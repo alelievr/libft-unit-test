@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:26:54 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/18 23:35:53 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/19 21:19:48 by bciss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,11 @@ void    display_test_result(int value, char *explications)
 			printf(COLOR_TIMEOUT"[TIMEOUT] "COLOR_CLEAR);
 			break ;
 		case TEST_FAILED:
-			printf("%s have failed !\nTest information: %s\n"COLOR_CLEAR, current_fun_name, explications);
+			printf(COLOR_FAILED"[FAILED]"COLOR_CLEAR"\nTest information: %s\n"COLOR_CLEAR, explications);
+//			printf("test code: %s\n", current_test_code);
 			break ;
 		case TEST_CRASH:
-			printf("%s have crash !\nTest information: %s\n"COLOR_CLEAR, current_fun_name, explications);
+			printf("\n%s have crash !\nTest information: %s\n"COLOR_CLEAR, current_fun_name, explications);
 			break ;
 		case TEST_NOCRASH:
 			printf("%s\n"COLOR_CLEAR, explications);
@@ -42,6 +43,7 @@ void    display_test_result(int value, char *explications)
 			break ;
 		case TEST_MISSING:
 			printf("%s%s is missing !\n"COLOR_CLEAR, COLOR_FAILED, current_fun_name);
+			return ;
 			break ;
 	}
 	fflush(stdout);

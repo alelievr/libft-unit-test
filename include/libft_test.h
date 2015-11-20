@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/18 23:23:40 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/19 22:17:22 by bciss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,12 @@ enum		e_values {
 
 # define	SET_EXPLICATION(x)	current_explication = x;
 # define	SET_TEST_TEXT(x)	current_test = x;
+# define	SET_CURRENT_TEST_CODE(x) current_test_code = x;
 
-# define	SANDBOX(x)			if (!(g_pid = fork())) {sandbox();x;} if (g_pid > 0) { wait((int*)g_ret); _SANDBOX_RAISE(g_ret[0]) }
-# define	SANDBOX_RAISE(x)	SANDBOX(x); if (SANDBOX_CRASH) ft_raise(TEST_CRASH); ft_raise(g_ret[1]);
+# define	SANDBOX_STRINGIFY(x)	SET_CURRENT_TEST_CODE(#x)	
+# define	SANDBOX(x)			SANDBOX_STRINGIFY(x); if (!(g_pid = fork())) {sandbox();x;exit(TEST_SUCCESS);} if (g_pid > 0) { wait((int*)g_ret); _SANDBOX_RAISE(g_ret[0]) }
+# define	SANDBOX_RAISE(x)	SANDBOX(x); if (SANDBOX_CRASH) ft_raise(TEST_CRASH); else ft_raise(g_ret[1]);
+# define	SANDBOX_IRAISE(x)	SANDBOX(x); if (SANDBOX_CRASH) ft_raise(TEST_SUCCESS); else ft_raise(TEST_FAILED);
 # define	SANDBOX_RESULT		(g_ret[1])
 # define	SANDBOX_RETURN		(g_ret[0])
 # define	_SANDBOX_RAISE(x)	if (x == SIGKILL) ft_raise(TEST_TIMEOUT); if (x == SIGQUIT) ft_raise(TEST_INTERUPT);
@@ -70,6 +73,7 @@ extern		char			*current_explication;
 extern		char			*current_test;
 extern		pid_t			g_pid;
 extern		char			g_ret[2];
+extern		char			*current_test_code;
 
 /*  Display functions  */
 void	display_test_result(int value, char *explications);

@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:30:13 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/18 00:38:36 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/19 21:17:55 by bciss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int				current_subtest_id = 0;
 int				total_subtest = 0;
 char			*current_test = "";
 char			*current_explication = "";
+char			*current_test_code = "";
 pid_t			g_pid = 0;
 char			g_ret[2];
 t_libft_subtest	fun_subtest_table[SUBTEST_SIZE];
