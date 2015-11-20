@@ -6,7 +6,7 @@
 #    By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/04/04 19:22:36 by alelievr          #+#    #+#              #
-#    Updated: 2015/11/18 23:02:35 by alelievr         ###   ########.fr        #
+#    Updated: 2015/11/19 22:37:55 by bciss            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@
 #################
 
 #	Libft Makefile path
-LIBFTDIR	=	../libft
+LIBFTDIR	=	~/rendu/wolfi/libft/
 
 #	Sources
 SRCDIR		=	./src
@@ -139,6 +139,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 
 #	Removing objects
 clean:
+	@rm -f $(SONAME) $(ANAME)
 	@if [ $(ALREADY_RM)x != xx ]; then \
 		$(call disp_title,Cleaning,$(CLEAN_COLOR_T)); \
 		fi
@@ -272,5 +273,9 @@ coffee:
 	@echo "     '._     """----.....______.....----"""         _.'"
 	@echo '         ""--..,,_____            _____,,..--"""'''
 	@echo '                      """------"""'
+
+
+f: all
+	./$(NAME)
 
 .PHONY: all clean fclean re norme codesize coffee
