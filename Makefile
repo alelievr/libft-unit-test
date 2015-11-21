@@ -6,7 +6,7 @@
 #    By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/04/04 19:22:36 by alelievr          #+#    #+#              #
-#    Updated: 2015/11/21 17:14:20 by bciss            ###   ########.fr        #
+#    Updated: 2015/11/21 20:19:32 by bciss            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@
 #################
 
 #	Libft Makefile path
-LIBFTDIR	=	~/rendu/wolfi/libft/
+LIBFTDIR	=	../libft
 
 #	Sources
 SRCDIR		=	./src
@@ -35,10 +35,15 @@ INCDIR		=	./include
 LIBDIR		=	
 LIBS		=	
 
+#	Assets
+ASSETDIR	=	assets
+
 #	Output
-NAME		=	run_test
+NAME		=	libtests
 SONAME		=	libft.so
 ANAME		=	libft.a
+LIBMALLOC	=	malloc.dylib
+WRAPNAME	=	run_test
 
 FRAMEWORK	=	
 
@@ -111,23 +116,29 @@ disp_title	=	$(call disp_indent); \
 #################
 
 #	First target
-all: $(ANAME) $(SONAME) $(NAME)
+all: $(ASSETDIR)/$(ANAME) $(SONAME) $(ASSETDIR)/$(NAME) $(ASSETDIR)/$(LIBMALLOC) $(WRAPNAME)
 
 $(SONAME): shared
 
-$(ANAME):
+$(WRAPNAME):
+	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", $(CC) $(ASSETDIR)/wrapper.c -o $(WRAPNAME))
+
+$(ASSETDIR)/$(LIBMALLOC):
+	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", $(CC) -dynamiclib $(ASSETDIR)/malloc.c -I $(INCDIR) -o $(ASSETDIR)/$(LIBMALLOC))
+
+$(ASSETDIR)/$(ANAME):
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", make -C $(LIBFTDIR))
-	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", cp $(LIBFTDIR)/libft.a .)
+	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", cp $(LIBFTDIR)/libft.a $(ASSETDIR)/)
 	
 shared:
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m➤ \033[38;5;$(LINK_COLOR)m",\
-		$(CC), $(CSOFLAGS), -o, $(SONAME), libft.a)
+		$(CC), $(CSOFLAGS), -o, $(SONAME), $(ASSETDIR)/libft.a)
 
 #	Linking
-$(NAME): $(OBJ)
+$(ASSETDIR)/$(NAME): $(OBJ)
 	@$(call disp_title,Linking,$(LINK_COLOR_T));
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m➤ \033[38;5;$(LINK_COLOR)m",\
-		$(CC), $(CFLAGS), $(OPTFLAGS), $(VLIBDIR), $(VLIB), $(RFRAME), -o, $(NAME), $(OBJ))
+		$(CC), $(CFLAGS), $(OPTFLAGS), $(VLIBDIR), $(VLIB), $(RFRAME), -o, $(ASSETDIR)/$(NAME), $(OBJ))
 
 #	Objects compilation
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
@@ -139,7 +150,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 
 #	Removing objects
 clean:
-	@rm -f $(SONAME) $(ANAME)
+	@rm -f $(SONAME) $(ANAME) $(WRAPNAME) $(ASSETDIR)/$(LIBMALLOC)
 	@if [ $(ALREADY_RM)x != xx ]; then \
 		$(call disp_title,Cleaning,$(CLEAN_COLOR_T)); \
 		fi
