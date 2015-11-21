@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/21 01:20:34 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/21 20:17:53 by bciss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -338,7 +338,7 @@ void            test_ft_memccpy(void){
 //         ft_bzero           //
 ////////////////////////////////
 
-void            test_ft_memmove(void){ }
+void            test_ft_memmove(void){}
 
 ////////////////////////////////
 //         ft_bzero           //
@@ -356,13 +356,105 @@ void            test_ft_memcmp(void){ }
 //         ft_bzero           //
 ////////////////////////////////
 
-void            test_ft_strlen(void){ }
+void			test_ft_strlen_zero(void *ptr) {
+	typeof(strlen)	*ft_strlen = ptr;
+	SET_EXPLICATION("your strlen doesn't work with a \\0 inside the string");
+
+	SANDBOX_RAISE(
+
+			if (ft_strlen("HAHAHAHA \0 TA FAIL XD") != 9)
+				exit(TEST_FAILED);
+			exit(TEST_SUCCESS);
+			);
+
+}
+
+void			test_ft_strlen_empty(void *ptr) {
+	typeof(strlen)	*ft_strlen = ptr;
+	SET_EXPLICATION("your strlen doesn't work with an empty string");
+
+	SANDBOX_RAISE(
+
+			if (ft_strlen(""))
+				exit(TEST_FAILED);
+			exit(TEST_SUCCESS);
+			);
+
+}
+
+void			test_ft_strlen_null(void *ptr) {
+	typeof(strlen)	*ft_strlen = ptr;
+	SET_EXPLICATION("your strlen does not segv when null is sended");
+
+	SANDBOX_IRAISE(
+			ft_strlen(NULL);
+			);
+}
+
+void			test_ft_strlen_basic(void *ptr) {
+	typeof(strlen)	*ft_strlen = ptr;
+	SET_EXPLICATION("your strlen doesn't work with basic test");
+
+	SANDBOX_RAISE(
+
+			if (ft_strlen("sais-tu compter ?") != strlen("parceque lui oui!"))
+				exit(TEST_FAILED);
+			exit(TEST_SUCCESS);
+			);
+
+}
+
+void            test_ft_strlen(void){
+
+	add_fun_subtest(test_ft_strlen_basic);
+	add_fun_subtest(test_ft_strlen_null);
+	add_fun_subtest(test_ft_strlen_empty);
+	add_fun_subtest(test_ft_strlen_zero);
+}
 
 ////////////////////////////////
 //         ft_bzero           //
 ////////////////////////////////
 
-void            test_ft_strdup(void){ }
+void			test_ft_strdup_zero(void *ptr) {
+	typeof(strdup)	*ft_strdup = ptr;
+	SET_EXPLICATION("your strdup don't work with empty string");
+
+	SANDBOX_RAISE(
+			char 	*str;
+			char	*tmp = "";
+
+			str = ft_strdup(tmp);
+			if (strcmp(str, tmp))
+				exit(TEST_FAILED);
+			free(str);
+			exit(TEST_SUCCESS);
+			);
+}
+
+
+void			test_ft_strdup_basic(void *ptr) {
+	typeof(strdup)	*ft_strdup = ptr;
+	SET_EXPLICATION("your strdup doesn't with basic input");
+
+	SANDBOX_RAISE(
+			char	*str;
+			char	*tmp = "I malloc so I am.";
+			
+			str = ft_strdup(tmp);
+			if (strcmp(str, tmp))
+				exit(TEST_FAILED);
+			free(str);
+			exit(TEST_SUCCESS);
+			);
+
+}
+
+void            test_ft_strdup(void){
+
+	add_fun_subtest(test_ft_strdup_basic);
+	add_fun_subtest(test_ft_strdup_zero);
+}
 
 ////////////////////////////////
 //         ft_bzero           //
@@ -569,7 +661,26 @@ void            test_ft_isprint(void){
 //         ft_bzero           //
 ////////////////////////////////
 
-void            test_ft_toupper(void){ }
+void			test_ft_toupper_(void *ptr) {
+	typeof(toupper)	*ft_toupper = ptr;
+	SET_EXPLICATION("your ft_isprint just doesn't work, REALLY ?!");
+
+	SANDBOX_RAISE(
+			int		i;
+			i = -1;
+			while (i < 130)
+			{
+				if (ft_isprint(i) != isprint(i))
+					exit(TEST_FAILED);
+				i++;
+			}
+			exit(TEST_SUCCESS);
+		);
+}
+
+void            test_ft_toupper(void){
+	add_fun_subtest(test_ft_toupper_);
+}
 
 ////////////////////////////////
 //         ft_bzero           //
