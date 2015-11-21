@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/21 20:19:56 by bciss            ###   ########.fr       */
+/*   Updated: 2015/11/22 00:33:25 by bciss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -416,6 +416,24 @@ void            test_ft_strlen(void){
 //         ft_bzero           //
 ////////////////////////////////
 
+void			test_ft_strdup_last_char(void *ptr) {
+	typeof(strdup)	*ft_strdup = ptr;
+	SET_EXPLICATION("your strdup does not add \\0 at the end of the sring");
+
+	SANDBOX_RAISE(
+			char 	*str;
+			char	*tmp = "HAHAHA \0 tu me vois pas !";
+
+			MALLOC_MEMSET;
+			str = ft_strdup(tmp);
+			MALLOC_RESET;
+			if (strcmp(str, tmp))
+				exit(TEST_FAILED);
+			free(str);
+			exit(TEST_SUCCESS);
+			);
+}
+
 void			test_ft_strdup_zero(void *ptr) {
 	typeof(strdup)	*ft_strdup = ptr;
 	SET_EXPLICATION("your strdup don't work with empty string");
@@ -432,6 +450,36 @@ void			test_ft_strdup_zero(void *ptr) {
 			);
 }
 
+void			test_ft_strdup_null(void *ptr) {
+	typeof(strdup)	*ft_strdup = ptr;
+	SET_EXPLICATION("your strdup does not segv with NULL");
+
+	SANDBOX_IRAISE(
+			ft_strdup(NULL);
+			);
+}
+
+void			test_ft_strdup_malloc_null(void *ptr) {
+	typeof(strdup)	*ft_strdup = ptr;
+	SET_EXPLICATION("you dindn't protect your malloc return");
+
+//	SANDBOX_RAISE(
+//			char	*str;
+//			char	*tmp = "I malloc so I am.";
+			
+			lseek(g_malloc_fd, 0, SEEK_SET);
+			write(g_malloc_fd, (char[1]){_MALLOC_NULL}, 1);
+
+			printf("malloc = %p\n", malloc(10));
+			fflush(stdout);
+//			str = strdup(tmp);
+			MALLOC_RESET;
+//			if (str == NULL)
+//				exit(TEST_SUCCESS);
+//			exit(TEST_FAILED);
+//			);
+	(void)ft_strdup;
+}
 
 void			test_ft_strdup_basic(void *ptr) {
 	typeof(strdup)	*ft_strdup = ptr;
@@ -452,8 +500,11 @@ void			test_ft_strdup_basic(void *ptr) {
 
 void            test_ft_strdup(void){
 
+	add_fun_subtest(test_ft_strdup_malloc_null);
 	add_fun_subtest(test_ft_strdup_basic);
 	add_fun_subtest(test_ft_strdup_zero);
+	add_fun_subtest(test_ft_strdup_last_char);
+	add_fun_subtest(test_ft_strdup_null);
 }
 
 ////////////////////////////////
@@ -661,7 +712,7 @@ void            test_ft_isprint(void){
 //         ft_bzero           //
 ////////////////////////////////
 
-void			test_ft_toupper_(void *ptr) {
+/*void			test_ft_toupper_(void *ptr) {
 	typeof(toupper)	*ft_toupper = ptr;
 	SET_EXPLICATION("your ft_isprint just doesn't work, REALLY ?!");
 
@@ -676,10 +727,10 @@ void			test_ft_toupper_(void *ptr) {
 			}
 			exit(TEST_SUCCESS);
 		);
-}
+}*/
 
 void            test_ft_toupper(void){
-	add_fun_subtest(test_ft_toupper_);
+//	add_fun_subtest(test_ft_toupper_);
 }
 
 ////////////////////////////////

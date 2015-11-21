@@ -6,7 +6,7 @@
 #    By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/04/04 19:22:36 by alelievr          #+#    #+#              #
-#    Updated: 2015/11/21 20:19:32 by bciss            ###   ########.fr        #
+#    Updated: 2015/11/22 00:32:54 by bciss            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@
 #################
 
 #	Libft Makefile path
-LIBFTDIR	=	../libft
+LIBFTDIR	=	~/rendu/wolfi/libft
 
 #	Sources
 SRCDIR		=	./src
@@ -121,7 +121,7 @@ all: $(ASSETDIR)/$(ANAME) $(SONAME) $(ASSETDIR)/$(NAME) $(ASSETDIR)/$(LIBMALLOC)
 $(SONAME): shared
 
 $(WRAPNAME):
-	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", $(CC) $(ASSETDIR)/wrapper.c -o $(WRAPNAME))
+	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", $(CC) $(ASSETDIR)/wrapper.c -I $(INCDIR) -o $(WRAPNAME))
 
 $(ASSETDIR)/$(LIBMALLOC):
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", $(CC) -dynamiclib $(ASSETDIR)/malloc.c -I $(INCDIR) -o $(ASSETDIR)/$(LIBMALLOC))
@@ -150,7 +150,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 
 #	Removing objects
 clean:
-	@rm -f $(SONAME) $(ANAME) $(WRAPNAME) $(ASSETDIR)/$(LIBMALLOC)
+	@rm -f $(SONAME) $(ASSETDIR)/$(ANAME) $(WRAPNAME) $(ASSETDIR)/$(LIBMALLOC)
 	@if [ $(ALREADY_RM)x != xx ]; then \
 		$(call disp_title,Cleaning,$(CLEAN_COLOR_T)); \
 		fi
@@ -287,6 +287,6 @@ coffee:
 
 
 f: all
-	./$(NAME)
+	./$(WRAPNAME)
 
 .PHONY: all clean fclean re norme codesize coffee

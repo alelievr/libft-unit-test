@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/21 20:16:50 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/22 00:20:16 by bciss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	run_subtests(void *h, int start) {
 		current_fun_name = fun_subtest_table[start].fun_name;
 		tmpfun = dlsym(handle, fun_subtest_table[start].fun_name);
 		current_subtest_id++;
+		MALLOC_RESET;
 		if (tmpfun)
 			fun_subtest_table[start].fun_test_ptr(tmpfun);
 	}
@@ -95,6 +96,7 @@ int		main(void) {
 		ft_exit("can't open/create logfile !");
 	if ((g_malloc_fd = open(TMP_FILE, O_WRONLY | O_TRUNC | O_CREAT, 0600)) == -1)
 		ft_exit("can't create tmp file !");
+	MALLOC_RESET;
 	if (!(handle = dlopen("./libft.so", RTLD_LAZY)))
 		ft_exit(dlerror());
 

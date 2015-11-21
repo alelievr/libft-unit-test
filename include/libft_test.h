@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/21 20:10:50 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/22 00:25:26 by bciss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ enum		e_values {
 # define	SANDBOX_CRASH		(g_ret[0] == SIGSEGV || g_ret[0] == SIGBUS || g_ret[0] == SIGABRT)
 
 # define	_MALLOC_NULL		'N'
-# define	_MALLOC_RESET		' '
+# define	_MALLOC_RESET		'R'
 # define	_MALLOC_MEMSET		'M'
 # define	_MALLOC_SIZE		'S'
 
