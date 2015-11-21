@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/21 01:19:37 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/21 20:16:50 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	run_subtests(void *h, int start) {
 	printf("\nSee %s for more informations !\n", LOG_FILE);
 	dprintf(g_log_fd, "\n");
 	close(g_log_fd);
+	unlink(TMP_FILE);
 	exit(0);
 }
 
@@ -90,8 +91,10 @@ void	load_timer(void) {
 int		main(void) {
 	void	*handle;
 
-	if ((g_log_fd = open(LOG_FILE, O_WRONLY | O_TRUNC | O_CREAT, 0655)) == -1)
+	if ((g_log_fd = open(LOG_FILE, O_WRONLY | O_TRUNC | O_CREAT, 0600)) == -1)
 		ft_exit("can't open/create logfile !");
+	if ((g_malloc_fd = open(TMP_FILE, O_WRONLY | O_TRUNC | O_CREAT, 0600)) == -1)
+		ft_exit("can't create tmp file !");
 	if (!(handle = dlopen("./libft.so", RTLD_LAZY)))
 		ft_exit(dlerror());
 

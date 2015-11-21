@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/21 01:20:02 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/21 20:10:50 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ enum		e_values {
 };
 
 # define	LOG_FILE		"result.log"
+# define	TMP_FILE		".over_malloc"
 
 # define	COLOR_SUCCESS "\033[38;5;46m"
 # define	COLOR_FAILED "\033[38;5;160m"
@@ -72,6 +73,16 @@ enum		e_values {
 # define	_SANDBOX_RAISE(x)	if (x == SIGKILL) ft_raise(TEST_TIMEOUT); if (x == SIGQUIT) ft_raise(TEST_INTERUPT);
 # define	SANDBOX_CRASH		(g_ret[0] == SIGSEGV || g_ret[0] == SIGBUS || g_ret[0] == SIGABRT)
 
+# define	_MALLOC_NULL		'N'
+# define	_MALLOC_RESET		' '
+# define	_MALLOC_MEMSET		'M'
+# define	_MALLOC_SIZE		'S'
+
+# define	MALLOC_NULL			lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char[1]){_MALLOC_NULL}, 1);
+# define	MALLOC_RESET		lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char[1]){_MALLOC_RESET}, 1);
+# define	MALLOC_MEMSET		lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char[1]){_MALLOC_MEMSET}, 1);
+# define	MALLOC_SIZE			lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char[1]){_MALLOC_SIZE}, 1);
+
 extern		char			*current_fun_name;
 extern		int				current_test_id;
 extern		t_libft_test	fun_test_table[];
@@ -83,6 +94,7 @@ extern		char			*current_test;
 extern		pid_t			g_pid;
 extern		char			g_ret[2];
 extern		int				g_log_fd;
+extern		int				g_malloc_fd;
 extern		char			*current_test_code;
 
 /*  Display functions  */
