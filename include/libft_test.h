@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/22 00:25:26 by bciss            ###   ########.fr       */
+/*   Updated: 2015/11/22 00:59:35 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,10 @@ enum		e_values {
 # define	_MALLOC_MEMSET		'M'
 # define	_MALLOC_SIZE		'S'
 
-# define	MALLOC_NULL			lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char[1]){_MALLOC_NULL}, 1);
-# define	MALLOC_RESET		lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char[1]){_MALLOC_RESET}, 1);
-# define	MALLOC_MEMSET		lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char[1]){_MALLOC_MEMSET}, 1);
-# define	MALLOC_SIZE			lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char[1]){_MALLOC_SIZE}, 1);
+# define	MALLOC_NULL			lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[1]){_MALLOC_NULL}, 1);
+# define	MALLOC_RESET		lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[1]){_MALLOC_RESET}, 1);
+# define	MALLOC_MEMSET		lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[1]){_MALLOC_MEMSET}, 1);
+# define	MALLOC_SIZE			lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[1]){_MALLOC_SIZE}, 1);
 
 extern		char			*current_fun_name;
 extern		int				current_test_id;

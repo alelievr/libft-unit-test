@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/22 00:33:25 by bciss            ###   ########.fr       */
+/*   Updated: 2015/11/22 01:35:17 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -463,27 +463,20 @@ void			test_ft_strdup_malloc_null(void *ptr) {
 	typeof(strdup)	*ft_strdup = ptr;
 	SET_EXPLICATION("you dindn't protect your malloc return");
 
-//	SANDBOX_RAISE(
-//			char	*str;
-//			char	*tmp = "I malloc so I am.";
-			
-			lseek(g_malloc_fd, 0, SEEK_SET);
-			write(g_malloc_fd, (char[1]){_MALLOC_NULL}, 1);
+	SANDBOX_RAISE(
+			char	*str;
 
-			printf("malloc = %p\n", malloc(10));
-			fflush(stdout);
-//			str = strdup(tmp);
+			MALLOC_NULL;
+			str = strdup("so you malloc ? :)");
 			MALLOC_RESET;
-//			if (str == NULL)
-//				exit(TEST_SUCCESS);
-//			exit(TEST_FAILED);
-//			);
+			exit(TEST_SUCCESS);
+			);
 	(void)ft_strdup;
 }
 
 void			test_ft_strdup_basic(void *ptr) {
 	typeof(strdup)	*ft_strdup = ptr;
-	SET_EXPLICATION("your strdup doesn't with basic input");
+	SET_EXPLICATION("your strdup doesn't works with basic input");
 
 	SANDBOX_RAISE(
 			char	*str;
@@ -511,7 +504,89 @@ void            test_ft_strdup(void){
 //         ft_bzero           //
 ////////////////////////////////
 
-void            test_ft_strcpy(void){ }
+void			test_ft_strcpy_basic(void *ptr) {
+	typeof(strcpy)	*ft_strcpy = ptr;
+	SET_EXPLICATION("your strcpy does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*src = "--> nyancat <--\n\r";
+			char	dst1[30] = {[29]='a'};
+			char	dst2[30] = {[29]='a'};
+
+			strcpy(dst1, src);
+			ft_strcpy(dst2, src);
+			if (strcmp(dst1, dst2))
+				exit(TEST_FAILED);
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_strcpy_unicode(void *ptr) {
+	typeof(strcpy)	*ft_strcpy = ptr;
+	SET_EXPLICATION("your strcpy does not support unicode ?");
+
+	SANDBOX_RAISE(
+			char	*src = "œð˛ʼˇ,´˛ˀ-ºª•¶ªˆ§´";
+			char	dst1[80] = {[79]='a'};
+			char	dst2[80] = {[79]='a'};
+
+			strcpy(dst1, src);
+			ft_strcpy(dst2, src);
+			if (strcmp(dst1, dst2))
+				exit(TEST_FAILED);
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_strcpy_empty(void *ptr) {
+	typeof(strcpy)	*ft_strcpy = ptr;
+	SET_EXPLICATION("your strcpy does not works with an empty string");
+
+	SANDBOX_RAISE(
+			char	*src = "";
+			char	dst1[30] = {[29]='a'};
+			char	dst2[30] = {[29]='a'};
+
+			strcpy(dst1, src);
+			ft_strcpy(dst2, src);
+			if (strcmp(dst1, dst2))
+				exit(TEST_FAILED);
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_strcpy_null(void *ptr) {
+	typeof(strcpy)	*ft_strcpy = ptr;
+	SET_EXPLICATION("your strcpy does not segfault when null parameter is sent");
+
+	SANDBOX_IRAISE(
+			strcpy(NULL);
+			);
+}
+
+void			test_ft_strcpy_overlap(void *ptr) {
+	typeof(strcpy)	*ft_strcpy = ptr;
+	SET_EXPLICATION("your strcpy does not support overlap");
+
+	SANDBOX_RAISE(
+			char	dst1[60] = "the cake is a lie\0 this is padding !";
+			char	dst2[60] = "the cake is a lie\0 this is padding !";
+
+			strcpy(dst1 + 2, dst1);
+			ft_strcpy(dst2 + 2, dst2);
+			if (strcmp(dst1, dst2))
+				exit(TEST_FAILED);
+			exit(TEST_SUCCESS);
+			);
+}
+
+void            test_ft_strcpy(void) {
+	add_fun_subtest(test_ft_strcpy_basic);
+	add_fun_subtest(test_ft_strcpy_unicode);
+	add_fun_subtest(test_ft_strcpy_empty);
+	add_fun_subtest(test_ft_strcpy_null);
+	add_fun_subtest(test_ft_strcpy_overlap);
+}
 
 ////////////////////////////////
 //         ft_bzero           //

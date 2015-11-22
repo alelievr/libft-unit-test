@@ -6,7 +6,7 @@
 #    By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/04/04 19:22:36 by alelievr          #+#    #+#              #
-#    Updated: 2015/11/22 00:32:54 by bciss            ###   ########.fr        #
+#    Updated: 2015/11/22 01:08:31 by alelievr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@
 #################
 
 #	Libft Makefile path
-LIBFTDIR	=	~/rendu/wolfi/libft
+LIBFTDIR	=	../libft
 
 #	Sources
 SRCDIR		=	./src
@@ -150,12 +150,13 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 
 #	Removing objects
 clean:
-	@rm -f $(SONAME) $(ASSETDIR)/$(ANAME) $(WRAPNAME) $(ASSETDIR)/$(LIBMALLOC)
 	@if [ $(ALREADY_RM)x != xx ]; then \
 		$(call disp_title,Cleaning,$(CLEAN_COLOR_T)); \
 		fi
 	@$(call exec_color,"\033[38;5;$(CLEAN_COLOR_T)m➤ \033[38;5;$(CLEAN_COLOR)m",\
 		rm -f, $(OBJ)) # <- Cleaning objs
+	@$(call exec_color,"\033[38;5;$(CLEAN_COLOR_T)m➤ \033[38;5;$(CLEAN_COLOR)m",\
+		rm -f, $(SONAME) $(ASSETDIR)/$(ANAME) $(ASSETDIR)$(NAME) $(ASSETDIR)/$(LIBMALLOC)) # <- Cleaning assets
 	@rmdir $(OBJDIR) 2> /dev/null || echo "" > /dev/null
 	@$(eval ALREADY_RM=x)
 
@@ -165,7 +166,7 @@ fclean: clean
 		$(call disp_title,Cleaning,$(CLEAN_COLOR_T)); \
 		fi
 	@$(call exec_color,"\033[38;5;$(CLEAN_COLOR_T)m➤ \033[38;5;$(CLEAN_COLOR)m",\
-		rm -f, $(NAME))
+		rm -f, $(WRAPNAME))
 	@$(eval ALREADY_RM=x)
 
 #	All removing then compiling
