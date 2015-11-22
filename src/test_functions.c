@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/22 01:35:17 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/22 03:10:51 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,7 @@ void            test_ft_bzero(void){
 }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_memcpy          //
 ////////////////////////////////
 
 
@@ -247,7 +247,7 @@ void            test_ft_memcpy(void){
 }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_memccpy         //
 ////////////////////////////////
 
 /*void			test_ft_memcpy_basic_test(void *ptr) {
@@ -335,25 +335,128 @@ void            test_ft_memccpy(void){
 */}
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_memmove         //
 ////////////////////////////////
 
-void            test_ft_memmove(void){}
+void			test_ft_memmove_basic(void *ptr) {
+	typeof(memmove)		*ft_memmove = ptr;
+	SET_EXPLICATION("your memmove does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*src = "this is a good nyancat !\r\n";
+			char	dst1[0xF0];
+			char	dst2[0xF0];
+			int		size = strlen(src);
+
+			memmove(dst1, src, size);
+			ft_memmove(dst2, src, size);
+			if (!memcmp(dst1, dst2, size))
+				exit(TEST_SUCCESS);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_memmove_null_byte(void *ptr) {
+	typeof(memmove)		*ft_memmove = ptr;
+	SET_EXPLICATION("your memmove does not works with \\0 and others unsigned char codes");
+
+	SANDBOX_RAISE(
+			char	*src = "thi\xffs i\xfas \0a g\xde\xadood \0nyan\0cat\0 !\r\n";
+			int		size = 33;
+			char	dst1[0xF0];
+			char	dst2[0xF0];
+
+			memmove(dst1, src, size);
+			ft_memmove(dst2, src, size);
+			if (!memcmp(dst1, dst2, size))
+				exit(TEST_SUCCESS);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_memmove_long_int(void *ptr) {
+	typeof(memmove)		*ft_memmove = ptr;
+	SET_EXPLICATION("your memmove does not works with integers copy");
+
+	SANDBOX_RAISE(
+			unsigned long	src = 0xdeadbeef;
+			int		size = sizeof(src);
+			unsigned long	dst1;
+			unsigned long	dst2;
+
+			memmove(&dst1, &src, size);
+			ft_memmove(&dst2, &src, size);
+			if (!memcmp(&dst1, &dst2, size))
+				exit(TEST_SUCCESS);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_memmove_overlap(void *ptr) {
+	typeof(memmove)		*ft_memmove = ptr;
+	SET_EXPLICATION("your memmove does not support the overlap");
+
+	SANDBOX_RAISE(
+			char	dst1[0xF0];
+			char	dst2[0xF0];
+			char	*data = "thiß ß\xde\xad\xbe\xeftriñg will be øvérlapéd !\r\n";
+			int		size = 0xF0 - 4;
+
+			memcpy(dst1, data, strlen(data));
+			memcpy(dst2, data, strlen(data));
+			memmove(dst1 + 3, dst2, size);
+			ft_memmove(dst2 + 3, dst2, size);
+			if (!memcmp(dst1, dst2, size))
+				exit(TEST_SUCCESS);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_memmove_null1(void *ptr) {
+	typeof(memmove)		*ft_memmove = ptr;
+	SET_EXPLICATION("your memmove does not segfault when null params is sent");
+
+	SANDBOX_IRAISE(
+			char	b[0xF0];
+
+			ft_memmove(NULL, b, 5);
+			);
+}
+
+void			test_ft_memmove_null2(void *ptr) {
+	typeof(memmove)		*ft_memmove = ptr;
+	SET_EXPLICATION("your memset does not segfault when null params is sent");
+
+	SANDBOX_IRAISE(
+			char	b[0xF0];
+
+			ft_memmove(b, NULL, 5);
+			);
+}
+
+void            test_ft_memmove(void){
+	add_fun_subtest(test_ft_memmove_basic);
+	add_fun_subtest(test_ft_memmove_null_byte);
+	add_fun_subtest(test_ft_memmove_long_int);
+	add_fun_subtest(test_ft_memmove_overlap);
+	add_fun_subtest(test_ft_memmove_null1);
+	add_fun_subtest(test_ft_memmove_null2);
+}
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_memchr          //
 ////////////////////////////////
 
 void            test_ft_memchr(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_memcmp          //
 ////////////////////////////////
 
 void            test_ft_memcmp(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_strlen          //
 ////////////////////////////////
 
 void			test_ft_strlen_zero(void *ptr) {
@@ -413,7 +516,7 @@ void            test_ft_strlen(void){
 }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_strdup          //
 ////////////////////////////////
 
 void			test_ft_strdup_last_char(void *ptr) {
@@ -501,7 +604,7 @@ void            test_ft_strdup(void){
 }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_strcpy          //
 ////////////////////////////////
 
 void			test_ft_strcpy_basic(void *ptr) {
@@ -555,12 +658,23 @@ void			test_ft_strcpy_empty(void *ptr) {
 			);
 }
 
-void			test_ft_strcpy_null(void *ptr) {
+void			test_ft_strcpy_null1(void *ptr) {
 	typeof(strcpy)	*ft_strcpy = ptr;
 	SET_EXPLICATION("your strcpy does not segfault when null parameter is sent");
 
 	SANDBOX_IRAISE(
-			strcpy(NULL);
+			ft_strcpy(NULL, "olol");
+			);
+}
+
+void			test_ft_strcpy_null2(void *ptr) {
+	typeof(strcpy)	*ft_strcpy = ptr;
+	SET_EXPLICATION("your strcpy does not segfault when null parameter is sent");
+
+	SANDBOX_IRAISE(
+			char	b[0xF0] = {0};
+
+			ft_strcpy(b, NULL);
 			);
 }
 
@@ -584,12 +698,13 @@ void            test_ft_strcpy(void) {
 	add_fun_subtest(test_ft_strcpy_basic);
 	add_fun_subtest(test_ft_strcpy_unicode);
 	add_fun_subtest(test_ft_strcpy_empty);
-	add_fun_subtest(test_ft_strcpy_null);
+	add_fun_subtest(test_ft_strcpy_null1);
+	add_fun_subtest(test_ft_strcpy_null2);
 	add_fun_subtest(test_ft_strcpy_overlap);
 }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_strncpy         //
 ////////////////////////////////
 
 void            test_ft_strncpy(void){ }
@@ -601,19 +716,19 @@ void            test_ft_strncpy(void){ }
 void            test_ft_strcat(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_strcat          //
 ////////////////////////////////
 
 void            test_ft_strncat(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_strncat         //
 ////////////////////////////////
 
 void            test_ft_strlcat(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_strlcat         //
 ////////////////////////////////
 
 void            test_ft_strchr(void){ }
@@ -625,37 +740,37 @@ void            test_ft_strchr(void){ }
 void            test_ft_strrchr(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_strrchr         //
 ////////////////////////////////
 
 void            test_ft_strstr(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_strstr          //
 ////////////////////////////////
 
 void            test_ft_strnstr(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_strcmp          //
 ////////////////////////////////
 
 void            test_ft_strcmp(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_strncmp         //
 ////////////////////////////////
 
 void            test_ft_strncmp(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_atoi            //
 ////////////////////////////////
 
 void            test_ft_atoi(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_isalpha         //
 ////////////////////////////////
 
 #include <ctype.h>
@@ -683,7 +798,7 @@ void            test_ft_isalpha(void){
 }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_isdigit         //
 ////////////////////////////////
 
 void			test_ft_isdigit_(void *ptr) {
@@ -708,7 +823,7 @@ void            test_ft_isdigit(void){
 }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_isalnum         //
 ////////////////////////////////
 
 void			test_ft_isalnum_(void *ptr) {
@@ -718,7 +833,7 @@ void			test_ft_isalnum_(void *ptr) {
 	SANDBOX_RAISE(
 			int		i;
 			i = -1;
-			while (i < 130)
+			while (i < 530)
 			{
 				if (ft_isalnum(i) != isalnum(i))
 					exit(TEST_FAILED);
@@ -733,7 +848,7 @@ void            test_ft_isalnum(void){
 }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_isascii         //
 ////////////////////////////////
 
 void			test_ft_isascii_(void *ptr) {
@@ -743,7 +858,7 @@ void			test_ft_isascii_(void *ptr) {
 	SANDBOX_RAISE(
 			int		i;
 			i = -1;
-			while (i < 130)
+			while (i < 530)
 			{
 				if (ft_isascii(i) != isascii(i))
 					exit(TEST_FAILED);
@@ -758,7 +873,7 @@ void            test_ft_isascii(void){
 }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_isprint         //
 ////////////////////////////////
 
 void			test_ft_isprint_(void *ptr) {
@@ -768,7 +883,7 @@ void			test_ft_isprint_(void *ptr) {
 	SANDBOX_RAISE(
 			int		i;
 			i = -1;
-			while (i < 130)
+			while (i < 530)
 			{
 				if (ft_isprint(i) != isprint(i))
 					exit(TEST_FAILED);
@@ -784,7 +899,7 @@ void            test_ft_isprint(void){
 }
 
 ////////////////////////////////
-//         ft_bzero           //
+//        ft_touupper         //
 ////////////////////////////////
 
 /*void			test_ft_toupper_(void *ptr) {
@@ -809,151 +924,151 @@ void            test_ft_toupper(void){
 }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_tolower         //
 ////////////////////////////////
 
 void            test_ft_tolower(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//        ft_memalloc         //
 ////////////////////////////////
 
 void            test_ft_memalloc(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_memdel          //
 ////////////////////////////////
 
 void            test_ft_memdel(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_strnew          //
 ////////////////////////////////
 
 void            test_ft_strnew(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_strdel          //
 ////////////////////////////////
 
 void            test_ft_strdel(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_strclr          //
 ////////////////////////////////
 
 void            test_ft_strclr(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_striter         //
 ////////////////////////////////
 
 void            test_ft_striter(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//        ft_striteri         //
 ////////////////////////////////
 
 void            test_ft_striteri(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_strmap          //
 ////////////////////////////////
 
 void            test_ft_strmap(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_strmapi         //
 ////////////////////////////////
 
 void            test_ft_strmapi(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_strequ          //
 ////////////////////////////////
 
 void            test_ft_strequ(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_strnequ         //
 ////////////////////////////////
 
 void            test_ft_strnequ(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_strsub          //
 ////////////////////////////////
 
 void            test_ft_strsub(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_strjoin         //
 ////////////////////////////////
 
 void            test_ft_strjoin(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_strtrim         //
 ////////////////////////////////
 
 void            test_ft_strtrim(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//        ft_strsplit         //
 ////////////////////////////////
 
 void            test_ft_strsplit(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_itoa            //
 ////////////////////////////////
 
 void            test_ft_itoa(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_putchar         //
 ////////////////////////////////
 
 void            test_ft_putchar(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_putstr          //
 ////////////////////////////////
 
 void            test_ft_putstr(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_putendl         //
 ////////////////////////////////
 
 void            test_ft_putendl(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_putnbr          //
 ////////////////////////////////
 
 void            test_ft_putnbr(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//       ft_putchar_fd        //
 ////////////////////////////////
 
 void            test_ft_putchar_fd(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//       ft_putstr_fd         //
 ////////////////////////////////
 
 void            test_ft_putstr_fd(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//       ft_putendl_fd        //
 ////////////////////////////////
 
 void            test_ft_putendl_fd(void){ }
 
 ////////////////////////////////
-//         ft_bzero           //
+//       ft_putnbr_fd         //
 ////////////////////////////////
 
 void            test_ft_putnbr_fd(void){ }
