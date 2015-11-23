@@ -25,6 +25,9 @@ void *malloc(size_t size)
 			case _MALLOC_SIZE:
 				printf("%li bytes allocated\n", size);
 				break ;
+			default:
+				return (real_malloc(size));
+				break ;
 		}
 		close(fd);
 	}

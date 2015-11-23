@@ -6,11 +6,16 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/22 03:10:51 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/23 01:01:15 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft_test.h"
+
+#define		STRING_1	"the cake is a lie !\0I'm hidden lol\r\n"
+#define		STRING_4	"phrase differente pour le test"
+#define		STRING_2	"there is no starts in the sky"
+#define		STRING_3	"test basic !"
 
 void			add_fun_subtest(void (*fun)(void *ptr)) {
 	static int		index = 0;
@@ -42,8 +47,9 @@ void			test_ft_memset_basic(void *ptr) {
 			memset(b1, 'A', BSIZE);
 			ft_memset(b2, 'A', BSIZE);
 
-			if (strcmp(b1, b2))
-				exit(TEST_FAILED);
+			if (!strcmp(b1, b2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(b1, b2);
 			exit(TEST_SUCCESS);
 			);
 }
@@ -62,9 +68,10 @@ void			test_ft_memset_fat(void *ptr) {
 			memset(b1, '\5', BFSIZE);
 			ft_memset(b2, '\5', BFSIZE);
 
-			if (strcmp(b1, b2))
-				exit(TEST_FAILED);
-			exit(TEST_SUCCESS);
+			if (!strcmp(b1, b2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(b1, b2);
+			exit(TEST_FAILED);
 			);
 }
 
@@ -87,9 +94,10 @@ void			test_ft_memset_zero_value(void *ptr) {
 
 			ft_memset(buff, '\xff', 0);
 			memset(buff2, '\xff', 0);
-			if (memcmp(buff, buff2, BSIZE))
-				exit(TEST_FAILED);
-			exit(TEST_SUCCESS);
+			if (!memcmp(buff, buff2, BSIZE))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff, buff2);
+			exit(TEST_FAILED);
 		   );
 }
 
@@ -118,9 +126,10 @@ void			test_ft_bzero_basic(void *ptr) {
 
 			bzero(str, 60);
 			ft_bzero(str2, 60);
-			if (memcmp(str, str2, BSIZE))
-				exit(TEST_FAILED);
-			exit(TEST_SUCCESS);
+			if (!memcmp(str, str2, BSIZE))
+				exit(TEST_SUCCESS);
+			SET_DIFF(str, str2);
+			exit(TEST_FAILED);
 			);
 }
 
@@ -135,9 +144,10 @@ void			test_ft_bzero_zero_value(void *ptr) {
 
 			ft_bzero(buff, 0);
 			bzero(buff2, 0);
-			if (memcmp(buff, buff2, BSIZE))
-				exit(TEST_FAILED);
-			exit(TEST_SUCCESS);
+			if (!memcmp(buff, buff2, BSIZE))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff, buff2);
+			exit(TEST_FAILED);
 		   );
 }
 
@@ -167,13 +177,16 @@ void			test_ft_memcpy_basic_test(void *ptr) {
 	SET_EXPLICATION("your memcpy doesn't work with basic params");
 
 	SANDBOX_RAISE(
-			char	buff[] = "test basic du memcpy !";
+			char	src[] = "test basic du memcpy !";
+			char	buff1[22];
 			char	buff2[22];
 
-			ft_memcpy(buff2, buff, 22);
-			if (memcmp(buff, buff2, 22))
-				exit(TEST_FAILED);
-			exit(TEST_SUCCESS);
+			memcpy(buff1, src, 22);
+			ft_memcpy(buff2, src, 22);
+			if (!memcmp(buff1, buff2, 22))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
 			);
 
 }
@@ -184,12 +197,14 @@ void			test_ft_memcpy_zero_value(void *ptr) {
 
 	SANDBOX_RAISE(
 			char	buff[] = "test 0 du memcpy !";
-			char	buff2[] = "phrase differente pour le test";
+			char	*src = STRING_4;
+			char	buff2[] = STRING_4;
 
 			ft_memcpy(buff2, buff, 0);
-			if (memcmp("phrase differente pour le test", buff2, strlen(buff2)))
-				exit(TEST_FAILED);
-			exit(TEST_SUCCESS);
+			if (!memcmp(src, buff2, strlen(buff2)))
+				exit(TEST_SUCCESS);
+			SET_DIFF(src, buff2);
+			exit(TEST_FAILED);
 			);
 
 }
@@ -199,13 +214,16 @@ void			test_ft_memcpy_basic_test2(void *ptr) {
 	SET_EXPLICATION("your memcpy does not work with basic params");
 
 	SANDBOX_RAISE(
-			char	buff[] = "test basic numero 2";
-			char	buff2[] = "phrase differente pour le test";
+			char	src[] = STRING_3;
+			char	buff1[] = STRING_1;
+			char	buff2[] = STRING_1;
 
-			ft_memcpy(buff2, buff, strlen(buff));
-			if (memcmp("test basic numero 2our le test", buff2, strlen(buff2)))
-				exit(TEST_FAILED);
-			exit(TEST_SUCCESS);
+			memcpy(buff1, src, strlen(src));
+			ft_memcpy(buff2, src, strlen(src));
+			if (!memcmp(buff1, buff2, strlen(buff2)))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
 			);
 
 }
@@ -217,6 +235,25 @@ void			test_ft_memcpy_to_small(void *ptr) {
 	SANDBOX_IRAISE(
 			ft_memcpy("", "segfaulter tu dois", 17);
 			);
+}
+
+void			test_ft_memcpy_struct(void *ptr) {
+	typeof(memcpy)	*ft_memcpy = ptr;
+	SET_EXPLICATION("your memcpy does not work with basic params");
+	t_test src = {"nyancat® inside", (void*)0xdeadbeef, 0x42424242424242L, 0b1010100010};
+
+	SANDBOX_RAISE(
+			char	buff1[0xF00];
+			char	buff2[0xF00];
+
+			memcpy(buff1, &src, sizeof(src));
+			ft_memcpy(buff2, &src, sizeof(src));
+			if (!memcmp(buff1, buff2, strlen(buff2)))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+
 }
 
 void			test_ft_memcpy_null1(void *ptr) {
@@ -242,6 +279,7 @@ void            test_ft_memcpy(void){
 	add_fun_subtest(test_ft_memcpy_zero_value);
 	add_fun_subtest(test_ft_memcpy_basic_test2);
 	add_fun_subtest(test_ft_memcpy_to_small);
+	add_fun_subtest(test_ft_memcpy_struct);
 	add_fun_subtest(test_ft_memcpy_null1);
 	add_fun_subtest(test_ft_memcpy_null2);
 }
@@ -352,6 +390,7 @@ void			test_ft_memmove_basic(void *ptr) {
 			ft_memmove(dst2, src, size);
 			if (!memcmp(dst1, dst2, size))
 				exit(TEST_SUCCESS);
+			SET_DIFF(dst1, dst2);
 			exit(TEST_FAILED);
 			);
 }
@@ -370,6 +409,7 @@ void			test_ft_memmove_null_byte(void *ptr) {
 			ft_memmove(dst2, src, size);
 			if (!memcmp(dst1, dst2, size))
 				exit(TEST_SUCCESS);
+			SET_DIFF(dst1, dst2);
 			exit(TEST_FAILED);
 			);
 }
@@ -408,6 +448,7 @@ void			test_ft_memmove_overlap(void *ptr) {
 			ft_memmove(dst2 + 3, dst2, size);
 			if (!memcmp(dst1, dst2, size))
 				exit(TEST_SUCCESS);
+			SET_DIFF(dst1, dst2);
 			exit(TEST_FAILED);
 			);
 }
@@ -425,7 +466,7 @@ void			test_ft_memmove_null1(void *ptr) {
 
 void			test_ft_memmove_null2(void *ptr) {
 	typeof(memmove)		*ft_memmove = ptr;
-	SET_EXPLICATION("your memset does not segfault when null params is sent");
+	SET_EXPLICATION("your memmove does not segfault when null params is sent");
 
 	SANDBOX_IRAISE(
 			char	b[0xF0];
@@ -434,26 +475,246 @@ void			test_ft_memmove_null2(void *ptr) {
 			);
 }
 
+void			test_ft_memmove_same_pointer(void *ptr) {
+	typeof(memmove)		*ft_memmove = ptr;
+	SET_EXPLICATION("your memmove does not support the overlap");
+
+	SANDBOX_RAISE(
+			char	data1[] = STRING_1;
+			char	data2[] = STRING_1;
+			int		size = strlen(STRING_1);
+
+			memmove(data1, data1, size);
+			ft_memmove(data2, data2, size);
+			if (!memcmp(data1, data2, size))
+				exit(TEST_SUCCESS);
+			SET_DIFF(data1, data2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_memmove_malloc_null(void *ptr) {
+	typeof(memmove)		*ft_memmove = ptr;
+	SET_EXPLICATION("your malloc is not protected (you should not malloc for this)");
+
+	SANDBOX_RAISE(
+			char	*src = STRING_1;
+			char	buff[0xF0];
+
+			MALLOC_NULL;
+			memmove(buff, src, 100);
+			MALLOC_RESET;
+			exit(TEST_SUCCESS);
+			);
+	(void)ft_memmove;
+}
+
 void            test_ft_memmove(void){
 	add_fun_subtest(test_ft_memmove_basic);
 	add_fun_subtest(test_ft_memmove_null_byte);
 	add_fun_subtest(test_ft_memmove_long_int);
 	add_fun_subtest(test_ft_memmove_overlap);
+	add_fun_subtest(test_ft_memmove_same_pointer);
 	add_fun_subtest(test_ft_memmove_null1);
 	add_fun_subtest(test_ft_memmove_null2);
+	add_fun_subtest(test_ft_memmove_malloc_null);
 }
 
 ////////////////////////////////
 //         ft_memchr          //
 ////////////////////////////////
 
-void            test_ft_memchr(void){ }
+void			test_ft_memchr_basic(void *ptr) {
+	typeof(memchr)		*ft_memchr = ptr;
+	SET_EXPLICATION("your memchr does not works with basic input");
+
+	SANDBOX_RAISE(
+			char			*src = "/|\x12\xff\x09\x42\042\42|\\";
+			int				size = 10;
+
+			if (memchr(src, '\x42', size) == ft_memchr(src, '\x42', size))
+				exit(TEST_SUCCESS);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_memchr_not_found1(void *ptr) {
+	typeof(memchr)		*ft_memchr = ptr;
+	SET_EXPLICATION("your memchr does not works");
+
+	SANDBOX_RAISE(
+			char			*src = "/|\x12\xff\x09\x42\042\42|\\";
+			int				size = 2;
+
+			if (memchr(src, '\x42', size) == ft_memchr(src, '\x42', size))
+				exit(TEST_SUCCESS);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_memchr_not_found2(void *ptr) {
+	typeof(memchr)		*ft_memchr = ptr;
+	SET_EXPLICATION("your memchr does not works");
+
+	SANDBOX_RAISE(
+			char			*src = "/|\x12\xff\x09\x42\042\42|\\";
+			int				size = 10;
+
+			if (memchr(src, '\xde', size) == ft_memchr(src, '\xde', size))
+				exit(TEST_SUCCESS);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_memchr_null_byte(void *ptr) {
+	typeof(memchr)		*ft_memchr = ptr;
+	SET_EXPLICATION("your memchr failed to find a \\0");
+
+	SANDBOX_RAISE(
+			char			*src = "/|\x12\xff\x09\0\x42\042\0\42|\\";
+			int				size = 12;
+
+			if (memchr(src, '\0', size) == ft_memchr(src, '\0', size))
+				exit(TEST_SUCCESS);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_memchr_null(void *ptr) {
+	typeof(memchr)		*ft_memchr = ptr;
+	SET_EXPLICATION("your memchr does not segfault when null param is sent");
+
+	SANDBOX_IRAISE(
+			ft_memchr(NULL, '\0', 0x20);
+			);
+}
+
+void            test_ft_memchr(void) {
+	add_fun_subtest(test_ft_memchr_basic);
+	add_fun_subtest(test_ft_memchr_not_found1);
+	add_fun_subtest(test_ft_memchr_not_found2);
+	add_fun_subtest(test_ft_memchr_null_byte);
+	add_fun_subtest(test_ft_memchr_null);
+}
 
 ////////////////////////////////
 //         ft_memcmp          //
 ////////////////////////////////
 
-void            test_ft_memcmp(void){ }
+void			test_ft_memcmp_basic(void *ptr) {
+	typeof(memcmp)		*ft_memcmp = ptr;
+	SET_EXPLICATION("yout memcmp does not works with basic input");
+
+	SANDBOX_RAISE(
+			uint8_t	*s1 = (uint8_t *)"\xff\xaa\xde\x12MACOSX";
+			uint8_t	*s2 = (uint8_t *)"\xff\xaa\xde\x12MACOSX";
+			size_t	size = 10;
+
+			if (memcmp(s1, s2, size) == ft_memcmp(s1, s2, size))
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(memcmp(s1, s2, size), memcmp(s1, s2, size));
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_memcmp_basic1(void *ptr) {
+	typeof(memcmp)		*ft_memcmp = ptr;
+	SET_EXPLICATION("yout memcmp does not works with basic input");
+
+	SANDBOX_RAISE(
+			uint8_t	*s1 = (uint8_t *)"\xff\xaa\xde\x12OLOL";
+			uint8_t	*s2 = (uint8_t *)"\xff\xaa\xde\x12MACOSX";
+			size_t	size = 7;
+
+			int		i1 = memcmp(s1, s2, size);
+			int		i2 = ft_memcmp(s1, s2, size);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+	(void)ft_memcmp;
+}
+
+void			test_ft_memcmp_basic2(void *ptr) {
+	typeof(memcmp)		*ft_memcmp = ptr;
+	SET_EXPLICATION("yout memcmp does not works with basic input");
+
+	SANDBOX_RAISE(
+			uint8_t	*s1 = (uint8_t *)"\xff\xaa\xde\x12";
+			uint8_t	*s2 = (uint8_t *)"\xff\xaa\xde\x12MACOSAAAAA";
+			size_t	size = 4;
+
+			if (memcmp(s1, s2, size) == ft_memcmp(s1, s2, size))
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(memcmp(s1, s2, size), ft_memcmp(s1, s2, size));
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_memcmp_basic3(void *ptr) {
+	typeof(memcmp)		*ft_memcmp = ptr;
+	SET_EXPLICATION("yout memcmp does not works with basic input");
+
+	SANDBOX_RAISE(
+			uint8_t	*s1 = (uint8_t *)"\xff\xaa\xde\xffMACOSX\xff";
+			uint8_t	*s2 = (uint8_t *)"\xff\xaa\xde\x00";
+			size_t	size = 4;
+
+			if (memcmp(s1, s2, size) == ft_memcmp(s1, s2, size))
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(memcmp(s1, s2, size), ft_memcmp(s1, s2, size));
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_memcmp_null_byte(void *ptr) {
+	typeof(memcmp)		*ft_memcmp = ptr;
+	SET_EXPLICATION("yout memcmp does not works with basic input");
+
+	SANDBOX_RAISE(
+			uint8_t	*s1 = (uint8_t *)"\xff\0\0\xaa\0\xde\xffMACOSX\xff";
+			uint8_t	*s2 = (uint8_t *)"\xff\0\0\xaa\0\xde\x00MBS";
+			size_t	size = 9;
+
+			if (memcmp(s1, s2, size) == ft_memcmp(s1, s2, size))
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(memcmp(s1, s2, size), ft_memcmp(s1, s2, size));
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_memcmp_null1(void *ptr) {
+	typeof(memcmp)		*ft_memcmp = ptr;
+	SET_EXPLICATION("your memcmp does not segfault when null parameter is sent");
+
+	SANDBOX_IRAISE(
+			char	b1[] = "nyancat";
+
+			ft_memcmp(NULL, b1, 4);
+			);
+}
+
+void			test_ft_memcmp_null2(void *ptr) {
+	typeof(memcmp)		*ft_memcmp = ptr;
+	SET_EXPLICATION("your memcmp does not segfault when null parameter is sent");
+
+	SANDBOX_IRAISE(
+			char	b1[] = "nyancat";
+
+			ft_memcmp(b1, NULL, 4);
+			);
+}
+
+void            test_ft_memcmp(void){
+	add_fun_subtest(test_ft_memcmp_basic);
+	add_fun_subtest(test_ft_memcmp_basic1);
+	add_fun_subtest(test_ft_memcmp_basic2);
+	add_fun_subtest(test_ft_memcmp_basic3);
+	add_fun_subtest(test_ft_memcmp_null_byte);
+	add_fun_subtest(test_ft_memcmp_null1);
+	add_fun_subtest(test_ft_memcmp_null2);
+}
 
 ////////////////////////////////
 //         ft_strlen          //
@@ -618,8 +879,10 @@ void			test_ft_strcpy_basic(void *ptr) {
 
 			strcpy(dst1, src);
 			ft_strcpy(dst2, src);
-			if (strcmp(dst1, dst2))
+			if (strcmp(dst1, dst2)) {
+				SET_DIFF(dst1, dst2);
 				exit(TEST_FAILED);
+			}
 			exit(TEST_SUCCESS);
 			);
 }
@@ -635,8 +898,10 @@ void			test_ft_strcpy_unicode(void *ptr) {
 
 			strcpy(dst1, src);
 			ft_strcpy(dst2, src);
-			if (strcmp(dst1, dst2))
+			if (strcmp(dst1, dst2)) {
+				SET_DIFF(dst1, dst2);
 				exit(TEST_FAILED);
+			}
 			exit(TEST_SUCCESS);
 			);
 }
@@ -652,8 +917,10 @@ void			test_ft_strcpy_empty(void *ptr) {
 
 			strcpy(dst1, src);
 			ft_strcpy(dst2, src);
-			if (strcmp(dst1, dst2))
+			if (strcmp(dst1, dst2)) {
+				SET_DIFF(dst1, dst2);
 				exit(TEST_FAILED);
+			}
 			exit(TEST_SUCCESS);
 			);
 }
@@ -678,75 +945,734 @@ void			test_ft_strcpy_null2(void *ptr) {
 			);
 }
 
-void			test_ft_strcpy_overlap(void *ptr) {
-	typeof(strcpy)	*ft_strcpy = ptr;
-	SET_EXPLICATION("your strcpy does not support overlap");
-
-	SANDBOX_RAISE(
-			char	dst1[60] = "the cake is a lie\0 this is padding !";
-			char	dst2[60] = "the cake is a lie\0 this is padding !";
-
-			strcpy(dst1 + 2, dst1);
-			ft_strcpy(dst2 + 2, dst2);
-			if (strcmp(dst1, dst2))
-				exit(TEST_FAILED);
-			exit(TEST_SUCCESS);
-			);
-}
-
 void            test_ft_strcpy(void) {
 	add_fun_subtest(test_ft_strcpy_basic);
 	add_fun_subtest(test_ft_strcpy_unicode);
 	add_fun_subtest(test_ft_strcpy_empty);
 	add_fun_subtest(test_ft_strcpy_null1);
 	add_fun_subtest(test_ft_strcpy_null2);
-	add_fun_subtest(test_ft_strcpy_overlap);
 }
 
 ////////////////////////////////
 //         ft_strncpy         //
 ////////////////////////////////
 
-void            test_ft_strncpy(void){ }
+void			test_ft_strncpy_basic(void *ptr) {
+	typeof(strncpy)	*ft_strncpy = ptr;
+	SET_EXPLICATION("your strncpy does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*src = "--> nyancat <--\n\r";
+			char	dst1[30] = {[29]='a'};
+			char	dst2[30] = {[29]='a'};
+			size_t	max = 12;
+
+			strncpy(dst1, src, max);
+			ft_strncpy(dst2, src, max);
+			if (strcmp(dst1, dst2)) {
+				SET_DIFF(dst1, dst2);
+				exit(TEST_FAILED);
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_strncpy_unicode(void *ptr) {
+	typeof(strncpy)	*ft_strncpy = ptr;
+	SET_EXPLICATION("your strncpy does not support unicode ?");
+
+	SANDBOX_RAISE(
+			char	*src = "œð˛ʼˇ,´˛ˀ-ºª•¶ªˆ§´";
+			char	dst1[80] = {[79]='a'};
+			char	dst2[80] = {[79]='a'};
+			size_t	max = 16;
+
+			strncpy(dst1, src, max);
+			ft_strncpy(dst2, src, max);
+			if (strcmp(dst1, dst2)) {
+				SET_DIFF(dst1, dst2);
+				exit(TEST_FAILED);
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_strncpy_empty(void *ptr) {
+	typeof(strncpy)	*ft_strncpy = ptr;
+	SET_EXPLICATION("your strncpy does not works with an empty string");
+
+	SANDBOX_RAISE(
+			char	*src = "";
+			char	dst1[30] = {[29]='a'};
+			char	dst2[30] = {[29]='a'};
+			size_t	max = 29;
+
+			strncpy(dst1, src, max);
+			ft_strncpy(dst2, src, max);
+			if (strcmp(dst1, dst2)) {
+				SET_DIFF(dst1, dst2);
+				exit(TEST_FAILED);
+			}
+			exit(TEST_SUCCESS);
+			);
+	(void)ft_strncpy;
+}
+
+void			test_ft_strncpy_zero(void *ptr) {
+	typeof(strncpy)	*ft_strncpy = ptr;
+	SET_EXPLICATION("your strncpy does not works with an 0 as lenght");
+
+	SANDBOX_RAISE(
+			char	*src = "this is a string with a \0 inside";
+			char	dst1[50] = {[49]='a'};
+			char	dst2[50] = {[49]='a'};
+			size_t	max = 31;
+
+			strncpy(dst1, src, max);
+			ft_strncpy(dst2, src, max);
+			if (strcmp(dst1, dst2)) {
+				SET_DIFF(dst1, dst2);
+				exit(TEST_FAILED);
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_strncpy_fill(void *ptr) {
+	typeof(strncpy)	*ft_strncpy = ptr;
+	SET_EXPLICATION("your strncpy does not fill with \\0 the rest of the dest buffer");
+
+	SANDBOX_RAISE(
+			char	*src = "stars";
+			char	dst1[50] = {[49]='a'};
+			char	dst2[50] = {[49]='a'};
+			size_t	max = 50;
+
+			strncpy(dst1, src, max);
+			ft_strncpy(dst2, src, max);
+			if (memcmp(dst1, dst2, max)) {
+				SET_DIFF(dst1, dst2);
+				exit(TEST_FAILED);
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_strncpy_null1(void *ptr) {
+	typeof(strncpy)	*ft_strncpy = ptr;
+	SET_EXPLICATION("your strncpy does not segfault when null parameter is sent");
+
+	SANDBOX_IRAISE(
+			ft_strncpy(NULL, "olol", 3);
+			);
+}
+
+void			test_ft_strncpy_null2(void *ptr) {
+	typeof(strncpy)	*ft_strncpy = ptr;
+	SET_EXPLICATION("your strncpy does not segfault when null parameter is sent");
+
+	SANDBOX_IRAISE(
+			char	b[0xF0] = {0};
+
+			ft_strncpy(b, NULL, 2);
+			);
+}
+
+void            test_ft_strncpy(void){
+	add_fun_subtest(test_ft_strncpy_basic);
+	add_fun_subtest(test_ft_strncpy_unicode);
+	add_fun_subtest(test_ft_strncpy_empty);
+	add_fun_subtest(test_ft_strncpy_zero);
+	add_fun_subtest(test_ft_strncpy_fill);
+	add_fun_subtest(test_ft_strncpy_null1);
+	add_fun_subtest(test_ft_strncpy_null2);
+}
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_trcat           //
 ////////////////////////////////
 
-void            test_ft_strcat(void){ }
+void			test_ft_strcat_basic(void *ptr) {
+	typeof(strcat)	*ft_strcat = ptr;
+	SET_EXPLICATION("your strcat does not works with basic input");
 
-////////////////////////////////
-//         ft_strcat          //
-////////////////////////////////
+	SANDBOX_RAISE(
+			char	*str = STRING_1;
+			char	buff1[0xF00] = STRING_2;
+			char	buff2[0xF00] = STRING_2;
 
-void            test_ft_strncat(void){ }
+			strcat(buff1, str);
+			ft_strcat(buff2, str);
+			if (!strcmp(buff1, buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strcat_empty1(void *ptr) {
+	typeof(strcat)	*ft_strcat = ptr;
+	SET_EXPLICATION("your strcat does not works with empty string as first parameter");
+
+	SANDBOX_RAISE(
+			char	*str = "";
+			char	buff1[0xF00] = STRING_2;
+			char	buff2[0xF00] = STRING_2;
+
+			strcat(buff1, str);
+			ft_strcat(buff2, str);
+			if (!strcmp(buff1, buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strcat_empty2(void *ptr) {
+	typeof(strcat)	*ft_strcat = ptr;
+	SET_EXPLICATION("your strcat does not works with empty string as second parameter");
+
+	SANDBOX_RAISE(
+			char	*str = STRING_1;
+			char	buff1[0xF00] = "";
+			char	buff2[0xF00] = "";
+
+			strcat(buff1, str);
+			ft_strcat(buff2, str);
+			if (!strcmp(buff1, buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strcat_null_byte(void *ptr) {
+	typeof(strcat)	*ft_strcat = ptr;
+	SET_EXPLICATION("your strcat does not set a \\0 to the end");
+
+	SANDBOX_RAISE(
+			char	*str = "n\0AAAAAAAAAAAAAAAAA";
+			char	buff1[0xF00] = "\0AAAAAAAAAAAAAAAA";
+			char	buff2[0xF00] = "\0AAAAAAAAAAAAAAAA";
+
+			strcat(buff1, str);
+			ft_strcat(buff2, str);
+			if (!strcmp(buff1, buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strcat_null1(void *ptr) {
+	typeof(strcat)	*ft_strcat = ptr;
+	SET_EXPLICATION("your strcat does not segfault when null parameter is sent");
+
+	SANDBOX_IRAISE(
+			char	b[0xF] = "nyan !";
+
+			ft_strcat(NULL, b);
+			);
+}
+
+void			test_ft_strcat_null2(void *ptr) {
+	typeof(strcat)	*ft_strcat = ptr;
+	SET_EXPLICATION("your strcat does not segfault when null parameter is sent");
+
+	SANDBOX_IRAISE(
+			char	b[0xF] = "nyan !";
+
+			ft_strcat(b, NULL);
+			);
+}
+
+void            test_ft_strcat(void){
+	add_fun_subtest(test_ft_strcat_basic);
+	add_fun_subtest(test_ft_strcat_empty1);
+	add_fun_subtest(test_ft_strcat_empty2);
+	add_fun_subtest(test_ft_strcat_null_byte);
+	add_fun_subtest(test_ft_strcat_null1);
+	add_fun_subtest(test_ft_strcat_null2);
+}
 
 ////////////////////////////////
 //         ft_strncat         //
 ////////////////////////////////
 
-void            test_ft_strlcat(void){ }
+void			test_ft_strncat_basic(void *ptr) {
+	typeof(strncat)	*ft_strncat = ptr;
+	SET_EXPLICATION("your strncat does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*str = STRING_1;
+			char	buff1[0xF00] = STRING_2;
+			char	buff2[0xF00] = STRING_2;
+			size_t	max = 5;
+
+			strncat(buff1, str, max);
+			ft_strncat(buff2, str, max);
+			if (!strcmp(buff1, buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strncat_basic1(void *ptr) {
+	typeof(strncat)	*ft_strncat = ptr;
+	SET_EXPLICATION("your strncat does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*str = STRING_1;
+			char	buff1[0xF00] = STRING_2;
+			char	buff2[0xF00] = STRING_2;
+			size_t	max = 5;
+
+			strncat(buff1, str, max);
+			ft_strncat(buff2, str, max);
+			if (!strcmp(buff1, buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strncat_basic2(void *ptr) {
+	typeof(strncat)	*ft_strncat = ptr;
+	SET_EXPLICATION("your strncat does not works with over length size");
+
+	SANDBOX_RAISE(
+			char	*str = STRING_1;
+			char	buff1[0xF00] = STRING_2;
+			char	buff2[0xF00] = STRING_2;
+			size_t	max = 1000;
+
+			strncat(buff1, str, max);
+			ft_strncat(buff2, str, max);
+			if (!strcmp(buff1, buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strncat_empty1(void *ptr) {
+	typeof(strncat)	*ft_strncat = ptr;
+	SET_EXPLICATION("your strcat does not works with empty string as first parameter");
+
+	SANDBOX_RAISE(
+			char	*str = "";
+			char	buff1[0xF00] = STRING_2;
+			char	buff2[0xF00] = STRING_2;
+			size_t	max = 5;
+
+			strncat(buff1, str, max);
+			ft_strncat(buff2, str, max);
+			if (!strcmp(buff1, buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strncat_empty2(void *ptr) {
+	typeof(strncat)	*ft_strncat = ptr;
+	SET_EXPLICATION("your strcat does not works with empty string as second parameter");
+
+	SANDBOX_RAISE(
+			char	*str = STRING_1;
+			char	buff1[0xF00] = "";
+			char	buff2[0xF00] = "";
+			size_t	max = 5;
+
+			strncat(buff1, str, max);
+			ft_strncat(buff2, str, max);
+			if (!strcmp(buff1, buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strncat_null_byte(void *ptr) {
+	typeof(strncat)	*ft_strncat = ptr;
+	SET_EXPLICATION("your strncat does not set a \\0 to the end");
+
+	SANDBOX_RAISE(
+			char	*str = "n\0AAAAAAAAAAAAAAAAA";
+			char	buff1[0xF00] = "\0AAAAAAAAAAAAAAAA";
+			char	buff2[0xF00] = "\0AAAAAAAAAAAAAAAA";
+			size_t	max = 10;
+
+			strncat(buff1, str, max);
+			ft_strncat(buff2, str, max);
+			if (!strcmp(buff1, buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strncat_null1(void *ptr) {
+	typeof(strncat)	*ft_strncat = ptr;
+	SET_EXPLICATION("your strncat does not segfault when null parameter is sent");
+
+	SANDBOX_IRAISE(
+			char	b[0xF] = "nyan !";
+
+			ft_strncat(NULL, b, 2);
+			);
+}
+
+void			test_ft_strncat_null2(void *ptr) {
+	typeof(strncat)	*ft_strncat = ptr;
+	SET_EXPLICATION("your strncat does not segfault when null parameter is sent");
+
+	SANDBOX_IRAISE(
+			char	b[0xF] = "nyan !";
+
+			ft_strncat(b, NULL, 2);
+			);
+}
+
+void            test_ft_strncat(void){
+	add_fun_subtest(test_ft_strncat_basic);
+	add_fun_subtest(test_ft_strncat_basic1);
+	add_fun_subtest(test_ft_strncat_basic2);
+	add_fun_subtest(test_ft_strncat_empty1);
+	add_fun_subtest(test_ft_strncat_empty2);
+	add_fun_subtest(test_ft_strncat_null_byte);
+	add_fun_subtest(test_ft_strncat_null1);
+	add_fun_subtest(test_ft_strncat_null2);
+}
 
 ////////////////////////////////
 //         ft_strlcat         //
 ////////////////////////////////
 
-void            test_ft_strchr(void){ }
+void			test_ft_strlcat_basic(void *ptr) {
+	typeof(strlcat)	*ft_strlcat = ptr;
+	SET_EXPLICATION("your strlcat does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*str = STRING_1;
+			char	buff1[0xF00] = STRING_2;
+			char	buff2[0xF00] = STRING_2;
+			size_t	max = strlen(STRING_1) + 4;
+
+			strlcat(buff1, str, max);
+			ft_strlcat(buff2, str, max);
+			if (!strcmp(buff1, buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strlcat_basic1(void *ptr) {
+	typeof(strlcat)	*ft_strlcat = ptr;
+	SET_EXPLICATION("your strlcat does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*str = STRING_1;
+			char	buff1[0xF00] = STRING_2;
+			char	buff2[0xF00] = STRING_2;
+			size_t	max = strlen(STRING_1) + strlen(STRING_2);
+
+			strlcat(buff1, str, max);
+			ft_strlcat(buff2, str, max);
+			if (!strcmp(buff1, buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strlcat_basic2(void *ptr) {
+	typeof(strlcat)	*ft_strlcat = ptr;
+	SET_EXPLICATION("your strlcat does not works with over length size");
+
+	SANDBOX_RAISE(
+			char	*str = STRING_1;
+			char	buff1[0xF00] = STRING_2;
+			char	buff2[0xF00] = STRING_2;
+			size_t	max = 1000;
+
+			strlcat(buff1, str, max);
+			ft_strlcat(buff2, str, max);
+			if (!strcmp(buff1, buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strlcat_empty1(void *ptr) {
+	typeof(strlcat)	*ft_strlcat = ptr;
+	SET_EXPLICATION("your strcat does not works with empty string as first parameter");
+
+	SANDBOX_RAISE(
+			char	*str = "";
+			char	buff1[0xF00] = STRING_2;
+			char	buff2[0xF00] = STRING_2;
+			size_t	max = strlen(STRING_2) + 1;
+
+			strlcat(buff1, str, max);
+			ft_strlcat(buff2, str, max);
+			if (!strcmp(buff1, buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strlcat_empty2(void *ptr) {
+	typeof(strlcat)	*ft_strlcat = ptr;
+	SET_EXPLICATION("your strcat does not works with empty string as second parameter");
+
+	SANDBOX_RAISE(
+			char	*str = STRING_1;
+			char	buff1[0xF00] = "";
+			char	buff2[0xF00] = "";
+			size_t	max = strlen(STRING_1) + 1;
+
+			strlcat(buff1, str, max);
+			ft_strlcat(buff2, str, max);
+			if (!strcmp(buff1, buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strlcat_null_byte(void *ptr) {
+	typeof(strlcat)	*ft_strlcat = ptr;
+	SET_EXPLICATION("your strlcat does not set a \\0 to the end");
+
+	SANDBOX_RAISE(
+			char	*str = "n\0AA";
+			char	buff1[0xF00] = "\0AAAAAAAAAAAAAAAA";
+			char	buff2[0xF00] = "\0AAAAAAAAAAAAAAAA";
+			size_t	max = 10;
+
+			strlcat(buff1, str, max);
+			ft_strlcat(buff2, str, max);
+			if (!strcmp(buff1, buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strlcat_null1(void *ptr) {
+	typeof(strlcat)	*ft_strlcat = ptr;
+	SET_EXPLICATION("your strlcat does not segfault when null parameter is sent");
+
+	SANDBOX_IRAISE(
+			char	b[0xF] = "nyan !";
+
+			ft_strlcat(NULL, b, 2);
+			);
+}
+
+void			test_ft_strlcat_null2(void *ptr) {
+	typeof(strlcat)	*ft_strlcat = ptr;
+	SET_EXPLICATION("your strlcat does not segfault when null parameter is sent");
+
+	SANDBOX_IRAISE(
+			char	b[0xF] = "nyan !";
+
+			ft_strlcat(b, NULL, 2);
+			);
+}
+
+void            test_ft_strlcat(void){
+	add_fun_subtest(test_ft_strlcat_basic);
+	add_fun_subtest(test_ft_strlcat_basic1);
+	add_fun_subtest(test_ft_strlcat_basic2);
+	add_fun_subtest(test_ft_strlcat_empty1);
+	add_fun_subtest(test_ft_strlcat_empty2);
+	add_fun_subtest(test_ft_strlcat_null_byte);
+	add_fun_subtest(test_ft_strlcat_null1);
+	add_fun_subtest(test_ft_strlcat_null2);
+}
 
 ////////////////////////////////
-//         ft_bzero           //
+//         ft_strchr          //
 ////////////////////////////////
 
-void            test_ft_strrchr(void){ }
+void			test_ft_strchr_basic(void *ptr) {
+	typeof(strchr)	*ft_strchr = ptr;
+	SET_EXPLICATION("your strchr does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*src = STRING_1;
+
+			char	*d1 = strchr(src, ' ');
+			char	*d2 = ft_strchr(src, ' ');
+			if (d1 == d2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(d1, d2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strchr_not_found(void *ptr) {
+	typeof(strchr)	*ft_strchr = ptr;
+	SET_EXPLICATION("your strchr does not works with not found char");
+
+	SANDBOX_RAISE(
+			char	*src = STRING_1;
+
+			char	*d1 = strchr(src, ' ');
+			char	*d2 = ft_strchr(src, ' ');
+			if (d1 == d2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(d1, d2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strchr_unicode(void *ptr) {
+	typeof(strchr)	*ft_strchr = ptr;
+	SET_EXPLICATION("your strchr does not works with unicode");
+
+	SANDBOX_RAISE(
+			char	*src = "īœ˙ˀ˘¯ˇ¸¯.œ«‘––™ª•¡¶¢˜ˀ";
+
+			char	*d1 = strchr(src, L'–');
+			char	*d2 = ft_strchr(src, L'–');
+			if (d1 == d2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(d1, d2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strchr_zero(void *ptr) {
+	typeof(strchr)	*ft_strchr = ptr;
+	SET_EXPLICATION("your strchr does not works with \\0");
+
+	SANDBOX_RAISE(
+			char	*src = "there is so \0ma\0ny \0 \\0 in t\0his stri\0ng !\0\0\0\0";
+
+			char	*d1 = strchr(src, '\0');
+			char	*d2 = ft_strchr(src, '\0');
+			if (d1 == d2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(d1, d2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strchr_null(void *ptr) {
+	typeof(strchr)	*ft_strchr = ptr;
+
+	SANDBOX_IRAISE(
+			ft_strchr(NULL, '\0');
+			)
+}
+
+void            test_ft_strchr(void){
+	add_fun_subtest(test_ft_strchr_basic);
+	add_fun_subtest(test_ft_strchr_not_found);
+	add_fun_subtest(test_ft_strchr_unicode);
+	add_fun_subtest(test_ft_strchr_zero);
+	add_fun_subtest(test_ft_strchr_null);
+}
 
 ////////////////////////////////
 //         ft_strrchr         //
 ////////////////////////////////
 
-void            test_ft_strstr(void){ }
+void			test_ft_strrchr_basic(void *ptr) {
+	typeof(strrchr)	*ft_strrchr = ptr;
+	SET_EXPLICATION("your strrchr does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*src = STRING_1;
+
+			char	*d1 = strrchr(src, ' ');
+			char	*d2 = ft_strrchr(src, ' ');
+			if (d1 == d2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(d1, d2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strrchr_not_found(void *ptr) {
+	typeof(strrchr)	*ft_strrchr = ptr;
+	SET_EXPLICATION("your strrchr does not works with not found char");
+
+	SANDBOX_RAISE(
+			char	*src = STRING_1;
+
+			char	*d1 = strrchr(src, ' ');
+			char	*d2 = ft_strrchr(src, ' ');
+			if (d1 == d2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(d1, d2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strrchr_unicode(void *ptr) {
+	typeof(strrchr)	*ft_strrchr = ptr;
+	SET_EXPLICATION("your strrchr does not works with unicode");
+
+	SANDBOX_RAISE(
+			char	*src = "īœ˙ˀ˘¯ˇ¸¯.œ«‘––™ª•¡¶¢˜ˀ";
+
+			char	*d1 = strrchr(src, L'–');
+			char	*d2 = ft_strrchr(src, L'–');
+			if (d1 == d2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(d1, d2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strrchr_zero(void *ptr) {
+	typeof(strrchr)	*ft_strrchr = ptr;
+	SET_EXPLICATION("your strrchr does not works with \\0");
+
+	SANDBOX_RAISE(
+			char	*src = "there is so \0ma\0ny \0 \\0 in t\0his stri\0ng !\0\0\0\0";
+
+			char	*d1 = strrchr(src, '\0');
+			char	*d2 = ft_strrchr(src, '\0');
+			if (d1 == d2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(d1, d2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strrchr_null(void *ptr) {
+	typeof(strrchr)	*ft_strrchr = ptr;
+
+	SANDBOX_IRAISE(
+			ft_strrchr(NULL, '\0');
+			)
+}
+
+void            test_ft_strrchr(void){
+	add_fun_subtest(test_ft_strrchr_basic);
+	add_fun_subtest(test_ft_strrchr_not_found);
+	add_fun_subtest(test_ft_strrchr_unicode);
+	add_fun_subtest(test_ft_strrchr_zero);
+	add_fun_subtest(test_ft_strrchr_null);
+}
 
 ////////////////////////////////
 //         ft_strstr          //
+////////////////////////////////
+
+void            test_ft_strstr(void){ }
+
+////////////////////////////////
+//         ft_strnstr         //
 ////////////////////////////////
 
 void            test_ft_strnstr(void){ }
@@ -767,7 +1693,196 @@ void            test_ft_strncmp(void){ }
 //         ft_atoi            //
 ////////////////////////////////
 
-void            test_ft_atoi(void){ }
+void			test_ft_atoi_basic(void *ptr) {
+	typeof(atoi)	*ft_atoi = ptr;
+	SET_EXPLICATION("your atoi does not works with positive numbers");
+
+	SANDBOX_RAISE(
+			char	*n = "945";
+
+			int		i1 = atoi(n);
+			int		i2 = ft_atoi(n);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_atoi_negative(void *ptr) {
+	typeof(atoi)	*ft_atoi = ptr;
+	SET_EXPLICATION("your atoi does not works with negative numbers");
+
+	SANDBOX_RAISE(
+			char	*n = "-085";
+
+			int		i1 = atoi(n);
+			int		i2 = ft_atoi(n);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_atoi_rand(void *ptr) {
+	typeof(atoi)	*ft_atoi = ptr;
+	SET_EXPLICATION("your atoi does not works with random numbers");
+
+	SANDBOX_RAISE(
+			srand(clock());
+			for (int i = 0; i < 100; i++) {
+				char n[15];
+				sprintf(n, "%i", rand());
+
+				int		i1 = atoi(n);
+				int		i2 = ft_atoi(n);
+				if (i1 != i2) {
+					SET_DIFF_INT(i1, i2);
+					exit(TEST_FAILED);
+				}
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_atoi_blank1(void *ptr) {
+	typeof(atoi)	*ft_atoi = ptr;
+	SET_EXPLICATION("your atoi is not working with blanks");
+
+	SANDBOX_RAISE(
+			char	*n = "\t\v\f\r\n \f-06050";
+
+			int		i1 = atoi(n);
+			int		i2 = ft_atoi(n);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_atoi_blank2(void *ptr) {
+	typeof(atoi)	*ft_atoi = ptr;
+	SET_EXPLICATION("your atoi is not working with blanks");
+
+	SANDBOX_RAISE(
+			char	*n = "\t\v\f\r\n \f- \f\t\n\r    06050";
+
+			int		i1 = atoi(n);
+			int		i2 = ft_atoi(n);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_atoi_string(void *ptr) {
+	typeof(atoi)	*ft_atoi = ptr;
+	SET_EXPLICATION("your atoi is not working with blanks");
+
+	SANDBOX_RAISE(
+			char	*n = "-123THERE IS A NYANCAT UNDER YOUR BED";
+
+			int		i1 = atoi(n);
+			int		i2 = ft_atoi(n);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_atoi_max_int(void *ptr) {
+	typeof(atoi)	*ft_atoi = ptr;
+	SET_EXPLICATION("your atoi does not works with int max value");
+
+	SANDBOX_RAISE(
+			char	n[15];
+			sprintf(n, "%i", INT_MAX);
+
+			int		i1 = atoi(n);
+			int		i2 = ft_atoi(n);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_atoi_min_int(void *ptr) {
+	typeof(atoi)	*ft_atoi = ptr;
+	SET_EXPLICATION("your atoi does not works with int min value");
+
+	SANDBOX_RAISE(
+			char	n[15];
+			sprintf(n, "%i", INT_MIN);
+
+			int		i1 = atoi(n);
+			int		i2 = ft_atoi(n);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_atoi_max_long(void *ptr) {
+	typeof(atoi)	*ft_atoi = ptr;
+	SET_EXPLICATION("your atoi does not works with long max value");
+
+	SANDBOX_RAISE(
+			char	n[40];
+			sprintf(n, "%li", LONG_MAX);
+
+			int		i1 = atoi(n);
+			int		i2 = ft_atoi(n);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_KO);
+			);
+}
+
+void			test_ft_atoi_min_long(void *ptr) {
+	typeof(atoi)	*ft_atoi = ptr;
+	SET_EXPLICATION("your atoi does not works with long min value");
+
+	SANDBOX_RAISE(
+			char	n[40];
+			sprintf(n, "%li", LONG_MIN);
+
+			int		i1 = atoi(n);
+			int		i2 = ft_atoi(n);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_KO);
+			);
+}
+
+void			test_ft_atoi_null(void *ptr) {
+	typeof(atoi)	*ft_atoi = ptr;
+
+	SANDBOX_IRAISE(
+			ft_atoi(NULL);
+			);
+}
+
+void            test_ft_atoi(void){
+	add_fun_subtest(test_ft_atoi_basic);
+	add_fun_subtest(test_ft_atoi_negative);
+	add_fun_subtest(test_ft_atoi_rand);
+	add_fun_subtest(test_ft_atoi_blank1);
+	add_fun_subtest(test_ft_atoi_blank2);
+	add_fun_subtest(test_ft_atoi_string);
+	add_fun_subtest(test_ft_atoi_max_int);
+	add_fun_subtest(test_ft_atoi_min_int);
+	add_fun_subtest(test_ft_atoi_max_long);
+	add_fun_subtest(test_ft_atoi_min_long);
+	add_fun_subtest(test_ft_atoi_null);
+}
 
 ////////////////////////////////
 //         ft_isalpha         //
@@ -782,7 +1897,7 @@ void			test_ft_isalpha_(void *ptr) {
 	SANDBOX_RAISE(
 			int		i;
 			i = -1;
-			while (i < 130)
+			while (i < 530)
 			{
 				if (ft_isalpha(i) != isalpha(i))
 					exit(TEST_FAILED);
@@ -808,7 +1923,7 @@ void			test_ft_isdigit_(void *ptr) {
 	SANDBOX_RAISE(
 			int		i;
 			i = -1;
-			while (i < 130)
+			while (i < 530)
 			{
 				if (ft_isdigit(i) != isdigit(i))
 					exit(TEST_FAILED);
@@ -1029,7 +2144,68 @@ void            test_ft_itoa(void){ }
 //         ft_putchar         //
 ////////////////////////////////
 
-void            test_ft_putchar(void){ }
+void			test_ft_putchar_basic(void *ptr) {
+	typeof(putchar)	*ft_putchar = ptr;
+	SET_EXPLICATION("your putchar does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	buff[10];
+			char	c = 'o';
+			STDOUT_TO_BUFF;
+			ft_putchar(c);
+			GET_STDOUT(buff, 10);
+			if (buff[0] == c)
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff, &c);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_putchar_ascii(void *ptr) {
+	typeof(putchar)	*ft_putchar = ptr;
+	SET_EXPLICATION("your putchar does not works with all ascii chars");
+
+	SANDBOX_RAISE(
+			char	buff[1000];
+			char	buff2[1000];
+			STDOUT_TO_BUFF;
+			for (int i = 0; i < 300; i++) {
+				ft_putchar(i);
+				buff2[i] = i;
+			}
+			GET_STDOUT(buff, 1000);
+			for (int i = 0; i < 300; i++)
+				if (buff[i] != buff2[i]) {
+					SET_DIFF(buff2, buff);
+					exit(TEST_FAILED);
+				}
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_putchar_unicode(void *ptr) {
+	typeof(putchar)	*ft_putchar = ptr;
+	SET_EXPLICATION("your putchar does not works with unicode");
+
+	SANDBOX_RAISE(
+			char	buff[10];
+			int		c = L'ø';
+			STDOUT_TO_BUFF;
+			ft_putchar(c);
+			GET_STDOUT(buff, 10);
+			if (buff[0] == c)
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff, (char*)&c);
+			exit(TEST_KO);
+			);
+	(void)ft_putchar;
+}
+
+void            test_ft_putchar(void){
+	add_fun_subtest(test_ft_putchar_basic);
+	add_fun_subtest(test_ft_putchar_ascii);
+	add_fun_subtest(test_ft_putchar_unicode);
+}
 
 ////////////////////////////////
 //         ft_putstr          //

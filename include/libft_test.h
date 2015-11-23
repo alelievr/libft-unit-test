@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/22 00:59:35 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/23 01:01:14 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <fcntl.h>
+# include <stdint.h>
+# include <limits.h>
+# include <time.h>
 
 typedef struct	s_subtest {
 	char	*fun_name;
@@ -34,7 +37,15 @@ typedef struct	s_errs {
 	int		type;
 	char	*data;
 	char	*code;
+	char	*diff;
 }				t_err;
+
+typedef struct	s_tests {
+	char					data[128];
+	void					*ptr;
+	unsigned long long int	olol;
+	int						flags;
+}				t_test;
 
 enum		e_values {
 	TEST_SUCCESS,
@@ -43,17 +54,21 @@ enum		e_values {
 	TEST_CRASH,
 	TEST_INTERUPT,
 	TEST_MISSING,
-	TEST_NOCRASH
+	TEST_NOCRASH,
+	TEST_KO,
+	TEST_FINISHED
 };
 
 # define	LOG_FILE		"result.log"
 # define	TMP_FILE		".over_malloc"
+# define	DIFF_FILE		".fun_diff"
 
-# define	COLOR_SUCCESS "\033[38;5;46m"
-# define	COLOR_FAILED "\033[38;5;160m"
-# define	COLOR_TIMEOUT "\033[38;5;166m"
-# define	COLOR_INTERUPT "\033[38;5;93m"
-# define	COLOR_CLEAR "\033[0m"
+# define	COLOR_SUCCESS	"\033[38;5;46m"
+# define	COLOR_FAILED	"\033[38;5;160m"
+# define	COLOR_TIMEOUT	"\033[38;5;166m"
+# define	COLOR_INTERUPT	"\033[38;5;93m"
+# define	COLOR_KO		"\033[38;5;226m"
+# define	COLOR_CLEAR		"\033[0m"
 
 # define	BSIZE			0xF00
 # define	BFSIZE			0xF0000
@@ -83,6 +98,14 @@ enum		e_values {
 # define	MALLOC_MEMSET		lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[1]){_MALLOC_MEMSET}, 1);
 # define	MALLOC_SIZE			lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[1]){_MALLOC_SIZE}, 1);
 
+# define	SET_DIFF(x, y)		lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%s|\n%12s: |%s|", current_fun_name + 3, x, current_fun_name, y) ; write(g_diff_fd, "\0", 1);
+# define	SET_DIFF_INT(x, y)	lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%i|\n%12s: |%i|", current_fun_name + 3, x, current_fun_name, y) ; write(g_diff_fd, "\0", 1);
+# define	SET_DIFF_PTR(x, y)	lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%p|\n%12s: |%p|", current_fun_name + 3, x, current_fun_name, y) ; write(g_diff_fd, "\0", 1);
+# define	RESET_DIFF			lseek(g_diff_fd, 0, SEEK_SET); write(g_diff_fd, "\0", 1);
+
+#define		STDOUT_TO_BUFF		fd_to_buffer(STDOUT_FILENO);
+#define		GET_STDOUT(y, z)	get_fd_buffer(STDOUT_FILENO, y, z);
+
 extern		char			*current_fun_name;
 extern		int				current_test_id;
 extern		t_libft_test	fun_test_table[];
@@ -95,6 +118,7 @@ extern		pid_t			g_pid;
 extern		char			g_ret[2];
 extern		int				g_log_fd;
 extern		int				g_malloc_fd;
+extern		int				g_diff_fd;
 extern		char			*current_test_code;
 
 /*  Display functions  */
@@ -167,6 +191,8 @@ void			test_ft_putnbr_fd(void);
 void    		run_subtests(void *h, int start);
 void			signals(void);
 void			ft_raise(int s);
+void			fd_to_buffer(int fd);
+char			*get_fd_buffer(int fd, char *buff, size_t size);
 
 /*  sanbox:  */
 void			sandbox(void);

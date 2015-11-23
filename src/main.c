@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/22 00:20:16 by bciss            ###   ########.fr       */
+/*   Updated: 2015/11/23 00:32:47 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,26 @@
 #include <time.h>
 #include "libft_test.h"
 #include "init.c"
+
+int		fd_pipe[2];
+int		_stdout;
+
+void	fd_to_buffer(int fd) {
+	_stdout = dup(fd);
+	if (pipe(fd_pipe) != 0)
+		return ;
+	dup2(fd_pipe[1], fd);
+	close(fd_pipe[1]);
+}
+
+char	*get_fd_buffer(int fd, char *buff, size_t size) {
+	int		ret;
+
+	ret = read(fd_pipe[0], buff, size);
+	buff[ret] = 0;
+	dup2(_stdout, fd);
+	return (buff);
+}
 
 void	ft_exit(char *str) {
 	printf("%s\n", str);
@@ -53,9 +73,12 @@ void	run_subtests(void *h, int start) {
 		tmpfun = dlsym(handle, fun_subtest_table[start].fun_name);
 		current_subtest_id++;
 		MALLOC_RESET;
+		RESET_DIFF;
 		if (tmpfun)
 			fun_subtest_table[start].fun_test_ptr(tmpfun);
 	}
+	current_fun_name = "";
+	display_test_result(TEST_FINISHED, "");
 	printf("\nSee %s for more informations !\n", LOG_FILE);
 	dprintf(g_log_fd, "\n");
 	close(g_log_fd);
@@ -96,7 +119,10 @@ int		main(void) {
 		ft_exit("can't open/create logfile !");
 	if ((g_malloc_fd = open(TMP_FILE, O_WRONLY | O_TRUNC | O_CREAT, 0600)) == -1)
 		ft_exit("can't create tmp file !");
+	if ((g_diff_fd = open(DIFF_FILE, O_RDWR | O_TRUNC | O_CREAT, 0600)) == -1)
+		ft_exit("can't create/open diff file !");
 	MALLOC_RESET;
+	RESET_DIFF;
 	if (!(handle = dlopen("./libft.so", RTLD_LAZY)))
 		ft_exit(dlerror());
 
