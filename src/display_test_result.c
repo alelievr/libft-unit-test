@@ -15,7 +15,8 @@
 
 char	*butify(char *code) {
 	char	*tmp;
-	if (!(tmp = (char*)malloc(sizeof(char) * (strlen(code) + 0xF00))))
+	size_t	size = (strlen(code) + 0xF00);
+	if (!(tmp = (char*)malloc(sizeof(char) * size)))
 		return ("//BUFFER ERROR\\\\");
 	char	*ret = tmp;
 	int		indent = 1;
@@ -33,6 +34,7 @@ char	*butify(char *code) {
 		else
 			*tmp++ = *code++;
 	}
+	*tmp = 0;
 	return (ret);
 }
 

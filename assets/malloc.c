@@ -3,18 +3,51 @@
 #include <string.h>
 #include "libft_test.h"
 
+int     ft_convert(char *buffer, int64_t n, int b, int maj)
+{
+	unsigned char   base[b + 1];
+	int             i;
+	int             tmp;
+
+	i = -1;
+	while (++i < b)
+		if (i < 10)
+			base[i] = '0' + i;
+		else
+			base[i] = (maj ? 'A' : 'a') + i - 10;
+	i = 0;
+	tmp = n;
+	while (tmp >= b && ((++i)))
+		tmp /= b;
+	n *= b;
+	while (n >= b && ((n /= b)))
+		buffer[i--] = base[n % b];
+	buffer[i--] = base[n % b];
+	return (strlen(buffer));
+}
+
 void *malloc(size_t size)
 {
-	void	*(*real_malloc)(size_t);
+	static void	*(*real_malloc)(size_t) = NULL;
 	int		fd;
 	void	*tmp;
+	char	buff[16] = {[15]=0};
 
-	real_malloc = dlsym(RTLD_NEXT, "malloc");
-	if ((fd = open(TMP_FILE, O_RDONLY)) != -1) {
-		char		c;
-		read(fd, &c, 1);
-		switch (c) {
+	if (real_malloc == NULL)
+		real_malloc = dlsym(RTLD_NEXT, "malloc");
+	if ((fd = open(TMP_FILE, O_RDWR)) != -1) {
+		char		c[2];
+
+		read(fd, c, 2);
+		if (c[1] == _MALLOC_DISABLE) {
+			lseek(fd, 1, SEEK_SET);
+			write(fd, (char[1]){_MALLOC_ENABLE}, 1);
+			return real_malloc(size);
+		}
+		close(fd);
+		switch (c[0]) {
 			case _MALLOC_NULL:
+	write(1, "null ?", 6);
 				return (NULL);
 				break ;
 			case _MALLOC_MEMSET:
@@ -23,14 +56,11 @@ void *malloc(size_t size)
 				return tmp;
 				break ;
 			case _MALLOC_SIZE:
-				printf("%li bytes allocated\n", size);
-				break ;
-			default:
-				return (real_malloc(size));
+				ft_convert(buff, size, 10, 0);
+				write(1, buff, strlen(buff));
+				write(1, " bytes allocated\n", 18);
 				break ;
 		}
-		close(fd);
 	}
 	return real_malloc(size);
 }
-

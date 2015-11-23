@@ -828,12 +828,15 @@ void			test_ft_strdup_malloc_null(void *ptr) {
 	SET_EXPLICATION("you dindn't protect your malloc return");
 
 	SANDBOX_RAISE(
-			char	*str;
+			char	*ptr;
 
 			MALLOC_NULL;
-			str = strdup("so you malloc ? :)");
+			ptr = ft_strdup("lol");
 			MALLOC_RESET;
-			exit(TEST_SUCCESS);
+			if (!ptr)
+				exit(TEST_SUCCESS);
+			SET_DIFF_PTR(NULL, ptr);
+			exit(TEST_FAILED);
 			);
 	(void)ft_strdup;
 }
