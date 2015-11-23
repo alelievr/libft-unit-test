@@ -1672,19 +1672,259 @@ void            test_ft_strrchr(void){
 //         ft_strstr          //
 ////////////////////////////////
 
-void            test_ft_strstr(void){ }
+void			test_ft_strstr_basic(void *ptr) {
+	typeof(strstr)	*ft_strstr = ptr;
+	SET_EXPLICATION("your strstr does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*s1 = "FF";
+			char	*s2 = "see FF your FF return FF now FF";
+
+			char	*i1 = strstr(s1, s2);
+			char	*i2 = ft_strstr(s1, s2);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strstr_not_found(void *ptr) {
+	typeof(strstr)	*ft_strstr = ptr;
+	SET_EXPLICATION("your strstr does not works with not found patern");
+
+	SANDBOX_RAISE(
+			char	*s1 = "can't found that";
+			char	*s2 = "in this !";
+
+			char	*i1 = strstr(s1, s2);
+			char	*i2 = ft_strstr(s1, s2);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strstr_zero_len1(void *ptr) {
+	typeof(strstr)	*ft_strstr = ptr;
+	SET_EXPLICATION("your strstr does not works with empty strings");
+
+	SANDBOX_RAISE(
+			char	*s1 = "";
+			char	*s2 = "oh no not the empty string !";
+
+			char	*i1 = strstr(s1, s2);
+			char	*i2 = ft_strstr(s1, s2);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strstr_zero_len2(void *ptr) {
+	typeof(strstr)	*ft_strstr = ptr;
+	SET_EXPLICATION("your strstr does not works with empty strings");
+
+	SANDBOX_RAISE(
+			char	*s1 = "oh no not the empty string !";
+			char	*s2 = "";
+
+			char	*i1 = strstr(s1, s2);
+			char	*i2 = ft_strstr(s1, s2);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strstr_same_ptr(void *ptr) {
+	typeof(strstr)	*ft_strstr = ptr;
+
+	SANDBOX_RAISE(
+			char	*s1 = "AAAAAAAAAAAAA";
+
+			char	*i1 = strstr(s1, s1);
+			char	*i2 = ft_strstr(s1, s1);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strstr_null1(void *ptr) {
+	typeof(strstr)	*ft_strstr = ptr;
+	SET_EXPLICATION("your strstr does not segfault when null parameter is sent");
+
+	SANDBOX_IRAISE(
+			ft_strstr(NULL, "fake");
+			);
+}
+
+void			test_ft_strstr_null2(void *ptr) {
+	typeof(strstr)	*ft_strstr = ptr;
+	SET_EXPLICATION("your strstr does not segfault when null parameter is sent");
+
+	SANDBOX_IRAISE(
+			ft_strstr("fake", NULL);
+			);
+}
+
+void            test_ft_strstr(void){
+	add_fun_subtest(test_ft_strstr_basic);
+	add_fun_subtest(test_ft_strstr_not_found);
+	add_fun_subtest(test_ft_strstr_zero_len1);
+	add_fun_subtest(test_ft_strstr_zero_len2);
+	add_fun_subtest(test_ft_strstr_same_ptr);
+	add_fun_subtest(test_ft_strstr_null2);
+	add_fun_subtest(test_ft_strstr_null1);
+}
 
 ////////////////////////////////
 //         ft_strnstr         //
 ////////////////////////////////
 
-void            test_ft_strnstr(void){ }
+void			test_ft_strnstr_basic(void *ptr) {
+	typeof(strnstr)	*ft_strnstr = ptr;
+	SET_EXPLICATION("your strnstr does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*s1 = "FF";
+			char	*s2 = "see FF your FF return FF now FF";
+			size_t	max = strlen(s2);
+
+			char	*i1 = strnstr(s1, s2, max);
+			char	*i2 = ft_strnstr(s1, s2, max);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strnstr_not_found(void *ptr) {
+	typeof(strnstr)	*ft_strnstr = ptr;
+	SET_EXPLICATION("your strnstr does not works with not found patern");
+
+	SANDBOX_RAISE(
+			char	*s1 = "FF";
+			char	*s2 = "see FF your FF return FF now FF";
+
+			char	*i1 = strnstr(s1, s2, 4);
+			char	*i2 = ft_strnstr(s1, s2, 4);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strnstr_zero_len1(void *ptr) {
+	typeof(strnstr)	*ft_strnstr = ptr;
+	SET_EXPLICATION("your strnstr does not works with empty strings");
+
+	SANDBOX_RAISE(
+			char	*s1 = "";
+			char	*s2 = "oh no not the empty string !";
+			size_t	max = strlen(s2);
+
+			char	*i1 = strnstr(s1, s2, max);
+			char	*i2 = ft_strnstr(s1, s2, max);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strnstr_zero_len2(void *ptr) {
+	typeof(strnstr)	*ft_strnstr = ptr;
+	SET_EXPLICATION("your strnstr does not works with empty strings");
+
+	SANDBOX_RAISE(
+			char	*s1 = "oh no not the empty string !";
+			char	*s2 = "";
+			size_t	max = strlen(s1);
+
+			char	*i1 = strnstr(s1, s2, max);
+			char	*i2 = ft_strnstr(s1, s2, max);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strnstr_same_ptr(void *ptr) {
+	typeof(strnstr)	*ft_strnstr = ptr;
+
+	SANDBOX_RAISE(
+			char	*s1 = "AAAAAAAAAAAAA";
+			size_t	max = strlen(s1);
+
+			char	*i1 = strnstr(s1, s1, max);
+			char	*i2 = ft_strnstr(s1, s1, max);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strnstr_zero(void *ptr) {
+	typeof(strnstr)	*ft_strnstr = ptr;
+
+	SANDBOX_RAISE(
+			char	*s1 = "A";
+
+			char	*i1 = strnstr(s1, s1, 0);
+			char	*i2 = ft_strnstr(s1, s1, 0);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strnstr_null1(void *ptr) {
+	typeof(strnstr)	*ft_strnstr = ptr;
+	SET_EXPLICATION("your strnstr does not segfault when null parameter is sent");
+
+	SANDBOX_IRAISE(
+			ft_strnstr(NULL, "fake", 3);
+			);
+}
+
+void			test_ft_strnstr_null2(void *ptr) {
+	typeof(strnstr)	*ft_strnstr = ptr;
+	SET_EXPLICATION("your strnstr does not segfault when null parameter is sent");
+
+	SANDBOX_IRAISE(
+			ft_strnstr("fake", NULL, 3);
+			);
+}
+
+void            test_ft_strnstr(void){
+	add_fun_subtest(test_ft_strnstr_basic);
+	add_fun_subtest(test_ft_strnstr_not_found);
+	add_fun_subtest(test_ft_strnstr_zero_len1);
+	add_fun_subtest(test_ft_strnstr_zero_len2);
+	add_fun_subtest(test_ft_strnstr_same_ptr);
+	add_fun_subtest(test_ft_strnstr_zero);
+	add_fun_subtest(test_ft_strnstr_null2);
+	add_fun_subtest(test_ft_strnstr_null1);
+}
 
 ////////////////////////////////
 //         ft_strcmp          //
 ////////////////////////////////
 
-void            test_ft_strcmp(void){ }
+void            test_ft_strcmp(void){
+
+}
 
 ////////////////////////////////
 //         ft_strncmp         //
