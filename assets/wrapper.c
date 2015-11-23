@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/21 19:48:59 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/22 01:01:03 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/23 01:21:03 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,10 @@ int		main(void) {
 		exit(execve("./assets/libtests", argv, env));
 	else {
 		wait((int *)ret);
-		if (ret[0] != 0)
-			printf("[%s]: %s\n", sigs[ret[0]].name, sigs[ret[0]].str);
+		if (ret[0] != 0) {
+			printf("[%s]: %s\n", sigs[ret[0] - 1].name, sigs[ret[0] - 1].str);
+			printf("\033[38;5;201mOMG you crashed my program, please report this bug to @alelievr !\nthanks\n\033[0m");
+		}
 		unlink(TMP_FILE);
 	}
 	return (0);

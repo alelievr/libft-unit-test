@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:26:54 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/23 00:42:13 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/23 01:42:52 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,26 @@
 #include <ctype.h>
 
 char	*butify(char *code) {
-	code = strdup(code);
-	char	*tmp = code;
+	char	*tmp;
+	if (!(tmp = (char*)malloc(sizeof(char) * (strlen(code) + 0xF00))))
+		return ("//BUFFER ERROR\\\\");
+	char	*ret = tmp;
+	int		indent = 1;
 
+	*tmp++ = '\t';
 	while (*code) {
-		if (*code == ';' && isspace(code[1]))
-			code[1] = '\n';
-		code++;
+		if (*code == ';' && (isspace(code[1]) || (code[1] == ';' && isspace(code[2])))) {
+			while (*code && (isspace(*code) || *code == ';'))
+				code++;
+			*tmp++ = ';';
+			*tmp++ = '\n';
+			for (int i = 0; i < indent; i++)
+				*tmp++ = '\t';
+		}
+		else
+			*tmp++ = *code++;
 	}
-	return (tmp);
+	return (ret);
 }
 
 char	*get_diff(void) {
@@ -83,7 +94,7 @@ void    display_test_result(int value, char *explications)
 				dprintf(g_log_fd, "\n[%s]: %s\n", verbose_type(errs[i].type), errs[i].data);
 				dprintf(g_log_fd, "Test code:\n%s\n", butify(errs[i].code));
 				if (errs[i].diff != NULL) {
-					dprintf(g_log_fd, "Diffs:\n%s\n\n", errs[i].diff);
+					dprintf(g_log_fd, "Diffs:\n%s\n", errs[i].diff);
 					free(errs[i].diff);
 				}
 			}

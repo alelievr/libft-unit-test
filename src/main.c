@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/23 00:32:47 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/23 01:27:50 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <dlfcn.h>
 #include <time.h>
+#include <execinfo.h>
 #include "libft_test.h"
 #include "init.c"
 

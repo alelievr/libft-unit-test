@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/23 01:01:14 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/23 01:44:14 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ enum		e_values {
 # define	BSIZE			0xF00
 # define	BFSIZE			0xF0000
 # define	SUBTEST_SIZE	0xF00
-# define	TIMEOUT_MILLIS	1200
+# define	TIMEOUT_MILLIS	2200
 
 # define	SET_EXPLICATION(x)	current_explication = x;
 # define	SET_TEST_TEXT(x)	current_test = x;
@@ -98,7 +98,7 @@ enum		e_values {
 # define	MALLOC_MEMSET		lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[1]){_MALLOC_MEMSET}, 1);
 # define	MALLOC_SIZE			lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[1]){_MALLOC_SIZE}, 1);
 
-# define	SET_DIFF(x, y)		lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%s|\n%12s: |%s|", current_fun_name + 3, x, current_fun_name, y) ; write(g_diff_fd, "\0", 1);
+# define	SET_DIFF(x, y)		lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%s|\n%12s: |%s|", current_fun_name + 3, x, current_fun_name, y); write(g_diff_fd, "\0", 1);
 # define	SET_DIFF_INT(x, y)	lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%i|\n%12s: |%i|", current_fun_name + 3, x, current_fun_name, y) ; write(g_diff_fd, "\0", 1);
 # define	SET_DIFF_PTR(x, y)	lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%p|\n%12s: |%p|", current_fun_name + 3, x, current_fun_name, y) ; write(g_diff_fd, "\0", 1);
 # define	RESET_DIFF			lseek(g_diff_fd, 0, SEEK_SET); write(g_diff_fd, "\0", 1);
