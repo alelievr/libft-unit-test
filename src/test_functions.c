@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/23 01:47:31 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/23 18:58:21 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1922,8 +1922,30 @@ void            test_ft_strnstr(void){
 //         ft_strcmp          //
 ////////////////////////////////
 
-void            test_ft_strcmp(void){
 
+void			test_ft_strcmp_basic(void *ptr) {
+	typeof(strcmp)	*ft_strcmp = ptr;
+	SET_EXPLICATION("your strcmp does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*s1 = STRING_1;
+			char	*s2 = STRING_2;
+
+			int		i1 = strcmp(s1, s2);
+			int		i2 = ft_strcmp(s1, s2);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void            test_ft_strcmp(void){
+	add_fun_subtest(test_ft_strcmp_basic);
+	add_fun_subtest(test_ft_strcmp_basic2);
+	add_fun_subtest(test_ft_strcmp_ascii);
+	add_fun_subtest(test_ft_strcmp_null1);
+	add_fun_subtest(test_ft_strcmp_null2);
 }
 
 ////////////////////////////////
