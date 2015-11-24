@@ -17,6 +17,8 @@
 #define		STRING_2	"there is no starts in the sky"
 #define		STRING_3	"test basic !"
 
+#define		REG(x)		((x > 0) ? 1 : ((x < 0) ? -1 : 0))
+
 void			add_fun_subtest(void (*fun)(void *ptr)) {
 	static int		index = 0;
 
@@ -603,7 +605,7 @@ void            test_ft_memchr(void) {
 
 void			test_ft_memcmp_basic(void *ptr) {
 	typeof(memcmp)		*ft_memcmp = ptr;
-	SET_EXPLICATION("yout memcmp does not works with basic input");
+	SET_EXPLICATION("your memcmp does not works with basic input");
 
 	SANDBOX_RAISE(
 			uint8_t	*s1 = (uint8_t *)"\xff\xaa\xde\x12MACOSX";
@@ -619,7 +621,7 @@ void			test_ft_memcmp_basic(void *ptr) {
 
 void			test_ft_memcmp_basic1(void *ptr) {
 	typeof(memcmp)		*ft_memcmp = ptr;
-	SET_EXPLICATION("yout memcmp does not works with basic input");
+	SET_EXPLICATION("your memcmp does not works with basic input");
 
 	SANDBOX_RAISE(
 			uint8_t	*s1 = (uint8_t *)"\xff\xaa\xde\x12OLOL";
@@ -627,7 +629,7 @@ void			test_ft_memcmp_basic1(void *ptr) {
 			size_t	size = 7;
 
 			int		i1 = memcmp(s1, s2, size);
-			int		i2 = ft_memcmp(s1, s2, size);
+			int		i2 = REG(ft_memcmp(s1, s2, size));
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
 			SET_DIFF_INT(i1, i2);
@@ -638,7 +640,7 @@ void			test_ft_memcmp_basic1(void *ptr) {
 
 void			test_ft_memcmp_basic2(void *ptr) {
 	typeof(memcmp)		*ft_memcmp = ptr;
-	SET_EXPLICATION("yout memcmp does not works with basic input");
+	SET_EXPLICATION("your memcmp does not works with basic input");
 
 	SANDBOX_RAISE(
 			uint8_t	*s1 = (uint8_t *)"\xff\xaa\xde\x12";
@@ -654,12 +656,12 @@ void			test_ft_memcmp_basic2(void *ptr) {
 
 void			test_ft_memcmp_basic3(void *ptr) {
 	typeof(memcmp)		*ft_memcmp = ptr;
-	SET_EXPLICATION("yout memcmp does not works with basic input");
+	SET_EXPLICATION("your memcmp does not works with basic input");
 
 	SANDBOX_RAISE(
 			uint8_t	*s1 = (uint8_t *)"\xff\xaa\xde\xffMACOSX\xff";
-			uint8_t	*s2 = (uint8_t *)"\xff\xaa\xde\x00";
-			size_t	size = 4;
+			uint8_t	*s2 = (uint8_t *)"\xff\xaa\xde\x02";
+			size_t	size = 8;
 
 			if (memcmp(s1, s2, size) == ft_memcmp(s1, s2, size))
 				exit(TEST_SUCCESS);
@@ -670,7 +672,7 @@ void			test_ft_memcmp_basic3(void *ptr) {
 
 void			test_ft_memcmp_null_byte(void *ptr) {
 	typeof(memcmp)		*ft_memcmp = ptr;
-	SET_EXPLICATION("yout memcmp does not works with basic input");
+	SET_EXPLICATION("your memcmp does not works with basic input");
 
 	SANDBOX_RAISE(
 			uint8_t	*s1 = (uint8_t *)"\xff\0\0\xaa\0\xde\xffMACOSX\xff";
@@ -1923,7 +1925,7 @@ void            test_ft_strnstr(void){
 ////////////////////////////////
 
 
-void			test_ft_strcmp_basic(void *ptr) {
+void			test_ft_strcmp_basic1(void *ptr) {
 	typeof(strcmp)	*ft_strcmp = ptr;
 	SET_EXPLICATION("your strcmp does not works with basic input");
 
@@ -1932,7 +1934,7 @@ void			test_ft_strcmp_basic(void *ptr) {
 			char	*s2 = STRING_2;
 
 			int		i1 = strcmp(s1, s2);
-			int		i2 = ft_strcmp(s1, s2);
+			int		i2 = REG(ft_strcmp(s1, s2));
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
 			SET_DIFF_INT(i1, i2);
@@ -1940,9 +1942,80 @@ void			test_ft_strcmp_basic(void *ptr) {
 			);
 }
 
+void			test_ft_strcmp_basic2(void *ptr) {
+	typeof(strcmp)	*ft_strcmp = ptr;
+	SET_EXPLICATION("your strcmp does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*s1 = "omg1";
+			char	*s2 = "omg3";
+
+			int		i1 = strcmp(s1, s2);
+			int		i2 = REG(ft_strcmp(s1, s2));
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strcmp_basic3(void *ptr) {
+	typeof(strcmp)	*ft_strcmp = ptr;
+	SET_EXPLICATION("your strcmp does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*s1 = "";
+			char	*s2 = "";
+
+			int		i1 = strcmp(s1, s2);
+			int		i2 = REG(ft_strcmp(s1, s2));
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strcmp_ascii(void *ptr) {
+	typeof(strcmp)	*ft_strcmp = ptr;
+	SET_EXPLICATION("your strcmp does not works with non ascii chars");
+
+	SANDBOX_RAISE(
+			char	*s1 = "\x12\xff\x65\x12\xbd\xde\xad";
+			char	*s2 = "\x12\x02";
+
+			int		i1 = strcmp(s1, s2);
+			int		i2 = REG(ft_strcmp(s1, s2));
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strcmp_null1(void *ptr) {
+	typeof(strcmp)	*ft_strcmp = ptr;
+	SET_EXPLICATION("your strcmp does not segfault when null parameter is sent");
+
+	SANDBOX_IRAISE(
+			ft_strcmp(NULL, "nope");
+			);
+}
+
+void			test_ft_strcmp_null2(void *ptr) {
+	typeof(strcmp)	*ft_strcmp = ptr;
+	SET_EXPLICATION("your strcmp does not segfault when null parameter is sent");
+
+	SANDBOX_IRAISE(
+			ft_strcmp("nope", NULL);
+			ft_strcmp(NULL, NULL);
+			);
+}
+
 void            test_ft_strcmp(void){
-	add_fun_subtest(test_ft_strcmp_basic);
+	add_fun_subtest(test_ft_strcmp_basic1);
 	add_fun_subtest(test_ft_strcmp_basic2);
+	add_fun_subtest(test_ft_strcmp_basic3);
 	add_fun_subtest(test_ft_strcmp_ascii);
 	add_fun_subtest(test_ft_strcmp_null1);
 	add_fun_subtest(test_ft_strcmp_null2);
@@ -1952,7 +2025,122 @@ void            test_ft_strcmp(void){
 //         ft_strncmp         //
 ////////////////////////////////
 
-void            test_ft_strncmp(void){ }
+void			test_ft_strncmp_basic1(void *ptr) {
+	typeof(strncmp)	*ft_strncmp = ptr;
+	SET_EXPLICATION("your strncmp does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*s1 = STRING_1;
+			char	*s2 = STRING_2;
+			size_t	size = strlen(STRING_1);
+
+			int		i1 = strncmp(s1, s2, size);
+			int		i2 = REG(ft_strncmp(s1, s2, size));
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strncmp_basic2(void *ptr) {
+	typeof(strncmp)	*ft_strncmp = ptr;
+	SET_EXPLICATION("your strncmp does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*s1 = "omg1||||||||||||||||";
+			char	*s2 = "omg3";
+			size_t	size = 4;
+
+			int		i1 = strncmp(s1, s2, size);
+			int		i2 = REG(ft_strncmp(s1, s2, size));
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strncmp_basic3(void *ptr) {
+	typeof(strncmp)	*ft_strncmp = ptr;
+	SET_EXPLICATION("your strncmp does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*s1 = "";
+			char	*s2 = "";
+
+			int		i1 = strncmp(s1, s2, 1);
+			int		i2 = REG(ft_strncmp(s1, s2, 1));
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strncmp_over_len(void *ptr) {
+	typeof(strncmp)	*ft_strncmp = ptr;
+	SET_EXPLICATION("your strncmp does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*s1 = "omg1";
+			char	*s2 = "omg3                ";
+			size_t	size = 100000;
+
+			int		i1 = strncmp(s1, s2, size);
+			int		i2 = ft_strncmp(s1, s2, size);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+void			test_ft_strncmp_ascii(void *ptr) {
+	typeof(strncmp)	*ft_strncmp = ptr;
+	SET_EXPLICATION("your strncmp does not works with non ascii chars");
+
+	SANDBOX_RAISE(
+			char	*s1 = "\x12\xff\x65\x12\xbd\xde\xad";
+			char	*s2 = "\x12\x02";
+			size_t	size = 6;
+
+			int		i1 = strncmp(s1, s2, size);
+			int		i2 = ft_strncmp(s1, s2, size);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strncmp_null1(void *ptr) {
+	typeof(strncmp)	*ft_strncmp = ptr;
+	SET_EXPLICATION("your strncmp does not segfault when null parameter is sent");
+
+	SANDBOX_IRAISE(
+			ft_strncmp(NULL, "nope", 3);
+			);
+}
+
+void			test_ft_strncmp_null2(void *ptr) {
+	typeof(strncmp)	*ft_strncmp = ptr;
+	SET_EXPLICATION("your strncmp does not segfault when null parameter is sent");
+
+	SANDBOX_IRAISE(
+			ft_strncmp("nope", NULL, 3);
+			ft_strncmp(NULL, NULL, 3);
+			);
+}
+
+void            test_ft_strncmp(void){
+	add_fun_subtest(test_ft_strncmp_basic1);
+	add_fun_subtest(test_ft_strncmp_basic2);
+	add_fun_subtest(test_ft_strncmp_basic3);
+	add_fun_subtest(test_ft_strncmp_over_len);
+	add_fun_subtest(test_ft_strncmp_ascii);
+	add_fun_subtest(test_ft_strncmp_null1);
+	add_fun_subtest(test_ft_strncmp_null2);
+}
 
 ////////////////////////////////
 //         ft_atoi            //
@@ -2282,104 +2470,771 @@ void            test_ft_isprint(void){
 //        ft_touupper         //
 ////////////////////////////////
 
-/*void			test_ft_toupper_(void *ptr) {
+void			test_ft_toupper_(void *ptr) {
 	typeof(toupper)	*ft_toupper = ptr;
 	SET_EXPLICATION("your ft_isprint just doesn't work, REALLY ?!");
 
 	SANDBOX_RAISE(
 			int		i;
-			i = -1;
-			while (i < 130)
+			i = -100;
+			while (i < 530)
 			{
-				if (ft_isprint(i) != isprint(i))
+				if (ft_toupper(i) != toupper(i))
 					exit(TEST_FAILED);
 				i++;
 			}
 			exit(TEST_SUCCESS);
 		);
-}*/
+}
 
-void            test_ft_toupper(void){
-//	add_fun_subtest(test_ft_toupper_);
+void            test_ft_toupper(void) {
+	add_fun_subtest(test_ft_toupper_);
 }
 
 ////////////////////////////////
 //         ft_tolower         //
 ////////////////////////////////
 
-void            test_ft_tolower(void){ }
+void			test_ft_tolower_(void *ptr) {
+	typeof(tolower)	*ft_tolower = ptr;
+	SET_EXPLICATION("your ft_isprint just doesn't work, REALLY ?!");
+
+	SANDBOX_RAISE(
+			int		i;
+			i = -100;
+			while (i < 530)
+			{
+				if (ft_tolower(i) != tolower(i))
+					exit(TEST_FAILED);
+				i++;
+			}
+			exit(TEST_SUCCESS);
+		);
+}
+
+void            test_ft_tolower(void){
+	add_fun_subtest(test_ft_tolower_);
+}
 
 ////////////////////////////////
 //        ft_memalloc         //
 ////////////////////////////////
 
-void            test_ft_memalloc(void){ }
+void			test_ft_memalloc_free(void *ptr) {
+	void *	(*ft_memalloc)(size_t) = ptr;
+	SET_EXPLICATION("your memalloc don't allocate memory");
+
+	SANDBOX_RAISE(
+			free(ft_memalloc(42));
+			);
+}
+
+void			test_ft_memalloc_zero(void *ptr) {
+	void *	(*ft_memalloc)(size_t) = ptr;
+	SET_EXPLICATION("your memalloc does not set allocated mem to 0");
+
+	SANDBOX_RAISE(
+			size_t	size = 514;
+			char	*ret = ft_memalloc(size);
+
+			for (size_t i = 0;i < size;i++)
+				if (ret[i] != 0) {
+					SET_DIFF_INT(0, ret[i]);
+					exit(TEST_FAILED);
+				}
+			free(ret);
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_memalloc_malloc_null(void *ptr) {
+	void *	(*ft_memalloc)(size_t) = ptr;
+	SET_EXPLICATION("you did not protect your malloc return");
+
+	SANDBOX_RAISE(
+			void	*ret;
+
+			MALLOC_NULL;
+			ret = ft_memalloc(42);
+			MALLOC_RESET;
+			if (!ret)
+				exit(TEST_SUCCESS);
+			SET_DIFF_PTR(NULL, ret);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_memalloc_size(void *ptr) {
+	void *	(*ft_memalloc)(size_t) = ptr;
+
+	(void)ft_memalloc;
+}
+
+void            test_ft_memalloc(void) {
+	add_fun_subtest(test_ft_memalloc_free);
+	add_fun_subtest(test_ft_memalloc_zero);
+	add_fun_subtest(test_ft_memalloc_malloc_null);
+//	add_fun_subtest(test_ft_memalloc_size);
+}
 
 ////////////////////////////////
 //         ft_memdel          //
 ////////////////////////////////
 
-void            test_ft_memdel(void){ }
+void			test_ft_memdel_test(void *ptr) {
+	void	(*ft_memdel)(void **) = ptr;
+
+	SANDBOX_RAISE(
+			void	*m = malloc(42);
+
+			ft_memdel(&m);
+			if (m == NULL)
+				exit(TEST_SUCCESS);
+			SET_DIFF_PTR(NULL, m);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_memdel_free(void *ptr) {
+	void	(*ft_memdel)(void **) = ptr;
+	SET_EXPLICATION("your memdel does not free memory !");
+
+	SANDBOX_RAISE(
+			STDOUT_TO_BUFF;
+			void	*m = malloc(42);
+			ft_memdel(&m);
+			if (m != NULL)
+				free(m);
+			write(1, "", 1);
+			VOID_STDOUT;
+			);
+}
+
+void			test_ft_memdel_null(void *ptr) {
+	void	(*ft_memdel)(void **) = ptr;
+	SET_EXPLICATION("your memdel does not segfault when null parameter is sent");
+
+	SANDBOX(
+			ft_memdel(NULL);
+			);
+	if (SANDBOX_CRASH)
+		ft_raise(TEST_SUCCESS);
+	else
+		ft_raise(TEST_KO);
+}
+
+void            test_ft_memdel(void) {
+	add_fun_subtest(test_ft_memdel_test);
+	add_fun_subtest(test_ft_memdel_free);
+	add_fun_subtest(test_ft_memdel_null);
+}
 
 ////////////////////////////////
 //         ft_strnew          //
 ////////////////////////////////
 
-void            test_ft_strnew(void){ }
+void			test_ft_strnew_free(void *ptr) {
+	void *	(*ft_strnew)(size_t) = ptr;
+	SET_EXPLICATION("your strnew don't allocate memory");
+
+	SANDBOX_RAISE(
+			free(ft_strnew(42));
+			);
+}
+
+//FIXME this function need to be malloc-size tested !
+void			test_ft_strnew_zero(void *ptr) {
+	void *	(*ft_strnew)(size_t) = ptr;
+	SET_EXPLICATION("your strnew does not set allocated mem to 0");
+
+	SANDBOX_RAISE(
+			size_t	size = 514;
+			char	*ret = ft_strnew(size);
+
+			for (size_t i = 0;i < size + 1;i++)
+				if (ret[i] != 0) {
+					SET_DIFF_INT(0, ret[i]);
+					exit(TEST_FAILED);
+				}
+			free(ret);
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_strnew_malloc_null(void *ptr) {
+	void *	(*ft_strnew)(size_t) = ptr;
+	SET_EXPLICATION("you did not protect your malloc return");
+
+	SANDBOX_RAISE(
+			void	*ret;
+
+			MALLOC_NULL;
+			ret = ft_strnew(42);
+			MALLOC_RESET;
+			if (!ret)
+				exit(TEST_SUCCESS);
+			SET_DIFF_PTR(NULL, ret);
+			exit(TEST_FAILED);
+			);
+}
+
+void            test_ft_strnew(void){
+	add_fun_subtest(test_ft_strnew_free);
+	add_fun_subtest(test_ft_strnew_zero);
+	add_fun_subtest(test_ft_strnew_malloc_null);
+}
 
 ////////////////////////////////
 //         ft_strdel          //
 ////////////////////////////////
 
-void            test_ft_strdel(void){ }
+void			test_ft_strdel_test(void *ptr) {
+	void	(*ft_strdel)(void **) = ptr;
+
+	SANDBOX_RAISE(
+			void	*m = malloc(42);
+
+			ft_strdel(&m);
+			if (m == NULL)
+				exit(TEST_SUCCESS);
+			SET_DIFF_PTR(NULL, m);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strdel_free(void *ptr) {
+	void	(*ft_strdel)(void **) = ptr;
+	SET_EXPLICATION("your strdel does not free memory !");
+
+	SANDBOX_RAISE(
+			STDOUT_TO_BUFF;
+			void	*m = malloc(42);
+			ft_strdel(&m);
+			if (m != NULL)
+				free(m);
+			write(1, "", 1);
+			VOID_STDOUT;
+			);
+}
+
+void			test_ft_strdel_null(void *ptr) {
+	void	(*ft_strdel)(void **) = ptr;
+	SET_EXPLICATION("your strdel does not segfault when null parameter is sent");
+
+	SANDBOX_KO(
+			ft_strdel(NULL);
+			);
+}
+
+void            test_ft_strdel(void){
+	add_fun_subtest(test_ft_strdel_test);
+	add_fun_subtest(test_ft_strdel_free);
+	add_fun_subtest(test_ft_strdel_null);
+}
 
 ////////////////////////////////
 //         ft_strclr          //
 ////////////////////////////////
 
-void            test_ft_strclr(void){ }
+void			test_ft_strclr_basic(void *ptr) {
+	void	(*ft_strclr)(char *) = ptr;
+	SET_EXPLICATION("your strclr does not set to 0 the string");
+
+	SANDBOX_RAISE(
+			char	b[] = "strclr test !\r\n";
+			char	n[0xF0];
+			size_t	size = strlen(b);
+
+			memset(n, 0, size);
+			ft_strclr(b);
+			if (!memcmp(b, n, size))
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(0, memcmp(b, n, size));
+			exit(TEST_FAILED);
+			);
+
+}
+
+void			test_ft_strclr_null(void *ptr) {
+	void	(*ft_strclr)(char *) = ptr;
+	SET_EXPLICATION("your strclr does not segfault when null parameter is sent");
+
+	SANDBOX_KO(
+			ft_strclr(NULL);
+			);
+}
+
+void            test_ft_strclr(void){
+	add_fun_subtest(test_ft_strclr_basic);
+	add_fun_subtest(test_ft_strclr_null);
+}
 
 ////////////////////////////////
 //         ft_striter         //
 ////////////////////////////////
 
-void            test_ft_striter(void){ }
+void			f_striter(char *s) { *s = 'F'; }
+
+void			test_ft_striter_basic(void *ptr) {
+	void	(*ft_striter)(char *, void (*)(char *)) = ptr;
+	SET_EXPLICATION("your st does no works");
+
+	SANDBOX_RAISE(
+			char	b[] = "override this !";
+			char	b2[0xF0];
+			size_t	size = strlen(b);
+
+			for (size_t i = 0; i < size; i++)
+				f_striter(b2 + i);
+			b2[size] = 0;
+			ft_striter(b, f_striter);
+			if (!strcmp(b, b2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(b, b2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_striter_null1(void *ptr) {
+	void	(*ft_striter)(char *, void (*)(char *)) = ptr;
+	SET_EXPLICATION("your striter does not segfault when null parameter is sent");
+
+	SANDBOX_KO(
+			ft_striter(NULL, f_striter)
+			);
+}
+
+void			test_ft_striter_null2(void *ptr) {
+	void	(*ft_striter)(char *, void (*)(char *)) = ptr;
+	SET_EXPLICATION("your striter does not segfault when null parameter is sent");
+
+	SANDBOX_KO(
+			ft_striter("you should not ...", NULL);
+			);
+}
+
+void            test_ft_striter(void){
+	add_fun_subtest(test_ft_striter_basic);
+	add_fun_subtest(test_ft_striter_null1);
+	add_fun_subtest(test_ft_striter_null2);
+}
 
 ////////////////////////////////
 //        ft_striteri         //
 ////////////////////////////////
 
-void            test_ft_striteri(void){ }
+void			f_striteri(unsigned i, char *s) { *s = i + '0'; }
+
+void			test_ft_striteri_basic(void *ptr) {
+	void	(*ft_striteri)(char *, void (*)(unsigned, char *)) = ptr;
+	SET_EXPLICATION("your striteri does no works");
+
+	SANDBOX_RAISE(
+			char	b[] = "override this !";
+			char	b2[0xF0];
+			size_t	size = strlen(b);
+
+			for (size_t i = 0; i < size; i++)
+				f_striteri(i, b2 + i);
+			b2[size] = 0;
+			ft_striteri(b, f_striteri);
+			if (!strcmp(b, b2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(b, b2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_striteri_null1(void *ptr) {
+	void	(*ft_striteri)(char *, void (*)(unsigned, char *)) = ptr;
+	SET_EXPLICATION("your striteri does not segfault when null parameter is sent");
+
+	SANDBOX_KO(
+			ft_striteri(NULL, f_striteri)
+			);
+}
+
+void			test_ft_striteri_null2(void *ptr) {
+	void	(*ft_striteri)(char *, void (*)(unsigned, char *)) = ptr;
+	SET_EXPLICATION("your striteri does not segfault when null parameter is sent");
+
+	SANDBOX_KO(
+			ft_striteri("you should not ...", NULL);
+			ft_striteri(NULL, NULL);
+			);
+}
+
+void            test_ft_striteri(void){
+	add_fun_subtest(test_ft_striteri_basic);
+	add_fun_subtest(test_ft_striteri_null1);
+	add_fun_subtest(test_ft_striteri_null2);
+}
 
 ////////////////////////////////
 //         ft_strmap          //
 ////////////////////////////////
 
-void            test_ft_strmap(void){ }
+char			f_strmap(char c) { return (c + 7); }
+
+void			test_ft_strmap_basic(void *ptr) {
+	char *	(*ft_strmap)(const char *, char (*)(char)) = ptr;
+	SET_EXPLICATION("your strmap does not works");
+
+	SANDBOX_RAISE(
+			char	*b = "override this !";
+			char	b2[0xF0];
+			size_t	size = strlen(b);
+
+			for (size_t i = 0; i < size; i++)
+				b2[i] = f_strmap(b[i]);
+			b2[size] = 0;
+			char	*ret = ft_strmap(b, f_strmap);
+			if (!strcmp(b2, ret))
+				exit(TEST_SUCCESS);
+			SET_DIFF(ret, b2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strmap_free(void *ptr) {
+	char *	(*ft_strmap)(const char *, char (*)(char)) = ptr;
+	SET_EXPLICATION("your strmap does not malloc ?");
+
+	SANDBOX_RAISE(
+			char	*b = "override this !";
+			char	b2[0xF0];
+			size_t	size = strlen(b);
+
+			for (size_t i = 0; i < size; i++)
+				b2[i] = f_strmap(b[i]);
+			b2[size] = 0;
+			STDOUT_TO_BUFF;
+			char *newstr = ft_strmap(b, f_strmap);
+			if (!strcmp(newstr, b2))
+				exit(TEST_SUCCESS);
+			free(newstr);
+			write(1, "", 1);
+			VOID_STDOUT;
+			SET_DIFF(b2, newstr);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strmap_malloc_null(void *ptr) {
+	char *	(*ft_strmap)(const char *, char (*)(char)) = ptr;
+	SET_EXPLICATION("you did not protect your malloc return");
+
+	SANDBOX_RAISE(
+			char	*b = "override this !";
+
+			MALLOC_NULL;
+			char *newstr = ft_strmap(b, f_strmap);
+			MALLOC_RESET;
+			if (newstr == NULL)
+				exit(TEST_SUCCESS);
+			SET_DIFF(NULL, newstr);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strmap_null1(void *ptr) {
+	char *	(*ft_strmap)(const char *, char (*)(char)) = ptr;
+	SET_EXPLICATION("your strmap does not segfault when null parameter is sent");
+
+	SANDBOX_KO(
+			ft_strmap(NULL, f_strmap);
+			);
+}
+
+void			test_ft_strmap_null2(void *ptr) {
+	char *	(*ft_strmap)(const char *, char (*)(char)) = ptr;
+	SET_EXPLICATION("your strmap does not segfault when null parameter is sent");
+
+	SANDBOX_KO(
+			ft_strmap("olol", NULL);
+			ft_strmap(NULL, NULL);
+			);
+}
+
+void            test_ft_strmap(void){
+	add_fun_subtest(test_ft_strmap_basic);
+	add_fun_subtest(test_ft_strmap_free);
+	add_fun_subtest(test_ft_strmap_malloc_null);
+	add_fun_subtest(test_ft_strmap_null1);
+	add_fun_subtest(test_ft_strmap_null2);
+}
 
 ////////////////////////////////
 //         ft_strmapi         //
 ////////////////////////////////
 
-void            test_ft_strmapi(void){ }
+char			f_strmapi(unsigned i, char c) { return (c + i); }
+
+void			test_ft_strmapi_basic(void *ptr) {
+	char *	(*ft_strmapi)(const char *, char (*)(unsigned, char)) = ptr;
+	SET_EXPLICATION("your strmapi does not works");
+
+	SANDBOX_RAISE(
+			char	*b = "override this !";
+			char	b2[0xF0];
+			size_t	size = strlen(b);
+
+			for (size_t i = 0; i < size; i++)
+				b2[i] = f_strmapi(i, b[i]);
+			b2[size] = 0;
+			char	*ret = ft_strmapi(b, f_strmapi);
+			if (!strcmp(b2, ret))
+				exit(TEST_SUCCESS);
+			SET_DIFF(ret, b2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strmapi_free(void *ptr) {
+	char *	(*ft_strmapi)(const char *, char (*)(unsigned, char)) = ptr;
+	SET_EXPLICATION("your strmapi does not malloc ?");
+
+	SANDBOX_RAISE(
+			char	*b = "override this !";
+			char	b2[0xF0];
+			size_t	size = strlen(b);
+
+			for (size_t i = 0; i < size; i++)
+				b2[i] = f_strmapi(i, b[i]);
+			b2[size] = 0;
+			STDOUT_TO_BUFF;
+			char *newstr = ft_strmapi(b, f_strmapi);
+			if (!strcmp(newstr, b2))
+				exit(TEST_SUCCESS);
+			free(newstr);
+			write(1, "", 1);
+			VOID_STDOUT;
+			SET_DIFF(b2, newstr);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strmapi_malloc_null(void *ptr) {
+	char *	(*ft_strmapi)(const char *, char (*)(unsigned, char)) = ptr;
+	SET_EXPLICATION("you did not protect your malloc return");
+
+	SANDBOX_RAISE(
+			char	*b = "override this !";
+
+			MALLOC_NULL;
+			char *newstr = ft_strmapi(b, f_strmapi);
+			MALLOC_RESET;
+			if (newstr == NULL)
+				exit(TEST_SUCCESS);
+			SET_DIFF(NULL, newstr);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strmapi_null1(void *ptr) {
+	char *	(*ft_strmapi)(const char *, char (*)(unsigned, char)) = ptr;
+	SET_EXPLICATION("your strmapi does not segfault when null parameter is sent");
+
+	SANDBOX_KO(
+			ft_strmapi(NULL, f_strmapi);
+			);
+}
+
+void			test_ft_strmapi_null2(void *ptr) {
+	char *	(*ft_strmapi)(const char *, char (*)(unsigned, char)) = ptr;
+	SET_EXPLICATION("your strmapi does not segfault when null parameter is sent");
+
+	SANDBOX_KO(
+			ft_strmapi("olol", NULL);
+			ft_strmapi(NULL, NULL);
+			);
+}
+void            test_ft_strmapi(void){
+	add_fun_subtest(test_ft_strmapi_basic);
+	add_fun_subtest(test_ft_strmapi_free);
+	add_fun_subtest(test_ft_strmapi_malloc_null);
+	add_fun_subtest(test_ft_strmapi_null1);
+	add_fun_subtest(test_ft_strmapi_null2);
+}
 
 ////////////////////////////////
 //         ft_strequ          //
 ////////////////////////////////
 
-void            test_ft_strequ(void){ }
+void			test_ft_strequ_basic(void *ptr) {
+	int		(*ft_strequ)(const char *s1, const char *s2) = ptr;
+
+	SANDBOX_RAISE(
+			char	*s1 = STRING_1;
+			char	*s2 = STRING_2;
+
+			int		i1 = ft_strequ(s1, s2);
+			if (i1 == 0)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(0, i1);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strequ_basic2(void *ptr) {
+	int		(*ft_strequ)(const char *s1, const char *s2) = ptr;
+	SET_EXPLICATION("your strequ does not works with empty string");
+
+	SANDBOX_RAISE(
+			char	*s1 = "";
+			char	*s2 = "";
+
+			int		i1 = ft_strequ(s1, s2);
+			if (i1 == 1)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(0, i1);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strequ_same_pointer(void *ptr) {
+	int		(*ft_strequ)(const char *s1, const char *s2) = ptr;
+	SET_EXPLICATION("your strequ does not works with empty string");
+
+	SANDBOX_RAISE(
+			char	*s1 = "NYANCAT INSIDE";
+
+			int		i1 = ft_strequ(s1, s1);
+			if (i1 == 1)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(0, i1);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strequ_null1(void *ptr) {
+	int		(*ft_strequ)(const char *s1, const char *s2) = ptr;
+	SET_EXPLICATION("your strequ does not segfault when null parameter is sent");
+
+	SANDBOX_KO(
+			char	*s1 = "AAAAAAAA";
+
+			ft_strequ(NULL, s1);
+			);
+}
+
+void			test_ft_strequ_null2(void *ptr) {
+	int		(*ft_strequ)(const char *s1, const char *s2) = ptr;
+	SET_EXPLICATION("your strequ does not segfault when null parameter is sent");
+
+	SANDBOX_KO(
+			char	*s1 = "AAAAAAAA";
+
+			ft_strequ(s1, NULL);
+			ft_strequ(NULL, NULL);
+			);
+}
+
+void            test_ft_strequ(void){
+	add_fun_subtest(test_ft_strequ_basic);
+	add_fun_subtest(test_ft_strequ_basic2);
+	add_fun_subtest(test_ft_strequ_same_pointer);
+	add_fun_subtest(test_ft_strequ_null1);
+	add_fun_subtest(test_ft_strequ_null2);
+}
 
 ////////////////////////////////
 //         ft_strnequ         //
 ////////////////////////////////
 
-void            test_ft_strnequ(void){ }
+void			test_ft_strnequ_basic(void *ptr) {
+	int		(*ft_strnequ)(const char *s1, const char *s2, size_t n) = ptr;
+
+	SANDBOX_RAISE(
+			char	*s1 = STRING_1;
+			char	*s2 = STRING_2;
+
+			int		i1 = ft_strnequ(s1, s2, strlen(s1));
+			if (i1 == 0)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(0, i1);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strnequ_basic2(void *ptr) {
+	int		(*ft_strnequ)(const char *s1, const char *s2, size_t n) = ptr;
+	SET_EXPLICATION("your strnequ does not works with empty string");
+
+	SANDBOX_RAISE(
+			char	*s1 = "";
+			char	*s2 = "";
+
+			int		i1 = ft_strnequ(s1, s2, 1000);
+			if (i1 == 1)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(0, i1);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strnequ_same_pointer(void *ptr) {
+	int		(*ft_strnequ)(const char *s1, const char *s2, size_t n) = ptr;
+	SET_EXPLICATION("your strnequ does not works with empty string");
+
+	SANDBOX_RAISE(
+			char	*s1 = "NYANCAT INSIDE";
+
+			int		i1 = ft_strnequ(s1, s1, strlen(s1));
+			if (i1 == 1)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(0, i1);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strnequ_null1(void *ptr) {
+	int		(*ft_strnequ)(const char *s1, const char *s2, size_t n) = ptr;
+	SET_EXPLICATION("your strnequ does not segfault when null parameter is sent");
+
+	SANDBOX_KO(
+			char	*s1 = "AAAAAAAA";
+
+			ft_strnequ(NULL, s1, 3);
+			);
+}
+
+void			test_ft_strnequ_null2(void *ptr) {
+	int		(*ft_strnequ)(const char *s1, const char *s2, size_t n) = ptr;
+	SET_EXPLICATION("your strnequ does not segfault when null parameter is sent");
+
+	SANDBOX_KO(
+			char	*s1 = "AAAAAAAA";
+
+			ft_strnequ(s1, NULL, 3);
+			ft_strnequ(NULL, NULL, 3);
+			);
+}
+
+void            test_ft_strnequ(void){
+	add_fun_subtest(test_ft_strnequ_basic);
+	add_fun_subtest(test_ft_strnequ_basic2);
+	add_fun_subtest(test_ft_strnequ_same_pointer);
+	add_fun_subtest(test_ft_strnequ_null1);
+	add_fun_subtest(test_ft_strnequ_null2);
+}
 
 ////////////////////////////////
 //         ft_strsub          //
 ////////////////////////////////
 
-void            test_ft_strsub(void){ }
+void			test_ft_strsub_basic(void *ptr) {
+	
+}
+
+void            test_ft_strsub(void){
+	add_fun_subtest(test_ft_strsub_basic);
+	add_fun_subtest(test_ft_strsub_out1);
+	add_fun_subtest(test_ft_strsub_out2);
+	add_fun_subtest(test_ft_strsub_malloc_null);
+	add_fun_subtest(test_ft_strsub_all);
+	add_fun_subtest(test_ft_strsub_null);
+}
 
 ////////////////////////////////
 //         ft_strjoin         //

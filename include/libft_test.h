@@ -81,6 +81,7 @@ enum		e_values {
 
 # define	SANDBOX_STRINGIFY(x)	SET_CURRENT_TEST_CODE(#x)	
 # define	SANDBOX(x)			SANDBOX_STRINGIFY(x); sandbox();if (!(g_pid = fork())) {x;exit(TEST_SUCCESS);} if (g_pid > 0) { wait((int*)g_ret); _SANDBOX_RAISE(g_ret[0]); unsandbox(); }
+# define	SANDBOX_KO(x)		SANDBOX(x); if (SANDBOX_CRASH) ft_raise(TEST_SUCCESS); else ft_raise(TEST_KO);
 # define	SANDBOX_RAISE(x)	SANDBOX(x); if (SANDBOX_CRASH) ft_raise(TEST_CRASH); else ft_raise(g_ret[1]);
 # define	SANDBOX_IRAISE(x)	SANDBOX(x); if (SANDBOX_CRASH) ft_raise(TEST_SUCCESS); else ft_raise(TEST_NOCRASH);
 # define	SANDBOX_RESULT		(g_ret[1])
@@ -105,8 +106,9 @@ enum		e_values {
 # define	SET_DIFF_PTR(x, y)	lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%p|\n%12s: |%p|", current_fun_name + 3, x, current_fun_name, y) ; write(g_diff_fd, "\0", 1);
 # define	RESET_DIFF			lseek(g_diff_fd, 0, SEEK_SET); write(g_diff_fd, "\0", 1);
 
-#define		STDOUT_TO_BUFF		fd_to_buffer(STDOUT_FILENO);
-#define		GET_STDOUT(y, z)	get_fd_buffer(STDOUT_FILENO, y, z);
+# define	STDOUT_TO_BUFF		fd_to_buffer(STDOUT_FILENO);
+# define	GET_STDOUT(y, z)	get_fd_buffer(STDOUT_FILENO, y, z);
+# define	VOID_STDOUT			get_fd_buffer(STDOUT_FILENO, NULL, 0);
 
 extern		char			*current_fun_name;
 extern		int				current_test_id;

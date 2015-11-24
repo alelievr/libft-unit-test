@@ -47,7 +47,6 @@ void *malloc(size_t size)
 		close(fd);
 		switch (c[0]) {
 			case _MALLOC_NULL:
-	write(1, "null ?", 6);
 				return (NULL);
 				break ;
 			case _MALLOC_MEMSET:

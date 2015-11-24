@@ -33,6 +33,12 @@ void	fd_to_buffer(int fd) {
 char	*get_fd_buffer(int fd, char *buff, size_t size) {
 	int		ret;
 
+	if (buff == NULL) {
+		char	b[0xF000];
+		read(fd_pipe[0], b, sizeof(b));
+		dup2(_stdout, fd);
+		return (NULL);
+	}
 	ret = read(fd_pipe[0], buff, size);
 	buff[ret] = 0;
 	dup2(_stdout, fd);
@@ -93,14 +99,14 @@ void	*timer(void *t) {
 
 	(void)t;
 	while (42) {
-		if (last_test_id != current_test_id)
+		if (last_test_id != current_subtest_id)
 			time = 0;
 		if (time >= TIMEOUT_MILLIS) {
 			time = 0;
 			kill(g_pid, SIGKILL);
 		}
 		time++;
-		last_test_id = current_test_id;
+		last_test_id = current_subtest_id;
 		usleep(1000);
 	}
 	return (NULL);
