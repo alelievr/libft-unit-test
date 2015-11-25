@@ -22,4 +22,4 @@ This allows tow interesting things, the first is in the case of you haven't fini
 
 =========[CONTRIBUTE]=========
 
-if you want to add new tests/functions for this checker, just contact me (@alelievr on slack)
+if you want to add new tests/functions to this project, just contact me (@alelievr on slack)
