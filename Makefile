@@ -43,7 +43,7 @@ NAME		=	libtests
 SONAME		=	libft.so
 ANAME		=	libft.a
 LIBMALLOC	=	malloc.dylib
-WRAPNAME	=	run_test
+WRAPNAME	=	$(ASSETDIR)/run_test
 
 FRAMEWORK	=	
 
@@ -185,6 +185,10 @@ run: $(NAME)
 codesize:
 	@cat $(NORME) |grep -v '/\*' |wc -l
 
+f: all
+	@echo "\033[38;5;93mRUNING TESTS:"
+	@./$(WRAPNAME)
+
 coffee:
 	@clear
 	@echo ""
@@ -286,8 +290,5 @@ coffee:
 	@echo '         ""--..,,_____            _____,,..--"""'''
 	@echo '                      """------"""'
 
-
-f: all
-	./$(WRAPNAME)
 
 .PHONY: all clean fclean re norme codesize coffee
