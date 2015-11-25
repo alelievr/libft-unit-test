@@ -108,8 +108,8 @@ void    display_test_result(int value, char *explications)
 			printf("\n");
 			dprintf(g_log_fd, "\n");
 		}
-		printf(COLOR_CLEAR"testing [%s]: "COLOR_CLEAR, current_fun_name);
-		dprintf(g_log_fd, "testing [%s]: ", current_fun_name);
+		printf(COLOR_CLEAR"%s:%*s"COLOR_CLEAR, current_fun_name, 14 - (int)strlen(current_fun_name), "");
+		dprintf(g_log_fd, "%s:%*s", current_fun_name, 14 - (int)strlen(current_fun_name), "");
 	}
 	switch (value) {
 		case TEST_SUCCESS:

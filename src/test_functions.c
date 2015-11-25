@@ -3292,7 +3292,7 @@ void			test_ft_strsub_malloc_null(void *ptr) {
 	SANDBOX_RAISE(
 			char	*s = "malloc protection !";
 
-			MALLOC_SIZE;
+			MALLOC_NULL;
 			char	*ret = ft_strsub(s, 0, 5);
 			MALLOC_RESET;
 			if (ret == NULL)
@@ -3392,21 +3392,60 @@ void			test_ft_putchar_ascii(void *ptr) {
 	SET_EXPLICATION("your putchar does not works with all ascii chars");
 
 	SANDBOX_RAISE(
-			char	buff[1000];
-			char	buff2[1000];
+			char	buff[200];
+			char	buff2[200];
 			STDOUT_TO_BUFF;
-			for (int i = 0; i < 300; i++) {
+			for (int i = 0; i < 128; i++) {
 				ft_putchar(i);
 				buff2[i] = i;
 			}
 			GET_STDOUT(buff, 1000);
-			for (int i = 0; i < 300; i++)
+			for (int i = 0; i < 128; i++)
 				if (buff[i] != buff2[i]) {
-					SET_DIFF(buff2, buff);
+					SET_DIFF(buff2 + 1, buff + 1);
 					exit(TEST_FAILED);
 				}
 			exit(TEST_SUCCESS);
 			);
+}
+
+int     nbr_bits(unsigned int nbr)
+{
+	int     i;
+
+	i = 1;
+	while ((nbr = nbr >> 1))
+		i++;
+	return (i);
+}
+
+void    putwchart(int wchar, int *len, char *buff)
+{
+	unsigned int    ch;
+	int             n;
+	int				i = 0;
+
+	ch = (unsigned int)wchar;
+	n = nbr_bits(ch);
+	if (n > 7 && ((*len += 1)))
+	{
+		if (n > 11 && ((*len += 1)))
+		{
+			if (n > 16 && ((*len += 2)))
+			{
+				buff[i++] = ((ch >> 18) & 7) | 240;
+				buff[i++] = ((ch >> 12) & 63) | 128;
+			}
+			else if ((*len += 1))
+				buff[i++] = ((ch >> 12) & 15) | 224;
+			buff[i++] = ((ch >> 6) & 63) | 128;
+		}
+		else if ((*len += 1))
+			buff[i++] = ((ch >> 6) & 31) | 192;
+		buff[i++] = (ch & 63) | 128;
+	}
+	else if ((*len += 1))
+		buff[i++] = ch;
 }
 
 void			test_ft_putchar_unicode(void *ptr) {
@@ -3415,13 +3454,17 @@ void			test_ft_putchar_unicode(void *ptr) {
 
 	SANDBOX_RAISE(
 			char	buff[10];
+			char	buff2[10];
 			int		c = L'ø';
+			int		len = 0;
+			putwchart(c, &len, buff2);
+			buff2[len] = 0;
 			STDOUT_TO_BUFF;
 			ft_putchar(c);
 			GET_STDOUT(buff, 10);
-			if (buff[0] == c)
+			if (!strcmp(buff, buff2))
 				exit(TEST_SUCCESS);
-			SET_DIFF(buff, (char*)&c);
+			SET_DIFF(buff, buff2);
 			exit(TEST_KO);
 			);
 	(void)ft_putchar;
