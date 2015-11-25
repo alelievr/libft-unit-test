@@ -169,5 +169,4 @@ void    display_test_result(int value, char *explications)
 	fflush(stdout);
 	old_fun_name = current_fun_name;
 //	printf("current_subtest_id = %i\n", current_subtest_id);
-	run_subtests(NULL, current_subtest_id);
 }

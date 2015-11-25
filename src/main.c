@@ -70,19 +70,18 @@ void	load_test(void *handle, int start) {
 }
 
 void	run_subtests(void *h, int start) {
-	void	*tmpfun;
+	void		*tmpfun;
 	static void	*handle = NULL;
 
 	if (!handle)
 		handle = h;
-	if (fun_subtest_table[start].fun_name) {
-		current_fun_name = fun_subtest_table[start].fun_name;
-		tmpfun = dlsym(handle, fun_subtest_table[start].fun_name);
-		current_subtest_id++;
+	for (int i = start; fun_subtest_table[i].fun_name; i++, current_subtest_id++) {
+		current_fun_name = fun_subtest_table[i].fun_name;
+		tmpfun = dlsym(handle, fun_subtest_table[i].fun_name);
 		MALLOC_RESET;
 		RESET_DIFF;
 		if (tmpfun)
-			fun_subtest_table[start].fun_test_ptr(tmpfun);
+			fun_subtest_table[i].fun_test_ptr(tmpfun);
 	}
 	current_fun_name = "";
 	display_test_result(TEST_FINISHED, "");

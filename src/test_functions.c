@@ -2520,6 +2520,8 @@ void            test_ft_tolower(void){
 //        ft_memalloc         //
 ////////////////////////////////
 
+//FIXME this function needs a test for \0 at end of the string
+
 void			test_ft_memalloc_free(void *ptr) {
 	void *	(*ft_memalloc)(size_t) = ptr;
 	SET_EXPLICATION("your memalloc don't allocate memory");
@@ -2632,6 +2634,8 @@ void            test_ft_memdel(void) {
 ////////////////////////////////
 //         ft_strnew          //
 ////////////////////////////////
+
+//FIXME this function needs a test for \0 at end of the string
 
 void			test_ft_strnew_free(void *ptr) {
 	void *	(*ft_strnew)(size_t) = ptr;
@@ -2874,6 +2878,8 @@ void            test_ft_striteri(void){
 //         ft_strmap          //
 ////////////////////////////////
 
+//FIXME this function needs a test for \0 at end of the string
+
 char			f_strmap(char c) { return (c + 7); }
 
 void			test_ft_strmap_basic(void *ptr) {
@@ -2967,6 +2973,8 @@ void            test_ft_strmap(void){
 ////////////////////////////////
 //         ft_strmapi         //
 ////////////////////////////////
+
+//FIXME this function needs a test for \0 at end of the string
 
 char			f_strmapi(unsigned i, char c) { return (c + i); }
 
@@ -3223,14 +3231,112 @@ void            test_ft_strnequ(void){
 //         ft_strsub          //
 ////////////////////////////////
 
+//FIXME this function needs a test for \0 at end of the string
+
 void			test_ft_strsub_basic(void *ptr) {
-	
+	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
+	SET_EXPLICATION("your strsub does not works with valid input");
+
+	SANDBOX_RAISE(
+			char	*str = "i just want this part #############";
+			size_t	size = 22;
+
+			char	*ret = ft_strsub(str, 0, size);
+			if (!strncmp(ret, str, size)) {
+				free(ret);
+				exit(TEST_SUCCESS);
+			}
+			SET_DIFF("i just want this part", ret);
+			free(ret);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strsub_basic2(void *ptr) {
+	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
+	SET_EXPLICATION("your strsub does not works with valid input");
+
+	SANDBOX_RAISE(
+			char	*str = "i just want this part #############";
+			size_t	size = 20;
+
+			char	*ret = ft_strsub(str, 5, size);
+			if (!strncmp(ret, str + 5, size)) {
+				free(ret);
+				exit(TEST_SUCCESS);
+			}
+			SET_DIFF("t want this part ###", ret);
+			free(ret);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strsub_out1(void *ptr) {
+	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
+	SET_EXPLICATION("your strsub does not segfault/return null when invalid start/length is sent");
+
+	SANDBOX_KO(
+			char	*s = strdup("out of this ???");
+			
+			char	*ret = ft_strsub(s, 40, 20);
+			free(s);
+			if (ret == NULL)
+				exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_strsub_malloc_null(void *ptr) {
+	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
+	SET_EXPLICATION("you did not protect your malloc");
+
+	SANDBOX_RAISE(
+			char	*s = "malloc protection !";
+
+			MALLOC_SIZE;
+			char	*ret = ft_strsub(s, 0, 5);
+			MALLOC_RESET;
+			if (ret == NULL)
+				exit(TEST_SUCCESS);
+			SET_DIFF_PTR(NULL, ret);
+			exit(TEST_FAILED);
+			(void)s;
+			(void)ft_strsub;
+			);
+}
+
+void			test_ft_strsub_all(void *ptr) {
+	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
+	SET_EXPLICATION("your strsub does not works for a whole string");
+
+	SANDBOX_RAISE(
+			char	*s = "all of this !";
+			size_t	size = strlen(s);
+
+			char	*ret = ft_strsub(s, 0, size);
+
+			if (!strcmp(s, ret)) {
+				free(ret);
+				exit(TEST_SUCCESS);
+			}
+			SET_DIFF(s, ret);
+			free(ret);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strsub_null(void *ptr) {
+	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
+	SET_EXPLICATION("your strsub does not segfault when null parameter is sent");
+
+	SANDBOX_KO(
+			ft_strsub(NULL, 0, 12);
+			);
 }
 
 void            test_ft_strsub(void){
 	add_fun_subtest(test_ft_strsub_basic);
+	add_fun_subtest(test_ft_strsub_basic2);
 	add_fun_subtest(test_ft_strsub_out1);
-	add_fun_subtest(test_ft_strsub_out2);
 	add_fun_subtest(test_ft_strsub_malloc_null);
 	add_fun_subtest(test_ft_strsub_all);
 	add_fun_subtest(test_ft_strsub_null);
