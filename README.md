@@ -3,8 +3,11 @@
 ========[INSTALLATION]=========
 
 git clone your_libft_repository libft/
+
 git clone this repository libft-unit-test
+
 cd libft-unit-test
+
 make f
 
 you can change te default libft path in the makefile (LIBFTDIR variable)
