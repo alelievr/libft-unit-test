@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/23 01:27:50 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/25 21:41:01 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,7 @@ void	load_test(void *handle, int start) {
 		current_test_id++;
 		current_fun_name = fun_test_table[i].fun_name;
 		tmpfun = dlsym(handle, fun_test_table[i].fun_name);
-		if (!tmpfun) {
-			ft_raise(TEST_MISSING);
-			continue ;
-		}
+		current_fun_visibility = fun_test_table[i].visible;
 		fun_test_table[i].fun_test_ptr();
 	}
 }
@@ -82,6 +79,8 @@ void	run_subtests(void *h, int start) {
 		RESET_DIFF;
 		if (tmpfun)
 			fun_subtest_table[i].fun_test_ptr(tmpfun);
+		else if (fun_subtest_table[i].visible)
+			ft_raise(TEST_MISSING);
 	}
 	current_fun_name = "";
 	display_test_result(TEST_FINISHED, "");

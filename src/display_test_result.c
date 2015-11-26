@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:26:54 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/23 01:42:52 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/26 16:31:45 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,33 @@ char	*verbose_color(int type) {
 	}
 }
 
+void	display_part(char *s) {
+	if (!strcmp(s, "ft_memset")) {
+		printf(COLOR_PART1"                      First part\n");
+		printf("%s\n", ".-\"-.     .-\"-.     .-\"-.     .-\"-.     .-\"-.     .-\"-.\n"
+				       "     \"-.-\"     \"-.-\"     \"-.-\"     \"-.-\"     \"-.-\"    "COLOR_CLEAR);
+	}
+	if (!strcmp(s, "ft_memalloc")) {
+		printf(COLOR_PART2"\n                     Second part\n");
+		printf("%s\n", " __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)\n"
+					   "(______)(______)(______)(______)(______)(______)(______)(___\n");
+	}
+
+	if (!strcmp(s, "ft_lstnew")) {
+		printf(COLOR_PART3"\n%s\n", " /~~~\\/~~\\/~~~\\/~~~\\/~~\\/~~~\\                    /~~~\\/~~\\/~~~\\/~~~\\/~~\\/~~~\\\n"
+				 "| /\\/ /\\/ /\\ || /\\/ /\\/ /\\ |                    | /\\ \\/\\ \\/\\ || /\\ \\/\\ \\/\\ |\n"
+				 " \\ \\/ /\\/ /\\/ /\\ \\/ /\\/ /\\/ /     Bonus part     \\ \\/\\ \\/\\ \\/ /\\ \\/\\ \\/\\ \\/ /\n"
+				 "   \\ \\/\\ \\/\\ \\/  \\ \\/\\ \\/\\ \\/                      \\/ /\\/ /\\/ /  \\/ /\\/ /\\/ /\n"
+				 ",_/\\ \\/\\ \\/\\ \\__/\\ \\/\\ \\/\\ \\______________________/ /\\/ /\\/ /\\__/ /\\/ /\\/ /\\_,\n"
+				 "(__/\\__/\\__/\\____/\\__/\\__/\\________________________/\\__/\\__/\\____/\\__/\\__/\\__)\n");
+	}
+}
+
 void    display_test_result(int value, char *explications)
 {
 	static char		*old_fun_name = NULL;
 	static int		index = 0;
+	static int		once = 0;
 	static t_err	errs[0xF00] = {{0, NULL, NULL, NULL}};
 
 	if (!old_fun_name || strcmp(old_fun_name, current_fun_name)) {
@@ -107,7 +130,9 @@ void    display_test_result(int value, char *explications)
 		if (old_fun_name) {
 			printf("\n");
 			dprintf(g_log_fd, "\n");
+			once = 1;
 		}
+		display_part(current_fun_name);
 		printf(COLOR_CLEAR"%s:%*s"COLOR_CLEAR, current_fun_name, 14 - (int)strlen(current_fun_name), "");
 		dprintf(g_log_fd, "%s:%*s", current_fun_name, 14 - (int)strlen(current_fun_name), "");
 	}
@@ -161,12 +186,14 @@ void    display_test_result(int value, char *explications)
 			dprintf(g_log_fd, "[INTERUPTED]");
 			break ;
 		case TEST_MISSING:
-			printf(COLOR_FAILED"%s is missing !\n"COLOR_CLEAR, current_fun_name);
-			dprintf(g_log_fd, "%s is missing !\n", current_fun_name);
-			return ;
+			if (once) {
+				printf(COLOR_FAILED"[MISSING]"COLOR_CLEAR);
+				dprintf(g_log_fd, "[MISSING]");
+			}
 			break ;
 	}
 	fflush(stdout);
 	old_fun_name = current_fun_name;
+	once = 0;
 //	printf("current_subtest_id = %i\n", current_subtest_id);
 }

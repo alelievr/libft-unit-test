@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/23 01:44:14 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/26 16:53:00 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,13 @@
 typedef struct	s_subtest {
 	char	*fun_name;
 	void	(*fun_test_ptr)(void *ptr);
+	char	visible;
 }				t_libft_subtest;
 
 typedef struct	s_test {
 	char	*fun_name;
 	void	(*fun_test_ptr)(void);
+	char	visible;
 }				t_libft_test;
 
 typedef struct	s_errs {
@@ -46,6 +48,12 @@ typedef struct	s_tests {
 	unsigned long long int	olol;
 	int						flags;
 }				t_test;
+
+typedef struct	s_list {
+	void			*content;
+	size_t			content_size;
+	struct s_list	*next;
+}				t_list;
 
 enum		e_values {
 	TEST_SUCCESS,
@@ -68,6 +76,9 @@ enum		e_values {
 # define	COLOR_TIMEOUT	"\033[38;5;166m"
 # define	COLOR_INTERUPT	"\033[38;5;93m"
 # define	COLOR_KO		"\033[38;5;226m"
+# define	COLOR_PART1		"\033[38;5;82m"
+# define	COLOR_PART2		"\033[38;5;226m"
+# define	COLOR_PART3		"\033[38;5;9m"
 # define	COLOR_CLEAR		"\033[0m"
 
 # define	BSIZE			0xF00
@@ -111,6 +122,7 @@ enum		e_values {
 # define	VOID_STDOUT			get_fd_buffer(STDOUT_FILENO, NULL, 0);
 
 extern		char			*current_fun_name;
+extern		int				current_fun_visibility;
 extern		int				current_test_id;
 extern		t_libft_test	fun_test_table[];
 extern		t_libft_subtest	fun_subtest_table[SUBTEST_SIZE];
@@ -190,6 +202,15 @@ void			test_ft_putchar_fd(void);
 void			test_ft_putstr_fd(void);
 void			test_ft_putendl_fd(void);
 void			test_ft_putnbr_fd(void);
+
+void            test_ft_lstnew(void);
+void            test_ft_lstdelone(void);
+void            test_ft_lstdel(void);
+void            test_ft_lstadd(void);
+void            test_ft_lstiter(void);
+void            test_ft_lstmap(void);
+
+void			test_ft_islower(void);
 
 /*  others:  */
 void    		run_subtests(void *h, int start);
