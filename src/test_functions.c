@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/26 17:35:50 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/26 21:47:28 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -4193,6 +4193,7 @@ void			test_ft_lstnew_malloc_null(void *ptr) {
 }
 
 void			test_ft_lstnew(void){
+	printf("OK !\n");
 	add_fun_subtest(test_ft_lstnew_basic);
 	add_fun_subtest(test_ft_lstnew_free);
 	add_fun_subtest(test_ft_lstnew_null);
@@ -4203,8 +4204,37 @@ void			test_ft_lstnew(void){
 //        ft_lstdelone        //
 ////////////////////////////////
 
+void			lstdelone_f(void *d, size_t n) {
+	free(d);
+	(void)n;
+}
+
+t_list			*lstnew(void *d, size_t s) {
+	t_list *ret = malloc(sizeof(t_list));
+
+	ret->next = NULL;
+	ret->content = d;
+	ret->content_size = s;
+	return (ret);
+}
+
+void			test_ft_lstdelone_basic(void *ptr) {
+	void		(*ft_lstdelone)(t_list **, void (*)(void *, size_t)) = ptr;
+	SET_EXPLICATION("your lstdelone does not works");
+
+	SANDBOX_RAISE(
+			t_list	*l = lstnew(malloc(10), 10);
+
+			ft_lstdelone(&l, lstdelone_f);
+			if (!l)
+				exit(TEST_SUCCESS);
+			SET_DIFF_PTR(NULL, l);
+			exit(TEST_FAILED);
+			);
+}
+
 void			test_ft_lstdelone(void) {
-//	add_fun_subtest(test_ft_lstdelone_basic);
+	add_fun_subtest(test_ft_lstdelone_basic);
 }
 
 

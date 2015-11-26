@@ -6,7 +6,7 @@
 #    By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/04/04 19:22:36 by alelievr          #+#    #+#              #
-#    Updated: 2015/11/26 17:35:37 by alelievr         ###   ########.fr        #
+#    Updated: 2015/11/26 20:47:52 by alelievr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,13 +43,15 @@ NAME		=	libtests
 SONAME		=	libft.so
 ANAME		=	libft.a
 LIBMALLOC	=	malloc.dylib
+TMPLIB		=	$(ASSETDIR)/tmp
 WRAPNAME	=	$(ASSETDIR)/run_test
 
 FRAMEWORK	=	
 
 #	Compiler
 CFLAGS		=	-Werror -Wall -Wextra -g
-CSOFLAGS	=	-fpic -shared -Wl
+CSOFLAGS	=	-shared -fPIC
+CSOFLAGS2	=	
 CC			=	clang
 
 #	Optimization
@@ -131,8 +133,10 @@ $(ASSETDIR)/$(ANAME):
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", cp $(LIBFTDIR)/libft.a $(ASSETDIR)/)
 	
 shared:
+	@mkdir -p $(TMPLIB)
+	@cd $(TMPLIB) && ar -xv ../libft.a 1>/dev/null
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m➤ \033[38;5;$(LINK_COLOR)m",\
-		$(CC), $(CSOFLAGS), -o, $(SONAME), $(ASSETDIR)/libft.a)
+		$(CC), $(CSOFLAGS), $(TMPLIB)/*.o, -o, $(SONAME))
 
 #	Linking
 $(ASSETDIR)/$(NAME): $(OBJ)
@@ -153,6 +157,7 @@ clean:
 	@if [ $(ALREADY_RM)x != xx ]; then \
 		$(call disp_title,Cleaning,$(CLEAN_COLOR_T)); \
 		fi
+	@rm -rf $(TMPLIB)
 	@$(call exec_color,"\033[38;5;$(CLEAN_COLOR_T)m➤ \033[38;5;$(CLEAN_COLOR)m",\
 		rm -f, $(OBJ)) # <- Cleaning objs
 	@$(call exec_color,"\033[38;5;$(CLEAN_COLOR_T)m➤ \033[38;5;$(CLEAN_COLOR)m",\
