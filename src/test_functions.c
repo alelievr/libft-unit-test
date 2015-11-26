@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/26 16:53:01 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/26 17:35:50 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -4203,7 +4203,7 @@ void			test_ft_lstnew(void){
 //        ft_lstdelone        //
 ////////////////////////////////
 
-void			test_ft_lstdelone(void){
+void			test_ft_lstdelone(void) {
 //	add_fun_subtest(test_ft_lstdelone_basic);
 }
 

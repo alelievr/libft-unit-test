@@ -6,7 +6,7 @@
 #    By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/04/04 19:22:36 by alelievr          #+#    #+#              #
-#    Updated: 2015/11/22 01:08:31 by alelievr         ###   ########.fr        #
+#    Updated: 2015/11/26 17:35:37 by alelievr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,7 @@ FRAMEWORK	=
 
 #	Compiler
 CFLAGS		=	-Werror -Wall -Wextra -g
-CSOFLAGS	=	-fpic -shared -Wl,-all_load
+CSOFLAGS	=	-fpic -shared -Wl
 CC			=	clang
 
 #	Optimization
