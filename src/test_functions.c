@@ -746,7 +746,7 @@ void			test_ft_memcmp_basic(void *ptr) {
 
 			if (memcmp(s1, s2, size) == ft_memcmp(s1, s2, size))
 				exit(TEST_SUCCESS);
-			SET_DIFF_INT(memcmp(s1, s2, size), memcmp(s1, s2, size));
+			SET_DIFF_INT(memcmp(s1, s2, size), ft_memcmp(s1, s2, size));
 			exit(TEST_FAILED);
 			);
 }
@@ -3801,6 +3801,8 @@ void            test_ft_strjoin(void){
 //         ft_strtrim         //
 ////////////////////////////////
 
+//FIXME this function need to be malloc-size tested !
+
 void			test_ft_strtrim_basic(void *ptr) {
 	char *		(*ft_strtrim)(const char *) = ptr;
 	SET_EXPLICATION("your strtrim does not works with basic input");
@@ -4536,7 +4538,13 @@ void			test_ft_lstdelone(void) {
 //         ft_lstdel          //
 ////////////////////////////////
 
-void			test_ft_lstdel(void){ }
+void			test_ft_lstdel_basic(void *ptr) {
+	(void)ptr;
+}
+
+void			test_ft_lstdel(void){
+//	add_fun_subtest(test_ft_lstdel_basic);
+}
 
 ////////////////////////////////
 //        ft_lstadd           //
@@ -4577,4 +4585,138 @@ void			test_ft_islower_(void *ptr) {
 
 void			test_ft_islower(void) {
 	add_fun_subtest(test_ft_islower_);
+}
+
+////////////////////////////////
+//         ft_strtrimc         //
+////////////////////////////////
+
+//FIXME this function need to be malloc-size tested !
+
+void			test_ft_strtrimc_basic(void *ptr) {
+	char *		(*ft_strtrimc)(const char *, char c) = ptr;
+	SET_EXPLICATION("your strtrimc does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*s1 = "\t\t\t\t\t\t\t\tHello \t  Please\n Trim me !\t\t\t\t\t\t\t";
+			char	*s2 = "Hello \t  Please\n Trim me !";
+
+			char	*ret = ft_strtrimc(s1, '\t');
+			if (!strcmp(ret, s2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(s2, ret);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strtrimc_basic2(void *ptr) {
+	char *		(*ft_strtrimc)(const char *, char c) = ptr;
+	SET_EXPLICATION("your strtrimc does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*s1 = "                   Hello \t  Please\n Trim me !";
+			char	*s2 = "Hello \t  Please\n Trim me !";
+
+			char	*ret = ft_strtrimc(s1, ' ');
+			if (!strcmp(ret, s2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(s2, ret);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strtrimc_basic3(void *ptr) {
+	char *		(*ft_strtrimc)(const char *, char c) = ptr;
+	SET_EXPLICATION("your strtrimc does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*s1 = "Hello \t  Please\n Trim me !";
+			char	*s2 = "Hello \t  Please\n Trim me !";
+
+			char	*ret = ft_strtrimc(s1, ' ');
+			if (!strcmp(ret, s2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(s2, ret);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strtrimc_free(void *ptr) {
+	char *		(*ft_strtrimc)(const char *, char c) = ptr;
+	SET_EXPLICATION("your strtrimc does not allocate memory");
+
+	SANDBOX_RAISE(
+			char	*s1 = "\x12\x12\x12Hello \t  Please\n Trim me !\x12";
+			char	*s2 = "Hello \t  Please\n Trim me !";
+
+			char	*ret = ft_strtrimc(s1, '\x12');
+			if (!strcmp(ret, s2)) {
+				free(ret);
+				exit(TEST_SUCCESS);
+			}
+			SET_DIFF(s2, ret);
+			free(ret);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strtrimc_malloc_null(void *ptr) {
+	char *		(*ft_strtrimc)(const char *, char c) = ptr;
+	SET_EXPLICATION("you dont protect your malloc return");
+
+	SANDBOX_RAISE(
+			char	*s1 = "   \t  \n\n \t\t  \n\n\nHello \t  Please\n Trim me !\n   \n \n \t\t\n  ";
+
+			MALLOC_NULL;
+			char	*ret = ft_strtrimc(s1, '\xff');
+			MALLOC_RESET;
+			if (ret == NULL)
+				exit(TEST_SUCCESS);
+			SET_DIFF_PTR(NULL, ret);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strtrimc_zero(void *ptr) {
+	char *		(*ft_strtrimc)(const char *, char c) = ptr;
+	SET_EXPLICATION("your strtrimc does not set \\0 to the end of the string");
+
+	SANDBOX_RAISE(
+			char	*s1 = "\n\n\n\n\nHello \t  Please\n Trim me ! \n\n\n\n\n";
+			char	*s2 = "Hello \t  Please\n Trim me ! ";
+
+			MALLOC_MEMSET;
+			char	*ret = ft_strtrimc(s1, '\n');
+			MALLOC_RESET;
+			if (!strcmp(s2, ret)) {
+				free(ret);
+				exit(TEST_SUCCESS);
+			}
+			SET_DIFF(ret, s2);
+			free(ret);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strtrimc_null(void *ptr) {
+	char *		(*ft_strtrimc)(const char *, char c) = ptr;
+	SET_EXPLICATION("your strtrimc does not segfault/return null when null parameter is sent");
+
+	SANDBOX_KO(
+			char	*ret = ft_strtrimc(NULL, ' ');
+			if (!ret)
+				exit(TEST_SUCCESS);
+			SET_DIFF_PTR(NULL, ret);
+			exit(TEST_FAILED);
+			);
+}
+
+void            test_ft_strtrimc(void){
+	add_fun_subtest(test_ft_strtrimc_basic);
+	add_fun_subtest(test_ft_strtrimc_basic2);
+	add_fun_subtest(test_ft_strtrimc_basic3);
+	add_fun_subtest(test_ft_strtrimc_free);
+	add_fun_subtest(test_ft_strtrimc_malloc_null);
+	add_fun_subtest(test_ft_strtrimc_zero);
+	add_fun_subtest(test_ft_strtrimc_null);
 }

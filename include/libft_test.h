@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/27 02:41:29 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/27 18:38:33 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ enum		e_values {
 # define	MALLOC_MEMSET		lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[2]){_MALLOC_MEMSET, _MALLOC_DISABLE}, 2);
 # define	MALLOC_DEBUG		lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[2]){_MALLOC_DEBUG, _MALLOC_DISABLE}, 2);
 # define	MALLOC_SIZE			lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[2]){_MALLOC_SIZE, _MALLOC_DISABLE}, 2);
+# define	MALLOC_DEBUG		lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[2]){_MALLOC_DEBUG, _MALLOC_DISABLE}, 2);
 
 # define	SET_DIFF(x, y)		lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%s|\n%12s: |%s|", current_fun_name + 3, x, current_fun_name, y); write(g_diff_fd, "\0", 1);
 # define	SET_DIFF_INT(x, y)	lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%i|\n%12s: |%i|", current_fun_name + 3, x, current_fun_name, y) ; write(g_diff_fd, "\0", 1);
@@ -214,6 +215,7 @@ void            test_ft_lstiter(void);
 void            test_ft_lstmap(void);
 
 void			test_ft_islower(void);
+void			test_ft_strtrimc(void);
 
 /*  others:  */
 void    		run_subtests(void *h, int start);
