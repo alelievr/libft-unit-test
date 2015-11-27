@@ -4536,7 +4536,13 @@ void			test_ft_lstdelone(void) {
 //         ft_lstdel          //
 ////////////////////////////////
 
-void			test_ft_lstdel(void){ }
+void			test_ft_lstdel_basic(void *ptr) {
+	(void)ptr;
+}
+
+void			test_ft_lstdel(void){
+//	add_fun_subtest(test_ft_lstdel_basic);
+}
 
 ////////////////////////////////
 //        ft_lstadd           //

@@ -70,6 +70,7 @@ enum		e_values {
 # define	LOG_FILE		"result.log"
 # define	TMP_FILE		".over_malloc"
 # define	DIFF_FILE		".fun_diff"
+# define	MALLOC_FILE		".last_malloc"
 
 # define	COLOR_SUCCESS	"\033[38;5;46m"
 # define	COLOR_FAILED	"\033[38;5;160m"
@@ -106,11 +107,13 @@ enum		e_values {
 # define	_MALLOC_RESET		'R'
 # define	_MALLOC_MEMSET		'M'
 # define	_MALLOC_SIZE		'S'
+# define	_MALLOC_DEBUG		'D'
 
 # define	MALLOC_NULL			lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[2]){_MALLOC_NULL, _MALLOC_DISABLE}, 2);
 # define	MALLOC_RESET		lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[2]){_MALLOC_RESET, _MALLOC_DISABLE}, 2);
 # define	MALLOC_MEMSET		lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[2]){_MALLOC_MEMSET, _MALLOC_DISABLE}, 2);
 # define	MALLOC_SIZE			lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[2]){_MALLOC_SIZE, _MALLOC_DISABLE}, 2);
+# define	MALLOC_DEBUG		lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[2]){_MALLOC_DEBUG, _MALLOC_DISABLE}, 2);
 
 # define	SET_DIFF(x, y)		lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%s|\n%12s: |%s|", current_fun_name + 3, x, current_fun_name, y); write(g_diff_fd, "\0", 1);
 # define	SET_DIFF_INT(x, y)	lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%i|\n%12s: |%i|", current_fun_name + 3, x, current_fun_name, y) ; write(g_diff_fd, "\0", 1);
@@ -218,6 +221,7 @@ void			signals(void);
 void			ft_raise(int s);
 void			fd_to_buffer(int fd);
 char			*get_fd_buffer(int fd, char *buff, size_t size);
+int				get_last_malloc_size(void);
 
 /*  sanbox:  */
 void			sandbox(void);
