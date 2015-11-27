@@ -121,8 +121,10 @@ enum		e_values {
 # define	RESET_DIFF			lseek(g_diff_fd, 0, SEEK_SET); write(g_diff_fd, "\0", 1);
 
 # define	STDOUT_TO_BUFF		fd_to_buffer(STDOUT_FILENO);
+# define	STDERR_TO_BUFF		fd_to_buffer(STDERR_FILENO);
 # define	GET_STDOUT(y, z)	get_fd_buffer(STDOUT_FILENO, y, z);
 # define	VOID_STDOUT			get_fd_buffer(STDOUT_FILENO, NULL, 0);
+# define	VOID_STDERR			get_fd_buffer(STDERR_FILENO, NULL, 0);
 
 extern		char			*current_fun_name;
 extern		int				current_fun_visibility;
