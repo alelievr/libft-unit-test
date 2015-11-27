@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/27 02:53:14 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/27 19:53:25 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -946,6 +946,27 @@ void			test_ft_strdup_zero(void *ptr) {
 			if (strcmp(str, tmp))
 				exit(TEST_FAILED);
 			free(str);
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_strdup_size(void *ptr) {
+	typeof(strdup)	*ft_strdup = ptr;
+	SET_EXPLICATION("your strdup did not allocate the good size so the \\0 test may be false");
+
+	SANDBOX_RAISE(
+			char 	*str;
+			char	*tmp = "this is a normal test";
+			int		r_size = strlen(tmp);
+			int		size;
+
+			MALLOC_SIZE;
+			str = ft_strdup(tmp);
+			MALLOC_RESET;
+			size = get_last_malloc_size();
+			if (size != r_size + 1)
+				exit(TEST_FAILED);
+			SET_DIFF_INT(r_size + 1, size);
 			exit(TEST_SUCCESS);
 			);
 }
@@ -4518,18 +4539,18 @@ void			test_ft_lstdelone_basic(void *ptr) {
 	void		(*ft_lstdelone)(t_list **, void (*)(void *, size_t)) = ptr;
 	SET_EXPLICATION("your lstdelone does not works");
 
+	STDERR_TO_BUFF;
 	SANDBOX_RAISE(
 			t_list	*l = lstnew(malloc(10), 10);
 
-			STDERR_TO_BUFF;
 			ft_lstdelone(&l, lstdelone_f);
-			write(2, "", 1);
-			VOID_STDERR;
+			write(STDERR_FILENO, "", 1);
 			if (!l)
 				exit(TEST_SUCCESS);
 			SET_DIFF_PTR(NULL, l);
 			exit(TEST_FAILED);
 			);
+	VOID_STDERR;
 }
 
 void			test_ft_lstdelone(void) {
@@ -4545,35 +4566,33 @@ void			test_ft_lstdel_basic(void *ptr) {
 	void		(*ft_lstdel)(t_list **, void (*)(void *, size_t)) = ptr;
 	SET_EXPLICATION("your lstdel does not works with basic input");
 
+	STDERR_TO_BUFF;
 	SANDBOX_RAISE(
 			t_list	*l = lstnew(strdup("nyancat"), 8);
 
 			l->next = lstnew(strdup("#TEST#"), 7);
-			STDERR_TO_BUFF;
 			ft_lstdel(&l, lstdelone_f);
 			write(STDERR_FILENO, "", 1);
-			VOID_STDERR;
 			if (!l)
 				exit(TEST_SUCCESS);
 			SET_DIFF_PTR(NULL, l);
 			exit(TEST_FAILED);
 			);
+	VOID_STDERR;
 }
 
 void			test_ft_lstdel_free(void *ptr) {
 	void		(*ft_lstdel)(t_list **, void (*)(void *, size_t)) = ptr;
 	SET_EXPLICATION("your lstdel does not free the list");
 
+	STDERR_TO_BUFF;
 	SANDBOX_IRAISE(
 			t_list	*l = lstnew(strdup("nyancat"), 8);
 			t_list	*tmp;
 
 			l->next = lstnew(strdup("#TEST#"), 7);
 			tmp = l->next;
-			STDERR_TO_BUFF;
 			ft_lstdel(&l, lstdelone_f);
-			write(STDERR_FILENO, "", 1);
-			VOID_STDERR;
 			if (!l) {
 				free(tmp);
 				exit(TEST_SUCCESS);
@@ -4581,6 +4600,7 @@ void			test_ft_lstdel_free(void *ptr) {
 			SET_DIFF_PTR(NULL, l);
 			exit(TEST_FAILED);
 			);
+	VOID_STDERR;
 }
 
 void			test_ft_lstdel(void){
@@ -4592,13 +4612,57 @@ void			test_ft_lstdel(void){
 //        ft_lstadd           //
 ////////////////////////////////
 
-void			test_ft_lstadd(void){ }
+void			test_ft_lstadd_basic(void *ptr) {
+	void	(*ft_lstadd)(t_list **, t_list *new) = ptr;
+	SET_EXPLICATION("your lstadd does not works with basic input");
+
+	SANDBOX_RAISE(
+			t_list	*l = lstnew(strdup("nyacat"), 8);
+			t_list	*n = lstnew(strdup("OK"), 3);
+
+			ft_lstadd(&l, n);
+			if (l == n && !strcmp(l->content, "OK") && l->content_size == 3)
+				exit(TEST_SUCCESS);
+			SET_DIFF_PTR(n, l);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_lstadd_free(void *ptr) {
+	void	(*ft_lstadd)(t_list **, t_list *new) = ptr;
+	SET_EXPLICATION("your lstadd does not works with basic input");
+
+	STDERR_TO_BUFF;
+	SANDBOX_RAISE(
+			t_list	*l = lstnew(strdup("nyacat"), 8);
+			t_list	*n = lstnew(strdup("OK"), 3);
+
+			ft_lstadd(&l, n);
+			if (l == n && !strcmp(l->content, "OK") && l->content_size == 3) {
+				free(l->next);
+				free(l);
+				exit(TEST_SUCCESS);
+			}
+			free(l->next);
+			free(l);
+			SET_DIFF_PTR(n, l);
+			exit(TEST_FAILED);
+			);
+	VOID_STDERR;
+}
+
+void			test_ft_lstadd(void){
+	add_fun_subtest(test_ft_lstadd_basic);
+	add_fun_subtest(test_ft_lstadd_free);
+}
 
 ////////////////////////////////
 //        ft_lstiter           //
 ////////////////////////////////
 
-void			test_ft_lstiter(void){ }
+void			test_ft_lstiter(void){
+
+}
 
 ////////////////////////////////
 //         ft_lstmap          //

@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/27 18:38:33 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/27 19:54:14 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,10 +122,10 @@ enum		e_values {
 # define	RESET_DIFF			lseek(g_diff_fd, 0, SEEK_SET); write(g_diff_fd, "\0", 1);
 
 # define	STDOUT_TO_BUFF		fd_to_buffer(STDOUT_FILENO);
-# define	STDERR_TO_BUFF		fd_to_buffer(STDERR_FILENO);
+# define	STDERR_TO_BUFF		fd_to_buffer(2);
 # define	GET_STDOUT(y, z)	get_fd_buffer(STDOUT_FILENO, y, z);
 # define	VOID_STDOUT			get_fd_buffer(STDOUT_FILENO, NULL, 0);
-# define	VOID_STDERR			get_fd_buffer(STDERR_FILENO, NULL, 0);
+# define	VOID_STDERR			write(STDERR_FILENO, "", 1); get_fd_buffer(2, NULL, 0);
 
 extern		char			*current_fun_name;
 extern		int				current_fun_visibility;
