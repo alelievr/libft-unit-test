@@ -4521,7 +4521,10 @@ void			test_ft_lstdelone_basic(void *ptr) {
 	SANDBOX_RAISE(
 			t_list	*l = lstnew(malloc(10), 10);
 
+			STDERR_TO_BUFF;
 			ft_lstdelone(&l, lstdelone_f);
+			write(2, "", 1);
+			VOID_STDERR;
 			if (!l)
 				exit(TEST_SUCCESS);
 			SET_DIFF_PTR(NULL, l);
@@ -4539,11 +4542,50 @@ void			test_ft_lstdelone(void) {
 ////////////////////////////////
 
 void			test_ft_lstdel_basic(void *ptr) {
-	(void)ptr;
+	void		(*ft_lstdel)(t_list **, void (*)(void *, size_t)) = ptr;
+	SET_EXPLICATION("your lstdel does not works with basic input");
+
+	SANDBOX_RAISE(
+			t_list	*l = lstnew(strdup("nyancat"), 8);
+
+			l->next = lstnew(strdup("#TEST#"), 7);
+			STDERR_TO_BUFF;
+			ft_lstdel(&l, lstdelone_f);
+			write(STDERR_FILENO, "", 1);
+			VOID_STDERR;
+			if (!l)
+				exit(TEST_SUCCESS);
+			SET_DIFF_PTR(NULL, l);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_lstdel_free(void *ptr) {
+	void		(*ft_lstdel)(t_list **, void (*)(void *, size_t)) = ptr;
+	SET_EXPLICATION("your lstdel does not free the list");
+
+	SANDBOX_IRAISE(
+			t_list	*l = lstnew(strdup("nyancat"), 8);
+			t_list	*tmp;
+
+			l->next = lstnew(strdup("#TEST#"), 7);
+			tmp = l->next;
+			STDERR_TO_BUFF;
+			ft_lstdel(&l, lstdelone_f);
+			write(STDERR_FILENO, "", 1);
+			VOID_STDERR;
+			if (!l) {
+				free(tmp);
+				exit(TEST_SUCCESS);
+			}
+			SET_DIFF_PTR(NULL, l);
+			exit(TEST_FAILED);
+			);
 }
 
 void			test_ft_lstdel(void){
-//	add_fun_subtest(test_ft_lstdel_basic);
+	add_fun_subtest(test_ft_lstdel_basic);
+	add_fun_subtest(test_ft_lstdel_free);
 }
 
 ////////////////////////////////
