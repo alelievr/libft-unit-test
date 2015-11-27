@@ -32,6 +32,7 @@ void *malloc(size_t size)
 	int		fd;
 	void	*tmp;
 	char	buff[16] = {[15]=0};
+	int		fd2;
 
 	if (real_malloc == NULL)
 		real_malloc = dlsym(RTLD_NEXT, "malloc");
@@ -55,6 +56,14 @@ void *malloc(size_t size)
 				return tmp;
 				break ;
 			case _MALLOC_SIZE:
+				ft_convert(buff, size, 10, 0);
+				if ((fd2 = open(MALLOC_FILE, O_WRONLY | O_TRUNC | O_CREAT, 0600)) == -1)
+					return (real_malloc(size));
+
+				write(fd2, buff, strlen(buff));
+				close(fd2);
+				break ;
+			case _MALLOC_DEBUG:
 				ft_convert(buff, size, 10, 0);
 				write(1, buff, strlen(buff));
 				write(1, " bytes allocated\n", 18);

@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/26 21:47:28 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/27 02:53:14 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,28 @@ void			test_ft_memset_basic(void *ptr) {
 			if (!strcmp(b1, b2))
 				exit(TEST_SUCCESS);
 			SET_DIFF(b1, b2);
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_memset_return(void *ptr) {
+	typeof(memset)	*ft_memset = ptr;
+
+	SET_EXPLICATION("your memset return address is false/your memset does not works");
+
+	//Auto raise: if crash => a TEST_CRASH is raised otherwise the return of the sandbox is raised
+	SANDBOX_RAISE(
+			char	b1[BSIZE + 1];
+			char	b2[BSIZE + 1];
+
+			b1[BSIZE] = 0;
+			b2[BSIZE] = 0;
+			char	*r1 = memset(b1, 'A', BSIZE);
+			char	*r2 = ft_memset(b2, 'A', BSIZE);
+
+			if (!strcmp(r1, r2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(r1, r2);
 			exit(TEST_SUCCESS);
 			);
 }
@@ -106,6 +128,7 @@ void			test_ft_memset_zero_value(void *ptr) {
 
 void            test_ft_memset(void) {
 	add_fun_subtest(test_ft_memset_basic);
+	add_fun_subtest(test_ft_memset_return);
 	add_fun_subtest(test_ft_memset_null);
 	add_fun_subtest(test_ft_memset_zero_value);
 	add_fun_subtest(test_ft_memset_fat);
@@ -189,6 +212,25 @@ void			test_ft_memcpy_basic_test(void *ptr) {
 			if (!memcmp(buff1, buff2, 22))
 				exit(TEST_SUCCESS);
 			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+
+}
+
+void			test_ft_memcpy_return(void *ptr) {
+	typeof(memcpy)	*ft_memcpy = ptr;
+	SET_EXPLICATION("your memcpy's return is false/doesn't work with basic params");
+
+	SANDBOX_RAISE(
+			char	src[] = "test basic du memcpy !";
+			char	buff1[22];
+			char	buff2[22];
+
+			char	*r1 = memcpy(buff1, src, 22);
+			char	*r2 = ft_memcpy(buff2, src, 22);
+			if (!memcmp(r1, r2, 22))
+				exit(TEST_SUCCESS);
+			SET_DIFF(r1, r2);
 			exit(TEST_FAILED);
 			);
 
@@ -279,6 +321,7 @@ void			test_ft_memcpy_null2(void *ptr) {
 
 void            test_ft_memcpy(void){
 	add_fun_subtest(test_ft_memcpy_basic_test);
+	add_fun_subtest(test_ft_memcpy_return);
 	add_fun_subtest(test_ft_memcpy_zero_value);
 	add_fun_subtest(test_ft_memcpy_basic_test2);
 	add_fun_subtest(test_ft_memcpy_to_small);
@@ -291,89 +334,157 @@ void            test_ft_memcpy(void){
 //         ft_memccpy         //
 ////////////////////////////////
 
-/*void			test_ft_memcpy_basic_test(void *ptr) {
-	typeof(memcpy)	*ft_memcpy = ptr;
-	SET_EXPLICATION("your memcpy doesn't work with basic params");
+void			test_ft_memccpy_basic_test(void *ptr) {
+	typeof(memccpy)	*ft_memccpy = ptr;
+	SET_EXPLICATION("your memccpy doesn't work with basic params");
 
 	SANDBOX_RAISE(
-			char	buff[] = "test basic du memcpy !";
+			char	src[] = "test basic du memccpy !";
+			char	buff1[22];
 			char	buff2[22];
 
-			ft_memcpy(buff2, buff, 22);
-			if (memcmp(buff, buff2, 22))
-				exit(TEST_FAILED);
-			exit(TEST_SUCCESS);
+			memccpy(buff1, src, 'm', 6);
+			ft_memccpy(buff2, src, 'm', 6);
+			if (!memcmp(buff1, buff2, 6))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
 			);
 
 }
 
-void			test_ft_memcpy_zero_value(void *ptr) {
-	typeof(memcpy)	*ft_memcpy = ptr;
-	SET_EXPLICATION("your memcpy does not work when call with 0");
+void			test_ft_memccpy_return(void *ptr) {
+	typeof(memccpy)	*ft_memccpy = ptr;
+	SET_EXPLICATION("your memccpy's return is false/doesn't work with basic params");
 
 	SANDBOX_RAISE(
-			char	buff[] = "test 0 du memcpy !";
-			char	buff2[] = "phrase differente pour le test";
+			char	src[] = "test basic du memccpy !";
+			char	buff1[22];
+			char	buff2[22];
 
-			ft_memcpy(buff2, buff, 0);
-			if (memcmp("phrase differente pour le test", buff2, strlen(buff2)))
-				exit(TEST_FAILED);
-			exit(TEST_SUCCESS);
+			char	*r1 = memccpy(buff1, src, 'm', 22);
+			char	*r2 = ft_memccpy(buff2, src, 'm', 22);
+			if (!memcmp(r1, r2, 1))
+				exit(TEST_SUCCESS);
+			SET_DIFF(r1, r2);
+			exit(TEST_FAILED);
 			);
 
 }
 
-void			test_ft_memcpy_basic_test2(void *ptr) {
-	typeof(memcpy)	*ft_memcpy = ptr;
-	SET_EXPLICATION("your memcpy does not work with basic params");
+void			test_ft_memccpy_not_found(void *ptr) {
+	typeof(memccpy)	*ft_memccpy = ptr;
+	SET_EXPLICATION("your memccpy does not works with not found char");
 
 	SANDBOX_RAISE(
-			char	buff[] = "test basic numero 2";
-			char	buff2[] = "phrase differente pour le test";
+			char	src[] = "test basic du memccpy !";
+			char	buff1[22];
+			char	buff2[22];
 
-			ft_memcpy(buff2, buff, strlen(buff));
-			if (memcmp("test basic numero 2our le test", buff2, strlen(buff2)))
-				exit(TEST_FAILED);
-			exit(TEST_SUCCESS);
+			char	*r1 = memccpy(buff1, src, 'z', 22);
+			char	*r2 = ft_memccpy(buff2, src, 'z', 22);
+			if (r1 == r2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(r1, r2);
+			exit(TEST_FAILED);
 			);
 
 }
 
-void			test_ft_memcpy_to_small(void *ptr) {
-	typeof(memcpy)	*ft_memcpy = ptr;
-	SET_EXPLICATION("your memcpy does not segfault dst is not big enough");
+void			test_ft_memccpy_zero_value(void *ptr) {
+	typeof(memccpy)	*ft_memccpy = ptr;
+	SET_EXPLICATION("your memccpy does not work when call with 0");
+
+	SANDBOX_RAISE(
+			char	buff[] = "test 0 \0du\0 memccpy !";
+			char	*src = STRING_4;
+			char	buff2[] = STRING_4;
+
+			ft_memccpy(buff2, buff, '\0', 0);
+			if (!memcmp(src, buff2, strlen(buff2)))
+				exit(TEST_SUCCESS);
+			SET_DIFF(src, buff2);
+			exit(TEST_FAILED);
+			);
+
+}
+
+void			test_ft_memccpy_basic_test2(void *ptr) {
+	typeof(memccpy)	*ft_memccpy = ptr;
+	SET_EXPLICATION("your memccpy does not work with basic params");
+
+	SANDBOX_RAISE(
+			char	src[] = STRING_3;
+			char	buff1[] = STRING_1;
+			char	buff2[] = STRING_1;
+
+			memccpy(buff1, src, ' ', strlen(src));
+			ft_memccpy(buff2, src, ' ', strlen(src));
+			if (!memcmp(buff1, buff2, strlen(buff2)))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+
+}
+
+void			test_ft_memccpy_to_small(void *ptr) {
+	typeof(memccpy)	*ft_memccpy = ptr;
+	SET_EXPLICATION("your memccpy does not segfault dst is not big enough");
 
 	SANDBOX_IRAISE(
-			ft_memcpy("", "segfaulter tu dois", 17);
+			ft_memccpy("", "segfaulter tu dois", '\0', 17);
 			);
 }
 
-void			test_ft_memcpy_null1(void *ptr) {
-	typeof(memcpy)	*ft_memcpy = ptr;
-	SET_EXPLICATION("your memcpy does not segv with NULL on first params");
+void			test_ft_memccpy_struct(void *ptr) {
+	typeof(memccpy)	*ft_memccpy = ptr;
+	SET_EXPLICATION("your memccpy does not work with basic params");
+	t_test src = {"nyancat® inside", (void*)0xdeadbeef, 0x42424242424242L, 0b1010100010};
+
+	SANDBOX_RAISE(
+			char	buff1[0xF00];
+			char	buff2[0xF00];
+
+			memccpy(buff1, &src, '\x42', sizeof(src));
+			ft_memccpy(buff2, &src, '\x42', sizeof(src));
+			if (!memcmp(buff1, buff2, strlen(buff2)))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+
+}
+
+void			test_ft_memccpy_null1(void *ptr) {
+	typeof(memccpy)	*ft_memccpy = ptr;
+	SET_EXPLICATION("your memccpy does not segv with NULL on first params");
 
 	SANDBOX_IRAISE(
-			ft_memcpy(NULL, "segfaulter tu dois", 17);
+			ft_memccpy(NULL, "segfaulter tu dois", 'e', 17);
 			);
 }
 
-void			test_ft_memcpy_null2(void *ptr) {
-	typeof(memcpy)	*ft_memcpy = ptr;
-	SET_EXPLICATION("your memcpy does not segv with NULL on second params");
+void			test_ft_memccpy_null2(void *ptr) {
+	typeof(memccpy)	*ft_memccpy = ptr;
+	SET_EXPLICATION("your memccpy does not segv with NULL on second params");
 
 	SANDBOX_IRAISE(
-			ft_memcpy("            ", NULL, 17);
+			ft_memccpy("            ", NULL, ' ', 17);
 			);
 }
-*/
+
 void            test_ft_memccpy(void){
-/*	add_fun_subtest(test_ft_memccpy_basic_test);
+	add_fun_subtest(test_ft_memccpy_basic_test);
+	add_fun_subtest(test_ft_memccpy_return);
+	add_fun_subtest(test_ft_memccpy_not_found);
 	add_fun_subtest(test_ft_memccpy_zero_value);
 	add_fun_subtest(test_ft_memccpy_basic_test2);
 	add_fun_subtest(test_ft_memccpy_to_small);
+	add_fun_subtest(test_ft_memcpy_struct);
 	add_fun_subtest(test_ft_memccpy_null1);
 	add_fun_subtest(test_ft_memccpy_null2);
-*/}
+}
 
 ////////////////////////////////
 //         ft_memmove         //
@@ -394,6 +505,25 @@ void			test_ft_memmove_basic(void *ptr) {
 			if (!memcmp(dst1, dst2, size))
 				exit(TEST_SUCCESS);
 			SET_DIFF(dst1, dst2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_memmove_return(void *ptr) {
+	typeof(memmove)		*ft_memmove = ptr;
+	SET_EXPLICATION("your memmove's return is false/does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*src = "thanks to @apellicc for this test !\r\n";
+			char	dst1[0xF0];
+			char	dst2[0xF0];
+			int		size = strlen(src);
+
+			char	*r1 = memmove(dst1, src, size);
+			char	*r2 = ft_memmove(dst2, src, size);
+			if (!memcmp(r1, r2, size))
+				exit(TEST_SUCCESS);
+			SET_DIFF(r1, r2);
 			exit(TEST_FAILED);
 			);
 }
@@ -514,6 +644,7 @@ void			test_ft_memmove_malloc_null(void *ptr) {
 
 void            test_ft_memmove(void){
 	add_fun_subtest(test_ft_memmove_basic);
+	add_fun_subtest(test_ft_memmove_return);
 	add_fun_subtest(test_ft_memmove_null_byte);
 	add_fun_subtest(test_ft_memmove_long_int);
 	add_fun_subtest(test_ft_memmove_overlap);
@@ -783,6 +914,8 @@ void            test_ft_strlen(void){
 //         ft_strdup          //
 ////////////////////////////////
 
+//FIXME add alloc size fcheck for this
+
 void			test_ft_strdup_last_char(void *ptr) {
 	typeof(strdup)	*ft_strdup = ptr;
 	SET_EXPLICATION("your strdup does not add \\0 at the end of the sring");
@@ -893,6 +1026,25 @@ void			test_ft_strcpy_basic(void *ptr) {
 			);
 }
 
+void			test_ft_strcpy_return(void *ptr) {
+	typeof(strcpy)	*ft_strcpy = ptr;
+	SET_EXPLICATION("your strcpy does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*src = "--> nyancat <--\n\r";
+			char	dst1[30] = {[29]='a'};
+			char	dst2[30] = {[29]='a'};
+
+			char	*r1 = strcpy(dst1, src);
+			char	*r2 = ft_strcpy(dst2, src);
+			if (strcmp(r1, r2)) {
+				SET_DIFF(r1, r2);
+				exit(TEST_FAILED);
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
 void			test_ft_strcpy_unicode(void *ptr) {
 	typeof(strcpy)	*ft_strcpy = ptr;
 	SET_EXPLICATION("your strcpy does not support unicode ?");
@@ -953,6 +1105,7 @@ void			test_ft_strcpy_null2(void *ptr) {
 
 void            test_ft_strcpy(void) {
 	add_fun_subtest(test_ft_strcpy_basic);
+	add_fun_subtest(test_ft_strcpy_return);
 	add_fun_subtest(test_ft_strcpy_unicode);
 	add_fun_subtest(test_ft_strcpy_empty);
 	add_fun_subtest(test_ft_strcpy_null1);
@@ -977,6 +1130,26 @@ void			test_ft_strncpy_basic(void *ptr) {
 			ft_strncpy(dst2, src, max);
 			if (strcmp(dst1, dst2)) {
 				SET_DIFF(dst1, dst2);
+				exit(TEST_FAILED);
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_strncpy_return(void *ptr) {
+	typeof(strncpy)	*ft_strncpy = ptr;
+	SET_EXPLICATION("your strncpy does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*src = "--> nyancat <--\n\r";
+			char	dst1[30] = {[29]='a'};
+			char	dst2[30] = {[29]='a'};
+			size_t	max = 12;
+
+			char	*r1 = strncpy(dst1, src, max);
+			char	*r2 = ft_strncpy(dst2, src, max);
+			if (strcmp(r1, r2)) {
+				SET_DIFF(r1, r2);
 				exit(TEST_FAILED);
 			}
 			exit(TEST_SUCCESS);
@@ -1086,6 +1259,7 @@ void			test_ft_strncpy_null2(void *ptr) {
 
 void            test_ft_strncpy(void){
 	add_fun_subtest(test_ft_strncpy_basic);
+	add_fun_subtest(test_ft_strncpy_return);
 	add_fun_subtest(test_ft_strncpy_unicode);
 	add_fun_subtest(test_ft_strncpy_empty);
 	add_fun_subtest(test_ft_strncpy_zero);
@@ -1112,6 +1286,24 @@ void			test_ft_strcat_basic(void *ptr) {
 			if (!strcmp(buff1, buff2))
 				exit(TEST_SUCCESS);
 			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strcat_return(void *ptr) {
+	typeof(strcat)	*ft_strcat = ptr;
+	SET_EXPLICATION("your strcat does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*str = STRING_1;
+			char	buff1[0xF00] = STRING_2;
+			char	buff2[0xF00] = STRING_2;
+
+			char	*r1 = strcat(buff1, str);
+			char	*r2 = ft_strcat(buff2, str);
+			if (!strcmp(r1, r2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(r1, r2);
 			exit(TEST_FAILED);
 			);
 }
@@ -1194,6 +1386,7 @@ void			test_ft_strcat_null2(void *ptr) {
 
 void            test_ft_strcat(void){
 	add_fun_subtest(test_ft_strcat_basic);
+	add_fun_subtest(test_ft_strcat_return);
 	add_fun_subtest(test_ft_strcat_empty1);
 	add_fun_subtest(test_ft_strcat_empty2);
 	add_fun_subtest(test_ft_strcat_null_byte);
@@ -1220,6 +1413,25 @@ void			test_ft_strncat_basic(void *ptr) {
 			if (!strcmp(buff1, buff2))
 				exit(TEST_SUCCESS);
 			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strncat_return(void *ptr) {
+	typeof(strncat)	*ft_strncat = ptr;
+	SET_EXPLICATION("your strncat does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*str = STRING_1;
+			char	buff1[0xF00] = STRING_2;
+			char	buff2[0xF00] = STRING_2;
+			size_t	max = 5;
+
+			char	*r1 = strncat(buff1, str, max);
+			char	*r2 = ft_strncat(buff2, str, max);
+			if (!strcmp(r1, r2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(r1, r2);
 			exit(TEST_FAILED);
 			);
 }
@@ -1343,6 +1555,7 @@ void			test_ft_strncat_null2(void *ptr) {
 
 void            test_ft_strncat(void){
 	add_fun_subtest(test_ft_strncat_basic);
+	add_fun_subtest(test_ft_strncat_return);
 	add_fun_subtest(test_ft_strncat_basic1);
 	add_fun_subtest(test_ft_strncat_basic2);
 	add_fun_subtest(test_ft_strncat_empty1);
@@ -1371,6 +1584,25 @@ void			test_ft_strlcat_basic(void *ptr) {
 			if (!strcmp(buff1, buff2))
 				exit(TEST_SUCCESS);
 			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strlcat_return(void *ptr) {
+	typeof(strlcat)	*ft_strlcat = ptr;
+	SET_EXPLICATION("your strlcat does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*str = STRING_1;
+			char	buff1[0xF00] = STRING_2;
+			char	buff2[0xF00] = STRING_2;
+			size_t	max = strlen(STRING_1) + 4;
+
+			size_t	r1 = strlcat(buff1, str, max);
+			size_t	r2 = ft_strlcat(buff2, str, max);
+			if (r1 == r2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT((int)r1, (int)r2);
 			exit(TEST_FAILED);
 			);
 }
@@ -1494,6 +1726,7 @@ void			test_ft_strlcat_null2(void *ptr) {
 
 void            test_ft_strlcat(void){
 	add_fun_subtest(test_ft_strlcat_basic);
+	add_fun_subtest(test_ft_strlcat_return);
 	add_fun_subtest(test_ft_strlcat_basic1);
 	add_fun_subtest(test_ft_strlcat_basic2);
 	add_fun_subtest(test_ft_strlcat_empty1);
@@ -2521,8 +2754,6 @@ void            test_ft_tolower(void){
 //        ft_memalloc         //
 ////////////////////////////////
 
-//FIXME this function needs a test for \0 at end of the string
-
 void			test_ft_memalloc_free(void *ptr) {
 	void *	(*ft_memalloc)(size_t) = ptr;
 	SET_EXPLICATION("your memalloc don't allocate memory");
@@ -2538,7 +2769,9 @@ void			test_ft_memalloc_zero(void *ptr) {
 
 	SANDBOX_RAISE(
 			size_t	size = 514;
+			MALLOC_MEMSET;
 			char	*ret = ft_memalloc(size);
+			MALLOC_RESET;
 
 			for (size_t i = 0;i < size;i++)
 				if (ret[i] != 0) {
@@ -2636,8 +2869,6 @@ void            test_ft_memdel(void) {
 //         ft_strnew          //
 ////////////////////////////////
 
-//FIXME this function needs a test for \0 at end of the string
-
 void			test_ft_strnew_free(void *ptr) {
 	void *	(*ft_strnew)(size_t) = ptr;
 	SET_EXPLICATION("your strnew don't allocate memory");
@@ -2654,7 +2885,9 @@ void			test_ft_strnew_zero(void *ptr) {
 
 	SANDBOX_RAISE(
 			size_t	size = 514;
+			MALLOC_MEMSET;
 			char	*ret = ft_strnew(size);
+			MALLOC_RESET;
 
 			for (size_t i = 0;i < size + 1;i++)
 				if (ret[i] != 0) {
@@ -2879,8 +3112,6 @@ void            test_ft_striteri(void){
 //         ft_strmap          //
 ////////////////////////////////
 
-//FIXME this function needs a test for \0 at end of the string
-
 char			f_strmap(char c) { return (c + 7); }
 
 void			test_ft_strmap_basic(void *ptr) {
@@ -2899,6 +3130,28 @@ void			test_ft_strmap_basic(void *ptr) {
 			if (!strcmp(b2, ret))
 				exit(TEST_SUCCESS);
 			SET_DIFF(ret, b2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strmap_zero(void *ptr) {
+	char *	(*ft_strmap)(const char *, char (*)(char)) = ptr;
+	SET_EXPLICATION("your strmap did not set \\0 at the end of the string");
+
+	SANDBOX_RAISE(
+			char	*b = "override this !";
+			char	b2[0xF0];
+			size_t	size = strlen(b);
+
+			for (size_t i = 0; i < size; i++)
+				b2[i] = f_strmap(b[i]);
+			b2[size] = 0;
+			MALLOC_MEMSET;
+			char	*ret = ft_strmap(b, f_strmap);
+			MALLOC_RESET;
+			if (!memcmp(b2, ret, size + 1))
+				exit(TEST_SUCCESS);
+			SET_DIFF(b2, ret);
 			exit(TEST_FAILED);
 			);
 }
@@ -2965,6 +3218,7 @@ void			test_ft_strmap_null2(void *ptr) {
 
 void            test_ft_strmap(void){
 	add_fun_subtest(test_ft_strmap_basic);
+	add_fun_subtest(test_ft_strmap_zero);
 	add_fun_subtest(test_ft_strmap_free);
 	add_fun_subtest(test_ft_strmap_malloc_null);
 	add_fun_subtest(test_ft_strmap_null1);
@@ -2974,8 +3228,6 @@ void            test_ft_strmap(void){
 ////////////////////////////////
 //         ft_strmapi         //
 ////////////////////////////////
-
-//FIXME this function needs a test for \0 at end of the string
 
 char			f_strmapi(unsigned i, char c) { return (c + i); }
 
@@ -2993,6 +3245,47 @@ void			test_ft_strmapi_basic(void *ptr) {
 			b2[size] = 0;
 			char	*ret = ft_strmapi(b, f_strmapi);
 			if (!strcmp(b2, ret))
+				exit(TEST_SUCCESS);
+			SET_DIFF(ret, b2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strmapi_malloc_size(void *ptr) {
+	char *	(*ft_strmapi)(const char *, char (*)(unsigned, char)) = ptr;
+	SET_EXPLICATION("your strmapi does not allocate the good size so the \\0 test may be false");
+
+	SANDBOX_RAISE(
+			char	*b = "override this !";
+			size_t	size = strlen(b);
+			size_t	alloc_size;
+
+			MALLOC_SIZE;
+			ft_strmapi(b, f_strmapi);
+			alloc_size = get_last_malloc_size();
+			if (alloc_size == size + 1)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT((int)size + 1, (int)alloc_size);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strmapi_zero(void *ptr) {
+	char *	(*ft_strmapi)(const char *, char (*)(unsigned, char)) = ptr;
+	SET_EXPLICATION("your strmapi did not set \\0 at the end of the string");
+
+	SANDBOX_RAISE(
+			char	*b = "override this !";
+			char	b2[0xF0];
+			size_t	size = strlen(b);
+
+			for (size_t i = 0; i < size; i++)
+				b2[i] = f_strmapi(i, b[i]);
+			b2[size] = 0;
+			MALLOC_MEMSET;
+			char	*ret = ft_strmapi(b, f_strmapi);
+			MALLOC_RESET;
+			if (!memcmp(b2, ret, size + 1))
 				exit(TEST_SUCCESS);
 			SET_DIFF(ret, b2);
 			exit(TEST_FAILED);
@@ -3061,6 +3354,8 @@ void			test_ft_strmapi_null2(void *ptr) {
 void            test_ft_strmapi(void){
 	add_fun_subtest(test_ft_strmapi_basic);
 	add_fun_subtest(test_ft_strmapi_free);
+	add_fun_subtest(test_ft_strmapi_zero);
+	add_fun_subtest(test_ft_strmapi_malloc_size);
 	add_fun_subtest(test_ft_strmapi_malloc_null);
 	add_fun_subtest(test_ft_strmapi_null1);
 	add_fun_subtest(test_ft_strmapi_null2);
@@ -4193,7 +4488,6 @@ void			test_ft_lstnew_malloc_null(void *ptr) {
 }
 
 void			test_ft_lstnew(void){
-	printf("OK !\n");
 	add_fun_subtest(test_ft_lstnew_basic);
 	add_fun_subtest(test_ft_lstnew_free);
 	add_fun_subtest(test_ft_lstnew_null);
@@ -4281,6 +4575,6 @@ void			test_ft_islower_(void *ptr) {
 			);
 }
 
-void			test_ft_islower(void){
+void			test_ft_islower(void) {
 	add_fun_subtest(test_ft_islower_);
 }

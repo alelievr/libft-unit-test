@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/21 19:48:59 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/23 01:21:03 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/27 02:39:12 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int		main(void) {
 			printf("\033[38;5;201mOMG you crashed my program, please report this bug to @alelievr !\nthanks\n\033[0m");
 		}
 		unlink(TMP_FILE);
+		unlink(MALLOC_FILE);
 	}
 	return (0);
 }

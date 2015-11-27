@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/25 21:41:01 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/27 02:45:27 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,17 @@ void	fd_to_buffer(int fd) {
 		return ;
 	dup2(fd_pipe[1], fd);
 	close(fd_pipe[1]);
+}
+
+int		get_last_malloc_size(void) {
+	int		fd;
+	char	buff[0xF0];
+
+	if ((fd = open(MALLOC_FILE, O_RDONLY)) == -1)
+		return (0);
+	if ((read(fd, buff, sizeof(buff))) == -1)
+		return (0);
+	return (atoi(buff));
 }
 
 char	*get_fd_buffer(int fd, char *buff, size_t size) {
