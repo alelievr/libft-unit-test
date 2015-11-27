@@ -87,6 +87,7 @@ t_libft_test	fun_test_table[] = {
 	{"ft_lstmap", test_ft_lstmap, 0},
 
 	{"ft_islower", test_ft_islower, 0},
+	{"ft_strtrimc", test_ft_strtrimc, 0},
 
 	{NULL, NULL, 0}
 };

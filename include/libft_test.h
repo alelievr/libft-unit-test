@@ -214,6 +214,7 @@ void            test_ft_lstiter(void);
 void            test_ft_lstmap(void);
 
 void			test_ft_islower(void);
+void			test_ft_strtrimc(void);
 
 /*  others:  */
 void    		run_subtests(void *h, int start);
