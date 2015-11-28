@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/28 17:37:32 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/28 19:48:28 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -4177,6 +4177,26 @@ void			test_ft_itoa_max_int(void *ptr) {
 				exit(TEST_FAILED);
 			}
 			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_itoa_size(void *ptr) {
+	char	*(*ft_itoa)(int) = ptr;
+	SET_EXPLICATION("your itoa does not works with max int");
+
+	SANDBOX_RAISE(
+			int		size;
+			char	*i1;
+
+			MALLOC_SIZE;
+			i1 = ft_itoa(-5859);
+			MALLOC_RESET;
+			size = get_last_malloc_size();
+
+			if (size == 6)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(6, size);
+			exit(TEST_KO);
 			);
 }
 
