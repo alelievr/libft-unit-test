@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/28 20:11:03 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/28 20:35:26 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -3663,6 +3663,28 @@ void			test_ft_strsub_basic2(void *ptr) {
 			);
 }
 
+void			test_ft_strsub_size(void *ptr) {
+	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
+	SET_EXPLICATION("your strsub did not allocate the good size so the \\0 test may be false");
+
+	SANDBOX_RAISE(
+			char	*str = "i just want this part #############";
+			size_t	size = 10;
+			int		ret_size;
+
+			MALLOC_SIZE;
+			ft_strsub(str, 5, size);
+			MALLOC_RESET;
+			ret_size = get_last_malloc_size();
+
+			if ((int)size + 1 == ret_size) {
+				exit(TEST_SUCCESS);
+			}
+			SET_DIFF_INT((int)size + 1, ret_size);
+			exit(TEST_FAILED);
+			);
+}
+
 void			test_ft_strsub_out1(void *ptr) {
 	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
 	SET_EXPLICATION("your strsub does not segfault/return null when invalid start/length is sent");
@@ -3750,6 +3772,7 @@ void			test_ft_strsub_null(void *ptr) {
 void            test_ft_strsub(void){
 	add_fun_subtest(test_ft_strsub_basic);
 	add_fun_subtest(test_ft_strsub_basic2);
+	add_fun_subtest(test_ft_strsub_size);
 	add_fun_subtest(test_ft_strsub_out1);
 	add_fun_subtest(test_ft_strsub_zero);
 	add_fun_subtest(test_ft_strsub_malloc_null);
@@ -4242,6 +4265,26 @@ void			test_ft_itoa_size(void *ptr) {
 			);
 }
 
+void			test_ft_itoa_size2(void *ptr) {
+	char	*(*ft_itoa)(int) = ptr;
+	SET_EXPLICATION("your itoa does not allocate the good size so the \\0 test may be false");
+
+	SANDBOX_RAISE(
+			int		size;
+			char	*i1;
+
+			MALLOC_SIZE;
+			i1 = ft_itoa(0);
+			MALLOC_RESET;
+			size = get_last_malloc_size();
+
+			if (size == 2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(6, size);
+			exit(TEST_KO);
+			);
+}
+
 void			test_ft_itoa_min_int(void *ptr) {
 	char	*(*ft_itoa)(int) = ptr;
 	SET_EXPLICATION("your itoa does not works with min int");
@@ -4298,6 +4341,7 @@ void            test_ft_itoa(void){
 	add_fun_subtest(test_ft_itoa_zero_byte);
 	add_fun_subtest(test_ft_itoa_malloc_null);
 	add_fun_subtest(test_ft_itoa_size);
+	add_fun_subtest(test_ft_itoa_size2);
 }
 
 ////////////////////////////////
