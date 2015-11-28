@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:30:13 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/26 15:15:03 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/28 00:14:54 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ t_libft_test	fun_test_table[] = {
 
 	{"ft_islower", test_ft_islower, 0},
 	{"ft_strtrimc", test_ft_strtrimc, 0},
+	{"ft_strndup", test_ft_strndup, 0},
 
 	{NULL, NULL, 0}
 };

@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/27 19:53:25 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/28 01:00:07 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -914,8 +914,6 @@ void            test_ft_strlen(void){
 //         ft_strdup          //
 ////////////////////////////////
 
-//FIXME add alloc size fcheck for this
-
 void			test_ft_strdup_last_char(void *ptr) {
 	typeof(strdup)	*ft_strdup = ptr;
 	SET_EXPLICATION("your strdup does not add \\0 at the end of the sring");
@@ -964,10 +962,10 @@ void			test_ft_strdup_size(void *ptr) {
 			str = ft_strdup(tmp);
 			MALLOC_RESET;
 			size = get_last_malloc_size();
-			if (size != r_size + 1)
-				exit(TEST_FAILED);
+			if (size == r_size + 1)
+				exit(TEST_SUCCESS);
 			SET_DIFF_INT(r_size + 1, size);
-			exit(TEST_SUCCESS);
+			exit(TEST_KO);
 			);
 }
 
@@ -1020,6 +1018,7 @@ void            test_ft_strdup(void){
 	add_fun_subtest(test_ft_strdup_malloc_null);
 	add_fun_subtest(test_ft_strdup_basic);
 	add_fun_subtest(test_ft_strdup_zero);
+	add_fun_subtest(test_ft_strdup_size);
 	add_fun_subtest(test_ft_strdup_last_char);
 	add_fun_subtest(test_ft_strdup_null);
 }
@@ -3822,8 +3821,6 @@ void            test_ft_strjoin(void){
 //         ft_strtrim         //
 ////////////////////////////////
 
-//FIXME this function need to be malloc-size tested !
-
 void			test_ft_strtrim_basic(void *ptr) {
 	char *		(*ft_strtrim)(const char *) = ptr;
 	SET_EXPLICATION("your strtrim does not works with basic input");
@@ -3869,6 +3866,27 @@ void			test_ft_strtrim_basic3(void *ptr) {
 				exit(TEST_SUCCESS);
 			SET_DIFF(s2, ret);
 			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strtrim_size(void *ptr) {
+	char *		(*ft_strtrim)(const char *) = ptr;
+	SET_EXPLICATION("your strtrim did not allocate the good size so the \\0 test may be false");
+
+	SANDBOX_RAISE(
+			char	*s1 = "\t   \n\n\n  \n\n\t    Hello \t  Please\n Trim me !\t\t\t\n  \t\t\t\t  ";
+			char	*s2 = "Hello \t  Please\n Trim me !";
+			int		r_size = strlen(s2);
+			int		size;
+
+			MALLOC_SIZE;
+			ft_strtrim(s1);
+			MALLOC_RESET;
+			size = get_last_malloc_size();
+			if (size == r_size + 1)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(r_size + 1, size);
+			exit(TEST_KO);
 			);
 }
 
@@ -3946,6 +3964,7 @@ void            test_ft_strtrim(void){
 	add_fun_subtest(test_ft_strtrim_basic);
 	add_fun_subtest(test_ft_strtrim_basic2);
 	add_fun_subtest(test_ft_strtrim_basic3);
+	add_fun_subtest(test_ft_strtrim_size);
 	add_fun_subtest(test_ft_strtrim_free);
 	add_fun_subtest(test_ft_strtrim_malloc_null);
 	add_fun_subtest(test_ft_strtrim_zero);
@@ -4390,7 +4409,7 @@ void			test_ft_putstr_null(void *ptr) {
 			ft_putstr(NULL);
 			GET_STDOUT(buff2, sizeof(buff2));
 			if (buff2[0])
-				exit(TEST_SUCCESS);
+				raise(SIGBUS);
 			SET_DIFF("(null)", buff2);
 			exit(TEST_FAILED);
 			);
@@ -4407,37 +4426,512 @@ void            test_ft_putstr(void){
 //         ft_putendl         //
 ////////////////////////////////
 
-void            test_ft_putendl(void){ }
+void			test_ft_putendl_basic(void *ptr) {
+	void		(*ft_putendl)(const char *) = ptr;
+	SET_EXPLICATION("your putendl does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	buff1[0xF00] = STRING_1;
+			char	buff2[0xF00];
+
+			STDOUT_TO_BUFF;
+			ft_putendl(buff1);
+			write(1, "", 1);
+			GET_STDOUT(buff2, sizeof(buff2));
+			strcat(buff1, "\n");
+			if (!strcmp(buff1, buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_putendl_ascii(void *ptr) {
+	void		(*ft_putendl)(const char *) = ptr;
+	SET_EXPLICATION("your putendl does not works with non ascii chars");
+
+	SANDBOX_RAISE(
+			char	buff1[0xF00] = "string \x01 of \x63 non \x0a ascii \x12 chars\x1d";
+			char	buff2[0xF00];
+
+			STDOUT_TO_BUFF;
+			ft_putendl(buff1);
+			write(1, "", 1);
+			GET_STDOUT(buff2, sizeof(buff2));
+			strcat(buff1, "\n");
+			if (!strcmp(buff1, buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_putendl_unicode(void *ptr) {
+	void		(*ft_putendl)(const char *) = ptr;
+	SET_EXPLICATION("your putendl does not works with non ascii chars");
+
+	SANDBOX_RAISE(
+			wchar_t	buff1[0xF00] = L"よくやった";
+			wchar_t	buff2[0xF00];
+
+//			STDOUT_TO_BUFF;
+			ft_putendl((char*)buff1);
+			write(1, "", 1);
+//			GET_STDOUT((char*)buff2, sizeof(buff2));
+			if (!strcmp((char*)buff1, (char*)buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF((char*)buff1, (char*)buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_putendl_null(void *ptr) {
+	void		(*ft_putendl)(const char *) = ptr;
+	SET_EXPLICATION("your putendl does not segfault/print something when null parameter is sent");
+
+	SANDBOX_IRAISE(
+			char	buff2[0xF00] = {0};
+
+			STDOUT_TO_BUFF;
+			ft_putendl(NULL);
+			GET_STDOUT(buff2, sizeof(buff2));
+			if (buff2[0])
+				raise(SIGBUS);
+			SET_DIFF("(null)\n", buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void            test_ft_putendl(void){
+	add_fun_subtest(test_ft_putendl_basic);
+	add_fun_subtest(test_ft_putendl_ascii);
+//	add_fun_subtest(test_ft_putendl_unicode);
+	add_fun_subtest(test_ft_putendl_null);
+}
 
 ////////////////////////////////
 //         ft_putnbr          //
 ////////////////////////////////
 
-void            test_ft_putnbr(void){ }
+void			test_ft_putnbr_basic(void *ptr) {
+	void		(*ft_putnbr)(int) = ptr;
+	SET_EXPLICATION("your putnbr does not works");
+
+	SANDBOX_RAISE(
+			int		i = 0;
+			char	buff[0xF0];
+
+			STDOUT_TO_BUFF;
+			ft_putnbr(i);
+			GET_STDOUT(buff, 0xF0);
+			if (atoi(buff) == i)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i, atoi(buff));
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_putnbr_int_max(void *ptr) {
+	void		(*ft_putnbr)(int) = ptr;
+	SET_EXPLICATION("your putnbr does not works with int max");
+
+	SANDBOX_RAISE(
+			int		i = INT_MAX;
+			char	buff[0xF0];
+
+			STDOUT_TO_BUFF;
+			ft_putnbr(i);
+			GET_STDOUT(buff, 0xF0);
+			if (atoi(buff) == i)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i, atoi(buff));
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_putnbr_int_min(void *ptr) {
+	void		(*ft_putnbr)(int) = ptr;
+	SET_EXPLICATION("your putnbr does not works with int min");
+
+	SANDBOX_RAISE(
+			int		i = INT_MIN;
+			char	buff[0xF0];
+
+			STDOUT_TO_BUFF;
+			ft_putnbr(i);
+			GET_STDOUT(buff, 0xF0);
+			if (atoi(buff) == i)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i, atoi(buff));
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_putnbr_random(void *ptr) {
+	void		(*ft_putnbr)(int) = ptr;
+	SET_EXPLICATION("your putnbr does not works with random numbers")
+
+	SANDBOX_RAISE(
+			int		i = 0;
+			int		nbr;
+			char	buff[0xF0];
+
+			srand(clock());
+			for (i = 0; i < 1000; i++) {
+				nbr = rand();
+				STDOUT_TO_BUFF;
+				ft_putnbr(nbr);
+				GET_STDOUT(buff, 0xF0);
+				if (nbr != atoi(buff)) {
+					SET_DIFF_INT(nbr, atoi(buff));
+					exit(TEST_FAILED);
+				}
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
+void            test_ft_putnbr(void){
+	add_fun_subtest(test_ft_putnbr_basic);
+	add_fun_subtest(test_ft_putnbr_int_max);
+	add_fun_subtest(test_ft_putnbr_int_min);
+	add_fun_subtest(test_ft_putnbr_random);
+}
 
 ////////////////////////////////
 //       ft_putchar_fd        //
 ////////////////////////////////
 
-void            test_ft_putchar_fd(void){ }
+void			test_ft_putchar_fd_basic(void *ptr) {
+	void		(*ft_putchar_fd)(int fd, int c) = ptr;
+	SET_EXPLICATION("your putchar does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	buff[10];
+			char	c = 'o';
+			STDERR_TO_BUFF;
+			ft_putchar_fd(c, STDERR_FILENO);
+			GET_STDERR(buff, 10);
+			if (buff[0] == c)
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff, &c);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_putchar_fd_ascii(void *ptr) {
+	void		(*ft_putchar_fd)(int fd, int c) = ptr;
+	SET_EXPLICATION("your putchar does not works with all ascii chars");
+
+	SANDBOX_RAISE(
+			char	buff[200];
+			char	buff2[200];
+			STDERR_TO_BUFF;
+			for (int i = 0; i < 128; i++) {
+				ft_putchar_fd(i, STDERR_FILENO);
+				buff2[i] = i;
+			}
+			GET_STDERR(buff, 1000);
+			for (int i = 0; i < 128; i++)
+				if (buff[i] != buff2[i]) {
+					SET_DIFF(buff2 + 1, buff + 1);
+					exit(TEST_FAILED);
+				}
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_putchar_fd_unicode(void *ptr) {
+	void		(*ft_putchar_fd)(int fd, int c) = ptr;
+	SET_EXPLICATION("your putchar does not works with unicode");
+
+	SANDBOX_RAISE(
+			char	buff[10];
+			char	buff2[10];
+			int		c = L'ø';
+			int		len = 0;
+			putwchart(c, &len, buff2);
+			buff2[len] = 0;
+			STDERR_TO_BUFF;
+			ft_putchar_fd(c, STDERR_FILENO);
+			GET_STDERR(buff, 10);
+			if (!strcmp(buff, buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff, buff2);
+			exit(TEST_KO);
+			);
+	(void)ft_putchar_fd;
+}
+
+void            test_ft_putchar_fd(void){
+	add_fun_subtest(test_ft_putchar_fd_basic);
+	add_fun_subtest(test_ft_putchar_fd_ascii);
+	add_fun_subtest(test_ft_putchar_fd_unicode);
+}
 
 ////////////////////////////////
 //       ft_putstr_fd         //
 ////////////////////////////////
 
-void            test_ft_putstr_fd(void){ }
+void			test_ft_putstr_fd_basic(void *ptr) {
+	void		(*ft_putstr_fd)(const char *, int fd) = ptr;
+	SET_EXPLICATION("your putstr does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*buff1 = STRING_1;
+			char	buff2[0xF00];
+
+			STDERR_TO_BUFF;
+			ft_putstr_fd(buff1, STDERR_FILENO);
+			write(1, "", 1);
+			GET_STDERR(buff2, sizeof(buff2));
+			if (!strcmp(buff1, buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_putstr_fd_ascii(void *ptr) {
+	void		(*ft_putstr_fd)(const char *, int fd) = ptr;
+	SET_EXPLICATION("your putstr does not works with non ascii chars");
+
+	SANDBOX_RAISE(
+			char	*buff1 = "string \x01 of \x63 non \x0a ascii \x12 chars\x1d";
+			char	buff2[0xF00];
+
+			STDERR_TO_BUFF;
+			ft_putstr_fd(buff1, STDERR_FILENO);
+			write(1, "", 1);
+			GET_STDERR(buff2, sizeof(buff2));
+			if (!strcmp(buff1, buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_putstr_fd_unicode(void *ptr) {
+	void		(*ft_putstr_fd)(const char *, int fd) = ptr;
+	SET_EXPLICATION("your putstr does not works with non ascii chars");
+
+	SANDBOX_RAISE(
+			wchar_t	*buff1 = L"よくやった";
+			wchar_t	buff2[0xF00];
+
+//			STDERR_TO_BUFF;
+			ft_putstr_fd((char*)buff1, STDERR_FILENO);
+			write(1, "", 1);
+//			GET_STDERR((char*)buff2, sizeof(buff2));
+			if (!strcmp((char*)buff1, (char*)buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF((char*)buff1, (char*)buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_putstr_fd_null(void *ptr) {
+	void		(*ft_putstr_fd)(const char *, int fd) = ptr;
+	SET_EXPLICATION("your putstr does not segfault/print something when null parameter is sent");
+
+	SANDBOX_IRAISE(
+			char	buff2[0xF00] = {0};
+
+			STDERR_TO_BUFF;
+			ft_putstr_fd(NULL, STDERR_FILENO);
+			GET_STDERR(buff2, sizeof(buff2));
+			if (buff2[0])
+				raise(SIGBUS);
+			SET_DIFF("(null)", buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void            test_ft_putstr_fd(void){
+	add_fun_subtest(test_ft_putstr_fd_basic);
+	add_fun_subtest(test_ft_putstr_fd_ascii);
+//	add_fun_subtest(test_ft_putstr_fd_unicode);
+	add_fun_subtest(test_ft_putstr_fd_null);
+}
 
 ////////////////////////////////
 //       ft_putendl_fd        //
 ////////////////////////////////
 
-void            test_ft_putendl_fd(void){ }
+void			test_ft_putendl_fd_basic(void *ptr) {
+	void		(*ft_putendl_fd)(const char *, int fd) = ptr;
+	SET_EXPLICATION("your putendl does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	buff1[0xF00] = STRING_1;
+			char	buff2[0xF00];
+
+			STDERR_TO_BUFF;
+			ft_putendl_fd(buff1, STDERR_FILENO);
+			write(1, "", 1);
+			GET_STDERR(buff2, sizeof(buff2));
+			strcat(buff1, "\n");
+			if (!strcmp(buff1, buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_putendl_fd_ascii(void *ptr) {
+	void		(*ft_putendl_fd)(const char *, int fd) = ptr;
+	SET_EXPLICATION("your putendl does not works with non ascii chars");
+
+	SANDBOX_RAISE(
+			char	buff1[0xF00] = "string \x01 of \x63 non \x0a ascii \x12 chars\x1d";
+			char	buff2[0xF00];
+
+			STDERR_TO_BUFF;
+			ft_putendl_fd(buff1, STDERR_FILENO);
+			write(1, "", 1);
+			GET_STDERR(buff2, sizeof(buff2));
+			strcat(buff1, "\n");
+			if (!strcmp(buff1, buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_putendl_fd_unicode(void *ptr) {
+	void		(*ft_putendl_fd)(const char *, int fd) = ptr;
+	SET_EXPLICATION("your putendl does not works with non ascii chars");
+
+	SANDBOX_RAISE(
+			wchar_t	buff1[0xF00] = L"よくやった";
+			wchar_t	buff2[0xF00];
+
+//			STDERR_TO_BUFF;
+			ft_putendl_fd((char*)buff1, STDERR_FILENO);
+			write(1, "", 1);
+//			GET_STDERR((char*)buff2, sizeof(buff2));
+			if (!strcmp((char*)buff1, (char*)buff2))
+				exit(TEST_SUCCESS);
+			SET_DIFF((char*)buff1, (char*)buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_putendl_fd_null(void *ptr) {
+	void		(*ft_putendl_fd)(const char *, int fd) = ptr;
+	SET_EXPLICATION("your putendl does not segfault/print something when null parameter is sent");
+
+	SANDBOX_IRAISE(
+			char	buff2[0xF00] = {0};
+
+			STDERR_TO_BUFF;
+			ft_putendl_fd(NULL, STDERR_FILENO);
+			GET_STDERR(buff2, sizeof(buff2));
+			if (buff2[0])
+				raise(SIGBUS);
+			SET_DIFF("(null)\n", buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void            test_ft_putendl_fd(void){
+	add_fun_subtest(test_ft_putendl_fd_basic);
+	add_fun_subtest(test_ft_putendl_fd_ascii);
+//	add_fun_subtest(test_ft_putendl_fd_unicode);
+	add_fun_subtest(test_ft_putendl_fd_null);
+}
+
+
 
 ////////////////////////////////
 //       ft_putnbr_fd         //
 ////////////////////////////////
 
-void            test_ft_putnbr_fd(void){ }
+void			test_ft_putnbr_fd_basic(void *ptr) {
+	void		(*ft_putnbr_fd)(int, int fd) = ptr;
+	SET_EXPLICATION("your putnbr does not works");
+
+	SANDBOX_RAISE(
+			int		i = 0;
+			char	buff[0xF0];
+
+			STDERR_TO_BUFF;
+			ft_putnbr_fd(i, STDERR_FILENO);
+			GET_STDERR(buff, 0xF0);
+			if (atoi(buff) == i)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i, atoi(buff));
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_putnbr_fd_int_max(void *ptr) {
+	void		(*ft_putnbr_fd)(int, int fd) = ptr;
+	SET_EXPLICATION("your putnbr does not works with int max");
+
+	SANDBOX_RAISE(
+			int		i = INT_MAX;
+			char	buff[0xF0];
+
+			STDERR_TO_BUFF;
+			ft_putnbr_fd(i, STDERR_FILENO);
+			GET_STDERR(buff, 0xF0);
+			if (atoi(buff) == i)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i, atoi(buff));
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_putnbr_fd_int_min(void *ptr) {
+	void		(*ft_putnbr_fd)(int, int fd) = ptr;
+	SET_EXPLICATION("your putnbr does not works with int min");
+
+	SANDBOX_RAISE(
+			int		i = INT_MIN;
+			char	buff[0xF0];
+
+			STDERR_TO_BUFF;
+			ft_putnbr_fd(i, STDERR_FILENO);
+			GET_STDERR(buff, 0xF0);
+			if (atoi(buff) == i)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i, atoi(buff));
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_putnbr_fd_random(void *ptr) {
+	void		(*ft_putnbr_fd)(int, int fd) = ptr;
+	SET_EXPLICATION("your putnbr does not works with random numbers")
+
+	SANDBOX_RAISE(
+			int		i = 0;
+			int		nbr;
+			char	buff[0xF0];
+
+			srand(clock());
+			for (i = 0; i < 1000; i++) {
+				nbr = rand();
+				STDERR_TO_BUFF;
+				ft_putnbr_fd(nbr, STDERR_FILENO);
+				GET_STDERR(buff, 0xF0);
+				if (nbr != atoi(buff)) {
+					SET_DIFF_INT(nbr, atoi(buff));
+					exit(TEST_FAILED);
+				}
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
+void            test_ft_putnbr_fd(void){
+	add_fun_subtest(test_ft_putnbr_fd_basic);
+	add_fun_subtest(test_ft_putnbr_fd_int_max);
+	add_fun_subtest(test_ft_putnbr_fd_int_min);
+	add_fun_subtest(test_ft_putnbr_fd_random);
+}
+
 
 
 
@@ -4528,6 +5022,8 @@ void			lstdelone_f(void *d, size_t n) {
 
 t_list			*lstnew(void *d, size_t s) {
 	t_list *ret = malloc(sizeof(t_list));
+	if (!ret)	
+		return (NULL);
 
 	ret->next = NULL;
 	ret->content = d;
@@ -4616,16 +5112,19 @@ void			test_ft_lstadd_basic(void *ptr) {
 	void	(*ft_lstadd)(t_list **, t_list *new) = ptr;
 	SET_EXPLICATION("your lstadd does not works with basic input");
 
+	STDERR_TO_BUFF;
 	SANDBOX_RAISE(
 			t_list	*l = lstnew(strdup("nyacat"), 8);
 			t_list	*n = lstnew(strdup("OK"), 3);
 
 			ft_lstadd(&l, n);
-			if (l == n && !strcmp(l->content, "OK") && l->content_size == 3)
+			if (l == n && !strcmp(l->content, "OK") && l->content_size == 3) {
 				exit(TEST_SUCCESS);
+			}
 			SET_DIFF_PTR(n, l);
 			exit(TEST_FAILED);
 			);
+	VOID_STDERR;
 }
 
 void			test_ft_lstadd_free(void *ptr) {
@@ -4651,24 +5150,141 @@ void			test_ft_lstadd_free(void *ptr) {
 	VOID_STDERR;
 }
 
+void			test_ft_lstadd_null(void *ptr) {
+	void	(*ft_lstadd)(t_list **, t_list *new) = ptr;
+	SET_EXPLICATION("your lstadd does not works with null node input");
+
+	STDERR_TO_BUFF;
+	SANDBOX_RAISE(
+			t_list	*l =  NULL;
+			t_list	*n = lstnew(strdup("OK"), 3);
+
+			ft_lstadd(&l, n);
+			if (l == n && !strcmp(l->content, "OK") && l->content_size == 3) {
+				free(l->next);
+				free(l);
+				exit(TEST_SUCCESS);
+			}
+			free(l->next);
+			free(l);
+			SET_DIFF_PTR(l, l);
+			exit(TEST_FAILED);
+			);
+	VOID_STDERR;
+}
+
 void			test_ft_lstadd(void){
 	add_fun_subtest(test_ft_lstadd_basic);
 	add_fun_subtest(test_ft_lstadd_free);
+	add_fun_subtest(test_ft_lstadd_null);
 }
 
 ////////////////////////////////
-//        ft_lstiter           //
+//        ft_lstiter          //
 ////////////////////////////////
 
-void			test_ft_lstiter(void){
+void			lstiter_f(t_list *m) {
+	free(m->content);
 
+	m->content = strdup("OK !");
+	m->content_size = 5;
+}
+
+void			test_ft_lstiter_basic(void *ptr) {
+	void	(*ft_lstiter)(t_list *, void (*)(t_list *)) = ptr;
+	SET_EXPLICATION("your lstiter does not works with basic input");
+
+	SANDBOX_RAISE(
+			t_list	*l = lstnew(strdup(" 1 2 3 "), 8);
+
+			l->next = lstnew(strdup("ss"), 3);
+			l->next->next = lstnew(strdup("-_-"), 4);
+			ft_lstiter(l, lstiter_f);
+			if (!strcmp(l->content, "OK !") && !strcmp(l->next->content, "OK !") && !strcmp(l->next->next->content, "OK !"))
+				exit(TEST_SUCCESS);
+			SET_DIFF("OK !", l->content);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_lstiter_null(void *ptr) {
+	void	(*ft_lstiter)(t_list *, void (*)(t_list *)) = ptr;
+	SET_EXPLICATION("your lstiter does not segfault when null parameter is sent");
+
+	SANDBOX_KO(
+			ft_lstiter(NULL, lstiter_f);
+			);
+}
+
+void			test_ft_lstiter(void){
+	add_fun_subtest(test_ft_lstiter_basic);
+	add_fun_subtest(test_ft_lstiter_null);
 }
 
 ////////////////////////////////
 //         ft_lstmap          //
 ////////////////////////////////
 
-void			test_ft_lstmap(void){ }
+t_list *		lstmap_f(t_list *m) {
+	t_list *	r = lstnew("OK !", 5);
+	(void)m;
+	return (r);
+}
+
+void			test_ft_lstmap_basic(void *ptr) {
+	t_list *	(*ft_lstmap)(t_list *, t_list * (*)(t_list *)) = ptr;
+	SET_EXPLICATION("your lstmap does not works with basic input");
+
+	SANDBOX_RAISE(
+			t_list	*l = lstnew(strdup(" 1 2 3 "), 8);
+			t_list	*ret;
+
+			l->next = lstnew(strdup("ss"), 3);
+			l->next->next = lstnew(strdup("-_-"), 4);
+			ret = ft_lstmap(l, lstmap_f);
+			if (!strcmp(ret->content, "OK !") && !strcmp(ret->next->content, "OK !") && !strcmp(ret->next->next->content, "OK !") && !strcmp(l->content, " 1 2 3 ") && !strcmp(l->next->content, "ss") && !strcmp(l->next->next->content, "-_-"))
+				exit(TEST_SUCCESS);
+			SET_DIFF(" 1 2 3 ", l->content);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_lstmap_null(void *ptr) {
+	t_list *	(*ft_lstmap)(t_list *, t_list * (*)(t_list *)) = ptr;
+	SET_EXPLICATION("your lstmap does not segfault when null parameter is sent");
+
+	SANDBOX_KO(
+			ft_lstmap(NULL, lstmap_f);
+			);
+}
+
+void			test_ft_lstmap_malloc_null(void *ptr) {
+	t_list *	(*ft_lstmap)(t_list *, t_list * (*)(t_list *)) = ptr;
+	SET_EXPLICATION("you did not protect your malloc");
+
+	SANDBOX_RAISE(
+			t_list	*l = lstnew(strdup(" 1 2 3 "), 8);
+			t_list	*ret;
+
+			l->next = lstnew(strdup("ss"), 3);
+			l->next->next = lstnew(strdup("-_-"), 4);
+			MALLOC_DEBUG;
+			ret = ft_lstmap(l, lstmap_f);
+			MALLOC_RESET;
+			if (!ret)
+				exit(TEST_SUCCESS);
+			SET_DIFF_PTR(NULL, ret);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_lstmap(void){
+	add_fun_subtest(test_ft_lstmap_basic);
+	add_fun_subtest(test_ft_lstmap_null);
+//	add_fun_subtest(test_ft_lstmap_malloc_null);
+}
+
+
 
 ////////////////////////////////
 //         ft_islower         //
@@ -4696,8 +5312,6 @@ void			test_ft_islower(void) {
 ////////////////////////////////
 //         ft_strtrimc         //
 ////////////////////////////////
-
-//FIXME this function need to be malloc-size tested !
 
 void			test_ft_strtrimc_basic(void *ptr) {
 	char *		(*ft_strtrimc)(const char *, char c) = ptr;
@@ -4744,6 +5358,27 @@ void			test_ft_strtrimc_basic3(void *ptr) {
 				exit(TEST_SUCCESS);
 			SET_DIFF(s2, ret);
 			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strtrimc_size(void *ptr) {
+	char *		(*ft_strtrimc)(const char *, char c) = ptr;
+	SET_EXPLICATION("your strtrimc did not allocate the good size so the \\0 test may be false");
+
+	SANDBOX_RAISE(
+			char	*s1 = "\t\t\t\t\t\t\t\tHello \t  Please\n Trim me !\t\t\t\t\t\t\t";
+			char	*s2 = "Hello \t  Please\n Trim me !";
+			int		r_size = strlen(s2);
+			int		size;
+
+			MALLOC_SIZE;
+			ft_strtrimc(s1, '\t');
+			MALLOC_RESET;
+			size = get_last_malloc_size();
+			if (size == r_size + 1)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(r_size + 1, size);
+			exit(TEST_KO);
 			);
 }
 
@@ -4821,8 +5456,145 @@ void            test_ft_strtrimc(void){
 	add_fun_subtest(test_ft_strtrimc_basic);
 	add_fun_subtest(test_ft_strtrimc_basic2);
 	add_fun_subtest(test_ft_strtrimc_basic3);
+	add_fun_subtest(test_ft_strtrimc_size);
 	add_fun_subtest(test_ft_strtrimc_free);
 	add_fun_subtest(test_ft_strtrimc_malloc_null);
 	add_fun_subtest(test_ft_strtrimc_zero);
 	add_fun_subtest(test_ft_strtrimc_null);
+}
+
+////////////////////////////////
+//         ft_strndup          //
+////////////////////////////////
+
+void			test_ft_strndup_last_char(void *ptr) {
+	typeof(strndup)	*ft_strndup = ptr;
+	SET_EXPLICATION("your strndup does not add \\0 at the end of the sring");
+
+	SANDBOX_RAISE(
+			char 	*str;
+			char	*tmp = "HAHAHA \0 tu me vois pas !";
+
+			MALLOC_MEMSET;
+			str = ft_strndup(tmp, 12);
+			MALLOC_RESET;
+			if (strcmp(str, tmp))
+				exit(TEST_FAILED);
+			free(str);
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_strndup_zero(void *ptr) {
+	typeof(strndup)	*ft_strndup = ptr;
+	SET_EXPLICATION("your strndup don't work with empty string");
+
+	SANDBOX_RAISE(
+			char 	*str;
+			char	*tmp = "";
+
+			str = ft_strndup(tmp, 5);
+			if (strcmp(str, tmp))
+				exit(TEST_FAILED);
+			free(str);
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_strndup_size(void *ptr) {
+	typeof(strndup)	*ft_strndup = ptr;
+	SET_EXPLICATION("your strndup did not allocate the good size so the \\0 test may be false");
+
+	SANDBOX_RAISE(
+			char 	*str;
+			char	*tmp = "this is a normal test";
+			int		r_size = 5;
+			int		size;
+
+			MALLOC_SIZE;
+			str = ft_strndup(tmp, r_size);
+			MALLOC_RESET;
+			size = get_last_malloc_size();
+			if (size != r_size + 1) {
+				SET_DIFF_INT(r_size + 1, size);
+				exit(TEST_KO);
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_strndup_null(void *ptr) {
+	typeof(strndup)	*ft_strndup = ptr;
+	SET_EXPLICATION("your strndup does not segv with NULL");
+
+	SANDBOX_IRAISE(
+			ft_strndup(NULL, 5);
+			);
+}
+
+void			test_ft_strndup_malloc_null(void *ptr) {
+	typeof(strndup)	*ft_strndup = ptr;
+	SET_EXPLICATION("you dindn't protect your malloc return");
+
+	SANDBOX_RAISE(
+			char	*ptr;
+
+			MALLOC_NULL;
+			ptr = ft_strndup("lol", 5);
+			MALLOC_RESET;
+			if (!ptr)
+				exit(TEST_SUCCESS);
+			SET_DIFF_PTR(NULL, ptr);
+			exit(TEST_FAILED);
+			);
+	(void)ft_strndup;
+}
+
+void			test_ft_strndup_basic(void *ptr) {
+	typeof(strndup)	*ft_strndup = ptr;
+	SET_EXPLICATION("your strndup doesn't works with basic input");
+
+	SANDBOX_RAISE(
+			char	*str;
+			char	*tmp = "I malloc so I am.";
+			
+			str = ft_strndup(tmp, strlen(tmp));
+			if (strcmp(str, tmp)) {
+				SET_DIFF(str, tmp);
+				exit(TEST_FAILED);
+			}
+			free(str);
+			exit(TEST_SUCCESS);
+			);
+
+}
+
+void			test_ft_strndup_basic2(void *ptr) {
+	typeof(strndup)	*ft_strndup = ptr;
+	SET_EXPLICATION("your strndup doesn't works with basic input");
+
+	SANDBOX_RAISE(
+			char	*str;
+			char	*tmp = "I malloc so I am.";
+			
+			str = ft_strndup(tmp, 3);
+			if (strcmp(str, tmp)) {
+				SET_DIFF("I m", str);
+				exit(TEST_FAILED);
+			}
+			free(str);
+			exit(TEST_SUCCESS);
+			);
+
+}
+
+void            test_ft_strndup(void){
+
+	add_fun_subtest(test_ft_strndup_malloc_null);
+	add_fun_subtest(test_ft_strndup_basic);
+	add_fun_subtest(test_ft_strndup_basic2);
+	add_fun_subtest(test_ft_strndup_zero);
+	add_fun_subtest(test_ft_strndup_size);
+	add_fun_subtest(test_ft_strndup_last_char);
+	add_fun_subtest(test_ft_strndup_null);
 }
