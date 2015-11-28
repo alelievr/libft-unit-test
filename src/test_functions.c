@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/28 19:48:28 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/28 19:53:45 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -4107,7 +4107,7 @@ void			test_ft_strsplit_null(void *ptr) {
 			)
 }
 
-void            test_ft_strsplit(void){
+void            test_ft_strsplit(void) {
 	add_fun_subtest(test_ft_strsplit_basic);
 	add_fun_subtest(test_ft_strsplit_free);
 	add_fun_subtest(test_ft_strsplit_malloc_null);
@@ -4182,7 +4182,7 @@ void			test_ft_itoa_max_int(void *ptr) {
 
 void			test_ft_itoa_size(void *ptr) {
 	char	*(*ft_itoa)(int) = ptr;
-	SET_EXPLICATION("your itoa does not works with max int");
+	SET_EXPLICATION("your itoa does not allocate the good size so the \\0 test may be false");
 
 	SANDBOX_RAISE(
 			int		size;
@@ -4234,7 +4234,7 @@ void			test_ft_itoa_zero_byte(void *ptr) {
 
 void			test_ft_itoa_malloc_null(void *ptr) {
 	char	*(*ft_itoa)(int) = ptr;
-	SET_EXPLICATION("your itoa don't set \\0 at the end of the string");
+	SET_EXPLICATION("you did not protect your malloc");
 
 	SANDBOX_RAISE(
 			MALLOC_NULL;
