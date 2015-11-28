@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/28 19:53:45 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/28 19:58:01 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -4255,6 +4255,7 @@ void            test_ft_itoa(void){
 	add_fun_subtest(test_ft_itoa_min_int);
 	add_fun_subtest(test_ft_itoa_zero_byte);
 	add_fun_subtest(test_ft_itoa_malloc_null);
+	add_fun_subtest(test_ft_itoa_size);
 }
 
 ////////////////////////////////
@@ -4631,7 +4632,7 @@ void			test_ft_putnbr_random(void *ptr) {
 			char	buff[0xF0];
 
 			srand(clock());
-			for (i = 0; i < 100; i++) {
+			for (i = 0; i < 10; i++) {
 				nbr = rand();
 				STDOUT_TO_BUFF;
 				ft_putnbr(nbr);
@@ -4965,7 +4966,7 @@ void			test_ft_putnbr_fd_random(void *ptr) {
 			char	buff[0xF0];
 
 			srand(clock());
-			for (i = 0; i < 100; i++) {
+			for (i = 0; i < 10; i++) {
 				nbr = rand();
 				STDERR_TO_BUFF;
 				ft_putnbr_fd(nbr, STDERR_FILENO);
