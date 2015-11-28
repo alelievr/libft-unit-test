@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/28 19:58:01 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/28 20:11:03 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -3236,6 +3236,27 @@ void			test_ft_strmap_free(void *ptr) {
 			);
 }
 
+void			test_ft_strmap_size(void *ptr) {
+	char *	(*ft_strmap)(const char *, char (*)(char)) = ptr;
+	SET_EXPLICATION("your strmap did not allocate the good size so the \\0 test may be false");
+
+	SANDBOX_RAISE(
+			char	*b = "override this !";
+			size_t	size = strlen(b);
+			int		ret_size;
+
+			MALLOC_SIZE;
+			ft_strmap(b, f_strmap);
+			MALLOC_RESET;
+			ret_size = get_last_malloc_size();
+
+			if (ret_size == (int)size + 1)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT((int)size + 1, ret_size);
+			exit(TEST_KO);
+			);
+}
+
 void			test_ft_strmap_malloc_null(void *ptr) {
 	char *	(*ft_strmap)(const char *, char (*)(char)) = ptr;
 	SET_EXPLICATION("you did not protect your malloc return");
@@ -3276,6 +3297,7 @@ void            test_ft_strmap(void){
 	add_fun_subtest(test_ft_strmap_basic);
 	add_fun_subtest(test_ft_strmap_zero);
 	add_fun_subtest(test_ft_strmap_free);
+	add_fun_subtest(test_ft_strmap_size);
 	add_fun_subtest(test_ft_strmap_malloc_null);
 	add_fun_subtest(test_ft_strmap_null1);
 	add_fun_subtest(test_ft_strmap_null2);
@@ -3345,6 +3367,26 @@ void			test_ft_strmapi_zero(void *ptr) {
 				exit(TEST_SUCCESS);
 			SET_DIFF(ret, b2);
 			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strmapi_size(void *ptr) {
+	char *	(*ft_strmapi)(const char *, char (*)(unsigned, char)) = ptr;
+	SET_EXPLICATION("your strmapi did not set \\0 at the end of the string");
+
+	SANDBOX_RAISE(
+			char	*b = "override this !";
+			size_t	size = strlen(b);
+			int		ret_size;
+
+			MALLOC_SIZE;
+			ft_strmapi(b, f_strmapi);
+			MALLOC_RESET;
+			ret_size = get_last_malloc_size();
+			if ((int)size + 1 == ret_size)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT((int)size + 1, ret_size);
+			exit(TEST_KO);
 			);
 }
 
