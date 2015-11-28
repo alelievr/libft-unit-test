@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/28 13:26:15 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/28 17:34:27 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -2342,7 +2342,7 @@ void			test_ft_strncmp_over_len(void *ptr) {
 			size_t	size = 100000;
 
 			int		i1 = strncmp(s1, s2, size);
-			int		i2 = ft_strncmp(s1, s2, size);
+			int		i2 = REG(ft_strncmp(s1, s2, size));
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
 			SET_DIFF_INT(i1, i2);
@@ -2359,7 +2359,7 @@ void			test_ft_strncmp_ascii(void *ptr) {
 			size_t	size = 6;
 
 			int		i1 = strncmp(s1, s2, size);
-			int		i2 = ft_strncmp(s1, s2, size);
+			int		i2 = REG(ft_strncmp(s1, s2, size));
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
 			SET_DIFF_INT(i1, i2);
@@ -2898,7 +2898,6 @@ void			test_ft_strnew_free(void *ptr) {
 			);
 }
 
-//FIXME this function need to be malloc-size tested !
 void			test_ft_strnew_zero(void *ptr) {
 	void *	(*ft_strnew)(size_t) = ptr;
 	SET_EXPLICATION("your strnew does not set allocated mem to 0");
@@ -2916,6 +2915,27 @@ void			test_ft_strnew_zero(void *ptr) {
 				}
 			free(ret);
 			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_strnew_size(void *ptr) {
+	void *	(*ft_strnew)(size_t) = ptr;
+	SET_EXPLICATION("your strnew did not allocate the good size so the \\0 test can be false");
+
+	SANDBOX_RAISE(
+			size_t	size = 514;
+			int		ret_size;
+
+			MALLOC_SIZE;
+			char	*ret = ft_strnew(size);
+			MALLOC_RESET;
+
+			ret_size = get_last_malloc_size();
+			if (ret_size == (int)size + 1)
+				exit(TEST_SUCCESS);
+			free(ret);
+			SET_DIFF_INT((int)size + 1, ret_size);
+			exit(TEST_FAILED);
 			);
 }
 
@@ -3546,8 +3566,6 @@ void            test_ft_strnequ(void){
 ////////////////////////////////
 //         ft_strsub          //
 ////////////////////////////////
-
-//FIXME this function needs a test for \0 at end of the string
 
 void			test_ft_strsub_basic(void *ptr) {
 	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
@@ -5576,10 +5594,11 @@ void			test_ft_strndup_basic2(void *ptr) {
 	SANDBOX_RAISE(
 			char	*str;
 			char	*tmp = "I malloc so I am.";
+			char	*res=  "I m";
 			
 			str = ft_strndup(tmp, 3);
-			if (strcmp(str, tmp)) {
-				SET_DIFF("I m", str);
+			if (strcmp(str, res)) {
+				SET_DIFF(res, str);
 				exit(TEST_FAILED);
 			}
 			free(str);
