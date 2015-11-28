@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/28 20:35:26 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/28 21:14:32 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -3693,9 +3693,12 @@ void			test_ft_strsub_out1(void *ptr) {
 			char	*s = strdup("out of this ???");
 			
 			char	*ret = ft_strsub(s, 40, 20);
-			free(s);
-			if (ret == NULL)
+			if (ret == NULL) {
+				free(s);
 				exit(TEST_SUCCESS);
+			}
+			SET_DIFF("[crash]", s);
+			free(s);
 			);
 }
 
