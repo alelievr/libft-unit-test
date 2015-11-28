@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/28 17:34:27 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/28 17:37:32 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -2803,6 +2803,27 @@ void			test_ft_memalloc_zero(void *ptr) {
 			);
 }
 
+void			test_ft_memalloc_size(void *ptr) {
+	void *	(*ft_memalloc)(size_t) = ptr;
+	SET_EXPLICATION("your memalloc does not set allocated mem to 0");
+
+	SANDBOX_RAISE(
+			size_t	size = 514;
+			int		ret_size;
+
+			MALLOC_SIZE;
+			char	*ret = ft_memalloc(size);
+			MALLOC_RESET;
+			ret_size = get_last_malloc_size();
+
+			free(ret);
+			if (ret_size == (int)size)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT((int)size, ret_size)
+			exit(TEST_SUCCESS);
+			);
+}
+
 void			test_ft_memalloc_malloc_null(void *ptr) {
 	void *	(*ft_memalloc)(size_t) = ptr;
 	SET_EXPLICATION("you did not protect your malloc return");
@@ -2820,17 +2841,11 @@ void			test_ft_memalloc_malloc_null(void *ptr) {
 			);
 }
 
-void			test_ft_memalloc_size(void *ptr) {
-	void *	(*ft_memalloc)(size_t) = ptr;
-
-	(void)ft_memalloc;
-}
-
 void            test_ft_memalloc(void) {
 	add_fun_subtest(test_ft_memalloc_free);
 	add_fun_subtest(test_ft_memalloc_zero);
 	add_fun_subtest(test_ft_memalloc_malloc_null);
-//	add_fun_subtest(test_ft_memalloc_size);
+	add_fun_subtest(test_ft_memalloc_size);
 }
 
 ////////////////////////////////
@@ -2959,6 +2974,7 @@ void			test_ft_strnew_malloc_null(void *ptr) {
 void            test_ft_strnew(void){
 	add_fun_subtest(test_ft_strnew_free);
 	add_fun_subtest(test_ft_strnew_zero);
+	add_fun_subtest(test_ft_strnew_size);
 	add_fun_subtest(test_ft_strnew_malloc_null);
 }
 
