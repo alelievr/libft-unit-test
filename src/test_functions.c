@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/28 01:00:07 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/11/28 13:26:15 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -4577,7 +4577,7 @@ void			test_ft_putnbr_random(void *ptr) {
 			char	buff[0xF0];
 
 			srand(clock());
-			for (i = 0; i < 1000; i++) {
+			for (i = 0; i < 100; i++) {
 				nbr = rand();
 				STDOUT_TO_BUFF;
 				ft_putnbr(nbr);
@@ -4911,7 +4911,7 @@ void			test_ft_putnbr_fd_random(void *ptr) {
 			char	buff[0xF0];
 
 			srand(clock());
-			for (i = 0; i < 1000; i++) {
+			for (i = 0; i < 100; i++) {
 				nbr = rand();
 				STDERR_TO_BUFF;
 				ft_putnbr_fd(nbr, STDERR_FILENO);
