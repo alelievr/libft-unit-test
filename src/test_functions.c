@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/28 21:14:32 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/02 16:01:08 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -359,8 +359,8 @@ void			test_ft_memccpy_return(void *ptr) {
 
 	SANDBOX_RAISE(
 			char	src[] = "test basic du memccpy !";
-			char	buff1[22];
-			char	buff2[22];
+			char	buff1[22] = {[21] = 0};
+			char	buff2[22] = {[21] = 0};
 
 			char	*r1 = memccpy(buff1, src, 'm', 22);
 			char	*r2 = ft_memccpy(buff2, src, 'm', 22);
@@ -2332,6 +2332,23 @@ void			test_ft_strncmp_basic3(void *ptr) {
 			);
 }
 
+void			test_ft_strncmp_cast(void *ptr) {
+	typeof(strncmp)	*ft_strncmp = ptr;
+	SET_EXPLICATION("your strncmp does not cast in unsigned char the diff");
+
+	SANDBOX_RAISE(
+			char	*s1 = "\200";
+			char	*s2 = "";
+
+			int		i1 = REG(strncmp(s1, s2, 1));
+			int		i2 = REG(ft_strncmp(s1, s2, 1));
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
 void			test_ft_strncmp_over_len(void *ptr) {
 	typeof(strncmp)	*ft_strncmp = ptr;
 	SET_EXPLICATION("your strncmp does not works with basic input");
@@ -2390,6 +2407,7 @@ void            test_ft_strncmp(void){
 	add_fun_subtest(test_ft_strncmp_basic1);
 	add_fun_subtest(test_ft_strncmp_basic2);
 	add_fun_subtest(test_ft_strncmp_basic3);
+	add_fun_subtest(test_ft_strncmp_cast);
 	add_fun_subtest(test_ft_strncmp_over_len);
 	add_fun_subtest(test_ft_strncmp_ascii);
 	add_fun_subtest(test_ft_strncmp_null1);
