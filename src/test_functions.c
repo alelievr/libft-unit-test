@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/02 16:01:08 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/03 00:08:49 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -2620,7 +2620,7 @@ void			test_ft_isalpha_(void *ptr) {
 	SET_EXPLICATION("your ft_isalpha just doesn't work, REALLY ?!");
 
 	SANDBOX_RAISE(
-			int		i;
+		int		i;
 			i = -1;
 			while (i < 530)
 			{
@@ -2787,6 +2787,16 @@ void			test_ft_tolower_(void *ptr) {
 void            test_ft_tolower(void){
 	add_fun_subtest(test_ft_tolower_);
 }
+
+
+
+///////////////////////////////
+///////////////////////////////
+//          PART II          //
+///////////////////////////////
+///////////////////////////////
+
+
 
 ////////////////////////////////
 //        ft_memalloc         //
@@ -4215,15 +4225,15 @@ void			test_ft_itoa_basic(void *ptr) {
 			char	*i3 = ft_itoa(-0);
 
 			if (strcmp(i1, "-623")) {
-				SET_DIFF(i1, "-623");
+				SET_DIFF("-623", i1);
 				exit(TEST_FAILED);
 			}
 			if (strcmp(i2, "156")) {
-				SET_DIFF(i2, "156");
+				SET_DIFF("156", i2);
 				exit(TEST_FAILED);
 			}
-			if (strcmp(i3, "0")) {
-				SET_DIFF(i3, "0");
+			if (strcmp("0", i3)) {
+				SET_DIFF("0", i3);
 				exit(TEST_FAILED);
 			}
 			exit(TEST_SUCCESS);

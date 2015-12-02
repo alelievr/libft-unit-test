@@ -60,7 +60,7 @@ void *malloc(size_t size)
 				if ((fd2 = open(MALLOC_FILE, O_WRONLY | O_TRUNC | O_CREAT, 0600)) == -1)
 					return (real_malloc(size));
 
-				write(fd2, buff, strlen(buff));
+				write(fd2, buff, strlen(buff) + 1);
 				close(fd2);
 				break ;
 			case _MALLOC_DEBUG:
