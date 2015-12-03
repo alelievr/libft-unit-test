@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/03 16:06:40 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/03 23:02:29 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -2700,8 +2700,10 @@ void			test_ft_isascii_(void *ptr) {
 			i = -1;
 			while (i < 530)
 			{
-				if (ft_isascii(i) != isascii(i))
+				if (ft_isascii(i) != isascii(i)) {
+					SET_DIFF_CUSTOM("%12s: |%i|\n%12s: |%i|\nparam: (%i)", current_fun_name + 3, isascii(i), current_fun_name, ft_isascii(i), i)
 					exit(TEST_FAILED);
+				}
 				i++;
 			}
 			exit(TEST_SUCCESS);
@@ -2725,8 +2727,10 @@ void			test_ft_isprint_(void *ptr) {
 			i = -1;
 			while (i < 530)
 			{
-				if (ft_isprint(i) != isprint(i))
+				if (ft_isprint(i) != isprint(i)) {
+					SET_DIFF_CUSTOM("%12s: |%i|\n%12s: |%i|\nparam: (%i)", current_fun_name + 3, isprint(i), current_fun_name, ft_isprint(i), i)
 					exit(TEST_FAILED);
+				}
 				i++;
 			}
 			exit(TEST_SUCCESS);
@@ -2751,8 +2755,10 @@ void			test_ft_toupper_(void *ptr) {
 			i = -100;
 			while (i < 530)
 			{
-				if (ft_toupper(i) != toupper(i))
+				if (ft_toupper(i) != toupper(i)) {
+					SET_DIFF_CUSTOM("%12s: |%i|\n%12s: |%i|\nparam: (%i)", current_fun_name + 3, toupper(i), current_fun_name, ft_toupper(i), i)
 					exit(TEST_FAILED);
+				}
 				i++;
 			}
 			exit(TEST_SUCCESS);
@@ -2776,8 +2782,10 @@ void			test_ft_tolower_(void *ptr) {
 			i = -100;
 			while (i < 530)
 			{
-				if (ft_tolower(i) != tolower(i))
+				if (ft_tolower(i) != tolower(i)) {
+					SET_DIFF_CUSTOM("%12s: |%i|\n%12s: |%i|\nparam: (%i)", current_fun_name + 3, tolower(i), current_fun_name, ft_tolower(i), i)
 					exit(TEST_FAILED);
+				}
 				i++;
 			}
 			exit(TEST_SUCCESS);
@@ -4754,7 +4762,7 @@ void            test_ft_putnbr(void){
 
 void			test_ft_putchar_fd_basic(void *ptr) {
 	void		(*ft_putchar_fd)(int fd, int c) = ptr;
-	SET_EXPLICATION("your putchar does not works with basic input");
+	SET_EXPLICATION("your putchar_fd does not works with basic input");
 
 	SANDBOX_RAISE(
 			char	buff[10];
@@ -4771,7 +4779,7 @@ void			test_ft_putchar_fd_basic(void *ptr) {
 
 void			test_ft_putchar_fd_ascii(void *ptr) {
 	void		(*ft_putchar_fd)(int fd, int c) = ptr;
-	SET_EXPLICATION("your putchar does not works with all ascii chars");
+	SET_EXPLICATION("your putchar_fd does not works with all ascii chars");
 
 	SANDBOX_RAISE(
 			char	buff[200];
@@ -4793,7 +4801,7 @@ void			test_ft_putchar_fd_ascii(void *ptr) {
 
 void			test_ft_putchar_fd_unicode(void *ptr) {
 	void		(*ft_putchar_fd)(int fd, int c) = ptr;
-	SET_EXPLICATION("your putchar does not works with unicode");
+	SET_EXPLICATION("your putchar_fd does not works with unicode");
 
 	SANDBOX_RAISE(
 			char	buff[10];
@@ -4825,7 +4833,7 @@ void            test_ft_putchar_fd(void){
 
 void			test_ft_putstr_fd_basic(void *ptr) {
 	void		(*ft_putstr_fd)(const char *, int fd) = ptr;
-	SET_EXPLICATION("your putstr does not works with basic input");
+	SET_EXPLICATION("your putstr_fd does not works with basic input");
 
 	SANDBOX_RAISE(
 			char	*buff1 = STRING_1;
@@ -4844,7 +4852,7 @@ void			test_ft_putstr_fd_basic(void *ptr) {
 
 void			test_ft_putstr_fd_ascii(void *ptr) {
 	void		(*ft_putstr_fd)(const char *, int fd) = ptr;
-	SET_EXPLICATION("your putstr does not works with non ascii chars");
+	SET_EXPLICATION("your putstr_fd does not works with non ascii chars");
 
 	SANDBOX_RAISE(
 			char	*buff1 = "string \x01 of \x63 non \x0a ascii \x12 chars\x1d";
@@ -4863,7 +4871,7 @@ void			test_ft_putstr_fd_ascii(void *ptr) {
 
 void			test_ft_putstr_fd_unicode(void *ptr) {
 	void		(*ft_putstr_fd)(const char *, int fd) = ptr;
-	SET_EXPLICATION("your putstr does not works with non ascii chars");
+	SET_EXPLICATION("your putstr_fd does not works with non ascii chars");
 
 	SANDBOX_RAISE(
 			wchar_t	*buff1 = L"よくやった";
@@ -4882,7 +4890,7 @@ void			test_ft_putstr_fd_unicode(void *ptr) {
 
 void			test_ft_putstr_fd_null(void *ptr) {
 	void		(*ft_putstr_fd)(const char *, int fd) = ptr;
-	SET_EXPLICATION("your putstr does not segfault/print something when null parameter is sent");
+	SET_EXPLICATION("your putstr_fd does not segfault/print something when null parameter is sent");
 
 	SANDBOX_PROT(
 			char	buff2[0xF00] = {0};
@@ -4910,7 +4918,7 @@ void            test_ft_putstr_fd(void){
 
 void			test_ft_putendl_fd_basic(void *ptr) {
 	void		(*ft_putendl_fd)(const char *, int fd) = ptr;
-	SET_EXPLICATION("your putendl does not works with basic input");
+	SET_EXPLICATION("your putendl_fd does not works with basic input");
 
 	SANDBOX_RAISE(
 			char	buff1[0xF00] = STRING_1;
@@ -4930,7 +4938,7 @@ void			test_ft_putendl_fd_basic(void *ptr) {
 
 void			test_ft_putendl_fd_ascii(void *ptr) {
 	void		(*ft_putendl_fd)(const char *, int fd) = ptr;
-	SET_EXPLICATION("your putendl does not works with non ascii chars");
+	SET_EXPLICATION("your putendl_fd does not works with non ascii chars");
 
 	SANDBOX_RAISE(
 			char	buff1[0xF00] = "string \x01 of \x63 non \x0a ascii \x12 chars\x1d";
@@ -4950,7 +4958,7 @@ void			test_ft_putendl_fd_ascii(void *ptr) {
 
 void			test_ft_putendl_fd_unicode(void *ptr) {
 	void		(*ft_putendl_fd)(const char *, int fd) = ptr;
-	SET_EXPLICATION("your putendl does not works with non ascii chars");
+	SET_EXPLICATION("your putendl_fd does not works with non ascii chars");
 
 	SANDBOX_RAISE(
 			wchar_t	buff1[0xF00] = L"よくやった";
@@ -4969,7 +4977,7 @@ void			test_ft_putendl_fd_unicode(void *ptr) {
 
 void			test_ft_putendl_fd_null(void *ptr) {
 	void		(*ft_putendl_fd)(const char *, int fd) = ptr;
-	SET_EXPLICATION("your putendl does not segfault/print something when null parameter is sent");
+	SET_EXPLICATION("your putendl_fd does not segfault/print something when null parameter is sent");
 
 	SANDBOX_PROT(
 			char	buff2[0xF00] = {0};
@@ -4999,7 +5007,7 @@ void            test_ft_putendl_fd(void){
 
 void			test_ft_putnbr_fd_basic(void *ptr) {
 	void		(*ft_putnbr_fd)(int, int fd) = ptr;
-	SET_EXPLICATION("your putnbr does not works");
+	SET_EXPLICATION("your putnbr_fd does not works");
 
 	SANDBOX_RAISE(
 			int		i = 0;
@@ -5017,7 +5025,7 @@ void			test_ft_putnbr_fd_basic(void *ptr) {
 
 void			test_ft_putnbr_fd_int_max(void *ptr) {
 	void		(*ft_putnbr_fd)(int, int fd) = ptr;
-	SET_EXPLICATION("your putnbr does not works with int max");
+	SET_EXPLICATION("your putnbr_fd does not works with int max");
 
 	SANDBOX_RAISE(
 			int		i = INT_MAX;
@@ -5035,7 +5043,7 @@ void			test_ft_putnbr_fd_int_max(void *ptr) {
 
 void			test_ft_putnbr_fd_int_min(void *ptr) {
 	void		(*ft_putnbr_fd)(int, int fd) = ptr;
-	SET_EXPLICATION("your putnbr does not works with int min");
+	SET_EXPLICATION("your putnbr_fd does not works with int min");
 
 	SANDBOX_RAISE(
 			int		i = INT_MIN;
@@ -5053,7 +5061,7 @@ void			test_ft_putnbr_fd_int_min(void *ptr) {
 
 void			test_ft_putnbr_fd_random(void *ptr) {
 	void		(*ft_putnbr_fd)(int, int fd) = ptr;
-	SET_EXPLICATION("your putnbr does not works with random numbers")
+	SET_EXPLICATION("your putnbr_fd does not works with random numbers")
 
 	SANDBOX_RAISE(
 			int		i = 0;

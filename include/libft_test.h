@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/03 15:49:09 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/03 22:56:43 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ enum		e_prot {
 # define	TMP_FILE		".over_malloc"
 # define	DIFF_FILE		".fun_diff"
 # define	MALLOC_FILE		".malloc_size"
+# define	BACKTRACE_FILE	"backtrace.crash"
 
 # define	COLOR_SUCCESS	"\033[38;5;46m"
 # define	COLOR_FAILED	"\033[38;5;160m"
@@ -131,6 +132,7 @@ enum		e_prot {
 # define	SET_DIFF(x, y)		lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%s|\n%12s: |%s|", current_fun_name + 3, x, current_fun_name, y); write(g_diff_fd, "\0", 1);
 # define	SET_DIFF_INT(x, y)	lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%i|\n%12s: |%i|", current_fun_name + 3, x, current_fun_name, y) ; write(g_diff_fd, "\0", 1);
 # define	SET_DIFF_PTR(x, y)	lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%p|\n%12s: |%p|", current_fun_name + 3, x, current_fun_name, y) ; write(g_diff_fd, "\0", 1);
+# define	SET_DIFF_CUSTOM(f, args...) lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, f, ##args) ; write(g_diff_fd, "\0", 1);
 # define	RESET_DIFF			lseek(g_diff_fd, 0, SEEK_SET); write(g_diff_fd, "\0", 1);
 
 # define	STDOUT_TO_BUFF		fd_to_buffer(STDOUT_FILENO);

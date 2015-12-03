@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/03 15:27:26 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/03 22:52:27 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <execinfo.h>
 #include "libft_test.h"
 #include "init.c"
+#include <errno.h>
 
 int		fd_pipe[2];
 int		_stdout;
