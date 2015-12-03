@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:26:54 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/03 15:42:02 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/03 16:07:28 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	display_part(char *s) {
 				       "     \"-.-\"     \"-.-\"     \"-.-\"     \"-.-\"     \"-.-\"    "COLOR_CLEAR);
 	}
 	if (!strcmp(s, "ft_memalloc")) {
-		printf("\n\033[38;5;226m%s"COLOR_CLEAR, "In this part, you can choose to protect your function or not protect them, a color code will tell you if your function is protected/not But stay coherent !");
+		printf(COLOR_INFO"\n%s"COLOR_CLEAR, "In this part, you can choose to protect your function or not protect them,\na color code will tell you if your function is protected/not But stay coherent !\n"COLOR_PROTECTED"[||]"COLOR_INFO" --> protected\n"COLOR_NPROTECTED"[||]"COLOR_INFO" --> not protected"COLOR_CLEAR);
 		printf(COLOR_PART2"\n                     Second part\n");
 		printf("%s\n", " __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)\n"
 					   "(______)(______)(______)(______)(______)(______)(______)(___\n");
@@ -110,9 +110,11 @@ void    display_test_result(int value, char *explications)
 	static char		*old_fun_name = NULL;
 	static int		index = 0;
 	static int		once = 0;
+	static int		first = 0;
 	static t_err	errs[0xF00] = {{0, NULL, NULL, NULL}};
 
 	if (!old_fun_name || strcmp(old_fun_name, current_fun_name)) {
+		first = 1;
 		if (index != 0) {
 			printf("\n");
 			for (int i = 0; i < index; i++) {
@@ -194,9 +196,10 @@ void    display_test_result(int value, char *explications)
 			}
 			break ;
 		case TEST_PROT:
-			if (current_protected != INVISIBLE) {
-				printf("%s[||]%s", (current_protected == PROTECTED) ? COLOR_PROTECTED : COLOR_NPROTECTED, COLOR_CLEAR);
+			if (current_protected != INVISIBLE && first) {
+				printf("%s[||] %s", (current_protected == PROTECTED) ? COLOR_PROTECTED : COLOR_NPROTECTED, COLOR_CLEAR);
 				dprintf(g_log_fd, "%s", (current_protected == PROTECTED) ? "{protected}" : "{not protected}");
+				first = 0;
 			}
 			break ;
 	}

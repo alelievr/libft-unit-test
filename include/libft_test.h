@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/03 15:43:52 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/03 15:49:09 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ enum		e_prot {
 # define	COLOR_CLEAR		"\033[0m"
 # define	COLOR_PROTECTED	"\033[38;5;229m"
 # define	COLOR_NPROTECTED "\033[38;5;80m"
+# define	COLOR_INFO		"\033[38;5;10m"
 
 # define	BSIZE			0xF00
 # define	BFSIZE			0xF0000

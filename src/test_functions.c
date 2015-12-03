@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/03 15:37:21 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/03 16:06:40 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -3039,7 +3039,7 @@ void			test_ft_strdel_null(void *ptr) {
 	void	(*ft_strdel)(void **) = ptr;
 	SET_EXPLICATION("your strdel does not segfault when null parameter is sent");
 
-	SANDBOX_KO(
+	SANDBOX_PROT(
 			ft_strdel(NULL);
 			);
 }
@@ -3077,7 +3077,7 @@ void			test_ft_strclr_null(void *ptr) {
 	void	(*ft_strclr)(char *) = ptr;
 	SET_EXPLICATION("your strclr does not segfault when null parameter is sent");
 
-	SANDBOX_KO(
+	SANDBOX_PROT(
 			ft_strclr(NULL);
 			);
 }
@@ -3117,7 +3117,7 @@ void			test_ft_striter_null1(void *ptr) {
 	void	(*ft_striter)(char *, void (*)(char *)) = ptr;
 	SET_EXPLICATION("your striter does not segfault when null parameter is sent");
 
-	SANDBOX_KO(
+	SANDBOX_PROT(
 			ft_striter(NULL, f_striter)
 			);
 }
@@ -3126,7 +3126,7 @@ void			test_ft_striter_null2(void *ptr) {
 	void	(*ft_striter)(char *, void (*)(char *)) = ptr;
 	SET_EXPLICATION("your striter does not segfault when null parameter is sent");
 
-	SANDBOX_KO(
+	SANDBOX_PROT(
 			ft_striter("you should not ...", NULL);
 			);
 }
@@ -3167,7 +3167,7 @@ void			test_ft_striteri_null1(void *ptr) {
 	void	(*ft_striteri)(char *, void (*)(unsigned, char *)) = ptr;
 	SET_EXPLICATION("your striteri does not segfault when null parameter is sent");
 
-	SANDBOX_KO(
+	SANDBOX_PROT(
 			ft_striteri(NULL, f_striteri)
 			);
 }
@@ -3176,7 +3176,7 @@ void			test_ft_striteri_null2(void *ptr) {
 	void	(*ft_striteri)(char *, void (*)(unsigned, char *)) = ptr;
 	SET_EXPLICATION("your striteri does not segfault when null parameter is sent");
 
-	SANDBOX_KO(
+	SANDBOX_PROT(
 			ft_striteri("you should not ...", NULL);
 			ft_striteri(NULL, NULL);
 			);
@@ -3302,7 +3302,7 @@ void			test_ft_strmap_null1(void *ptr) {
 	char *	(*ft_strmap)(const char *, char (*)(char)) = ptr;
 	SET_EXPLICATION("your strmap does not segfault when null parameter is sent");
 
-	SANDBOX_KO(
+	SANDBOX_PROT(
 			ft_strmap(NULL, f_strmap);
 			);
 }
@@ -3311,7 +3311,7 @@ void			test_ft_strmap_null2(void *ptr) {
 	char *	(*ft_strmap)(const char *, char (*)(char)) = ptr;
 	SET_EXPLICATION("your strmap does not segfault when null parameter is sent");
 
-	SANDBOX_KO(
+	SANDBOX_PROT(
 			ft_strmap("olol", NULL);
 			ft_strmap(NULL, NULL);
 			);
@@ -3459,7 +3459,7 @@ void			test_ft_strmapi_null1(void *ptr) {
 	char *	(*ft_strmapi)(const char *, char (*)(unsigned, char)) = ptr;
 	SET_EXPLICATION("your strmapi does not segfault when null parameter is sent");
 
-	SANDBOX_KO(
+	SANDBOX_PROT(
 			ft_strmapi(NULL, f_strmapi);
 			);
 }
@@ -3468,7 +3468,7 @@ void			test_ft_strmapi_null2(void *ptr) {
 	char *	(*ft_strmapi)(const char *, char (*)(unsigned, char)) = ptr;
 	SET_EXPLICATION("your strmapi does not segfault when null parameter is sent");
 
-	SANDBOX_KO(
+	SANDBOX_PROT(
 			ft_strmapi("olol", NULL);
 			ft_strmapi(NULL, NULL);
 			);
@@ -3537,7 +3537,7 @@ void			test_ft_strequ_null1(void *ptr) {
 	int		(*ft_strequ)(const char *s1, const char *s2) = ptr;
 	SET_EXPLICATION("your strequ does not segfault when null parameter is sent");
 
-	SANDBOX_KO(
+	SANDBOX_PROT(
 			char	*s1 = "AAAAAAAA";
 
 			ft_strequ(NULL, s1);
@@ -3548,7 +3548,7 @@ void			test_ft_strequ_null2(void *ptr) {
 	int		(*ft_strequ)(const char *s1, const char *s2) = ptr;
 	SET_EXPLICATION("your strequ does not segfault when null parameter is sent");
 
-	SANDBOX_KO(
+	SANDBOX_PROT(
 			char	*s1 = "AAAAAAAA";
 
 			ft_strequ(s1, NULL);
@@ -3618,7 +3618,7 @@ void			test_ft_strnequ_null1(void *ptr) {
 	int		(*ft_strnequ)(const char *s1, const char *s2, size_t n) = ptr;
 	SET_EXPLICATION("your strnequ does not segfault when null parameter is sent");
 
-	SANDBOX_KO(
+	SANDBOX_PROT(
 			char	*s1 = "AAAAAAAA";
 
 			ft_strnequ(NULL, s1, 3);
@@ -3629,7 +3629,7 @@ void			test_ft_strnequ_null2(void *ptr) {
 	int		(*ft_strnequ)(const char *s1, const char *s2, size_t n) = ptr;
 	SET_EXPLICATION("your strnequ does not segfault when null parameter is sent");
 
-	SANDBOX_KO(
+	SANDBOX_PROT(
 			char	*s1 = "AAAAAAAA";
 
 			ft_strnequ(s1, NULL, 3);
@@ -3709,23 +3709,6 @@ void			test_ft_strsub_size(void *ptr) {
 			);
 }
 
-void			test_ft_strsub_out1(void *ptr) {
-	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
-	SET_EXPLICATION("your strsub does not segfault/return null when invalid start/length is sent");
-
-	SANDBOX_KO(
-			char	*s = strdup("out of this ???");
-			
-			char	*ret = ft_strsub(s, 40, 20);
-			if (ret == NULL) {
-				free(s);
-				exit(TEST_SUCCESS);
-			}
-			SET_DIFF("[crash]", s);
-			free(s);
-			);
-}
-
 void			test_ft_strsub_zero(void *ptr) {
 	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
 	SET_EXPLICATION("your strsub does not set \\0 to the end of the string");
@@ -3791,7 +3774,7 @@ void			test_ft_strsub_null(void *ptr) {
 	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
 	SET_EXPLICATION("your strsub does not segfault when null parameter is sent");
 
-	SANDBOX_KO(
+	SANDBOX_PROT(
 			ft_strsub(NULL, 0, 12);
 			);
 }
@@ -3800,7 +3783,6 @@ void            test_ft_strsub(void){
 	add_fun_subtest(test_ft_strsub_basic);
 	add_fun_subtest(test_ft_strsub_basic2);
 	add_fun_subtest(test_ft_strsub_size);
-	add_fun_subtest(test_ft_strsub_out1);
 	add_fun_subtest(test_ft_strsub_zero);
 	add_fun_subtest(test_ft_strsub_malloc_null);
 	add_fun_subtest(test_ft_strsub_all);
@@ -3907,7 +3889,7 @@ void			test_ft_strjoin_null1(void *ptr) {
 	char *	(*ft_strjoin)(char *, char *) = ptr;
 	SET_EXPLICATION("your strjoin does not segfault/return null when null parameter is sent");
 
-	SANDBOX_KO(
+	SANDBOX_PROT(
 			char	*s1 = "where is my ";
 
 			char	*res = ft_strjoin(NULL, s1);
@@ -3922,7 +3904,7 @@ void			test_ft_strjoin_null2(void *ptr) {
 	char *	(*ft_strjoin)(char *, char *) = ptr;
 	SET_EXPLICATION("your strjoin does not segfault/return null when null parameter is sent");
 
-	SANDBOX_KO(
+	SANDBOX_PROT(
 			char	*s1 = "where is my ";
 
 			char	*res = ft_strjoin(s1, NULL);
@@ -4077,7 +4059,7 @@ void			test_ft_strtrim_null(void *ptr) {
 	char *		(*ft_strtrim)(const char *) = ptr;
 	SET_EXPLICATION("your strtrim does not segfault/return null when null parameter is sent");
 
-	SANDBOX_KO(
+	SANDBOX_PROT(
 			char	*ret = ft_strtrim(NULL);
 			if (!ret)
 				exit(TEST_SUCCESS);
@@ -4190,7 +4172,7 @@ void			test_ft_strsplit_null(void *ptr) {
 	char	**(*ft_strsplit)(char *, char) = ptr;
 	SET_EXPLICATION("your strsplit does not segfault/return null when null parameter is sent");
 
-	SANDBOX_KO(
+	SANDBOX_PROT(
 			char	**ret = ft_strsplit(NULL, ' ');
 			if (!ret)
 				exit(TEST_SUCCESS);
@@ -4570,13 +4552,13 @@ void			test_ft_putstr_null(void *ptr) {
 	void		(*ft_putstr)(const char *) = ptr;
 	SET_EXPLICATION("your putstr does not segfault/print something when null parameter is sent");
 
-	SANDBOX_IRAISE(
+	SANDBOX_PROT(
 			char	buff2[0xF00] = {0};
 
 			STDOUT_TO_BUFF;
 			ft_putstr(NULL);
 			GET_STDOUT(buff2, sizeof(buff2));
-			if (buff2[0])
+			if (!buff2[0])
 				raise(SIGBUS);
 			SET_DIFF("(null)", buff2);
 			exit(TEST_FAILED);
@@ -4657,13 +4639,13 @@ void			test_ft_putendl_null(void *ptr) {
 	void		(*ft_putendl)(const char *) = ptr;
 	SET_EXPLICATION("your putendl does not segfault/print something when null parameter is sent");
 
-	SANDBOX_IRAISE(
+	SANDBOX_PROT(
 			char	buff2[0xF00] = {0};
 
 			STDOUT_TO_BUFF;
 			ft_putendl(NULL);
 			GET_STDOUT(buff2, sizeof(buff2));
-			if (buff2[0])
+			if (!buff2[0])
 				raise(SIGBUS);
 			SET_DIFF("(null)\n", buff2);
 			exit(TEST_FAILED);
@@ -4902,13 +4884,13 @@ void			test_ft_putstr_fd_null(void *ptr) {
 	void		(*ft_putstr_fd)(const char *, int fd) = ptr;
 	SET_EXPLICATION("your putstr does not segfault/print something when null parameter is sent");
 
-	SANDBOX_IRAISE(
+	SANDBOX_PROT(
 			char	buff2[0xF00] = {0};
 
 			STDERR_TO_BUFF;
 			ft_putstr_fd(NULL, STDERR_FILENO);
 			GET_STDERR(buff2, sizeof(buff2));
-			if (buff2[0])
+			if (!buff2[0])
 				raise(SIGBUS);
 			SET_DIFF("(null)", buff2);
 			exit(TEST_FAILED);
@@ -4989,13 +4971,13 @@ void			test_ft_putendl_fd_null(void *ptr) {
 	void		(*ft_putendl_fd)(const char *, int fd) = ptr;
 	SET_EXPLICATION("your putendl does not segfault/print something when null parameter is sent");
 
-	SANDBOX_IRAISE(
+	SANDBOX_PROT(
 			char	buff2[0xF00] = {0};
 
 			STDERR_TO_BUFF;
 			ft_putendl_fd(NULL, STDERR_FILENO);
 			GET_STDERR(buff2, sizeof(buff2));
-			if (buff2[0])
+			if (!buff2[0])
 				raise(SIGBUS);
 			SET_DIFF("(null)\n", buff2);
 			exit(TEST_FAILED);
@@ -5102,6 +5084,11 @@ void            test_ft_putnbr_fd(void){
 
 
 
+////////////////////////////////
+////////////////////////////////
+//          Part III          //
+////////////////////////////////
+////////////////////////////////
 
 
 ////////////////////////////////
