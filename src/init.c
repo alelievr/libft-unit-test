@@ -6,12 +6,13 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:30:13 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/28 21:15:46 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/03 15:40:02 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 char			*current_fun_name = "";
 int				current_fun_visibility = 0;
+int				current_protected = 0;
 int				current_test_id = 0;
 int				current_subtest_id = 0;
 int				total_subtest = 0;
@@ -25,7 +26,7 @@ int				g_diff_fd = 0;
 char			g_ret[2];
 t_libft_subtest	fun_subtest_table[SUBTEST_SIZE];
 t_libft_test	fun_test_table[] = {
-	{"ft_memset", test_ft_memset, 1},
+/*	{"ft_memset", test_ft_memset, 1},
 	{"ft_bzero", test_ft_bzero, 1},
 	{"ft_memcpy", test_ft_memcpy, 1},
 	{"ft_memccpy", test_ft_memccpy, 1},
@@ -52,7 +53,7 @@ t_libft_test	fun_test_table[] = {
 	{"ft_isascii", test_ft_isascii, 1},
 	{"ft_isprint", test_ft_isprint, 1},
 	{"ft_toupper", test_ft_toupper, 1},
-	{"ft_tolower", test_ft_tolower, 1},
+	{"ft_tolower", test_ft_tolower, 1},*/
 
 	{"ft_memalloc", test_ft_memalloc, 1},
 	{"ft_memdel", test_ft_memdel, 1},

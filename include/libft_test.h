@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/27 23:53:50 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/03 15:43:52 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,14 @@ enum		e_values {
 	TEST_MISSING,
 	TEST_NOCRASH,
 	TEST_KO,
+	TEST_PROT,
 	TEST_FINISHED
+};
+
+enum		e_prot {
+	INVISIBLE,
+	PROTECTED,
+	NOT_PROTECTED
 };
 
 # define	LOG_FILE		"result.log"
@@ -81,6 +88,8 @@ enum		e_values {
 # define	COLOR_PART2		"\033[38;5;226m"
 # define	COLOR_PART3		"\033[38;5;9m"
 # define	COLOR_CLEAR		"\033[0m"
+# define	COLOR_PROTECTED	"\033[38;5;229m"
+# define	COLOR_NPROTECTED "\033[38;5;80m"
 
 # define	BSIZE			0xF00
 # define	BFSIZE			0xF0000
@@ -90,12 +99,14 @@ enum		e_values {
 # define	SET_EXPLICATION(x)	current_explication = x;
 # define	SET_TEST_TEXT(x)	current_test = x;
 # define	SET_CURRENT_TEST_CODE(x) current_test_code = x;
+# define	SET_CURRENT_PROTECTED(x) current_protected = x;
 
 # define	SANDBOX_STRINGIFY(x)	SET_CURRENT_TEST_CODE(#x)
 # define	SANDBOX(x)			SANDBOX_STRINGIFY(x); sandbox();if (!(g_pid = fork())) {x;exit(TEST_SUCCESS);} if (g_pid > 0) { wait((int*)g_ret); _SANDBOX_RAISE(g_ret[0]); unsandbox(); }
 # define	SANDBOX_KO(x)		SANDBOX(x); if (SANDBOX_CRASH) ft_raise(TEST_SUCCESS); else if (SANDBOX_RETURN != SIGKILL) ft_raise(TEST_KO);
 # define	SANDBOX_RAISE(x)	SANDBOX(x); if (SANDBOX_CRASH) ft_raise(TEST_CRASH); else if (SANDBOX_RETURN != SIGKILL) ft_raise(g_ret[1]);
 # define	SANDBOX_IRAISE(x)	SANDBOX(x); if (SANDBOX_CRASH) ft_raise(TEST_SUCCESS); else if (SANDBOX_RETURN != SIGKILL) ft_raise(TEST_NOCRASH);
+# define	SANDBOX_PROT(x);	SANDBOX(x); if (SANDBOX_CRASH) current_protected = NOT_PROTECTED; else current_protected = PROTECTED; ft_raise(TEST_PROT);
 # define	SANDBOX_RESULT		(g_ret[1])
 # define	SANDBOX_RETURN		(g_ret[0])
 # define	_SANDBOX_RAISE(x)	if (x == SIGKILL) ft_raise(TEST_TIMEOUT); if (x == SIGQUIT) ft_raise(TEST_INTERUPT);
@@ -143,6 +154,7 @@ extern		int				g_log_fd;
 extern		int				g_malloc_fd;
 extern		int				g_diff_fd;
 extern		char			*current_test_code;
+extern		int				current_protected;
 
 /*  Display functions  */
 void	display_test_result(int value, char *explications);

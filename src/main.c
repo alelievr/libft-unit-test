@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2015/11/27 19:31:14 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/03 15:27:26 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ void	run_subtests(void *h, int start) {
 		tmpfun = dlsym(handle, fun_subtest_table[i].fun_name);
 		MALLOC_RESET;
 		RESET_DIFF;
+		SET_CURRENT_PROTECTED(INVISIBLE);
 		if (tmpfun)
 			fun_subtest_table[i].fun_test_ptr(tmpfun);
 		else if (fun_subtest_table[i].visible)

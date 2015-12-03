@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:26:54 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/03 00:10:27 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/03 15:42:02 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	display_part(char *s) {
 				       "     \"-.-\"     \"-.-\"     \"-.-\"     \"-.-\"     \"-.-\"    "COLOR_CLEAR);
 	}
 	if (!strcmp(s, "ft_memalloc")) {
-		printf("\n\033[38;5;226m%s"COLOR_CLEAR, "Warrning: in this part, your functions may not segfault (on the moulinette test),\nso getting KO result for null parameter is normal (for the moulinette not for me ...)");
+		printf("\n\033[38;5;226m%s"COLOR_CLEAR, "In this part, you can choose to protect your function or not protect them, a color code will tell you if your function is protected/not But stay coherent !");
 		printf(COLOR_PART2"\n                     Second part\n");
 		printf("%s\n", " __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)\n"
 					   "(______)(______)(______)(______)(______)(______)(______)(___\n");
@@ -191,6 +191,12 @@ void    display_test_result(int value, char *explications)
 			if (once) {
 				printf(COLOR_FAILED"[MISSING]"COLOR_CLEAR);
 				dprintf(g_log_fd, "[MISSING]");
+			}
+			break ;
+		case TEST_PROT:
+			if (current_protected != INVISIBLE) {
+				printf("%s[||]%s", (current_protected == PROTECTED) ? COLOR_PROTECTED : COLOR_NPROTECTED, COLOR_CLEAR);
+				dprintf(g_log_fd, "%s", (current_protected == PROTECTED) ? "{protected}" : "{not protected}");
 			}
 			break ;
 	}
