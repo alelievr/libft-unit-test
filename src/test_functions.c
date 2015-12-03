@@ -3713,23 +3713,6 @@ void			test_ft_strsub_size(void *ptr) {
 			);
 }
 
-void			test_ft_strsub_out1(void *ptr) {
-	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
-	SET_EXPLICATION("your strsub does not segfault/return null when invalid start/length is sent");
-
-	SANDBOX_KO(
-			char	*s = strdup("out of this ???");
-			
-			char	*ret = ft_strsub(s, 40, 20);
-			if (ret == NULL) {
-				free(s);
-				exit(TEST_SUCCESS);
-			}
-			SET_DIFF("[crash]", s);
-			free(s);
-			);
-}
-
 void			test_ft_strsub_zero(void *ptr) {
 	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
 	SET_EXPLICATION("your strsub does not set \\0 to the end of the string");
@@ -3804,7 +3787,6 @@ void            test_ft_strsub(void){
 	add_fun_subtest(test_ft_strsub_basic);
 	add_fun_subtest(test_ft_strsub_basic2);
 	add_fun_subtest(test_ft_strsub_size);
-	add_fun_subtest(test_ft_strsub_out1);
 	add_fun_subtest(test_ft_strsub_zero);
 	add_fun_subtest(test_ft_strsub_malloc_null);
 	add_fun_subtest(test_ft_strsub_all);
