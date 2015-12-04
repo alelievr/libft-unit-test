@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/03 23:02:29 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/04 17:25:43 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -4350,6 +4350,20 @@ void			test_ft_itoa_malloc_null(void *ptr) {
 			);
 }
 
+void			test_ft_itoa_free_int_min(void *ptr) {
+	char	*(*ft_itoa)(int) = ptr;
+	SET_EXPLICATION("your itoa did not allocate memory for the int min value");
+
+	SANDBOX_RAISE(
+			char	*i1 = ft_itoa(INT_MIN);
+
+			STDERR_TO_BUFF;
+			free(i1);
+			VOID_STDERR;
+			exit(TEST_SUCCESS);
+			);
+}
+
 void            test_ft_itoa(void){
 	add_fun_subtest(test_ft_itoa_basic);
 	add_fun_subtest(test_ft_itoa_random);
@@ -4359,6 +4373,7 @@ void            test_ft_itoa(void){
 	add_fun_subtest(test_ft_itoa_malloc_null);
 	add_fun_subtest(test_ft_itoa_size);
 	add_fun_subtest(test_ft_itoa_size2);
+	add_fun_subtest(test_ft_itoa_free_int_min);
 }
 
 ////////////////////////////////
