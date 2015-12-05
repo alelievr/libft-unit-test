@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/03 22:56:43 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/05 20:34:52 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,9 +137,9 @@ enum		e_prot {
 
 # define	STDOUT_TO_BUFF		fd_to_buffer(STDOUT_FILENO);
 # define	STDERR_TO_BUFF		fd_to_buffer(STDERR_FILENO);
-# define	GET_STDOUT(y, z)	get_fd_buffer(STDOUT_FILENO, y, z);
-# define	GET_STDERR(y, z)	get_fd_buffer(STDERR_FILENO, y, z);
-# define	VOID_STDOUT			get_fd_buffer(STDOUT_FILENO, NULL, 0);
+# define	GET_STDOUT(y, z)	write(STDOUT_FILENO, "", 1); get_fd_buffer(STDOUT_FILENO, y, z);
+# define	GET_STDERR(y, z)	write(STDERR_FILENO, "", 1); get_fd_buffer(STDERR_FILENO, y, z);
+# define	VOID_STDOUT			write(STDOUT_FILENO, "", 1); get_fd_buffer(STDOUT_FILENO, NULL, 0);
 # define	VOID_STDERR			write(STDERR_FILENO, "", 1); get_fd_buffer(STDERR_FILENO, NULL, 0);
 
 extern		char			*current_fun_name;

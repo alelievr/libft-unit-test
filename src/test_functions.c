@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/04 17:25:43 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/05 20:43:38 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1945,6 +1945,23 @@ void			test_ft_strstr_basic(void *ptr) {
 			);
 }
 
+void			test_ft_strstr_zero_len(void *ptr) {
+	typeof(strstr)	*ft_strstr = ptr;
+	SET_EXPLICATION("your strstr does not works with empty strings");
+
+	SANDBOX_RAISE(
+			char	*s1 = "";
+			char	*s2 = "";
+
+			char	*i1 = strstr(s1, s2);
+			char	*i2 = ft_strstr(s1, s2);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
 void			test_ft_strstr_not_found(void *ptr) {
 	typeof(strstr)	*ft_strstr = ptr;
 	SET_EXPLICATION("your strstr does not works with not found patern");
@@ -2031,6 +2048,7 @@ void			test_ft_strstr_null2(void *ptr) {
 
 void            test_ft_strstr(void){
 	add_fun_subtest(test_ft_strstr_basic);
+	add_fun_subtest(test_ft_strstr_zero_len);
 	add_fun_subtest(test_ft_strstr_not_found);
 	add_fun_subtest(test_ft_strstr_zero_len1);
 	add_fun_subtest(test_ft_strstr_zero_len2);
@@ -3695,6 +3713,27 @@ void			test_ft_strsub_basic2(void *ptr) {
 			);
 }
 
+void			test_ft_strsub_zero_len(void *ptr) {
+	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
+	SET_EXPLICATION("your strsub does not works with empty strings");
+
+	SANDBOX_RAISE(
+			char	*str = "";
+			size_t	size = 0;
+
+			char	*ret = ft_strsub(str, 5, size);
+			if (!strncmp(ret, str + 5, size)) {
+				free(ret);
+				exit(TEST_SUCCESS);
+			}
+			SET_DIFF("", ret);
+			free(ret);
+			exit(TEST_FAILED);
+			);
+}
+
+
+
 void			test_ft_strsub_size(void *ptr) {
 	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
 	SET_EXPLICATION("your strsub did not allocate the good size so the \\0 test may be false");
@@ -3790,6 +3829,7 @@ void			test_ft_strsub_null(void *ptr) {
 void            test_ft_strsub(void){
 	add_fun_subtest(test_ft_strsub_basic);
 	add_fun_subtest(test_ft_strsub_basic2);
+	add_fun_subtest(test_ft_strsub_zero_len);
 	add_fun_subtest(test_ft_strsub_size);
 	add_fun_subtest(test_ft_strsub_zero);
 	add_fun_subtest(test_ft_strsub_malloc_null);
@@ -4582,7 +4622,7 @@ void			test_ft_putstr_null(void *ptr) {
 			ft_putstr(NULL);
 			GET_STDOUT(buff2, sizeof(buff2));
 			if (!buff2[0])
-				raise(SIGBUS);
+				raise(SIGINT);
 			SET_DIFF("(null)", buff2);
 			exit(TEST_FAILED);
 			);
@@ -4669,7 +4709,7 @@ void			test_ft_putendl_null(void *ptr) {
 			ft_putendl(NULL);
 			GET_STDOUT(buff2, sizeof(buff2));
 			if (!buff2[0])
-				raise(SIGBUS);
+				raise(SIGINT);
 			SET_DIFF("(null)\n", buff2);
 			exit(TEST_FAILED);
 			);
@@ -4914,7 +4954,7 @@ void			test_ft_putstr_fd_null(void *ptr) {
 			ft_putstr_fd(NULL, STDERR_FILENO);
 			GET_STDERR(buff2, sizeof(buff2));
 			if (!buff2[0])
-				raise(SIGBUS);
+				raise(SIGINT);
 			SET_DIFF("(null)", buff2);
 			exit(TEST_FAILED);
 			);
@@ -5001,7 +5041,7 @@ void			test_ft_putendl_fd_null(void *ptr) {
 			ft_putendl_fd(NULL, STDERR_FILENO);
 			GET_STDERR(buff2, sizeof(buff2));
 			if (!buff2[0])
-				raise(SIGBUS);
+				raise(SIGINT);
 			SET_DIFF("(null)\n", buff2);
 			exit(TEST_FAILED);
 			);
