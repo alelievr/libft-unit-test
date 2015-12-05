@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/05 20:43:38 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/05 23:41:17 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,32 @@ void			test_ft_memset_basic(void *ptr) {
 			);
 }
 
+void			test_ft_memset_unsigned(void *ptr) {
+	typeof(memset)	*ft_memset = ptr;
+
+	SET_EXPLICATION("your memset does not cast the memory into unsigned chars");
+
+	SANDBOX_RAISE(
+			char	b1[BSIZE + 1];
+			char	b2[BSIZE + 1];
+
+			b1[BSIZE] = 0;
+			b2[BSIZE] = 0;
+			memset(b1, '\200', BSIZE);
+			ft_memset(b2, '\200', BSIZE);
+
+			if (!strcmp(b1, b2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(b1, b2);
+			exit(TEST_SUCCESS);
+			);
+}
+
 void			test_ft_memset_return(void *ptr) {
 	typeof(memset)	*ft_memset = ptr;
 
 	SET_EXPLICATION("your memset return address is false/your memset does not works");
 
-	//Auto raise: if crash => a TEST_CRASH is raised otherwise the return of the sandbox is raised
 	SANDBOX_RAISE(
 			char	b1[BSIZE + 1];
 			char	b2[BSIZE + 1];
@@ -129,6 +149,7 @@ void			test_ft_memset_zero_value(void *ptr) {
 void            test_ft_memset(void) {
 	add_fun_subtest(test_ft_memset_basic);
 	add_fun_subtest(test_ft_memset_return);
+	add_fun_subtest(test_ft_memset_unsigned);
 	add_fun_subtest(test_ft_memset_null);
 	add_fun_subtest(test_ft_memset_zero_value);
 	add_fun_subtest(test_ft_memset_fat);
@@ -353,6 +374,26 @@ void			test_ft_memccpy_basic_test(void *ptr) {
 
 }
 
+void			test_ft_memccpy_unsigned(void *ptr) {
+	typeof(memccpy)	*ft_memccpy = ptr;
+	SET_EXPLICATION("your memccpy doesn't cast the memory into unsigned char");
+
+	SANDBOX_RAISE(
+			char	buff1[] = "abcdefghijklmnopqrstuvwxyz";
+			char	buff2[] = "abcdefghijklmnopqrstuvwxyz";
+			char	*src = "string with\200inside !";
+			
+			memccpy(buff1, src, '\200', 12);
+			ft_memccpy(buff2, src, '\200', 12);
+
+			if (!memcmp(buff1, buff2, 6))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+
+}
+
 void			test_ft_memccpy_return(void *ptr) {
 	typeof(memccpy)	*ft_memccpy = ptr;
 	SET_EXPLICATION("your memccpy's return is false/doesn't work with basic params");
@@ -476,6 +517,7 @@ void			test_ft_memccpy_null2(void *ptr) {
 
 void            test_ft_memccpy(void){
 	add_fun_subtest(test_ft_memccpy_basic_test);
+	add_fun_subtest(test_ft_memccpy_unsigned);
 	add_fun_subtest(test_ft_memccpy_return);
 	add_fun_subtest(test_ft_memccpy_not_found);
 	add_fun_subtest(test_ft_memccpy_zero_value);
@@ -668,6 +710,22 @@ void			test_ft_memchr_basic(void *ptr) {
 
 			if (memchr(src, '\x42', size) == ft_memchr(src, '\x42', size))
 				exit(TEST_SUCCESS);
+			SET_DIFF(memchr(src, '\x42', size), ft_memchr(src, '\x42', size))
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_memchr_unsigned(void *ptr) {
+	typeof(memchr)		*ft_memchr = ptr;
+	SET_EXPLICATION("your memchr does not cast in unsigned the memory");
+
+	SANDBOX_RAISE(
+			char			*src = "/|\x12\xff\x09\x42\2002\42|\\";
+			int				size = 10;
+
+			if (memchr(src, '\200', size) == ft_memchr(src, '\200', size))
+				exit(TEST_SUCCESS);
+			SET_DIFF(memchr(src, '\200', size), ft_memchr(src, '\200', size));
 			exit(TEST_FAILED);
 			);
 }
@@ -682,6 +740,7 @@ void			test_ft_memchr_not_found1(void *ptr) {
 
 			if (memchr(src, '\x42', size) == ft_memchr(src, '\x42', size))
 				exit(TEST_SUCCESS);
+			SET_DIFF(memchr(src, '\x42', size), ft_memchr(src, '\x42', size))
 			exit(TEST_FAILED);
 			);
 }
@@ -696,6 +755,7 @@ void			test_ft_memchr_not_found2(void *ptr) {
 
 			if (memchr(src, '\xde', size) == ft_memchr(src, '\xde', size))
 				exit(TEST_SUCCESS);
+			SET_DIFF(memchr(src, '\xde', size), ft_memchr(src, '\xde', size));
 			exit(TEST_FAILED);
 			);
 }
@@ -725,6 +785,7 @@ void			test_ft_memchr_null(void *ptr) {
 
 void            test_ft_memchr(void) {
 	add_fun_subtest(test_ft_memchr_basic);
+	add_fun_subtest(test_ft_memchr_unsigned);
 	add_fun_subtest(test_ft_memchr_not_found1);
 	add_fun_subtest(test_ft_memchr_not_found2);
 	add_fun_subtest(test_ft_memchr_null_byte);
@@ -802,6 +863,22 @@ void			test_ft_memcmp_basic3(void *ptr) {
 			);
 }
 
+void			test_ft_memcmp_unsigned(void *ptr) {
+	typeof(memcmp)		*ft_memcmp = ptr;
+	SET_EXPLICATION("your memcmp does not cast the memory in unsigned char");
+
+	SANDBOX_RAISE(
+			uint8_t	*s1 = (uint8_t *)"\xff\xaa\xde\200";
+			uint8_t	*s2 = (uint8_t *)"\xff\xaa\xde\0";
+			size_t	size = 8;
+
+			if (memcmp(s1, s2, size) == ft_memcmp(s1, s2, size))
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(memcmp(s1, s2, size), ft_memcmp(s1, s2, size));
+			exit(TEST_FAILED);
+			);
+}
+
 void			test_ft_memcmp_null_byte(void *ptr) {
 	typeof(memcmp)		*ft_memcmp = ptr;
 	SET_EXPLICATION("your memcmp does not works with basic input");
@@ -845,6 +922,7 @@ void            test_ft_memcmp(void){
 	add_fun_subtest(test_ft_memcmp_basic1);
 	add_fun_subtest(test_ft_memcmp_basic2);
 	add_fun_subtest(test_ft_memcmp_basic3);
+	add_fun_subtest(test_ft_memcmp_unsigned);
 	add_fun_subtest(test_ft_memcmp_null_byte);
 	add_fun_subtest(test_ft_memcmp_null1);
 	add_fun_subtest(test_ft_memcmp_null2);
@@ -1945,6 +2023,58 @@ void			test_ft_strstr_basic(void *ptr) {
 			);
 }
 
+void			test_ft_strstr_basic2(void *ptr) {
+	typeof(strstr)	*ft_strstr = ptr;
+	SET_EXPLICATION("your strstr does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*s1 = "MZIRIBMZIRIBMZP";
+			char	*s2 = "MZIRIBMZP";
+
+			char	*i1 = strstr(s1, s2);
+			char	*i2 = ft_strstr(s1, s2);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strstr_basic3(void *ptr) {
+	typeof(strstr)	*ft_strstr = ptr;
+	SET_EXPLICATION("your strstr does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*s2 = "FF";
+			char	*s1 = "see F your F return FF now FF";
+
+			char	*i1 = strstr(s1, s2);
+			char	*i2 = ft_strstr(s1, s2);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strstr_basic4(void *ptr) {
+	typeof(strstr)	*ft_strstr = ptr;
+	SET_EXPLICATION("your strstr does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*s1 = "FF";
+			char	*s2 = "see F your F return F now FF";
+
+			char	*i1 = strstr(s1, s2);
+			char	*i2 = ft_strstr(s1, s2);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+
 void			test_ft_strstr_zero_len(void *ptr) {
 	typeof(strstr)	*ft_strstr = ptr;
 	SET_EXPLICATION("your strstr does not works with empty strings");
@@ -2048,6 +2178,9 @@ void			test_ft_strstr_null2(void *ptr) {
 
 void            test_ft_strstr(void){
 	add_fun_subtest(test_ft_strstr_basic);
+	add_fun_subtest(test_ft_strstr_basic2);
+	add_fun_subtest(test_ft_strstr_basic3);
+	add_fun_subtest(test_ft_strstr_basic4);
 	add_fun_subtest(test_ft_strstr_zero_len);
 	add_fun_subtest(test_ft_strstr_not_found);
 	add_fun_subtest(test_ft_strstr_zero_len1);
@@ -2068,6 +2201,42 @@ void			test_ft_strnstr_basic(void *ptr) {
 	SANDBOX_RAISE(
 			char	*s1 = "FF";
 			char	*s2 = "see FF your FF return FF now FF";
+			size_t	max = strlen(s2);
+
+			char	*i1 = strnstr(s1, s2, max);
+			char	*i2 = ft_strnstr(s1, s2, max);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strnstr_basic2(void *ptr) {
+	typeof(strnstr)	*ft_strnstr = ptr;
+	SET_EXPLICATION("your strnstr does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*s1 = "FF";
+			char	*s2 = "see F your F return F now F";
+			size_t	max = strlen(s2);
+
+			char	*i1 = strnstr(s1, s2, max);
+			char	*i2 = ft_strnstr(s1, s2, max);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strnstr_basic3(void *ptr) {
+	typeof(strnstr)	*ft_strnstr = ptr;
+	SET_EXPLICATION("your strnstr does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*s1 = "MZIRIBMZIRIBMZE123";
+			char	*s2 = "MZIRIBMZE";
 			size_t	max = strlen(s2);
 
 			char	*i1 = strnstr(s1, s2, max);
@@ -2248,6 +2417,23 @@ void			test_ft_strcmp_basic3(void *ptr) {
 			);
 }
 
+void			test_ft_strcmp_unsigned(void *ptr) {
+	typeof(strcmp)	*ft_strcmp = ptr;
+	SET_EXPLICATION("your strcmp does not cast in unsigned the diff");
+
+	SANDBOX_RAISE(
+			char	*s1 = "\0";
+			char	*s2 = "\200";
+
+			int		i1 = REG(strcmp(s1, s2));
+			int		i2 = REG(ft_strcmp(s1, s2));
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
 void			test_ft_strcmp_ascii(void *ptr) {
 	typeof(strcmp)	*ft_strcmp = ptr;
 	SET_EXPLICATION("your strcmp does not works with non ascii chars");
@@ -2288,6 +2474,7 @@ void            test_ft_strcmp(void){
 	add_fun_subtest(test_ft_strcmp_basic1);
 	add_fun_subtest(test_ft_strcmp_basic2);
 	add_fun_subtest(test_ft_strcmp_basic3);
+	add_fun_subtest(test_ft_strcmp_unsigned);
 	add_fun_subtest(test_ft_strcmp_ascii);
 	add_fun_subtest(test_ft_strcmp_null1);
 	add_fun_subtest(test_ft_strcmp_null2);
@@ -2356,7 +2543,7 @@ void			test_ft_strncmp_cast(void *ptr) {
 
 	SANDBOX_RAISE(
 			char	*s1 = "\200";
-			char	*s2 = "";
+			char	*s2 = "\0";
 
 			int		i1 = REG(strncmp(s1, s2, 1));
 			int		i2 = REG(ft_strncmp(s1, s2, 1));
@@ -2843,17 +3030,34 @@ void			test_ft_memalloc_zero(void *ptr) {
 
 	SANDBOX_RAISE(
 			size_t	size = 514;
+			char	*cmp = malloc(size);
+			int		diff;
+
 			MALLOC_MEMSET;
 			char	*ret = ft_memalloc(size);
 			MALLOC_RESET;
 
-			for (size_t i = 0;i < size;i++)
-				if (ret[i] != 0) {
-					SET_DIFF_INT(0, ret[i]);
-					exit(TEST_FAILED);
-				}
+			bzero(cmp, size);
+			if ((diff = memcmp(cmp, ret, size))) {
+				SET_DIFF_INT(0, diff);
+				exit(TEST_FAILED);
+			}
 			free(ret);
 			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_memalloc_too_big(void *ptr) {
+	void *	(*ft_memalloc)(size_t) = ptr;
+	SET_EXPLICATION("your memalloc does not return null for too big value");
+
+	SANDBOX_RAISE(
+			char	*ret = ft_memalloc(ULONG_MAX);
+
+			if (!ret)
+				exit(TEST_SUCCESS);
+			SET_DIFF_PTR(NULL, ret);
+			exit(TEST_FAILED);
 			);
 }
 
@@ -4025,6 +4229,38 @@ void			test_ft_strtrim_basic3(void *ptr) {
 			);
 }
 
+void			test_ft_strtrim_empty(void *ptr) {
+	char *		(*ft_strtrim)(const char *) = ptr;
+	SET_EXPLICATION("your strtrim does not works with empty input");
+
+	SANDBOX_RAISE(
+			char	*s1 = "";
+			char	*s2 = "";
+
+			char	*ret = ft_strtrim(s1);
+			if (!strcmp(ret, s2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(s2, ret);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strtrim_blank(void *ptr) {
+	char *		(*ft_strtrim)(const char *) = ptr;
+	SET_EXPLICATION("your strtrim does not works with full blank input");
+
+	SANDBOX_RAISE(
+			char	*s1 = "  \t \t \n   \n\n\n\t";
+			char	*s2 = "";
+
+			char	*ret = ft_strtrim(s1);
+			if (!strcmp(ret, s2))
+				exit(TEST_SUCCESS);
+			SET_DIFF(s2, ret);
+			exit(TEST_FAILED);
+			);
+}
+
 void			test_ft_strtrim_size(void *ptr) {
 	char *		(*ft_strtrim)(const char *) = ptr;
 	SET_EXPLICATION("your strtrim did not allocate the good size so the \\0 test may be false");
@@ -4120,6 +4356,8 @@ void            test_ft_strtrim(void){
 	add_fun_subtest(test_ft_strtrim_basic);
 	add_fun_subtest(test_ft_strtrim_basic2);
 	add_fun_subtest(test_ft_strtrim_basic3);
+	add_fun_subtest(test_ft_strtrim_blank);
+	add_fun_subtest(test_ft_strtrim_empty);
 	add_fun_subtest(test_ft_strtrim_size);
 	add_fun_subtest(test_ft_strtrim_free);
 	add_fun_subtest(test_ft_strtrim_malloc_null);
@@ -4140,6 +4378,90 @@ void			test_ft_strsplit_basic(void *ptr) {
 			char	*s = "      split       this for   me  !       ";
 
 			char	**r = ft_strsplit(s, ' ');
+			while (*r) {
+				if (strcmp(*r, *ret)) {
+					SET_DIFF(*ret, *r);
+					exit(TEST_FAILED);
+				}
+				r++;
+				ret++;
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_strsplit_space(void *ptr) {
+	char	**(*ft_strsplit)(char *, char) = ptr;
+	SET_EXPLICATION("your strsplit does not works with full space string");
+	char	**ret = (char*[1]){NULL};
+
+	SANDBOX_RAISE(
+			char	*s = "                  ";
+
+			char	**r = ft_strsplit(s, ' ');
+			while (*r) {
+				if (strcmp(*r, *ret)) {
+					SET_DIFF(*ret, *r);
+					exit(TEST_FAILED);
+				}
+				r++;
+				ret++;
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_strsplit_begin(void *ptr) {
+	char	**(*ft_strsplit)(char *, char) = ptr;
+	SET_EXPLICATION("your strsplit does not works with one word");
+	char	**ret = (char*[2]){"olol", NULL};
+
+	SANDBOX_RAISE(
+			char	*s = "                  olol";
+
+			char	**r = ft_strsplit(s, ' ');
+			while (*r) {
+				if (strcmp(*r, *ret)) {
+					SET_DIFF(*ret, *r);
+					exit(TEST_FAILED);
+				}
+				r++;
+				ret++;
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_strsplit_end(void *ptr) {
+	char	**(*ft_strsplit)(char *, char) = ptr;
+	SET_EXPLICATION("your strsplit does not works with one word");
+	char	**ret = (char*[2]){"olol", NULL};
+
+	SANDBOX_RAISE(
+			char	*s = "olol                     ";
+
+			char	**r = ft_strsplit(s, ' ');
+			while (*r) {
+				if (strcmp(*r, *ret)) {
+					SET_DIFF(*ret, *r);
+					exit(TEST_FAILED);
+				}
+				r++;
+				ret++;
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_strsplit_empty(void *ptr) {
+	char	**(*ft_strsplit)(char *, char) = ptr;
+	SET_EXPLICATION("your strsplit does not works with empty string");
+	char	**ret = (char*[2]){NULL};
+
+	SANDBOX_RAISE(
+			char	*s = "";
+
+			char	**r = ft_strsplit(s, '\65');
 			while (*r) {
 				if (strcmp(*r, *ret)) {
 					SET_DIFF(*ret, *r);
@@ -4231,6 +4553,10 @@ void			test_ft_strsplit_null(void *ptr) {
 
 void            test_ft_strsplit(void) {
 	add_fun_subtest(test_ft_strsplit_basic);
+	add_fun_subtest(test_ft_strsplit_space);
+	add_fun_subtest(test_ft_strsplit_begin);
+	add_fun_subtest(test_ft_strsplit_end);
+	add_fun_subtest(test_ft_strsplit_empty);
 	add_fun_subtest(test_ft_strsplit_free);
 	add_fun_subtest(test_ft_strsplit_malloc_null);
 	add_fun_subtest(test_ft_strsplit_zero);
