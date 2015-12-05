@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/05 23:41:17 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/05 23:59:53 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -383,10 +383,10 @@ void			test_ft_memccpy_unsigned(void *ptr) {
 			char	buff2[] = "abcdefghijklmnopqrstuvwxyz";
 			char	*src = "string with\200inside !";
 			
-			memccpy(buff1, src, '\200', 12);
-			ft_memccpy(buff2, src, '\200', 12);
+			memccpy(buff1, src, '\200', 21);
+			ft_memccpy(buff2, src, '\200', 21);
 
-			if (!memcmp(buff1, buff2, 6))
+			if (!memcmp(buff1, buff2, 21))
 				exit(TEST_SUCCESS);
 			SET_DIFF(buff1, buff2);
 			exit(TEST_FAILED);
@@ -2352,6 +2352,8 @@ void			test_ft_strnstr_null2(void *ptr) {
 
 void            test_ft_strnstr(void){
 	add_fun_subtest(test_ft_strnstr_basic);
+	add_fun_subtest(test_ft_strnstr_basic2);
+	add_fun_subtest(test_ft_strnstr_basic3);
 	add_fun_subtest(test_ft_strnstr_not_found);
 	add_fun_subtest(test_ft_strnstr_zero_len1);
 	add_fun_subtest(test_ft_strnstr_zero_len2);
@@ -3102,6 +3104,7 @@ void			test_ft_memalloc_malloc_null(void *ptr) {
 void            test_ft_memalloc(void) {
 	add_fun_subtest(test_ft_memalloc_free);
 	add_fun_subtest(test_ft_memalloc_zero);
+	add_fun_subtest(test_ft_memalloc_too_big);
 	add_fun_subtest(test_ft_memalloc_malloc_null);
 	add_fun_subtest(test_ft_memalloc_size);
 }
