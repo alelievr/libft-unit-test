@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/06 02:20:01 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/06 03:22:32 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -5970,9 +5970,24 @@ void			test_ft_strtrimc_free(void *ptr) {
 			);
 }
 
+void			test_ft_strtrimc_not_found(void *ptr) {
+	char *		(*ft_strtrimc)(const char *, char c) = ptr;
+	SET_EXPLICATION("your strtrimc does not works with not found character ");
+
+	SANDBOX_RAISE(
+			char	*s1 = "   \t  \n\n \t\t  \n\n\nHello \t  Please\n Trim me !\n   \n \n \t\t\n  ";
+
+			char	*ret = ft_strtrimc(s1, '\xff');
+			if (!strcmp(s1, ret))
+				exit(TEST_SUCCESS);
+			SET_DIFF(s1, ret);
+			exit(TEST_FAILED);
+			);
+}
+
 void			test_ft_strtrimc_malloc_null(void *ptr) {
 	char *		(*ft_strtrimc)(const char *, char c) = ptr;
-	SET_EXPLICATION("you dont protect your malloc return");
+	SET_EXPLICATION("you did not protect your malloc return");
 
 	SANDBOX_RAISE(
 			char	*s1 = "   \t  \n\n \t\t  \n\n\nHello \t  Please\n Trim me !\n   \n \n \t\t\n  ";
@@ -6012,7 +6027,7 @@ void			test_ft_strtrimc_null(void *ptr) {
 	char *		(*ft_strtrimc)(const char *, char c) = ptr;
 	SET_EXPLICATION("your strtrimc does not segfault/return null when null parameter is sent");
 
-	SANDBOX_KO(
+	SANDBOX_PROT(
 			char	*ret = ft_strtrimc(NULL, ' ');
 			if (!ret)
 				exit(TEST_SUCCESS);
@@ -6026,6 +6041,7 @@ void            test_ft_strtrimc(void){
 	add_fun_subtest(test_ft_strtrimc_basic2);
 	add_fun_subtest(test_ft_strtrimc_basic3);
 	add_fun_subtest(test_ft_strtrimc_size);
+	add_fun_subtest(test_ft_strtrimc_not_found);
 	add_fun_subtest(test_ft_strtrimc_free);
 	add_fun_subtest(test_ft_strtrimc_malloc_null);
 	add_fun_subtest(test_ft_strtrimc_zero);
