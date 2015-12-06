@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/05 23:59:53 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/06 02:20:01 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -3097,6 +3097,28 @@ void			test_ft_memalloc_malloc_null(void *ptr) {
 			if (!ret)
 				exit(TEST_SUCCESS);
 			SET_DIFF_PTR(NULL, ret);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_memalloc_malloc_size(void *ptr) {
+	void *	(*ft_memalloc)(size_t) = ptr;
+	SET_EXPLICATION("your memalloc did not allocate the good size");
+
+	SANDBOX_RAISE(
+			void	*ret;
+			int		alloc_size = 42;
+			int		size;
+
+			MALLOC_SIZE;
+			ret = ft_memalloc(alloc_size);
+			MALLOC_RESET;
+
+			size = get_last_malloc_size();
+
+			if (size == alloc_size)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(alloc_size, size);
 			exit(TEST_FAILED);
 			);
 }
