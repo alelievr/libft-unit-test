@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/05 20:34:52 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/07 19:24:09 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ enum		e_values {
 	TEST_NOCRASH,
 	TEST_KO,
 	TEST_PROT,
+	TEST_INVISIBLE,
 	TEST_FINISHED
 };
 

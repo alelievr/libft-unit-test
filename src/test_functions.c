@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/06 03:22:32 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/07 19:22:40 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,9 +113,15 @@ void			test_ft_memset_fat(void *ptr) {
 			memset(b1, '\5', BFSIZE);
 			ft_memset(b2, '\5', BFSIZE);
 
-			if (!strcmp(b1, b2))
+			if (!memcmp(b1, b2, BFSIZE))
+			{
+				free(b1);
+				free(b2);
 				exit(TEST_SUCCESS);
+			}
 			SET_DIFF(b1, b2);
+			free(b1);
+			free(b2);
 			exit(TEST_FAILED);
 			);
 }
@@ -628,6 +634,23 @@ void			test_ft_memmove_overlap(void *ptr) {
 			);
 }
 
+void			test_ft_memmove_hard(void *ptr) {
+	typeof(memmove)		*ft_memmove = ptr;
+	SET_EXPLICATION("your memmove does not works with a 128Mo data input !");
+
+	SANDBOX_RAISE(
+			int		size = 128 * 1024 * 1024;
+			char	*dst = (char *)malloc(sizeof(char) * size);
+			char	*data = (char *)malloc(sizeof(char) * size);
+
+			memset(data, 'A', size);
+			if (!dst)
+				exit(TEST_INVISIBLE);
+			ft_memmove(dst, data, size);
+			exit(TEST_SUCCESS);
+			);
+}
+
 void			test_ft_memmove_null1(void *ptr) {
 	typeof(memmove)		*ft_memmove = ptr;
 	SET_EXPLICATION("your memmove does not segfault when null params is sent");
@@ -691,6 +714,7 @@ void            test_ft_memmove(void){
 	add_fun_subtest(test_ft_memmove_long_int);
 	add_fun_subtest(test_ft_memmove_overlap);
 	add_fun_subtest(test_ft_memmove_same_pointer);
+	add_fun_subtest(test_ft_memmove_hard);
 	add_fun_subtest(test_ft_memmove_null1);
 	add_fun_subtest(test_ft_memmove_null2);
 	add_fun_subtest(test_ft_memmove_malloc_null);
