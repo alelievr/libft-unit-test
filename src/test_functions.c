@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/07 19:22:40 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/07 21:39:21 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -5179,11 +5179,32 @@ void			test_ft_putnbr_random(void *ptr) {
 			);
 }
 
+void			test_ft_putnbr_itoa(void *ptr) {
+	void		(*ft_putnbr)(int) = ptr;
+	SET_EXPLICATION("your putnbr allocate memory, wtf ???");
+
+	SANDBOX_RAISE(
+			int		i = INT_MIN;
+			char	buff[0xF0];
+
+			STDOUT_TO_BUFF;
+			MALLOC_NULL;
+			ft_putnbr(i);
+			MALLOC_RESET;
+			GET_STDOUT(buff, 0xF0);
+			if (atoi(buff) == i)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i, atoi(buff));
+			exit(TEST_FAILED);
+			);
+}
+
 void            test_ft_putnbr(void){
 	add_fun_subtest(test_ft_putnbr_basic);
 	add_fun_subtest(test_ft_putnbr_int_max);
 	add_fun_subtest(test_ft_putnbr_int_min);
 	add_fun_subtest(test_ft_putnbr_random);
+	add_fun_subtest(test_ft_putnbr_itoa);
 }
 
 ////////////////////////////////
@@ -5513,11 +5534,32 @@ void			test_ft_putnbr_fd_random(void *ptr) {
 			);
 }
 
+void			test_ft_putnbr_fd_itoa(void *ptr) {
+	void		(*ft_putnbr_fd)(int, int) = ptr;
+	SET_EXPLICATION("your putnbr allocate memory, wtf ???");
+
+	SANDBOX_RAISE(
+			int		i = INT_MIN;
+			char	buff[0xF0];
+
+			STDERR_TO_BUFF;
+			MALLOC_NULL;
+			ft_putnbr_fd(i, STDERR_FILENO);
+			MALLOC_RESET;
+			GET_STDERR(buff, 0xF0);
+			if (atoi(buff) == i)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i, atoi(buff));
+			exit(TEST_FAILED);
+			);
+}
+
 void            test_ft_putnbr_fd(void){
 	add_fun_subtest(test_ft_putnbr_fd_basic);
 	add_fun_subtest(test_ft_putnbr_fd_int_max);
 	add_fun_subtest(test_ft_putnbr_fd_int_min);
 	add_fun_subtest(test_ft_putnbr_fd_random);
+	add_fun_subtest(test_ft_putnbr_fd_itoa);
 }
 
 
