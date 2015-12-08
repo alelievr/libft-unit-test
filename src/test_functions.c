@@ -3556,7 +3556,7 @@ void			test_ft_strmap_size(void *ptr) {
 			if (ret_size == (int)size + 1)
 				exit(TEST_SUCCESS);
 			SET_DIFF_INT((int)size + 1, ret_size);
-			exit(TEST_KO);
+			exit(TEST_FAILED);
 			);
 }
 
@@ -5846,7 +5846,7 @@ void			test_ft_lstiter_null(void *ptr) {
 	void	(*ft_lstiter)(t_list *, void (*)(t_list *)) = ptr;
 	SET_EXPLICATION("your lstiter does not segfault when null parameter is sent");
 
-	SANDBOX_KO(
+	SANDBOX_PROT(
 			ft_lstiter(NULL, lstiter_f);
 			);
 }
@@ -5888,7 +5888,7 @@ void			test_ft_lstmap_null(void *ptr) {
 	t_list *	(*ft_lstmap)(t_list *, t_list * (*)(t_list *)) = ptr;
 	SET_EXPLICATION("your lstmap does not segfault when null parameter is sent");
 
-	SANDBOX_KO(
+	SANDBOX_PROT(
 			ft_lstmap(NULL, lstmap_f);
 			);
 }
@@ -5942,6 +5942,75 @@ void			test_ft_islower_(void *ptr) {
 
 void			test_ft_islower(void) {
 	add_fun_subtest(test_ft_islower_);
+}
+
+////////////////////////////////
+//         ft_isupper         //
+////////////////////////////////
+
+void			test_ft_isupper_(void *ptr) {
+	typeof(isupper)	*ft_isupper = ptr;
+	SET_EXPLICATION("your isupper does not works ...");
+
+	SANDBOX_RAISE(
+			for (int i = -50; i < 530; i++) {
+				if (ft_isupper(i) != isupper(i)) {
+					SET_DIFF_INT(isupper(i), ft_isupper(i));
+					exit(TEST_FAILED);
+				}
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_isupper(void) {
+	add_fun_subtest(test_ft_isupper_);
+}
+
+////////////////////////////////
+//         ft_isnumber         //
+////////////////////////////////
+
+void			test_ft_isnumber_(void *ptr) {
+	typeof(isnumber)	*ft_isnumber = ptr;
+	SET_EXPLICATION("your isnumber does not works ...");
+
+	SANDBOX_RAISE(
+			for (int i = -50; i < 530; i++) {
+				if (ft_isnumber(i) != isnumber(i)) {
+					SET_DIFF_INT(isnumber(i), ft_isnumber(i));
+					exit(TEST_FAILED);
+				}
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_isnumber(void) {
+	add_fun_subtest(test_ft_isnumber_);
+}
+
+////////////////////////////////
+//         ft_isblank         //
+////////////////////////////////
+
+void			test_ft_isblank_(void *ptr) {
+	typeof(isblank)	*ft_isblank = ptr;
+	SET_EXPLICATION("your isblank does not works ...");
+
+	SANDBOX_RAISE(
+			for (int i = -50; i < 530; i++) {
+				if (ft_isblank(i) != isblank(i)) {
+					SET_DIFF_INT(isblank(i), ft_isblank(i));
+					exit(TEST_FAILED);
+				}
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_isblank(void) {
+	add_fun_subtest(test_ft_isblank_);
 }
 
 ////////////////////////////////
