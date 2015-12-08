@@ -233,6 +233,9 @@ void            test_ft_lstiter(void);
 void            test_ft_lstmap(void);
 
 void			test_ft_islower(void);
+void			test_ft_isupper(void);
+void			test_ft_isnumber(void);
+void			test_ft_isblank(void);
 void			test_ft_strtrimc(void);
 void			test_ft_strndup(void);
 

@@ -88,6 +88,9 @@ t_libft_test	fun_test_table[] = {
 	{"ft_lstmap", test_ft_lstmap, 0},
 
 	{"ft_islower", test_ft_islower, 0},
+	{"ft_isupper", test_ft_isupper, 0},
+	{"ft_isnumber", test_ft_isnumber, 0},
+	{"ft_isblank", test_ft_isblank, 0},
 	{"ft_strtrimc", test_ft_strtrimc, 0},
 	{"ft_strndup", test_ft_strndup, 0},
 

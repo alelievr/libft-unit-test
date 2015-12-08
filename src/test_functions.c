@@ -3532,7 +3532,7 @@ void			test_ft_strmap_size(void *ptr) {
 			if (ret_size == (int)size + 1)
 				exit(TEST_SUCCESS);
 			SET_DIFF_INT((int)size + 1, ret_size);
-			exit(TEST_KO);
+			exit(TEST_FAILED);
 			);
 }
 
@@ -5780,7 +5780,7 @@ void			test_ft_lstiter_null(void *ptr) {
 	void	(*ft_lstiter)(t_list *, void (*)(t_list *)) = ptr;
 	SET_EXPLICATION("your lstiter does not segfault when null parameter is sent");
 
-	SANDBOX_KO(
+	SANDBOX_PROT(
 			ft_lstiter(NULL, lstiter_f);
 			);
 }
@@ -5822,7 +5822,7 @@ void			test_ft_lstmap_null(void *ptr) {
 	t_list *	(*ft_lstmap)(t_list *, t_list * (*)(t_list *)) = ptr;
 	SET_EXPLICATION("your lstmap does not segfault when null parameter is sent");
 
-	SANDBOX_KO(
+	SANDBOX_PROT(
 			ft_lstmap(NULL, lstmap_f);
 			);
 }
