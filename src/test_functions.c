@@ -5879,6 +5879,75 @@ void			test_ft_islower(void) {
 }
 
 ////////////////////////////////
+//         ft_isupper         //
+////////////////////////////////
+
+void			test_ft_isupper_(void *ptr) {
+	typeof(isupper)	*ft_isupper = ptr;
+	SET_EXPLICATION("your isupper does not works ...");
+
+	SANDBOX_RAISE(
+			for (int i = -50; i < 530; i++) {
+				if (ft_isupper(i) != isupper(i)) {
+					SET_DIFF_INT(isupper(i), ft_isupper(i));
+					exit(TEST_FAILED);
+				}
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_isupper(void) {
+	add_fun_subtest(test_ft_isupper_);
+}
+
+////////////////////////////////
+//         ft_isnumber         //
+////////////////////////////////
+
+void			test_ft_isnumber_(void *ptr) {
+	typeof(isnumber)	*ft_isnumber = ptr;
+	SET_EXPLICATION("your isnumber does not works ...");
+
+	SANDBOX_RAISE(
+			for (int i = -50; i < 530; i++) {
+				if (ft_isnumber(i) != isnumber(i)) {
+					SET_DIFF_INT(isnumber(i), ft_isnumber(i));
+					exit(TEST_FAILED);
+				}
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_isnumber(void) {
+	add_fun_subtest(test_ft_isnumber_);
+}
+
+////////////////////////////////
+//         ft_isblank         //
+////////////////////////////////
+
+void			test_ft_isblank_(void *ptr) {
+	typeof(isblank)	*ft_isblank = ptr;
+	SET_EXPLICATION("your isblank does not works ...");
+
+	SANDBOX_RAISE(
+			for (int i = -50; i < 530; i++) {
+				if (ft_isblank(i) != isblank(i)) {
+					SET_DIFF_INT(isblank(i), ft_isblank(i));
+					exit(TEST_FAILED);
+				}
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_isblank(void) {
+	add_fun_subtest(test_ft_isblank_);
+}
+
+////////////////////////////////
 //         ft_strtrimc         //
 ////////////////////////////////
 
