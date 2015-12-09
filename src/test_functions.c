@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/08 16:36:17 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/09 19:10:32 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1391,7 +1391,7 @@ void            test_ft_strncpy(void){
 }
 
 ////////////////////////////////
-//         ft_trcat           //
+//         ft_strcat          //
 ////////////////////////////////
 
 void			test_ft_strcat_basic(void *ptr) {
@@ -1926,6 +1926,22 @@ void			test_ft_strchr_zero(void *ptr) {
 			);
 }
 
+void			test_ft_strchr_empty(void *ptr) {
+	typeof(strchr)	*ft_strchr = ptr;
+	SET_EXPLICATION("your strchr does not works with \\0");
+
+	SANDBOX_RAISE(
+			char	*src = "\0";
+
+			char	*d1 = strchr(src, 'a');
+			char	*d2 = ft_strchr(src, 'a');
+			if (d1 == d2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(d1, d2);
+			exit(TEST_FAILED);
+			);
+}
+
 void			test_ft_strchr_null(void *ptr) {
 	typeof(strchr)	*ft_strchr = ptr;
 
@@ -1939,6 +1955,7 @@ void            test_ft_strchr(void){
 	add_fun_subtest(test_ft_strchr_not_found);
 	add_fun_subtest(test_ft_strchr_unicode);
 	add_fun_subtest(test_ft_strchr_zero);
+	add_fun_subtest(test_ft_strchr_empty);
 	add_fun_subtest(test_ft_strchr_null);
 }
 
@@ -2010,6 +2027,22 @@ void			test_ft_strrchr_zero(void *ptr) {
 			);
 }
 
+void			test_ft_strrchr_empty(void *ptr) {
+	typeof(strrchr)	*ft_strrchr = ptr;
+	SET_EXPLICATION("your strrchr does not works with empty string");
+
+	SANDBOX_RAISE(
+			char	*src = "\0";
+
+			char	*d1 = strrchr(src, 'a');
+			char	*d2 = ft_strrchr(src, 'a');
+			if (d1 == d2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(d1, d2);
+			exit(TEST_FAILED);
+			);
+}
+
 void			test_ft_strrchr_null(void *ptr) {
 	typeof(strrchr)	*ft_strrchr = ptr;
 
@@ -2023,6 +2056,7 @@ void            test_ft_strrchr(void){
 	add_fun_subtest(test_ft_strrchr_not_found);
 	add_fun_subtest(test_ft_strrchr_unicode);
 	add_fun_subtest(test_ft_strrchr_zero);
+	add_fun_subtest(test_ft_strrchr_empty);
 	add_fun_subtest(test_ft_strrchr_null);
 }
 
