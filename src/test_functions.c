@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/09 19:10:32 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/11 18:14:40 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -5189,27 +5189,36 @@ void			test_ft_putnbr_int_min(void *ptr) {
 			);
 }
 
+#define ASSERT_PUTNBR(n1, n2) if (n1 != n2) { SET_DIFF_INT(n1, n2); exit(TEST_FAILED); } exit(TEST_SUCCESS);
 void			test_ft_putnbr_random(void *ptr) {
 	void		(*ft_putnbr)(int) = ptr;
 	SET_EXPLICATION("your putnbr does not works with random numbers")
 
 	SANDBOX_RAISE(
-			int		i = 0;
 			int		nbr;
 			char	buff[0xF0];
 
 			srand(clock());
-			for (i = 0; i < 10; i++) {
-				nbr = rand();
-				STDOUT_TO_BUFF;
-				ft_putnbr(nbr);
-				GET_STDOUT(buff, 0xF0);
-				if (nbr != atoi(buff)) {
-					SET_DIFF_INT(nbr, atoi(buff));
-					exit(TEST_FAILED);
-				}
-			}
-			exit(TEST_SUCCESS);
+			nbr = rand();
+			STDOUT_TO_BUFF;
+			ft_putnbr(nbr);
+			GET_STDOUT(buff, 0xF0);
+			ASSERT_PUTNBR(nbr, atoi(buff));
+			nbr = rand();
+			STDOUT_TO_BUFF;
+			ft_putnbr(nbr);
+			GET_STDOUT(buff, 0xF0);
+			ASSERT_PUTNBR(nbr, atoi(buff));
+			nbr = rand();
+			STDOUT_TO_BUFF;
+			ft_putnbr(nbr);
+			GET_STDOUT(buff, 0xF0);
+			ASSERT_PUTNBR(nbr, atoi(buff));
+			nbr = rand();
+			STDOUT_TO_BUFF;
+			ft_putnbr(nbr);
+			GET_STDOUT(buff, 0xF0);
+			ASSERT_PUTNBR(nbr, atoi(buff));
 			);
 }
 
@@ -5549,22 +5558,33 @@ void			test_ft_putnbr_fd_random(void *ptr) {
 	SET_EXPLICATION("your putnbr_fd does not works with random numbers")
 
 	SANDBOX_RAISE(
-			int		i = 0;
 			int		nbr;
 			char	buff[0xF0];
 
 			srand(clock());
-			for (i = 0; i < 10; i++) {
-				nbr = rand();
-				STDERR_TO_BUFF;
-				ft_putnbr_fd(nbr, STDERR_FILENO);
-				GET_STDERR(buff, 0xF0);
-				if (nbr != atoi(buff)) {
-					SET_DIFF_INT(nbr, atoi(buff));
-					exit(TEST_FAILED);
-				}
-			}
-			exit(TEST_SUCCESS);
+			nbr = rand();
+			STDERR_TO_BUFF;
+			ft_putnbr_fd(nbr, STDERR_FILENO);
+			GET_STDERR(buff, 0xF0);
+			ASSERT_PUTNBR(nbr, atoi(buff));
+			srand(clock());
+			nbr = rand();
+			STDERR_TO_BUFF;
+			ft_putnbr_fd(nbr, STDERR_FILENO);
+			GET_STDERR(buff, 0xF0);
+			ASSERT_PUTNBR(nbr, atoi(buff));
+			srand(clock());
+			nbr = rand();
+			STDERR_TO_BUFF;
+			ft_putnbr_fd(nbr, STDERR_FILENO);
+			GET_STDERR(buff, 0xF0);
+			ASSERT_PUTNBR(nbr, atoi(buff));
+			srand(clock());
+			nbr = rand();
+			STDERR_TO_BUFF;
+			ft_putnbr_fd(nbr, STDERR_FILENO);
+			GET_STDERR(buff, 0xF0);
+			ASSERT_PUTNBR(nbr, atoi(buff));
 			);
 }
 
