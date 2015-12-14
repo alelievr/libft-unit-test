@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/11 18:14:40 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/14 20:06:23 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -691,17 +691,21 @@ void			test_ft_memmove_same_pointer(void *ptr) {
 			);
 }
 
-void			test_ft_memmove_malloc_null(void *ptr) {
+void			test_ft_memmove_malloc(void *ptr) {
 	typeof(memmove)		*ft_memmove = ptr;
-	SET_EXPLICATION("your malloc is not protected (you should not malloc for this)");
+	SET_EXPLICATION("your memmove use malloc ? why ?");
 
 	SANDBOX_RAISE(
 			char	*src = STRING_1;
 			char	buff[0xF0];
 
 			MALLOC_NULL;
-			memmove(buff, src, 100);
+			char *ret = ft_memmove(buff, src, 100);
 			MALLOC_RESET;
+			if (ret == NULL) {
+				SET_DIFF(STRING_1, ret);
+				exit(TEST_FAILED);
+			}
 			exit(TEST_SUCCESS);
 			);
 	(void)ft_memmove;
@@ -717,7 +721,7 @@ void            test_ft_memmove(void){
 	add_fun_subtest(test_ft_memmove_hard);
 	add_fun_subtest(test_ft_memmove_null1);
 	add_fun_subtest(test_ft_memmove_null2);
-	add_fun_subtest(test_ft_memmove_malloc_null);
+	add_fun_subtest(test_ft_memmove_malloc);
 }
 
 ////////////////////////////////
@@ -5590,7 +5594,7 @@ void			test_ft_putnbr_fd_random(void *ptr) {
 
 void			test_ft_putnbr_fd_itoa(void *ptr) {
 	void		(*ft_putnbr_fd)(int, int) = ptr;
-	SET_EXPLICATION("your putnbr allocate memory, wtf ???");
+	SET_EXPLICATION("your putnbr_fd allocate memory, wtf ???");
 
 	SANDBOX_RAISE(
 			int		i = INT_MIN;
