@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/14 20:06:23 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/16 19:10:14 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -5751,6 +5751,13 @@ void			test_ft_lstdelone(void) {
 //         ft_lstdel          //
 ////////////////////////////////
 
+int				__delNum = 0;
+void			lstdel_f(void *lst, size_t s) {
+	(void)lst;
+	(void)s;
+	__delNum++;
+}
+
 void			test_ft_lstdel_basic(void *ptr) {
 	void		(*ft_lstdel)(t_list **, void (*)(void *, size_t)) = ptr;
 	SET_EXPLICATION("your lstdel does not works with basic input");
@@ -5792,9 +5799,33 @@ void			test_ft_lstdel_free(void *ptr) {
 	VOID_STDERR;
 }
 
-void			test_ft_lstdel(void){
+void			test_ft_lstdel_number(void *ptr) {
+	void		(*ft_lstdel)(t_list **, void (*)(void *, size_t)) = ptr;
+	SET_EXPLICATION("bad call number of the function pointer");
+	t_list	*list;
+
+	SANDBOX_RAISE(
+			char	*content = "hello !";
+
+			__delNum = 0;
+			list = malloc(sizeof(t_list));
+			bzero(list, sizeof(t_list));
+			list->next = malloc(sizeof(t_list));
+			bzero(list->next, sizeof(t_list));
+			list->content = content;
+			list->next->content = content + 2;
+			ft_lstdel(&list, lstdel_f);
+			if (__delNum == 2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(2, __delNum);
+			exit(TEST_FAILED);
+	)
+}
+
+void			test_ft_lstdel(void) {
 	add_fun_subtest(test_ft_lstdel_basic);
 	add_fun_subtest(test_ft_lstdel_free);
+	add_fun_subtest(test_ft_lstdel_number);
 }
 
 ////////////////////////////////
