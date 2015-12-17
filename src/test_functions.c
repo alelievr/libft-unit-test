@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/17 15:59:12 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/17 16:45:27 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1886,7 +1886,7 @@ void			test_ft_strlcat_null1(void *ptr) {
 
 void			test_ft_strlcat_return_value(void *ptr) {
 	typeof(strlcat)	*ft_strlcat = ptr;
-	SET_EXPLICATION("your strlcat does not work !");
+	SET_EXPLICATION("your strlcat return value is false");
 
 	SANDBOX_RAISE(
 			char	*src = "aaa";
