@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/16 19:10:14 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/17 15:59:12 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1363,6 +1363,48 @@ void			test_ft_strncpy_fill(void *ptr) {
 			);
 }
 
+void			test_ft_strncpy_number_0(void *ptr) {
+	typeof(strncpy)	*ft_strncpy = ptr;
+	SET_EXPLICATION("your strncpy put the bad number of \\0 at the end of the string");
+
+	SANDBOX_RAISE(
+			char	*src = "len\0AAAAAAAAAAAA";
+			char	dst1[] = "BBBBBBBBBBBBBBBBBBBB";
+			char	dst2[] = "BBBBBBBBBBBBBBBBBBBB";
+			size_t	len = strlen(dst1);
+
+			strncpy(dst1, src, 7);
+			ft_strncpy(dst2, src, 7);
+			for (size_t i = 0; i < len; i++)
+				if (dst1[i] != dst2[i]) {
+					SET_DIFF_ASCII(dst1, dst2, len);
+					exit(TEST_FAILED);
+				}
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_strncpy_final_0(void *ptr) {
+	typeof(strncpy)	*ft_strncpy = ptr;
+	SET_EXPLICATION("your strncpy set a \\0 at the end of the string if strlen(src) > n");
+
+	SANDBOX_RAISE(
+			char	*src = "AAAAAAAAAAAA";
+			char	dst1[] = "BBBBBBBBBBBBBBBBBBBB";
+			char	dst2[] = "BBBBBBBBBBBBBBBBBBBB";
+			size_t	len = strlen(dst1);
+
+			strncpy(dst1, src, 2);
+			ft_strncpy(dst2, src, 2);
+			for (size_t i = 0; i < len; i++)
+				if (dst1[i] != dst2[i]) {
+					SET_DIFF_ASCII(dst1, dst2, len);
+					exit(TEST_FAILED);
+				}
+			exit(TEST_SUCCESS);
+			);
+}
+
 void			test_ft_strncpy_null1(void *ptr) {
 	typeof(strncpy)	*ft_strncpy = ptr;
 	SET_EXPLICATION("your strncpy does not segfault when null parameter is sent");
@@ -1390,6 +1432,8 @@ void            test_ft_strncpy(void){
 	add_fun_subtest(test_ft_strncpy_empty);
 	add_fun_subtest(test_ft_strncpy_zero);
 	add_fun_subtest(test_ft_strncpy_fill);
+	add_fun_subtest(test_ft_strncpy_number_0);
+	add_fun_subtest(test_ft_strncpy_final_0);
 	add_fun_subtest(test_ft_strncpy_null1);
 	add_fun_subtest(test_ft_strncpy_null2);
 }
@@ -1839,6 +1883,32 @@ void			test_ft_strlcat_null1(void *ptr) {
 			);
 }
 
+
+void			test_ft_strlcat_return_value(void *ptr) {
+	typeof(strlcat)	*ft_strlcat = ptr;
+	SET_EXPLICATION("your strlcat does not work !");
+
+	SANDBOX_RAISE(
+			char	*src = "aaa";
+			char	dst1[20] = {[19]=0};
+			char	dst2[20] = {[19]=0};
+			int		ret1;
+			int		ret2;
+
+			strlcat(dst1, src, 20);
+			strlcat(dst1, src, 20);
+			ret1 = strlcat(dst1, src, 20);
+
+			ft_strlcat(dst2, src, 20);
+			ft_strlcat(dst2, src, 20);
+			ret2 = ft_strlcat(dst2, src, 20);
+			if (ret1 == ret2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(ret1, ret2);
+			exit(TEST_FAILED);
+			);
+}
+
 void			test_ft_strlcat_null2(void *ptr) {
 	typeof(strlcat)	*ft_strlcat = ptr;
 	SET_EXPLICATION("your strlcat does not segfault when null parameter is sent");
@@ -1858,6 +1928,7 @@ void            test_ft_strlcat(void){
 	add_fun_subtest(test_ft_strlcat_empty1);
 	add_fun_subtest(test_ft_strlcat_empty2);
 	add_fun_subtest(test_ft_strlcat_null_byte);
+	add_fun_subtest(test_ft_strlcat_return_value);
 	add_fun_subtest(test_ft_strlcat_null1);
 	add_fun_subtest(test_ft_strlcat_null2);
 }
