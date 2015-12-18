@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/17 15:57:03 by alelievr         ###   ########.fr       */
+/*   Updated: 2015/12/18 17:43:38 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,9 +130,12 @@ enum		e_prot {
 # define	MALLOC_SIZE			lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[2]){_MALLOC_SIZE, _MALLOC_DISABLE}, 2);
 # define	MALLOC_DEBUG		lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[2]){_MALLOC_DEBUG, _MALLOC_DISABLE}, 2);
 
+//# define	PRINT_BITS(x, y)	print_double_bits(x, y);
 # define	SET_DIFF(x, y)		lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%s|\n%12s: |%s|", current_fun_name + 3, x, current_fun_name, y); write(g_diff_fd, "\0", 1);
 # define	SET_DIFF_INT(x, y)	lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%i|\n%12s: |%i|", current_fun_name + 3, x, current_fun_name, y) ; write(g_diff_fd, "\0", 1);
+# define	SET_DIFF_DOUBLE(x, y)	lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%lf|\n%12s: |%lf|", current_fun_name + 3, x, current_fun_name, y) ; write(g_diff_fd, "\0", 1);
 # define	SET_DIFF_PTR(x, y)	lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%p|\n%12s: |%p|", current_fun_name + 3, x, current_fun_name, y) ; write(g_diff_fd, "\0", 1);
+//# define	SET_DIFF_BIT(x, y, z)	lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |", current_fun_name + 3); PRINT_BITS(x, z); dprintf("|\n%12s: |", current_fun_name); PRINT_BITS(y, z); dprintf(g_diff_fd, "|");
 # define	SET_DIFF_CUSTOM(f, args...) lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, f, ##args) ; write(g_diff_fd, "\0", 1);
 # define	PRINT_DIFF_ASCII(x, z)	for (size_t it = 0; it < z; it++) dprintf(g_diff_fd, "\\x%02x", x[it]);
 # define	SET_DIFF_ASCII(x, y, z)	lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |", current_fun_name + 3); PRINT_DIFF_ASCII(x, z); dprintf(g_diff_fd, "|\n%12s: |", current_fun_name); PRINT_DIFF_ASCII(y, z); dprintf(g_diff_fd, "|");
@@ -241,6 +244,7 @@ void			test_ft_isnumber(void);
 void			test_ft_isblank(void);
 void			test_ft_strtrimc(void);
 void			test_ft_strndup(void);
+void			test_ft_atof(void);
 
 /*  others:  */
 void    		run_subtests(void *h, int start);

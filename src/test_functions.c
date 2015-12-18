@@ -81,7 +81,7 @@ void			test_ft_memset_unsigned(void *ptr) {
 void			test_ft_memset_return(void *ptr) {
 	typeof(memset)	*ft_memset = ptr;
 
-	SET_EXPLICATION("your memset return address is false/your memset does not works");
+	SET_EXPLICATION("your memset return address is false/your memset does not work");
 
 	SANDBOX_RAISE(
 			char	b1[BSIZE + 1];
@@ -421,7 +421,7 @@ void			test_ft_memccpy_return(void *ptr) {
 
 void			test_ft_memccpy_not_found(void *ptr) {
 	typeof(memccpy)	*ft_memccpy = ptr;
-	SET_EXPLICATION("your memccpy does not works with not found char");
+	SET_EXPLICATION("your memccpy does not work with not found char");
 
 	SANDBOX_RAISE(
 			char	src[] = "test basic du memccpy !";
@@ -540,7 +540,7 @@ void            test_ft_memccpy(void){
 
 void			test_ft_memmove_basic(void *ptr) {
 	typeof(memmove)		*ft_memmove = ptr;
-	SET_EXPLICATION("your memmove does not works with basic input");
+	SET_EXPLICATION("your memmove does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*src = "this is a good nyancat !\r\n";
@@ -559,7 +559,7 @@ void			test_ft_memmove_basic(void *ptr) {
 
 void			test_ft_memmove_return(void *ptr) {
 	typeof(memmove)		*ft_memmove = ptr;
-	SET_EXPLICATION("your memmove's return is false/does not works with basic input");
+	SET_EXPLICATION("your memmove's return is false/does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*src = "thanks to @apellicc for this test !\r\n";
@@ -578,7 +578,7 @@ void			test_ft_memmove_return(void *ptr) {
 
 void			test_ft_memmove_null_byte(void *ptr) {
 	typeof(memmove)		*ft_memmove = ptr;
-	SET_EXPLICATION("your memmove does not works with \\0 and others unsigned char codes");
+	SET_EXPLICATION("your memmove does not work with \\0 and others unsigned char codes");
 
 	SANDBOX_RAISE(
 			char	*src = "thi\xffs i\xfas \0a g\xde\xadood \0nyan\0cat\0 !\r\n";
@@ -597,7 +597,7 @@ void			test_ft_memmove_null_byte(void *ptr) {
 
 void			test_ft_memmove_long_int(void *ptr) {
 	typeof(memmove)		*ft_memmove = ptr;
-	SET_EXPLICATION("your memmove does not works with integers copy");
+	SET_EXPLICATION("your memmove does not work with integers copy");
 
 	SANDBOX_RAISE(
 			unsigned long	src = 0xdeadbeef;
@@ -657,7 +657,7 @@ void			test_ft_memmove_overlap_rev(void *ptr) {
 
 void			test_ft_memmove_hard(void *ptr) {
 	typeof(memmove)		*ft_memmove = ptr;
-	SET_EXPLICATION("your memmove does not works with a 128Mo data input !");
+	SET_EXPLICATION("your memmove does not work with a 128Mo data input !");
 
 	SANDBOX_RAISE(
 			int		size = 128 * 1024 * 1024;
@@ -752,7 +752,7 @@ void            test_ft_memmove(void){
 
 void			test_ft_memchr_basic(void *ptr) {
 	typeof(memchr)		*ft_memchr = ptr;
-	SET_EXPLICATION("your memchr does not works with basic input");
+	SET_EXPLICATION("your memchr does not work with basic input");
 
 	SANDBOX_RAISE(
 			char			*src = "/|\x12\xff\x09\x42\042\42|\\";
@@ -782,7 +782,7 @@ void			test_ft_memchr_unsigned(void *ptr) {
 
 void			test_ft_memchr_not_found1(void *ptr) {
 	typeof(memchr)		*ft_memchr = ptr;
-	SET_EXPLICATION("your memchr does not works");
+	SET_EXPLICATION("your memchr does not work");
 
 	SANDBOX_RAISE(
 			char			*src = "/|\x12\xff\x09\x42\042\42|\\";
@@ -797,7 +797,7 @@ void			test_ft_memchr_not_found1(void *ptr) {
 
 void			test_ft_memchr_not_found2(void *ptr) {
 	typeof(memchr)		*ft_memchr = ptr;
-	SET_EXPLICATION("your memchr does not works");
+	SET_EXPLICATION("your memchr does not work");
 
 	SANDBOX_RAISE(
 			char			*src = "/|\x12\xff\x09\x42\042\42|\\";
@@ -848,7 +848,7 @@ void            test_ft_memchr(void) {
 
 void			test_ft_memcmp_basic(void *ptr) {
 	typeof(memcmp)		*ft_memcmp = ptr;
-	SET_EXPLICATION("your memcmp does not works with basic input");
+	SET_EXPLICATION("your memcmp does not work with basic input");
 
 	SANDBOX_RAISE(
 			uint8_t	*s1 = (uint8_t *)"\xff\xaa\xde\x12MACOSX";
@@ -864,7 +864,7 @@ void			test_ft_memcmp_basic(void *ptr) {
 
 void			test_ft_memcmp_basic1(void *ptr) {
 	typeof(memcmp)		*ft_memcmp = ptr;
-	SET_EXPLICATION("your memcmp does not works with basic input");
+	SET_EXPLICATION("your memcmp does not work with basic input");
 
 	SANDBOX_RAISE(
 			uint8_t	*s1 = (uint8_t *)"\xff\xaa\xde\x12OLOL";
@@ -883,7 +883,7 @@ void			test_ft_memcmp_basic1(void *ptr) {
 
 void			test_ft_memcmp_basic2(void *ptr) {
 	typeof(memcmp)		*ft_memcmp = ptr;
-	SET_EXPLICATION("your memcmp does not works with basic input");
+	SET_EXPLICATION("your memcmp does not work with basic input");
 
 	SANDBOX_RAISE(
 			uint8_t	*s1 = (uint8_t *)"\xff\xaa\xde\x12";
@@ -899,7 +899,7 @@ void			test_ft_memcmp_basic2(void *ptr) {
 
 void			test_ft_memcmp_basic3(void *ptr) {
 	typeof(memcmp)		*ft_memcmp = ptr;
-	SET_EXPLICATION("your memcmp does not works with basic input");
+	SET_EXPLICATION("your memcmp does not work with basic input");
 
 	SANDBOX_RAISE(
 			uint8_t	*s1 = (uint8_t *)"\xff\xaa\xde\xffMACOSX\xff";
@@ -931,7 +931,7 @@ void			test_ft_memcmp_unsigned(void *ptr) {
 
 void			test_ft_memcmp_null_byte(void *ptr) {
 	typeof(memcmp)		*ft_memcmp = ptr;
-	SET_EXPLICATION("your memcmp does not works with basic input");
+	SET_EXPLICATION("your memcmp does not work with basic input");
 
 	SANDBOX_RAISE(
 			uint8_t	*s1 = (uint8_t *)"\xff\0\0\xaa\0\xde\xffMACOSX\xff";
@@ -1126,7 +1126,7 @@ void			test_ft_strdup_malloc_null(void *ptr) {
 
 void			test_ft_strdup_basic(void *ptr) {
 	typeof(strdup)	*ft_strdup = ptr;
-	SET_EXPLICATION("your strdup doesn't works with basic input");
+	SET_EXPLICATION("your strdup doesn't work with basic input");
 
 	SANDBOX_RAISE(
 			char	*str;
@@ -1157,7 +1157,7 @@ void            test_ft_strdup(void){
 
 void			test_ft_strcpy_basic(void *ptr) {
 	typeof(strcpy)	*ft_strcpy = ptr;
-	SET_EXPLICATION("your strcpy does not works with basic input");
+	SET_EXPLICATION("your strcpy does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*src = "--> nyancat <--\n\r";
@@ -1176,7 +1176,7 @@ void			test_ft_strcpy_basic(void *ptr) {
 
 void			test_ft_strcpy_return(void *ptr) {
 	typeof(strcpy)	*ft_strcpy = ptr;
-	SET_EXPLICATION("your strcpy does not works with basic input");
+	SET_EXPLICATION("your strcpy does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*src = "--> nyancat <--\n\r";
@@ -1214,7 +1214,7 @@ void			test_ft_strcpy_unicode(void *ptr) {
 
 void			test_ft_strcpy_empty(void *ptr) {
 	typeof(strcpy)	*ft_strcpy = ptr;
-	SET_EXPLICATION("your strcpy does not works with an empty string");
+	SET_EXPLICATION("your strcpy does not work with an empty string");
 
 	SANDBOX_RAISE(
 			char	*src = "";
@@ -1266,7 +1266,7 @@ void            test_ft_strcpy(void) {
 
 void			test_ft_strncpy_basic(void *ptr) {
 	typeof(strncpy)	*ft_strncpy = ptr;
-	SET_EXPLICATION("your strncpy does not works with basic input");
+	SET_EXPLICATION("your strncpy does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*src = "--> nyancat <--\n\r";
@@ -1286,7 +1286,7 @@ void			test_ft_strncpy_basic(void *ptr) {
 
 void			test_ft_strncpy_return(void *ptr) {
 	typeof(strncpy)	*ft_strncpy = ptr;
-	SET_EXPLICATION("your strncpy does not works with basic input");
+	SET_EXPLICATION("your strncpy does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*src = "--> nyancat <--\n\r";
@@ -1326,7 +1326,7 @@ void			test_ft_strncpy_unicode(void *ptr) {
 
 void			test_ft_strncpy_empty(void *ptr) {
 	typeof(strncpy)	*ft_strncpy = ptr;
-	SET_EXPLICATION("your strncpy does not works with an empty string");
+	SET_EXPLICATION("your strncpy does not work with an empty string");
 
 	SANDBOX_RAISE(
 			char	*src = "";
@@ -1347,7 +1347,7 @@ void			test_ft_strncpy_empty(void *ptr) {
 
 void			test_ft_strncpy_zero(void *ptr) {
 	typeof(strncpy)	*ft_strncpy = ptr;
-	SET_EXPLICATION("your strncpy does not works with an 0 as lenght");
+	SET_EXPLICATION("your strncpy does not work with an 0 as lenght");
 
 	SANDBOX_RAISE(
 			char	*src = "this is a string with a \0 inside";
@@ -1466,7 +1466,7 @@ void            test_ft_strncpy(void){
 
 void			test_ft_strcat_basic(void *ptr) {
 	typeof(strcat)	*ft_strcat = ptr;
-	SET_EXPLICATION("your strcat does not works with basic input");
+	SET_EXPLICATION("your strcat does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*str = STRING_1;
@@ -1484,7 +1484,7 @@ void			test_ft_strcat_basic(void *ptr) {
 
 void			test_ft_strcat_return(void *ptr) {
 	typeof(strcat)	*ft_strcat = ptr;
-	SET_EXPLICATION("your strcat does not works with basic input");
+	SET_EXPLICATION("your strcat does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*str = STRING_1;
@@ -1502,7 +1502,7 @@ void			test_ft_strcat_return(void *ptr) {
 
 void			test_ft_strcat_empty1(void *ptr) {
 	typeof(strcat)	*ft_strcat = ptr;
-	SET_EXPLICATION("your strcat does not works with empty string as first parameter");
+	SET_EXPLICATION("your strcat does not work with empty string as first parameter");
 
 	SANDBOX_RAISE(
 			char	*str = "";
@@ -1520,7 +1520,7 @@ void			test_ft_strcat_empty1(void *ptr) {
 
 void			test_ft_strcat_empty2(void *ptr) {
 	typeof(strcat)	*ft_strcat = ptr;
-	SET_EXPLICATION("your strcat does not works with empty string as second parameter");
+	SET_EXPLICATION("your strcat does not work with empty string as second parameter");
 
 	SANDBOX_RAISE(
 			char	*str = STRING_1;
@@ -1592,7 +1592,7 @@ void            test_ft_strcat(void){
 
 void			test_ft_strncat_basic(void *ptr) {
 	typeof(strncat)	*ft_strncat = ptr;
-	SET_EXPLICATION("your strncat does not works with basic input");
+	SET_EXPLICATION("your strncat does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*str = STRING_1;
@@ -1611,7 +1611,7 @@ void			test_ft_strncat_basic(void *ptr) {
 
 void			test_ft_strncat_return(void *ptr) {
 	typeof(strncat)	*ft_strncat = ptr;
-	SET_EXPLICATION("your strncat does not works with basic input");
+	SET_EXPLICATION("your strncat does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*str = STRING_1;
@@ -1630,7 +1630,7 @@ void			test_ft_strncat_return(void *ptr) {
 
 void			test_ft_strncat_basic1(void *ptr) {
 	typeof(strncat)	*ft_strncat = ptr;
-	SET_EXPLICATION("your strncat does not works with basic input");
+	SET_EXPLICATION("your strncat does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*str = STRING_1;
@@ -1649,7 +1649,7 @@ void			test_ft_strncat_basic1(void *ptr) {
 
 void			test_ft_strncat_basic2(void *ptr) {
 	typeof(strncat)	*ft_strncat = ptr;
-	SET_EXPLICATION("your strncat does not works with over length size");
+	SET_EXPLICATION("your strncat does not work with over length size");
 
 	SANDBOX_RAISE(
 			char	*str = STRING_1;
@@ -1668,7 +1668,7 @@ void			test_ft_strncat_basic2(void *ptr) {
 
 void			test_ft_strncat_empty1(void *ptr) {
 	typeof(strncat)	*ft_strncat = ptr;
-	SET_EXPLICATION("your strcat does not works with empty string as first parameter");
+	SET_EXPLICATION("your strcat does not work with empty string as first parameter");
 
 	SANDBOX_RAISE(
 			char	*str = "";
@@ -1687,7 +1687,7 @@ void			test_ft_strncat_empty1(void *ptr) {
 
 void			test_ft_strncat_empty2(void *ptr) {
 	typeof(strncat)	*ft_strncat = ptr;
-	SET_EXPLICATION("your strcat does not works with empty string as second parameter");
+	SET_EXPLICATION("your strcat does not work with empty string as second parameter");
 
 	SANDBOX_RAISE(
 			char	*str = STRING_1;
@@ -1763,7 +1763,7 @@ void            test_ft_strncat(void){
 
 void			test_ft_strlcat_basic(void *ptr) {
 	typeof(strlcat)	*ft_strlcat = ptr;
-	SET_EXPLICATION("your strlcat does not works with basic input");
+	SET_EXPLICATION("your strlcat does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*str = STRING_1;
@@ -1782,7 +1782,7 @@ void			test_ft_strlcat_basic(void *ptr) {
 
 void			test_ft_strlcat_return(void *ptr) {
 	typeof(strlcat)	*ft_strlcat = ptr;
-	SET_EXPLICATION("your strlcat does not works with basic input");
+	SET_EXPLICATION("your strlcat does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*str = STRING_1;
@@ -1801,7 +1801,7 @@ void			test_ft_strlcat_return(void *ptr) {
 
 void			test_ft_strlcat_basic1(void *ptr) {
 	typeof(strlcat)	*ft_strlcat = ptr;
-	SET_EXPLICATION("your strlcat does not works with basic input");
+	SET_EXPLICATION("your strlcat does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*str = STRING_1;
@@ -1820,7 +1820,7 @@ void			test_ft_strlcat_basic1(void *ptr) {
 
 void			test_ft_strlcat_basic2(void *ptr) {
 	typeof(strlcat)	*ft_strlcat = ptr;
-	SET_EXPLICATION("your strlcat does not works with over length size");
+	SET_EXPLICATION("your strlcat does not work with over length size");
 
 	SANDBOX_RAISE(
 			char	*str = STRING_1;
@@ -1839,7 +1839,7 @@ void			test_ft_strlcat_basic2(void *ptr) {
 
 void			test_ft_strlcat_empty1(void *ptr) {
 	typeof(strlcat)	*ft_strlcat = ptr;
-	SET_EXPLICATION("your strcat does not works with empty string as first parameter");
+	SET_EXPLICATION("your strcat does not work with empty string as first parameter");
 
 	SANDBOX_RAISE(
 			char	*str = "";
@@ -1858,7 +1858,7 @@ void			test_ft_strlcat_empty1(void *ptr) {
 
 void			test_ft_strlcat_empty2(void *ptr) {
 	typeof(strlcat)	*ft_strlcat = ptr;
-	SET_EXPLICATION("your strcat does not works with empty string as second parameter");
+	SET_EXPLICATION("your strcat does not work with empty string as second parameter");
 
 	SANDBOX_RAISE(
 			char	*str = STRING_1;
@@ -1961,7 +1961,7 @@ void            test_ft_strlcat(void){
 
 void			test_ft_strchr_basic(void *ptr) {
 	typeof(strchr)	*ft_strchr = ptr;
-	SET_EXPLICATION("your strchr does not works with basic input");
+	SET_EXPLICATION("your strchr does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*src = STRING_1;
@@ -1977,7 +1977,7 @@ void			test_ft_strchr_basic(void *ptr) {
 
 void			test_ft_strchr_not_found(void *ptr) {
 	typeof(strchr)	*ft_strchr = ptr;
-	SET_EXPLICATION("your strchr does not works with not found char");
+	SET_EXPLICATION("your strchr does not work with not found char");
 
 	SANDBOX_RAISE(
 			char	*src = STRING_1;
@@ -1993,7 +1993,7 @@ void			test_ft_strchr_not_found(void *ptr) {
 
 void			test_ft_strchr_unicode(void *ptr) {
 	typeof(strchr)	*ft_strchr = ptr;
-	SET_EXPLICATION("your strchr does not works with unicode");
+	SET_EXPLICATION("your strchr does not work with unicode");
 
 	SANDBOX_RAISE(
 			char	*src = "īœ˙ˀ˘¯ˇ¸¯.œ«‘––™ª•¡¶¢˜ˀ";
@@ -2009,7 +2009,7 @@ void			test_ft_strchr_unicode(void *ptr) {
 
 void			test_ft_strchr_zero(void *ptr) {
 	typeof(strchr)	*ft_strchr = ptr;
-	SET_EXPLICATION("your strchr does not works with \\0");
+	SET_EXPLICATION("your strchr does not work with \\0");
 
 	SANDBOX_RAISE(
 			char	*src = "there is so \0ma\0ny \0 \\0 in t\0his stri\0ng !\0\0\0\0";
@@ -2025,7 +2025,7 @@ void			test_ft_strchr_zero(void *ptr) {
 
 void			test_ft_strchr_empty(void *ptr) {
 	typeof(strchr)	*ft_strchr = ptr;
-	SET_EXPLICATION("your strchr does not works with \\0");
+	SET_EXPLICATION("your strchr does not work with \\0");
 
 	SANDBOX_RAISE(
 			char	*src = "\0";
@@ -2062,7 +2062,7 @@ void            test_ft_strchr(void){
 
 void			test_ft_strrchr_basic(void *ptr) {
 	typeof(strrchr)	*ft_strrchr = ptr;
-	SET_EXPLICATION("your strrchr does not works with basic input");
+	SET_EXPLICATION("your strrchr does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*src = STRING_1;
@@ -2078,7 +2078,7 @@ void			test_ft_strrchr_basic(void *ptr) {
 
 void			test_ft_strrchr_not_found(void *ptr) {
 	typeof(strrchr)	*ft_strrchr = ptr;
-	SET_EXPLICATION("your strrchr does not works with not found char");
+	SET_EXPLICATION("your strrchr does not work with not found char");
 
 	SANDBOX_RAISE(
 			char	*src = STRING_1;
@@ -2094,7 +2094,7 @@ void			test_ft_strrchr_not_found(void *ptr) {
 
 void			test_ft_strrchr_unicode(void *ptr) {
 	typeof(strrchr)	*ft_strrchr = ptr;
-	SET_EXPLICATION("your strrchr does not works with unicode");
+	SET_EXPLICATION("your strrchr does not work with unicode");
 
 	SANDBOX_RAISE(
 			char	*src = "īœ˙ˀ˘¯ˇ¸¯.œ«‘––™ª•¡¶¢˜ˀ";
@@ -2110,7 +2110,7 @@ void			test_ft_strrchr_unicode(void *ptr) {
 
 void			test_ft_strrchr_zero(void *ptr) {
 	typeof(strrchr)	*ft_strrchr = ptr;
-	SET_EXPLICATION("your strrchr does not works with \\0");
+	SET_EXPLICATION("your strrchr does not work with \\0");
 
 	SANDBOX_RAISE(
 			char	*src = "there is so \0ma\0ny \0 \\0 in t\0his stri\0ng !\0\0\0\0";
@@ -2126,7 +2126,7 @@ void			test_ft_strrchr_zero(void *ptr) {
 
 void			test_ft_strrchr_empty(void *ptr) {
 	typeof(strrchr)	*ft_strrchr = ptr;
-	SET_EXPLICATION("your strrchr does not works with empty string");
+	SET_EXPLICATION("your strrchr does not work with empty string");
 
 	SANDBOX_RAISE(
 			char	*src = "\0";
@@ -2163,7 +2163,7 @@ void            test_ft_strrchr(void){
 
 void			test_ft_strstr_basic(void *ptr) {
 	typeof(strstr)	*ft_strstr = ptr;
-	SET_EXPLICATION("your strstr does not works with basic input");
+	SET_EXPLICATION("your strstr does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "FF";
@@ -2180,7 +2180,7 @@ void			test_ft_strstr_basic(void *ptr) {
 
 void			test_ft_strstr_basic2(void *ptr) {
 	typeof(strstr)	*ft_strstr = ptr;
-	SET_EXPLICATION("your strstr does not works with basic input");
+	SET_EXPLICATION("your strstr does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "MZIRIBMZIRIBMZP";
@@ -2197,7 +2197,7 @@ void			test_ft_strstr_basic2(void *ptr) {
 
 void			test_ft_strstr_basic3(void *ptr) {
 	typeof(strstr)	*ft_strstr = ptr;
-	SET_EXPLICATION("your strstr does not works with basic input");
+	SET_EXPLICATION("your strstr does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s2 = "FF";
@@ -2214,7 +2214,7 @@ void			test_ft_strstr_basic3(void *ptr) {
 
 void			test_ft_strstr_basic4(void *ptr) {
 	typeof(strstr)	*ft_strstr = ptr;
-	SET_EXPLICATION("your strstr does not works with basic input");
+	SET_EXPLICATION("your strstr does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "FF";
@@ -2231,7 +2231,7 @@ void			test_ft_strstr_basic4(void *ptr) {
 
 void			test_ft_strstr_basic5(void *ptr) {
 	typeof(strstr)	*ft_strstr = ptr;
-	SET_EXPLICATION("your strstr does not works with basic input");
+	SET_EXPLICATION("your strstr does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "aaabbbaaabbb";
@@ -2248,7 +2248,7 @@ void			test_ft_strstr_basic5(void *ptr) {
 
 void			test_ft_strstr_zero_len(void *ptr) {
 	typeof(strstr)	*ft_strstr = ptr;
-	SET_EXPLICATION("your strstr does not works with empty strings");
+	SET_EXPLICATION("your strstr does not work with empty strings");
 
 	SANDBOX_RAISE(
 			char	*s1 = "";
@@ -2265,7 +2265,7 @@ void			test_ft_strstr_zero_len(void *ptr) {
 
 void			test_ft_strstr_not_found(void *ptr) {
 	typeof(strstr)	*ft_strstr = ptr;
-	SET_EXPLICATION("your strstr does not works with not found patern");
+	SET_EXPLICATION("your strstr does not work with not found patern");
 
 	SANDBOX_RAISE(
 			char	*s1 = "can't found that";
@@ -2282,7 +2282,7 @@ void			test_ft_strstr_not_found(void *ptr) {
 
 void			test_ft_strstr_zero_len1(void *ptr) {
 	typeof(strstr)	*ft_strstr = ptr;
-	SET_EXPLICATION("your strstr does not works with empty strings");
+	SET_EXPLICATION("your strstr does not work with empty strings");
 
 	SANDBOX_RAISE(
 			char	*s1 = "";
@@ -2299,7 +2299,7 @@ void			test_ft_strstr_zero_len1(void *ptr) {
 
 void			test_ft_strstr_zero_len2(void *ptr) {
 	typeof(strstr)	*ft_strstr = ptr;
-	SET_EXPLICATION("your strstr does not works with empty strings");
+	SET_EXPLICATION("your strstr does not work with empty strings");
 
 	SANDBOX_RAISE(
 			char	*s1 = "oh no not the empty string !";
@@ -2368,7 +2368,7 @@ void            test_ft_strstr(void){
 
 void			test_ft_strnstr_basic(void *ptr) {
 	typeof(strnstr)	*ft_strnstr = ptr;
-	SET_EXPLICATION("your strnstr does not works with basic input");
+	SET_EXPLICATION("your strnstr does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "FF";
@@ -2386,7 +2386,7 @@ void			test_ft_strnstr_basic(void *ptr) {
 
 void			test_ft_strnstr_basic2(void *ptr) {
 	typeof(strnstr)	*ft_strnstr = ptr;
-	SET_EXPLICATION("your strnstr does not works with basic input");
+	SET_EXPLICATION("your strnstr does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "FF";
@@ -2404,7 +2404,7 @@ void			test_ft_strnstr_basic2(void *ptr) {
 
 void			test_ft_strnstr_basic3(void *ptr) {
 	typeof(strnstr)	*ft_strnstr = ptr;
-	SET_EXPLICATION("your strnstr does not works with basic input");
+	SET_EXPLICATION("your strnstr does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "MZIRIBMZIRIBMZE123";
@@ -2422,7 +2422,7 @@ void			test_ft_strnstr_basic3(void *ptr) {
 
 void			test_ft_strnstr_not_found(void *ptr) {
 	typeof(strnstr)	*ft_strnstr = ptr;
-	SET_EXPLICATION("your strnstr does not works with not found patern");
+	SET_EXPLICATION("your strnstr does not work with not found patern");
 
 	SANDBOX_RAISE(
 			char	*s1 = "FF";
@@ -2439,7 +2439,7 @@ void			test_ft_strnstr_not_found(void *ptr) {
 
 void			test_ft_strnstr_zero_len1(void *ptr) {
 	typeof(strnstr)	*ft_strnstr = ptr;
-	SET_EXPLICATION("your strnstr does not works with empty strings");
+	SET_EXPLICATION("your strnstr does not work with empty strings");
 
 	SANDBOX_RAISE(
 			char	*s1 = "";
@@ -2457,7 +2457,7 @@ void			test_ft_strnstr_zero_len1(void *ptr) {
 
 void			test_ft_strnstr_zero_len2(void *ptr) {
 	typeof(strnstr)	*ft_strnstr = ptr;
-	SET_EXPLICATION("your strnstr does not works with empty strings");
+	SET_EXPLICATION("your strnstr does not work with empty strings");
 
 	SANDBOX_RAISE(
 			char	*s1 = "oh no not the empty string !";
@@ -2542,7 +2542,7 @@ void            test_ft_strnstr(void){
 
 void			test_ft_strcmp_basic1(void *ptr) {
 	typeof(strcmp)	*ft_strcmp = ptr;
-	SET_EXPLICATION("your strcmp does not works with basic input");
+	SET_EXPLICATION("your strcmp does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = STRING_1;
@@ -2559,7 +2559,7 @@ void			test_ft_strcmp_basic1(void *ptr) {
 
 void			test_ft_strcmp_basic2(void *ptr) {
 	typeof(strcmp)	*ft_strcmp = ptr;
-	SET_EXPLICATION("your strcmp does not works with basic input");
+	SET_EXPLICATION("your strcmp does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "omg1";
@@ -2576,7 +2576,7 @@ void			test_ft_strcmp_basic2(void *ptr) {
 
 void			test_ft_strcmp_basic3(void *ptr) {
 	typeof(strcmp)	*ft_strcmp = ptr;
-	SET_EXPLICATION("your strcmp does not works with basic input");
+	SET_EXPLICATION("your strcmp does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "";
@@ -2610,7 +2610,7 @@ void			test_ft_strcmp_unsigned(void *ptr) {
 
 void			test_ft_strcmp_ascii(void *ptr) {
 	typeof(strcmp)	*ft_strcmp = ptr;
-	SET_EXPLICATION("your strcmp does not works with non ascii chars");
+	SET_EXPLICATION("your strcmp does not work with non ascii chars");
 
 	SANDBOX_RAISE(
 			char	*s1 = "\x12\xff\x65\x12\xbd\xde\xad";
@@ -2660,7 +2660,7 @@ void            test_ft_strcmp(void){
 
 void			test_ft_strncmp_basic1(void *ptr) {
 	typeof(strncmp)	*ft_strncmp = ptr;
-	SET_EXPLICATION("your strncmp does not works with basic input");
+	SET_EXPLICATION("your strncmp does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = STRING_1;
@@ -2678,7 +2678,7 @@ void			test_ft_strncmp_basic1(void *ptr) {
 
 void			test_ft_strncmp_basic2(void *ptr) {
 	typeof(strncmp)	*ft_strncmp = ptr;
-	SET_EXPLICATION("your strncmp does not works with basic input");
+	SET_EXPLICATION("your strncmp does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "omg1||||||||||||||||";
@@ -2696,7 +2696,7 @@ void			test_ft_strncmp_basic2(void *ptr) {
 
 void			test_ft_strncmp_basic3(void *ptr) {
 	typeof(strncmp)	*ft_strncmp = ptr;
-	SET_EXPLICATION("your strncmp does not works with basic input");
+	SET_EXPLICATION("your strncmp does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "";
@@ -2730,7 +2730,7 @@ void			test_ft_strncmp_cast(void *ptr) {
 
 void			test_ft_strncmp_over_len(void *ptr) {
 	typeof(strncmp)	*ft_strncmp = ptr;
-	SET_EXPLICATION("your strncmp does not works with basic input");
+	SET_EXPLICATION("your strncmp does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "omg1";
@@ -2747,7 +2747,7 @@ void			test_ft_strncmp_over_len(void *ptr) {
 }
 void			test_ft_strncmp_ascii(void *ptr) {
 	typeof(strncmp)	*ft_strncmp = ptr;
-	SET_EXPLICATION("your strncmp does not works with non ascii chars");
+	SET_EXPLICATION("your strncmp does not work with non ascii chars");
 
 	SANDBOX_RAISE(
 			char	*s1 = "\x12\xff\x65\x12\xbd\xde\xad";
@@ -2799,7 +2799,7 @@ void            test_ft_strncmp(void){
 
 void			test_ft_atoi_basic(void *ptr) {
 	typeof(atoi)	*ft_atoi = ptr;
-	SET_EXPLICATION("your atoi does not works with positive numbers");
+	SET_EXPLICATION("your atoi does not work with positive numbers");
 
 	SANDBOX_RAISE(
 			char	*n = "945";
@@ -2815,7 +2815,7 @@ void			test_ft_atoi_basic(void *ptr) {
 
 void			test_ft_atoi_negative(void *ptr) {
 	typeof(atoi)	*ft_atoi = ptr;
-	SET_EXPLICATION("your atoi does not works with negative numbers");
+	SET_EXPLICATION("your atoi does not work with negative numbers");
 
 	SANDBOX_RAISE(
 			char	*n = "-085";
@@ -2831,7 +2831,7 @@ void			test_ft_atoi_negative(void *ptr) {
 
 void			test_ft_atoi_rand(void *ptr) {
 	typeof(atoi)	*ft_atoi = ptr;
-	SET_EXPLICATION("your atoi does not works with random numbers");
+	SET_EXPLICATION("your atoi does not work with random numbers");
 
 	SANDBOX_RAISE(
 			srand(clock());
@@ -2900,7 +2900,7 @@ void			test_ft_atoi_string(void *ptr) {
 
 void			test_ft_atoi_max_int(void *ptr) {
 	typeof(atoi)	*ft_atoi = ptr;
-	SET_EXPLICATION("your atoi does not works with int max value");
+	SET_EXPLICATION("your atoi does not work with int max value");
 
 	SANDBOX_RAISE(
 			char	n[15];
@@ -2917,7 +2917,7 @@ void			test_ft_atoi_max_int(void *ptr) {
 
 void			test_ft_atoi_min_int(void *ptr) {
 	typeof(atoi)	*ft_atoi = ptr;
-	SET_EXPLICATION("your atoi does not works with int min value");
+	SET_EXPLICATION("your atoi does not work with int min value");
 
 	SANDBOX_RAISE(
 			char	n[15];
@@ -2934,7 +2934,7 @@ void			test_ft_atoi_min_int(void *ptr) {
 
 void			test_ft_atoi_max_long(void *ptr) {
 	typeof(atoi)	*ft_atoi = ptr;
-	SET_EXPLICATION("your atoi does not works with long max value");
+	SET_EXPLICATION("your atoi does not work with long max value");
 
 	SANDBOX_RAISE(
 			char	n[40];
@@ -2951,7 +2951,7 @@ void			test_ft_atoi_max_long(void *ptr) {
 
 void			test_ft_atoi_min_long(void *ptr) {
 	typeof(atoi)	*ft_atoi = ptr;
-	SET_EXPLICATION("your atoi does not works with long min value");
+	SET_EXPLICATION("your atoi does not work with long min value");
 
 	SANDBOX_RAISE(
 			char	n[40];
@@ -3522,7 +3522,7 @@ void			f_striter(char *s) { *s = 'F'; }
 
 void			test_ft_striter_basic(void *ptr) {
 	void	(*ft_striter)(char *, void (*)(char *)) = ptr;
-	SET_EXPLICATION("your st does no works");
+	SET_EXPLICATION("your st does no work");
 
 	SANDBOX_RAISE(
 			char	b[] = "override this !";
@@ -3572,7 +3572,7 @@ void			f_striteri(unsigned i, char *s) { *s = i + '0'; }
 
 void			test_ft_striteri_basic(void *ptr) {
 	void	(*ft_striteri)(char *, void (*)(unsigned, char *)) = ptr;
-	SET_EXPLICATION("your striteri does no works");
+	SET_EXPLICATION("your striteri does no work");
 
 	SANDBOX_RAISE(
 			char	b[] = "override this !";
@@ -3623,7 +3623,7 @@ char			f_strmap(char c) { return (c + 7); }
 
 void			test_ft_strmap_basic(void *ptr) {
 	char *	(*ft_strmap)(const char *, char (*)(char)) = ptr;
-	SET_EXPLICATION("your strmap does not works");
+	SET_EXPLICATION("your strmap does not work");
 
 	SANDBOX_RAISE(
 			char	*b = "override this !";
@@ -3762,7 +3762,7 @@ char			f_strmapi(unsigned i, char c) { return (c + i); }
 
 void			test_ft_strmapi_basic(void *ptr) {
 	char *	(*ft_strmapi)(const char *, char (*)(unsigned, char)) = ptr;
-	SET_EXPLICATION("your strmapi does not works");
+	SET_EXPLICATION("your strmapi does not work");
 
 	SANDBOX_RAISE(
 			char	*b = "override this !";
@@ -3931,7 +3931,7 @@ void			test_ft_strequ_basic(void *ptr) {
 
 void			test_ft_strequ_basic2(void *ptr) {
 	int		(*ft_strequ)(const char *s1, const char *s2) = ptr;
-	SET_EXPLICATION("your strequ does not works with empty string");
+	SET_EXPLICATION("your strequ does not work with empty string");
 
 	SANDBOX_RAISE(
 			char	*s1 = "";
@@ -3947,7 +3947,7 @@ void			test_ft_strequ_basic2(void *ptr) {
 
 void			test_ft_strequ_same_pointer(void *ptr) {
 	int		(*ft_strequ)(const char *s1, const char *s2) = ptr;
-	SET_EXPLICATION("your strequ does not works with empty string");
+	SET_EXPLICATION("your strequ does not work with empty string");
 
 	SANDBOX_RAISE(
 			char	*s1 = "NYANCAT INSIDE";
@@ -4012,7 +4012,7 @@ void			test_ft_strnequ_basic(void *ptr) {
 
 void			test_ft_strnequ_basic2(void *ptr) {
 	int		(*ft_strnequ)(const char *s1, const char *s2, size_t n) = ptr;
-	SET_EXPLICATION("your strnequ does not works with empty string");
+	SET_EXPLICATION("your strnequ does not work with empty string");
 
 	SANDBOX_RAISE(
 			char	*s1 = "";
@@ -4028,7 +4028,7 @@ void			test_ft_strnequ_basic2(void *ptr) {
 
 void			test_ft_strnequ_same_pointer(void *ptr) {
 	int		(*ft_strnequ)(const char *s1, const char *s2, size_t n) = ptr;
-	SET_EXPLICATION("your strnequ does not works with empty string");
+	SET_EXPLICATION("your strnequ does not work with empty string");
 
 	SANDBOX_RAISE(
 			char	*s1 = "NYANCAT INSIDE";
@@ -4078,7 +4078,7 @@ void            test_ft_strnequ(void){
 
 void			test_ft_strsub_basic(void *ptr) {
 	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
-	SET_EXPLICATION("your strsub does not works with valid input");
+	SET_EXPLICATION("your strsub does not work with valid input");
 
 	SANDBOX_RAISE(
 			char	*str = "i just want this part #############";
@@ -4097,7 +4097,7 @@ void			test_ft_strsub_basic(void *ptr) {
 
 void			test_ft_strsub_basic2(void *ptr) {
 	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
-	SET_EXPLICATION("your strsub does not works with valid input");
+	SET_EXPLICATION("your strsub does not work with valid input");
 
 	SANDBOX_RAISE(
 			char	*str = "i just want this part #############";
@@ -4116,7 +4116,7 @@ void			test_ft_strsub_basic2(void *ptr) {
 
 void			test_ft_strsub_zero_len(void *ptr) {
 	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
-	SET_EXPLICATION("your strsub does not works with empty strings");
+	SET_EXPLICATION("your strsub does not work with empty strings");
 
 	SANDBOX_RAISE(
 			char	*str = "";
@@ -4200,7 +4200,7 @@ void			test_ft_strsub_malloc_null(void *ptr) {
 
 void			test_ft_strsub_all(void *ptr) {
 	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
-	SET_EXPLICATION("your strsub does not works for a whole string");
+	SET_EXPLICATION("your strsub does not work for a whole string");
 
 	SANDBOX_RAISE(
 			char	*s = "all of this !";
@@ -4244,7 +4244,7 @@ void            test_ft_strsub(void){
 
 void			test_ft_strjoin_basic(void *ptr) {
 	char *	(*ft_strjoin)(char *, char *) = ptr;
-	SET_EXPLICATION("your strjoin does not works with basic input");
+	SET_EXPLICATION("your strjoin does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "my favorite animal is";
@@ -4283,7 +4283,7 @@ void			test_ft_strjoin_free(void *ptr) {
 
 void			test_ft_strjoin_overlap(void *ptr) {
 	char *	(*ft_strjoin)(char *, char *) = ptr;
-	SET_EXPLICATION("your strjoin does not works with overlap input");
+	SET_EXPLICATION("your strjoin does not work with overlap input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "my favorite animal is ";
@@ -4380,7 +4380,7 @@ void            test_ft_strjoin(void){
 
 void			test_ft_strtrim_basic(void *ptr) {
 	char *		(*ft_strtrim)(const char *) = ptr;
-	SET_EXPLICATION("your strtrim does not works with basic input");
+	SET_EXPLICATION("your strtrim does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "   \t  \n\n \t\t  \n\n\nHello \t  Please\n Trim me !\n   \n \n \t\t\n  ";
@@ -4396,7 +4396,7 @@ void			test_ft_strtrim_basic(void *ptr) {
 
 void			test_ft_strtrim_basic2(void *ptr) {
 	char *		(*ft_strtrim)(const char *) = ptr;
-	SET_EXPLICATION("your strtrim does not works with basic input");
+	SET_EXPLICATION("your strtrim does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "   \t  \n\n \t\t  \n\n\nHello \t  Please\n Trim me !";
@@ -4412,7 +4412,7 @@ void			test_ft_strtrim_basic2(void *ptr) {
 
 void			test_ft_strtrim_basic3(void *ptr) {
 	char *		(*ft_strtrim)(const char *) = ptr;
-	SET_EXPLICATION("your strtrim does not works with basic input");
+	SET_EXPLICATION("your strtrim does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "Hello \t  Please\n Trim me !";
@@ -4428,7 +4428,7 @@ void			test_ft_strtrim_basic3(void *ptr) {
 
 void			test_ft_strtrim_empty(void *ptr) {
 	char *		(*ft_strtrim)(const char *) = ptr;
-	SET_EXPLICATION("your strtrim does not works with empty input");
+	SET_EXPLICATION("your strtrim does not work with empty input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "";
@@ -4444,7 +4444,7 @@ void			test_ft_strtrim_empty(void *ptr) {
 
 void			test_ft_strtrim_blank(void *ptr) {
 	char *		(*ft_strtrim)(const char *) = ptr;
-	SET_EXPLICATION("your strtrim does not works with full blank input");
+	SET_EXPLICATION("your strtrim does not work with full blank input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "  \t \t \n   \n\n\n\t";
@@ -4568,7 +4568,7 @@ void            test_ft_strtrim(void){
 
 void			test_ft_strsplit_basic(void *ptr) {
 	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLICATION("your strsplit does not works with basic input");
+	SET_EXPLICATION("your strsplit does not work with basic input");
 	char	**ret = (char*[6]){"split", "this", "for", "me", "!", NULL};
 
 	SANDBOX_RAISE(
@@ -4589,7 +4589,7 @@ void			test_ft_strsplit_basic(void *ptr) {
 
 void			test_ft_strsplit_space(void *ptr) {
 	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLICATION("your strsplit does not works with full space string");
+	SET_EXPLICATION("your strsplit does not work with full space string");
 	char	**ret = (char*[1]){NULL};
 
 	SANDBOX_RAISE(
@@ -4610,7 +4610,7 @@ void			test_ft_strsplit_space(void *ptr) {
 
 void			test_ft_strsplit_begin(void *ptr) {
 	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLICATION("your strsplit does not works with one word");
+	SET_EXPLICATION("your strsplit does not work with one word");
 	char	**ret = (char*[2]){"olol", NULL};
 
 	SANDBOX_RAISE(
@@ -4631,7 +4631,7 @@ void			test_ft_strsplit_begin(void *ptr) {
 
 void			test_ft_strsplit_end(void *ptr) {
 	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLICATION("your strsplit does not works with one word");
+	SET_EXPLICATION("your strsplit does not work with one word");
 	char	**ret = (char*[2]){"olol", NULL};
 
 	SANDBOX_RAISE(
@@ -4652,7 +4652,7 @@ void			test_ft_strsplit_end(void *ptr) {
 
 void			test_ft_strsplit_empty(void *ptr) {
 	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLICATION("your strsplit does not works with empty string");
+	SET_EXPLICATION("your strsplit does not work with empty string");
 	char	**ret = (char*[2]){NULL};
 
 	SANDBOX_RAISE(
@@ -4673,7 +4673,7 @@ void			test_ft_strsplit_empty(void *ptr) {
 
 void			test_ft_strsplit_free(void *ptr) {
 	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLICATION("your strsplit does not works with basic input");
+	SET_EXPLICATION("your strsplit does not work with basic input");
 	char	**ret = (char*[6]){"split  ", "this", "for", "me", "!", NULL};
 
 	SANDBOX_RAISE(
@@ -4714,7 +4714,7 @@ void			test_ft_strsplit_malloc_null(void *ptr) {
 
 void			test_ft_strsplit_zero(void *ptr) {
 	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLICATION("your strsplit does not works with basic input");
+	SET_EXPLICATION("your strsplit does not work with basic input");
 	char	**ret = (char*[6]){"split", "this", "for", "me", "!", NULL};
 
 	SANDBOX_RAISE(
@@ -4766,7 +4766,7 @@ void            test_ft_strsplit(void) {
 
 void			test_ft_itoa_basic(void *ptr) {
 	char	*(*ft_itoa)(int) = ptr;
-	SET_EXPLICATION("your itoa does not works with basic input");
+	SET_EXPLICATION("your itoa does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*i1 = ft_itoa(-623);
@@ -4791,7 +4791,7 @@ void			test_ft_itoa_basic(void *ptr) {
 
 void			test_ft_itoa_random(void *ptr) {
 	char	*(*ft_itoa)(int) = ptr;
-	SET_EXPLICATION("your itoa does not works with random number");
+	SET_EXPLICATION("your itoa does not work with random number");
 
 	SANDBOX_RAISE(
 			srand(clock());
@@ -4812,7 +4812,7 @@ void			test_ft_itoa_random(void *ptr) {
 
 void			test_ft_itoa_max_int(void *ptr) {
 	char	*(*ft_itoa)(int) = ptr;
-	SET_EXPLICATION("your itoa does not works with max int");
+	SET_EXPLICATION("your itoa does not work with max int");
 
 	SANDBOX_RAISE(
 			char	*i1 = ft_itoa(INT_MAX);
@@ -4867,7 +4867,7 @@ void			test_ft_itoa_size2(void *ptr) {
 
 void			test_ft_itoa_min_int(void *ptr) {
 	char	*(*ft_itoa)(int) = ptr;
-	SET_EXPLICATION("your itoa does not works with min int");
+	SET_EXPLICATION("your itoa does not work with min int");
 
 	SANDBOX_RAISE(
 			char	*i1 = ft_itoa(INT_MIN);
@@ -4945,7 +4945,7 @@ void            test_ft_itoa(void){
 
 void			test_ft_putchar_basic(void *ptr) {
 	typeof(putchar)	*ft_putchar = ptr;
-	SET_EXPLICATION("your putchar does not works with basic input");
+	SET_EXPLICATION("your putchar does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	buff[10];
@@ -4962,7 +4962,7 @@ void			test_ft_putchar_basic(void *ptr) {
 
 void			test_ft_putchar_ascii(void *ptr) {
 	typeof(putchar)	*ft_putchar = ptr;
-	SET_EXPLICATION("your putchar does not works with all ascii chars");
+	SET_EXPLICATION("your putchar does not work with all ascii chars");
 
 	SANDBOX_RAISE(
 			char	buff[200];
@@ -5023,7 +5023,7 @@ void    putwchart(int wchar, int *len, char *buff)
 
 void			test_ft_putchar_unicode(void *ptr) {
 	typeof(putchar)	*ft_putchar = ptr;
-	SET_EXPLICATION("your putchar does not works with unicode");
+	SET_EXPLICATION("your putchar does not work with unicode");
 
 	SANDBOX_RAISE(
 			char	buff[10];
@@ -5055,7 +5055,7 @@ void            test_ft_putchar(void){
 
 void			test_ft_putstr_basic(void *ptr) {
 	void		(*ft_putstr)(const char *) = ptr;
-	SET_EXPLICATION("your putstr does not works with basic input");
+	SET_EXPLICATION("your putstr does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*buff1 = STRING_1;
@@ -5074,7 +5074,7 @@ void			test_ft_putstr_basic(void *ptr) {
 
 void			test_ft_putstr_ascii(void *ptr) {
 	void		(*ft_putstr)(const char *) = ptr;
-	SET_EXPLICATION("your putstr does not works with non ascii chars");
+	SET_EXPLICATION("your putstr does not work with non ascii chars");
 
 	SANDBOX_RAISE(
 			char	*buff1 = "string \x01 of \x63 non \x0a ascii \x12 chars\x1d";
@@ -5117,7 +5117,7 @@ int     ft_putwstr(wchar_t *wstr, char *buff)
 
 void			test_ft_putstr_unicode(void *ptr) {
 	void		(*ft_putstr)(const char *) = ptr;
-	SET_EXPLICATION("your putstr does not works with non ascii chars");
+	SET_EXPLICATION("your putstr does not work with non ascii chars");
 
 	SANDBOX_RAISE(
 			wchar_t	*buff1 = L"よくやった";
@@ -5164,7 +5164,7 @@ void            test_ft_putstr(void){
 
 void			test_ft_putendl_basic(void *ptr) {
 	void		(*ft_putendl)(const char *) = ptr;
-	SET_EXPLICATION("your putendl does not works with basic input");
+	SET_EXPLICATION("your putendl does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	buff1[0xF00] = STRING_1;
@@ -5184,7 +5184,7 @@ void			test_ft_putendl_basic(void *ptr) {
 
 void			test_ft_putendl_ascii(void *ptr) {
 	void		(*ft_putendl)(const char *) = ptr;
-	SET_EXPLICATION("your putendl does not works with non ascii chars");
+	SET_EXPLICATION("your putendl does not work with non ascii chars");
 
 	SANDBOX_RAISE(
 			char	buff1[0xF00] = "string \x01 of \x63 non \x0a ascii \x12 chars\x1d";
@@ -5204,7 +5204,7 @@ void			test_ft_putendl_ascii(void *ptr) {
 
 void			test_ft_putendl_unicode(void *ptr) {
 	void		(*ft_putendl)(const char *) = ptr;
-	SET_EXPLICATION("your putendl does not works with non ascii chars");
+	SET_EXPLICATION("your putendl does not work with non ascii chars");
 
 	SANDBOX_RAISE(
 			wchar_t	buff1[0xF00] = L"よくやった";
@@ -5251,7 +5251,7 @@ void            test_ft_putendl(void){
 
 void			test_ft_putnbr_basic(void *ptr) {
 	void		(*ft_putnbr)(int) = ptr;
-	SET_EXPLICATION("your putnbr does not works");
+	SET_EXPLICATION("your putnbr does not work");
 
 	SANDBOX_RAISE(
 			int		i = 0;
@@ -5269,7 +5269,7 @@ void			test_ft_putnbr_basic(void *ptr) {
 
 void			test_ft_putnbr_int_max(void *ptr) {
 	void		(*ft_putnbr)(int) = ptr;
-	SET_EXPLICATION("your putnbr does not works with int max");
+	SET_EXPLICATION("your putnbr does not work with int max");
 
 	SANDBOX_RAISE(
 			int		i = INT_MAX;
@@ -5287,7 +5287,7 @@ void			test_ft_putnbr_int_max(void *ptr) {
 
 void			test_ft_putnbr_int_min(void *ptr) {
 	void		(*ft_putnbr)(int) = ptr;
-	SET_EXPLICATION("your putnbr does not works with int min");
+	SET_EXPLICATION("your putnbr does not work with int min");
 
 	SANDBOX_RAISE(
 			int		i = INT_MIN;
@@ -5306,7 +5306,7 @@ void			test_ft_putnbr_int_min(void *ptr) {
 #define ASSERT_PUTNBR(n1, n2) if (n1 != n2) { SET_DIFF_INT(n1, n2); exit(TEST_FAILED); } exit(TEST_SUCCESS);
 void			test_ft_putnbr_random(void *ptr) {
 	void		(*ft_putnbr)(int) = ptr;
-	SET_EXPLICATION("your putnbr does not works with random numbers")
+	SET_EXPLICATION("your putnbr does not work with random numbers")
 
 	SANDBOX_RAISE(
 			int		nbr;
@@ -5370,7 +5370,7 @@ void            test_ft_putnbr(void){
 
 void			test_ft_putchar_fd_basic(void *ptr) {
 	void		(*ft_putchar_fd)(int fd, int c) = ptr;
-	SET_EXPLICATION("your putchar_fd does not works with basic input");
+	SET_EXPLICATION("your putchar_fd does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	buff[10];
@@ -5387,7 +5387,7 @@ void			test_ft_putchar_fd_basic(void *ptr) {
 
 void			test_ft_putchar_fd_ascii(void *ptr) {
 	void		(*ft_putchar_fd)(int fd, int c) = ptr;
-	SET_EXPLICATION("your putchar_fd does not works with all ascii chars");
+	SET_EXPLICATION("your putchar_fd does not work with all ascii chars");
 
 	SANDBOX_RAISE(
 			char	buff[200];
@@ -5409,7 +5409,7 @@ void			test_ft_putchar_fd_ascii(void *ptr) {
 
 void			test_ft_putchar_fd_unicode(void *ptr) {
 	void		(*ft_putchar_fd)(int fd, int c) = ptr;
-	SET_EXPLICATION("your putchar_fd does not works with unicode");
+	SET_EXPLICATION("your putchar_fd does not work with unicode");
 
 	SANDBOX_RAISE(
 			char	buff[10];
@@ -5441,7 +5441,7 @@ void            test_ft_putchar_fd(void){
 
 void			test_ft_putstr_fd_basic(void *ptr) {
 	void		(*ft_putstr_fd)(const char *, int fd) = ptr;
-	SET_EXPLICATION("your putstr_fd does not works with basic input");
+	SET_EXPLICATION("your putstr_fd does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*buff1 = STRING_1;
@@ -5460,7 +5460,7 @@ void			test_ft_putstr_fd_basic(void *ptr) {
 
 void			test_ft_putstr_fd_ascii(void *ptr) {
 	void		(*ft_putstr_fd)(const char *, int fd) = ptr;
-	SET_EXPLICATION("your putstr_fd does not works with non ascii chars");
+	SET_EXPLICATION("your putstr_fd does not work with non ascii chars");
 
 	SANDBOX_RAISE(
 			char	*buff1 = "string \x01 of \x63 non \x0a ascii \x12 chars\x1d";
@@ -5479,7 +5479,7 @@ void			test_ft_putstr_fd_ascii(void *ptr) {
 
 void			test_ft_putstr_fd_unicode(void *ptr) {
 	void		(*ft_putstr_fd)(const char *, int fd) = ptr;
-	SET_EXPLICATION("your putstr_fd does not works with non ascii chars");
+	SET_EXPLICATION("your putstr_fd does not work with non ascii chars");
 
 	SANDBOX_RAISE(
 			wchar_t	*buff1 = L"よくやった";
@@ -5526,7 +5526,7 @@ void            test_ft_putstr_fd(void){
 
 void			test_ft_putendl_fd_basic(void *ptr) {
 	void		(*ft_putendl_fd)(const char *, int fd) = ptr;
-	SET_EXPLICATION("your putendl_fd does not works with basic input");
+	SET_EXPLICATION("your putendl_fd does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	buff1[0xF00] = STRING_1;
@@ -5546,7 +5546,7 @@ void			test_ft_putendl_fd_basic(void *ptr) {
 
 void			test_ft_putendl_fd_ascii(void *ptr) {
 	void		(*ft_putendl_fd)(const char *, int fd) = ptr;
-	SET_EXPLICATION("your putendl_fd does not works with non ascii chars");
+	SET_EXPLICATION("your putendl_fd does not work with non ascii chars");
 
 	SANDBOX_RAISE(
 			char	buff1[0xF00] = "string \x01 of \x63 non \x0a ascii \x12 chars\x1d";
@@ -5566,7 +5566,7 @@ void			test_ft_putendl_fd_ascii(void *ptr) {
 
 void			test_ft_putendl_fd_unicode(void *ptr) {
 	void		(*ft_putendl_fd)(const char *, int fd) = ptr;
-	SET_EXPLICATION("your putendl_fd does not works with non ascii chars");
+	SET_EXPLICATION("your putendl_fd does not work with non ascii chars");
 
 	SANDBOX_RAISE(
 			wchar_t	buff1[0xF00] = L"よくやった";
@@ -5615,7 +5615,7 @@ void            test_ft_putendl_fd(void){
 
 void			test_ft_putnbr_fd_basic(void *ptr) {
 	void		(*ft_putnbr_fd)(int, int fd) = ptr;
-	SET_EXPLICATION("your putnbr_fd does not works");
+	SET_EXPLICATION("your putnbr_fd does not work");
 
 	SANDBOX_RAISE(
 			int		i = 0;
@@ -5633,7 +5633,7 @@ void			test_ft_putnbr_fd_basic(void *ptr) {
 
 void			test_ft_putnbr_fd_int_max(void *ptr) {
 	void		(*ft_putnbr_fd)(int, int fd) = ptr;
-	SET_EXPLICATION("your putnbr_fd does not works with int max");
+	SET_EXPLICATION("your putnbr_fd does not work with int max");
 
 	SANDBOX_RAISE(
 			int		i = INT_MAX;
@@ -5651,7 +5651,7 @@ void			test_ft_putnbr_fd_int_max(void *ptr) {
 
 void			test_ft_putnbr_fd_int_min(void *ptr) {
 	void		(*ft_putnbr_fd)(int, int fd) = ptr;
-	SET_EXPLICATION("your putnbr_fd does not works with int min");
+	SET_EXPLICATION("your putnbr_fd does not work with int min");
 
 	SANDBOX_RAISE(
 			int		i = INT_MIN;
@@ -5669,7 +5669,7 @@ void			test_ft_putnbr_fd_int_min(void *ptr) {
 
 void			test_ft_putnbr_fd_random(void *ptr) {
 	void		(*ft_putnbr_fd)(int, int fd) = ptr;
-	SET_EXPLICATION("your putnbr_fd does not works with random numbers")
+	SET_EXPLICATION("your putnbr_fd does not work with random numbers")
 
 	SANDBOX_RAISE(
 			int		nbr;
@@ -5745,7 +5745,7 @@ void            test_ft_putnbr_fd(void){
 
 void			test_ft_lstnew_basic(void *ptr) {
 	t_list	*(*ft_lstnew)(const void *, size_t) = ptr;
-	SET_EXPLICATION("your lstnew does not works with basic input");
+	SET_EXPLICATION("your lstnew does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*data = "hello, i'm a data";
@@ -5778,7 +5778,7 @@ void			test_ft_lstnew_free(void *ptr) {
 
 void			test_ft_lstnew_null(void *ptr) {
 	t_list	*(*ft_lstnew)(const void *, size_t) = ptr;
-	SET_EXPLICATION("your lstnew does not works with null parameter");
+	SET_EXPLICATION("your lstnew does not work with null parameter");
 
 	SANDBOX_RAISE(
 			t_list	*l = ft_lstnew(NULL, 0);
@@ -5836,7 +5836,7 @@ t_list			*lstnew(void *d, size_t s) {
 
 void			test_ft_lstdelone_basic(void *ptr) {
 	void		(*ft_lstdelone)(t_list **, void (*)(void *, size_t)) = ptr;
-	SET_EXPLICATION("your lstdelone does not works");
+	SET_EXPLICATION("your lstdelone does not work");
 
 	STDERR_TO_BUFF;
 	SANDBOX_RAISE(
@@ -5870,7 +5870,7 @@ void			lstdel_f(void *lst, size_t s) {
 
 void			test_ft_lstdel_basic(void *ptr) {
 	void		(*ft_lstdel)(t_list **, void (*)(void *, size_t)) = ptr;
-	SET_EXPLICATION("your lstdel does not works with basic input");
+	SET_EXPLICATION("your lstdel does not work with basic input");
 
 	STDERR_TO_BUFF;
 	SANDBOX_RAISE(
@@ -5944,7 +5944,7 @@ void			test_ft_lstdel(void) {
 
 void			test_ft_lstadd_basic(void *ptr) {
 	void	(*ft_lstadd)(t_list **, t_list *new) = ptr;
-	SET_EXPLICATION("your lstadd does not works with basic input");
+	SET_EXPLICATION("your lstadd does not work with basic input");
 
 	STDERR_TO_BUFF;
 	SANDBOX_RAISE(
@@ -5963,7 +5963,7 @@ void			test_ft_lstadd_basic(void *ptr) {
 
 void			test_ft_lstadd_free(void *ptr) {
 	void	(*ft_lstadd)(t_list **, t_list *new) = ptr;
-	SET_EXPLICATION("your lstadd does not works with basic input");
+	SET_EXPLICATION("your lstadd does not work with basic input");
 
 	STDERR_TO_BUFF;
 	SANDBOX_RAISE(
@@ -5986,7 +5986,7 @@ void			test_ft_lstadd_free(void *ptr) {
 
 void			test_ft_lstadd_null(void *ptr) {
 	void	(*ft_lstadd)(t_list **, t_list *new) = ptr;
-	SET_EXPLICATION("your lstadd does not works with null node input");
+	SET_EXPLICATION("your lstadd does not work with null node input");
 
 	STDERR_TO_BUFF;
 	SANDBOX_RAISE(
@@ -6026,7 +6026,7 @@ void			lstiter_f(t_list *m) {
 
 void			test_ft_lstiter_basic(void *ptr) {
 	void	(*ft_lstiter)(t_list *, void (*)(t_list *)) = ptr;
-	SET_EXPLICATION("your lstiter does not works with basic input");
+	SET_EXPLICATION("your lstiter does not work with basic input");
 
 	SANDBOX_RAISE(
 			t_list	*l = lstnew(strdup(" 1 2 3 "), 8);
@@ -6067,7 +6067,7 @@ t_list *		lstmap_f(t_list *m) {
 
 void			test_ft_lstmap_basic(void *ptr) {
 	t_list *	(*ft_lstmap)(t_list *, t_list * (*)(t_list *)) = ptr;
-	SET_EXPLICATION("your lstmap does not works with basic input");
+	SET_EXPLICATION("your lstmap does not work with basic input");
 
 	SANDBOX_RAISE(
 			t_list	*l = lstnew(strdup(" 1 2 3 "), 8);
@@ -6126,7 +6126,7 @@ void			test_ft_lstmap(void){
 
 void			test_ft_islower_(void *ptr) {
 	typeof(islower)	*ft_islower = ptr;
-	SET_EXPLICATION("your islower does not works ...");
+	SET_EXPLICATION("your islower does not work ...");
 
 	SANDBOX_RAISE(
 			for (int i = -50; i < 530; i++) {
@@ -6149,7 +6149,7 @@ void			test_ft_islower(void) {
 
 void			test_ft_isupper_(void *ptr) {
 	typeof(isupper)	*ft_isupper = ptr;
-	SET_EXPLICATION("your isupper does not works ...");
+	SET_EXPLICATION("your isupper does not work ...");
 
 	SANDBOX_RAISE(
 			for (int i = -50; i < 530; i++) {
@@ -6172,7 +6172,7 @@ void			test_ft_isupper(void) {
 
 void			test_ft_isnumber_(void *ptr) {
 	typeof(isnumber)	*ft_isnumber = ptr;
-	SET_EXPLICATION("your isnumber does not works ...");
+	SET_EXPLICATION("your isnumber does not work ...");
 
 	SANDBOX_RAISE(
 			for (int i = -50; i < 530; i++) {
@@ -6195,7 +6195,7 @@ void			test_ft_isnumber(void) {
 
 void			test_ft_isblank_(void *ptr) {
 	typeof(isblank)	*ft_isblank = ptr;
-	SET_EXPLICATION("your isblank does not works ...");
+	SET_EXPLICATION("your isblank does not work ...");
 
 	SANDBOX_RAISE(
 			for (int i = -50; i < 530; i++) {
@@ -6218,7 +6218,7 @@ void			test_ft_isblank(void) {
 
 void			test_ft_strtrimc_basic(void *ptr) {
 	char *		(*ft_strtrimc)(const char *, char c) = ptr;
-	SET_EXPLICATION("your strtrimc does not works with basic input");
+	SET_EXPLICATION("your strtrimc does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "\t\t\t\t\t\t\t\tHello \t  Please\n Trim me !\t\t\t\t\t\t\t";
@@ -6234,7 +6234,7 @@ void			test_ft_strtrimc_basic(void *ptr) {
 
 void			test_ft_strtrimc_basic2(void *ptr) {
 	char *		(*ft_strtrimc)(const char *, char c) = ptr;
-	SET_EXPLICATION("your strtrimc does not works with basic input");
+	SET_EXPLICATION("your strtrimc does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "                   Hello \t  Please\n Trim me !";
@@ -6250,7 +6250,7 @@ void			test_ft_strtrimc_basic2(void *ptr) {
 
 void			test_ft_strtrimc_basic3(void *ptr) {
 	char *		(*ft_strtrimc)(const char *, char c) = ptr;
-	SET_EXPLICATION("your strtrimc does not works with basic input");
+	SET_EXPLICATION("your strtrimc does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "Hello \t  Please\n Trim me !";
@@ -6306,7 +6306,7 @@ void			test_ft_strtrimc_free(void *ptr) {
 
 void			test_ft_strtrimc_not_found(void *ptr) {
 	char *		(*ft_strtrimc)(const char *, char c) = ptr;
-	SET_EXPLICATION("your strtrimc does not works with not found character ");
+	SET_EXPLICATION("your strtrimc does not work with not found character ");
 
 	SANDBOX_RAISE(
 			char	*s1 = "   \t  \n\n \t\t  \n\n\nHello \t  Please\n Trim me !\n   \n \n \t\t\n  ";
@@ -6471,7 +6471,7 @@ void			test_ft_strndup_malloc_null(void *ptr) {
 
 void			test_ft_strndup_basic(void *ptr) {
 	typeof(strndup)	*ft_strndup = ptr;
-	SET_EXPLICATION("your strndup doesn't works with basic input");
+	SET_EXPLICATION("your strndup doesn't work with basic input");
 
 	SANDBOX_RAISE(
 			char	*str;
@@ -6490,7 +6490,7 @@ void			test_ft_strndup_basic(void *ptr) {
 
 void			test_ft_strndup_basic2(void *ptr) {
 	typeof(strndup)	*ft_strndup = ptr;
-	SET_EXPLICATION("your strndup doesn't works with basic input");
+	SET_EXPLICATION("your strndup doesn't work with basic input");
 
 	SANDBOX_RAISE(
 			char	*str;
@@ -6517,4 +6517,258 @@ void            test_ft_strndup(void){
 	add_fun_subtest(test_ft_strndup_size);
 	add_fun_subtest(test_ft_strndup_last_char);
 	add_fun_subtest(test_ft_strndup_null);
+}
+
+void			test_ft_atof_basic(void *ptr) {
+	typeof(atof)	*ft_atof = ptr;
+	SET_EXPLICATION("your atof does not work with basic input");
+
+	SANDBOX_RAISE(
+			const char *	nbr = "0.6588";
+			double	d1;
+			double	d2;
+
+			d1 = atof(nbr);
+			d2 = ft_atof(nbr);
+			if ((float)d1 == (float)d2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_DOUBLE(d1, d2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_atof_negative(void *ptr) {
+	typeof(atof)	*ft_atof = ptr;
+	SET_EXPLICATION("your atof does not work with negative basic input");
+
+	SANDBOX_RAISE(
+			const char *	nbr = "-6.6588";
+			double	d1;
+			double	d2;
+
+			d1 = atof(nbr);
+			d2 = ft_atof(nbr);
+			if ((float)d1 == (float)d2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_DOUBLE(d1, d2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_atof_random(void *ptr) {
+	typeof(atof)	*ft_atof = ptr;
+	SET_EXPLICATION("your atof does not work with random numbers");
+
+	SANDBOX_RAISE(
+			char	buff[0xF0];
+			double	d1;
+			double	d2;
+
+			srand(clock());
+			for (int i = 0; i < 1000; i++) {
+				sprintf(buff, "%lf", (double)(clock() * rand() / (rand() * 10)));
+
+				d1 = atof(buff);
+				d2 = ft_atof(buff);
+				if ((float)d1 != (float)d2) {
+					SET_DIFF_DOUBLE(d1, d2);
+					exit(TEST_FAILED);
+				}
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
+#include <math.h>
+void			test_ft_atof_inf_plus(void *ptr) {
+	typeof(atof)	*ft_atof = ptr;
+	SET_EXPLICATION("your atof does not work with inf value");
+
+	SANDBOX_RAISE(
+			char	buff[0xF00];
+			double	d1;
+			double	d2;
+
+			sprintf(buff, "%lf", INFINITY);
+			d1 = atof(buff);
+			d2 = ft_atof(buff);
+			if ((float)d1 == (float)d2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_DOUBLE(d1, d2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_atof_inf_min(void *ptr) {
+	typeof(atof)	*ft_atof = ptr;
+	SET_EXPLICATION("your atof does not work with basic -inf value");
+
+	SANDBOX_RAISE(
+			char	buff[0xF00];
+			double	d1;
+			double	d2;
+
+			sprintf(buff, "%lf", -INFINITY);
+			d1 = atof(buff);
+			d2 = ft_atof(buff);
+			if ((float)d1 == (float)d2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_DOUBLE(d1, d2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_atof_zero(void *ptr) {
+	typeof(atof)	*ft_atof = ptr;
+	SET_EXPLICATION("your atof does not work with 0");
+
+	SANDBOX_RAISE(
+			const char *	nbr = "0";
+			double	d1;
+			double	d2;
+
+			d1 = atof(nbr);
+			d2 = ft_atof(nbr);
+			if ((float)d1 == (float)d2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_DOUBLE(d1, d2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_atof_nan(void *ptr) {
+	typeof(atof)	*ft_atof = ptr;
+	SET_EXPLICATION("your atof does not work with basic nan value");
+
+	SANDBOX_RAISE(
+			char	buff[0xF00];
+			double	d1;
+			double	d2;
+
+			sprintf(buff, "%lf", NAN);
+			d1 = atof(buff);
+			d2 = ft_atof(buff);
+			if ((float)d1 == (float)d2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_DOUBLE(d1, d2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_atof_blanks1(void *ptr) {
+	typeof(atof)	*ft_atof = ptr;
+	SET_EXPLICATION("your atof does not work with basic blanks");
+
+	SANDBOX_RAISE(
+			char *	nbr = "  \v\r  \t\n\n\f-9.457787";
+			double	d1;
+			double	d2;
+
+			d1 = atof(nbr);
+			d2 = ft_atof(nbr);
+			if ((float)d1 == (float)d2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_DOUBLE(d1, d2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_atof_blanks2(void *ptr) {
+	typeof(atof)	*ft_atof = ptr;
+	SET_EXPLICATION("your atof does not work with basic blanks");
+
+	SANDBOX_RAISE(
+			char *	nbr = "  \v\r  \t\n\n\f+42.442422f    ";
+			double	d1;
+			double	d2;
+
+			d1 = atof(nbr);
+			d2 = ft_atof(nbr);
+			if ((float)d1 == (float)d2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_DOUBLE(d1, d2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_atof_blanks3(void *ptr) {
+	typeof(atof)	*ft_atof = ptr;
+	SET_EXPLICATION("your atof does not work with - inside basic blanks");
+
+	SANDBOX_RAISE(
+			char *	nbr = "  \v\r  \t\n\n\f-    \v\f\r\n\n  \t\t656.45776    \r\n";
+			double	d1;
+			double	d2;
+
+			d1 = atof(nbr);
+			d2 = ft_atof(nbr);
+			if ((float)d1 == (float)d2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_DOUBLE(d1, d2);
+			exit(TEST_KO);
+			);
+}
+
+#include <float.h>
+void			test_ft_atof_max(void *ptr) {
+	typeof(atof)	*ft_atof = ptr;
+	SET_EXPLICATION("your atof does not work with max double value");
+
+	SANDBOX_RAISE(
+			char	nbr[0xF0];
+			double	d1;
+			double	d2;
+			sprintf(nbr, "%lf", DBL_MAX);
+
+			d1 = atof(nbr);
+			d2 = ft_atof(nbr);
+			if ((float)d1 == (float)d2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_DOUBLE(d1, d2);
+			exit(TEST_KO);
+			);
+}
+
+void			test_ft_atof_min(void *ptr) {
+	typeof(atof)	*ft_atof = ptr;
+	SET_EXPLICATION("your atof does not work with min double value");
+
+	SANDBOX_RAISE(
+			char	nbr[0xF0];
+			double	d1;
+			double	d2;
+			sprintf(nbr, "%lf", DBL_MIN);
+
+			d1 = atof(nbr);
+			d2 = ft_atof(nbr);
+			if ((float)d1 == (float)d2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_DOUBLE(d1, d2);
+			exit(TEST_KO);
+			);
+}
+
+void			test_ft_atof_null(void *ptr) {
+	typeof(atof)	*ft_atof = ptr;
+	SET_EXPLICATION("atof protection");
+
+	SANDBOX_PROT(
+			ft_atof(NULL);
+			);
+}
+
+void			test_ft_atof(void) {
+	add_fun_subtest(test_ft_atof_basic);
+	add_fun_subtest(test_ft_atof_negative);
+	add_fun_subtest(test_ft_atof_zero);
+	add_fun_subtest(test_ft_atof_random);
+	add_fun_subtest(test_ft_atof_inf_plus);
+	add_fun_subtest(test_ft_atof_inf_min);
+	add_fun_subtest(test_ft_atof_nan);
+	add_fun_subtest(test_ft_atof_blanks1);
+	add_fun_subtest(test_ft_atof_blanks2);
+	add_fun_subtest(test_ft_atof_blanks3);
+	add_fun_subtest(test_ft_atof_max);
+	add_fun_subtest(test_ft_atof_min);
+	add_fun_subtest(test_ft_atof_null);
 }
