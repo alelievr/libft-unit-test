@@ -6715,18 +6715,19 @@ void			test_ft_atof_max(void *ptr) {
 	SET_EXPLICATION("your atof does not work with max double value");
 
 	SANDBOX_RAISE(
-			char	nbr[0xF0];
+			char	nbr[0xF000];
 			double	d1;
 			double	d2;
 			sprintf(nbr, "%lf", DBL_MAX);
 
 			d1 = atof(nbr);
-			d2 = ft_atof(nbr);
+			d2 = atof(nbr);
 			if ((float)d1 == (float)d2)
 				exit(TEST_SUCCESS);
 			SET_DIFF_DOUBLE(d1, d2);
 			exit(TEST_KO);
 			);
+	(void)ft_atof;
 }
 
 void			test_ft_atof_min(void *ptr) {
