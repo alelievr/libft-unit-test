@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/17 16:45:27 by alelievr         ###   ########.fr       */
+/*   Created  2015/11/17 17:42:18 by alelievr          #+#    #+#             */
+/*   Updated  2015/12/17 18:01:20 by fdaudre-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -615,18 +615,39 @@ void			test_ft_memmove_long_int(void *ptr) {
 
 void			test_ft_memmove_overlap(void *ptr) {
 	typeof(memmove)		*ft_memmove = ptr;
-	SET_EXPLICATION("your memmove does not support the overlap");
+	SET_EXPLICATION("your memmove does not support the overlap (test 1)");
 
 	SANDBOX_RAISE(
-			char	dst1[0xF0];
-			char	dst2[0xF0];
+			char	dst1[0xF0] = {[0xF0 - 1] = 'A'};
+			char	dst2[0xF0] = {[0xF0 - 1] = 'A'};
 			char	*data = "thiß ß\xde\xad\xbe\xeftriñg will be øvérlapéd !\r\n";
-			int		size = 0xF0 - 4;
+			int		size = 0xF0 - 0xF;
 
 			memcpy(dst1, data, strlen(data));
 			memcpy(dst2, data, strlen(data));
-			memmove(dst1 + 3, dst2, size);
+			memmove(dst1 + 3, dst1, size);
 			ft_memmove(dst2 + 3, dst2, size);
+			if (!memcmp(dst1, dst2, size))
+				exit(TEST_SUCCESS);
+			SET_DIFF(dst1, dst2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_memmove_overlap_rev(void *ptr) {
+	typeof(memmove)		*ft_memmove = ptr;
+	SET_EXPLICATION("your memmove does not support the overlap (test 2)");
+
+	SANDBOX_RAISE(
+			char	dst1[0xF0] = {[0xF0 - 1] = 'A'};
+			char	dst2[0xF0] = {[0xF0 - 1] = 'A'};
+			char	*data = "thiß ß\xde\xad\xbe\xeftriñg will be øvérlapéd !\r\n";
+			int		size = 0xF0 - 0xF;
+
+			memcpy(dst1, data, strlen(data));
+			memcpy(dst2, data, strlen(data));
+			memmove(dst1, dst1 + 3, size);
+			ft_memmove(dst2, dst2 + 3, size);
 			if (!memcmp(dst1, dst2, size))
 				exit(TEST_SUCCESS);
 			SET_DIFF(dst1, dst2);
@@ -717,6 +738,7 @@ void            test_ft_memmove(void){
 	add_fun_subtest(test_ft_memmove_null_byte);
 	add_fun_subtest(test_ft_memmove_long_int);
 	add_fun_subtest(test_ft_memmove_overlap);
+	add_fun_subtest(test_ft_memmove_overlap_rev);
 	add_fun_subtest(test_ft_memmove_same_pointer);
 	add_fun_subtest(test_ft_memmove_hard);
 	add_fun_subtest(test_ft_memmove_null1);
@@ -2207,6 +2229,22 @@ void			test_ft_strstr_basic4(void *ptr) {
 			);
 }
 
+void			test_ft_strstr_basic5(void *ptr) {
+	typeof(strstr)	*ft_strstr = ptr;
+	SET_EXPLICATION("your strstr does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*s1 = "aaabbbaaabbb";
+			char	*s2 = "abbaaab";
+
+			char	*i1 = strstr(s1, s2);
+			char	*i2 = ft_strstr(s1, s2);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
 
 void			test_ft_strstr_zero_len(void *ptr) {
 	typeof(strstr)	*ft_strstr = ptr;
@@ -2314,6 +2352,7 @@ void            test_ft_strstr(void){
 	add_fun_subtest(test_ft_strstr_basic2);
 	add_fun_subtest(test_ft_strstr_basic3);
 	add_fun_subtest(test_ft_strstr_basic4);
+	add_fun_subtest(test_ft_strstr_basic5);
 	add_fun_subtest(test_ft_strstr_zero_len);
 	add_fun_subtest(test_ft_strstr_not_found);
 	add_fun_subtest(test_ft_strstr_zero_len1);
