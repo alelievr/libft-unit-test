@@ -6748,6 +6748,42 @@ void			test_ft_atof_min(void *ptr) {
 			);
 }
 
+void			test_ft_atof_exp1(void *ptr) {
+	typeof(atof)	*ft_atof = ptr;
+	SET_EXPLICATION("your atof does not work with positive exponential value");
+
+	SANDBOX_RAISE(
+			const char *	nbr = "6.6545e+8";
+			double	d1;
+			double	d2;
+
+			d1 = atof(nbr);
+			d2 = ft_atof(nbr);
+			if ((float)d1 == (float)d2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_DOUBLE(d1, d2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_atof_exp2(void *ptr) {
+	typeof(atof)	*ft_atof = ptr;
+	SET_EXPLICATION("your atof does not work with negative exponential value");
+
+	SANDBOX_RAISE(
+			const char *	nbr = "4.42125787e-3";
+			double	d1;
+			double	d2;
+
+			d1 = atof(nbr);
+			d2 = ft_atof(nbr);
+			if ((float)d1 == (float)d2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_DOUBLE(d1, d2);
+			exit(TEST_FAILED);
+			);
+}
+
 void			test_ft_atof_null(void *ptr) {
 	typeof(atof)	*ft_atof = ptr;
 	SET_EXPLICATION("atof protection");
@@ -6770,5 +6806,7 @@ void			test_ft_atof(void) {
 	add_fun_subtest(test_ft_atof_blanks3);
 	add_fun_subtest(test_ft_atof_max);
 	add_fun_subtest(test_ft_atof_min);
+	add_fun_subtest(test_ft_atof_exp1);
+	add_fun_subtest(test_ft_atof_exp2);
 	add_fun_subtest(test_ft_atof_null);
 }
