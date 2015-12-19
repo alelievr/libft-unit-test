@@ -129,8 +129,8 @@ $(ASSETDIR)/$(LIBMALLOC):
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", $(CC) -dynamiclib $(ASSETDIR)/malloc.c -I $(INCDIR) -o $(ASSETDIR)/$(LIBMALLOC))
 
 $(ASSETDIR)/$(ANAME):
-	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", make -C $(LIBFTDIR))
-	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", cp $(LIBFTDIR)/libft.a $(ASSETDIR)/)
+	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", make -C "$(LIBFTDIR)")
+	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", cp "$(LIBFTDIR)/libft.a" $(ASSETDIR)/)
 	
 shared:
 	@mkdir -p $(TMPLIB)
