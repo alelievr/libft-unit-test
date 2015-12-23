@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2015/04/04 19:22:36 by alelievr          #+#    #+#              #
-#    Updated: 2015/11/26 20:47:52 by alelievr         ###   ########.fr        #
+#    Created  2015/04/04 19:22:36 by alelievr          #+#    #+#              #
+#    Updated  2015/12/23 20:02:39 by alelievr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@
 #################
 
 #	Libft Makefile path
-LIBFTDIR	=	../libft
+LIBFTDIR	=	libft_tom
 
 #	Sources
 SRCDIR		=	./src
