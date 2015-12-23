@@ -5303,7 +5303,7 @@ void			test_ft_putnbr_int_min(void *ptr) {
 			);
 }
 
-#define ASSERT_PUTNBR(n1, n2) if (n1 != n2) { SET_DIFF_INT(n1, n2); exit(TEST_FAILED); } exit(TEST_SUCCESS);
+#define ASSERT_PUTNBR(n1, n2) if (n1 != n2) { SET_DIFF_INT(n1, n2); exit(TEST_FAILED); }
 void			test_ft_putnbr_random(void *ptr) {
 	void		(*ft_putnbr)(int) = ptr;
 	SET_EXPLICATION("your putnbr does not work with random numbers")
@@ -5333,6 +5333,7 @@ void			test_ft_putnbr_random(void *ptr) {
 			ft_putnbr(nbr);
 			GET_STDOUT(buff, 0xF0);
 			ASSERT_PUTNBR(nbr, atoi(buff));
+			exit(TEST_SUCCESS);
 			);
 }
 
@@ -5680,7 +5681,8 @@ void			test_ft_putnbr_fd_random(void *ptr) {
 			STDERR_TO_BUFF;
 			ft_putnbr_fd(nbr, STDERR_FILENO);
 			GET_STDERR(buff, 0xF0);
-			ASSERT_PUTNBR(nbr, atoi(buff));
+			int		nb = atoi(buff);
+			ASSERT_PUTNBR(nbr, nb);
 			srand(clock());
 			nbr = rand();
 			STDERR_TO_BUFF;
@@ -5699,6 +5701,7 @@ void			test_ft_putnbr_fd_random(void *ptr) {
 			ft_putnbr_fd(nbr, STDERR_FILENO);
 			GET_STDERR(buff, 0xF0);
 			ASSERT_PUTNBR(nbr, atoi(buff));
+			exit(TEST_SUCCESS);
 			);
 }
 
