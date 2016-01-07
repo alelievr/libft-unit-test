@@ -4671,6 +4671,27 @@ void			test_ft_strsplit_empty(void *ptr) {
 			);
 }
 
+void			test_ft_strsplit_full(void *ptr) {
+	char	**(*ft_strsplit)(char *, char) = ptr;
+	SET_EXPLICATION("your strsplit does not work with full string");
+	char	**ret = (char*[2]){NULL};
+
+	SANDBOX_RAISE(
+			char	*s = "0 0 0 0 0 0 0 0 0";
+
+			char	**r = ft_strsplit(s, ' ');
+			while (*r) {
+				if (strcmp(*r, "0")) {
+					SET_DIFF(*ret, *r);
+					exit(TEST_FAILED);
+				}
+				r++;
+				ret++;
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
 void			test_ft_strsplit_free(void *ptr) {
 	char	**(*ft_strsplit)(char *, char) = ptr;
 	SET_EXPLICATION("your strsplit does not work with basic input");
@@ -4754,6 +4775,7 @@ void            test_ft_strsplit(void) {
 	add_fun_subtest(test_ft_strsplit_begin);
 	add_fun_subtest(test_ft_strsplit_end);
 	add_fun_subtest(test_ft_strsplit_empty);
+	add_fun_subtest(test_ft_strsplit_full);
 	add_fun_subtest(test_ft_strsplit_free);
 	add_fun_subtest(test_ft_strsplit_malloc_null);
 	add_fun_subtest(test_ft_strsplit_zero);
