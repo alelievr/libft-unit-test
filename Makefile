@@ -191,6 +191,7 @@ codesize:
 	@cat $(NORME) |grep -v '/\*' |wc -l
 
 f: all
+	@rm -rf $(ASSETDIR)/$(ANAME)
 	@echo "\033[38;5;93mRUNING TESTS:"
 	@./$(WRAPNAME)
 

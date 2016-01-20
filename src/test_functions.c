@@ -2371,12 +2371,13 @@ void			test_ft_strnstr_basic(void *ptr) {
 	SET_EXPLICATION("your strnstr does not work with basic input");
 
 	SANDBOX_RAISE(
-			char	*s1 = "FF";
-			char	*s2 = "see FF your FF return FF now FF";
-			size_t	max = strlen(s2);
+			char	*s1 = "see FF your FF return FF now FF";
+			char	*s2 = "FF";
+			size_t	max = strlen(s1);
 
 			char	*i1 = strnstr(s1, s2, max);
 			char	*i2 = ft_strnstr(s1, s2, max);
+			printf("%p - %p\n", i1, i2);
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
 			SET_DIFF(i1, i2);
@@ -2420,7 +2421,7 @@ void			test_ft_strnstr_basic3(void *ptr) {
 			);
 }
 
-void			test_ft_strnstr_not_found(void *ptr) {
+void			test_ft_strnstr_found(void *ptr) {
 	typeof(strnstr)	*ft_strnstr = ptr;
 	SET_EXPLICATION("your strnstr does not work with not found patern");
 
@@ -2495,8 +2496,8 @@ void			test_ft_strnstr_zero(void *ptr) {
 	SANDBOX_RAISE(
 			char	*s1 = "A";
 
-			char	*i1 = strnstr(s1, s1, 0);
-			char	*i2 = ft_strnstr(s1, s1, 0);
+			char	*i1 = strnstr(s1, s1, 2);
+			char	*i2 = ft_strnstr(s1, s1, 2);
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
 			SET_DIFF(i1, i2);
@@ -2526,7 +2527,7 @@ void            test_ft_strnstr(void){
 	add_fun_subtest(test_ft_strnstr_basic);
 	add_fun_subtest(test_ft_strnstr_basic2);
 	add_fun_subtest(test_ft_strnstr_basic3);
-	add_fun_subtest(test_ft_strnstr_not_found);
+	add_fun_subtest(test_ft_strnstr_found);
 	add_fun_subtest(test_ft_strnstr_zero_len1);
 	add_fun_subtest(test_ft_strnstr_zero_len2);
 	add_fun_subtest(test_ft_strnstr_same_ptr);
