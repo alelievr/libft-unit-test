@@ -2377,7 +2377,6 @@ void			test_ft_strnstr_basic(void *ptr) {
 
 			char	*i1 = strnstr(s1, s2, max);
 			char	*i2 = ft_strnstr(s1, s2, max);
-			printf("%p - %p\n", i1, i2);
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
 			SET_DIFF(i1, i2);
