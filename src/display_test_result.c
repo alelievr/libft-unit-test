@@ -117,7 +117,7 @@ void    display_test_result(int value, char *explications)
 		first = 1;
 		if (index != 0) {
 			printf("\n");
-			for (int i = 0; i < index; i++) {
+			for (int i = 0; i < index && i < 0xF00 - 1; i++) {
 				printf("[%s%s"COLOR_CLEAR"]: %s\n", verbose_color(errs[i].type), verbose_type(errs[i].type), errs[i].data);
 				if (errs[i].type != TEST_TIMEOUT)
 					dprintf(g_log_fd, "\n[%s]: %s\n", verbose_type(errs[i].type), errs[i].data);

@@ -44,7 +44,7 @@ SONAME		=	libft.so
 ANAME		=	libft.a
 LIBMALLOC	=	malloc.dylib
 TMPLIB		=	$(ASSETDIR)/tmp
-WRAPNAME	=	$(ASSETDIR)/run_test
+WRAPNAME	=	run_test
 
 FRAMEWORK	=	
 

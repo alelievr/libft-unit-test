@@ -14,7 +14,7 @@
 
 #define		STRING_1	"the cake is a lie !\0I'm hidden lol\r\n"
 #define		STRING_4	"phrase differente pour le test"
-#define		STRING_2	"there is no starts in the sky"
+#define		STRING_2	"there is no stars in the sky"
 #define		STRING_3	"test basic !"
 
 #define		REG(x)		((x > 0) ? 1 : ((x < 0) ? -1 : 0))
