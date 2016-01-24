@@ -120,7 +120,11 @@ disp_title	=	$(call disp_indent); \
 #	First target
 all: $(ASSETDIR)/$(ANAME) $(SONAME) $(ASSETDIR)/$(NAME) $(ASSETDIR)/$(LIBMALLOC) $(WRAPNAME)
 
-$(SONAME): shared
+$(SONAME):
+	@mkdir -p $(TMPLIB)
+	@cd $(TMPLIB) && ar -xv ../libft.a 1>/dev/null
+	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m➤ \033[38;5;$(LINK_COLOR)m",\
+		$(CC), $(CSOFLAGS), $(TMPLIB)/*.o, -o, $(SONAME))
 
 $(WRAPNAME):
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", $(CC) $(ASSETDIR)/wrapper.c -I $(INCDIR) -o $(WRAPNAME))
@@ -132,12 +136,6 @@ $(ASSETDIR)/$(ANAME):
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", make -C "$(LIBFTDIR)")
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", cp "$(LIBFTDIR)/libft.a" $(ASSETDIR)/)
 	
-shared:
-	@mkdir -p $(TMPLIB)
-	@cd $(TMPLIB) && ar -xv ../libft.a 1>/dev/null
-	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m➤ \033[38;5;$(LINK_COLOR)m",\
-		$(CC), $(CSOFLAGS), $(TMPLIB)/*.o, -o, $(SONAME))
-
 #	Linking
 $(ASSETDIR)/$(NAME): $(OBJ)
 	@$(call disp_title,Linking,$(LINK_COLOR_T));
@@ -174,6 +172,9 @@ fclean: clean
 		rm -f, $(WRAPNAME))
 	@$(eval ALREADY_RM=x)
 
+libclean:
+	@rm -rf $(ASSETDIR)/$(ANAME) $(ASSETDIR)/$(NAME)
+
 #	All removing then compiling
 re: fclean all
 
@@ -190,7 +191,7 @@ run: $(NAME)
 codesize:
 	@cat $(NORME) |grep -v '/\*' |wc -l
 
-f: all
+f: libclean all
 	@rm -rf $(ASSETDIR)/$(ANAME)
 	@echo "\033[38;5;93mRUNING TESTS:"
 	@./$(WRAPNAME)
