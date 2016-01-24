@@ -176,7 +176,7 @@ libclean:
 	@rm -rf $(ASSETDIR)/$(ANAME) $(ASSETDIR)/$(NAME)
 
 #	All removing then compiling
-re: fclean all
+re: fclean libclean all
 
 #	Checking norme
 norme:
