@@ -2996,7 +2996,7 @@ void            test_ft_atoi(void){
 
 void			test_ft_isalpha_(void *ptr) {
 	typeof(isalpha)	*ft_isalpha = ptr;
-	SET_EXPLICATION("your ft_isalpha just doesn't work, REALLY ?!");
+	SET_EXPLICATION("your isalpha just doesn't work, REALLY ?!");
 
 	SANDBOX_RAISE(
 		int		i;
@@ -3022,7 +3022,7 @@ void            test_ft_isalpha(void){
 
 void			test_ft_isdigit_(void *ptr) {
 	typeof(isdigit)	*ft_isdigit = ptr;
-	SET_EXPLICATION("your ft_isdigit just doesn't work, REALLY ?!");
+	SET_EXPLICATION("your isdigit just doesn't work, REALLY ?!");
 
 	SANDBOX_RAISE(
 			int		i;
@@ -3047,7 +3047,7 @@ void            test_ft_isdigit(void){
 
 void			test_ft_isalnum_(void *ptr) {
 	typeof(isalnum)	*ft_isalnum = ptr;
-	SET_EXPLICATION("your ft_isalnum just doesn't work, REALLY ?!");
+	SET_EXPLICATION("your isalnum just doesn't work, REALLY ?!");
 
 	SANDBOX_RAISE(
 			int		i;
@@ -3072,7 +3072,7 @@ void            test_ft_isalnum(void){
 
 void			test_ft_isascii_(void *ptr) {
 	typeof(isascii)	*ft_isascii = ptr;
-	SET_EXPLICATION("your ft_isascii just doesn't work, REALLY ?!");
+	SET_EXPLICATION("your isascii just doesn't work, REALLY ?!");
 
 	SANDBOX_RAISE(
 			int		i;
@@ -3099,7 +3099,7 @@ void            test_ft_isascii(void){
 
 void			test_ft_isprint_(void *ptr) {
 	typeof(isprint)	*ft_isprint = ptr;
-	SET_EXPLICATION("your ft_isprint just doesn't work, REALLY ?!");
+	SET_EXPLICATION("your isprint just doesn't work, REALLY ?!");
 
 	SANDBOX_RAISE(
 			int		i;
@@ -3127,7 +3127,7 @@ void            test_ft_isprint(void){
 
 void			test_ft_toupper_(void *ptr) {
 	typeof(toupper)	*ft_toupper = ptr;
-	SET_EXPLICATION("your ft_isprint just doesn't work, REALLY ?!");
+	SET_EXPLICATION("your toupper just doesn't work, REALLY ?!");
 
 	SANDBOX_RAISE(
 			int		i;
@@ -3154,7 +3154,7 @@ void            test_ft_toupper(void) {
 
 void			test_ft_tolower_(void *ptr) {
 	typeof(tolower)	*ft_tolower = ptr;
-	SET_EXPLICATION("your ft_isprint just doesn't work, REALLY ?!");
+	SET_EXPLICATION("your tolower just doesn't work, REALLY ?!");
 
 	SANDBOX_RAISE(
 			int		i;
