@@ -2591,6 +2591,40 @@ void			test_ft_strcmp_basic3(void *ptr) {
 			);
 }
 
+void			test_ft_strcmp_zero1(void *ptr) {
+	typeof(strcmp)	*ft_strcmp = ptr;
+	SET_EXPLICATION("your strcmp does not work with zero length string");
+
+	SANDBOX_RAISE(
+			char	*s1 = "AAAAAA";
+			char	*s2 = "";
+
+			int		i1 = strcmp(s1, s2);
+			int		i2 = REG(ft_strcmp(s1, s2));
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strcmp_zero2(void *ptr) {
+	typeof(strcmp)	*ft_strcmp = ptr;
+	SET_EXPLICATION("your strcmp does not work with zero length string");
+
+	SANDBOX_RAISE(
+			char	*s1 = "";
+			char	*s2 = "AAAAAA";
+
+			int		i1 = strcmp(s1, s2);
+			int		i2 = REG(ft_strcmp(s1, s2));
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
 void			test_ft_strcmp_unsigned(void *ptr) {
 	typeof(strcmp)	*ft_strcmp = ptr;
 	SET_EXPLICATION("your strcmp does not cast in unsigned the diff");
@@ -2648,6 +2682,8 @@ void            test_ft_strcmp(void){
 	add_fun_subtest(test_ft_strcmp_basic1);
 	add_fun_subtest(test_ft_strcmp_basic2);
 	add_fun_subtest(test_ft_strcmp_basic3);
+	add_fun_subtest(test_ft_strcmp_zero1);
+	add_fun_subtest(test_ft_strcmp_zero2);
 	add_fun_subtest(test_ft_strcmp_unsigned);
 	add_fun_subtest(test_ft_strcmp_ascii);
 	add_fun_subtest(test_ft_strcmp_null1);
@@ -2704,6 +2740,40 @@ void			test_ft_strncmp_basic3(void *ptr) {
 
 			int		i1 = strncmp(s1, s2, 1);
 			int		i2 = REG(ft_strncmp(s1, s2, 1));
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strncmp_zero1(void *ptr) {
+	typeof(strncmp)	*ft_strncmp = ptr;
+	SET_EXPLICATION("your strncmp does not work with zero length string");
+
+	SANDBOX_RAISE(
+			char	*s1 = "AAAAAA";
+			char	*s2 = "";
+
+			int		i1 = strncmp(s1, s2, 6);
+			int		i2 = REG(ft_strncmp(s1, s2, 6));
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strncmp_zero2(void *ptr) {
+	typeof(strncmp)	*ft_strncmp = ptr;
+	SET_EXPLICATION("your strncmp does not work with zero length string");
+
+	SANDBOX_RAISE(
+			char	*s1 = "";
+			char	*s2 = "AAAAAA";
+
+			int		i1 = strncmp(s1, s2, 6);
+			int		i2 = REG(ft_strncmp(s1, s2, 6));
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
 			SET_DIFF_INT(i1, i2);
@@ -2786,6 +2856,8 @@ void            test_ft_strncmp(void){
 	add_fun_subtest(test_ft_strncmp_basic1);
 	add_fun_subtest(test_ft_strncmp_basic2);
 	add_fun_subtest(test_ft_strncmp_basic3);
+	add_fun_subtest(test_ft_strncmp_zero1);
+	add_fun_subtest(test_ft_strncmp_zero2);
 	add_fun_subtest(test_ft_strncmp_cast);
 	add_fun_subtest(test_ft_strncmp_over_len);
 	add_fun_subtest(test_ft_strncmp_ascii);
