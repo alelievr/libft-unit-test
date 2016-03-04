@@ -242,8 +242,13 @@ void    display_test_result(int value, char *explications)
 			if (g_time.state == INVISIBLE)
 				break ;
 			printf("%s\u25CF%s", (g_time.state == TEST_CRASH) ? COLOR_SPEED_CRASH : get_speed_color(), "\033[38;0m");
-			if (g_time.state == TEST_CRASH)
+			if (g_time.state == TEST_CRASH) {
 				dprintf(g_log_fd, "x??? the test has crash ...");
+				errs[index].type = TEST_CRASH;
+				errs[index].data = "speed test";
+				errs[index].diff = NULL;
+				errs[index++].code = current_test_code;
+			}
 			break ;
 	}
 	fflush(stdout);
