@@ -13,7 +13,7 @@
 #include "libft_test.h"
 #include <ctype.h>
 
-char	*butify(char *code) {
+static char	*butify(char *code) {
 	char	*tmp;
 	size_t	size = (strlen(code) + 0xF00);
 	if (!(tmp = (char*)malloc(sizeof(char) * size)))
@@ -38,14 +38,14 @@ char	*butify(char *code) {
 	return (ret);
 }
 
-char	*get_diff(void) {
+static char	*get_diff(void) {
 	char	buff[0xF000];
 	lseek(g_diff_fd, 0, SEEK_SET);
 	buff[read(g_diff_fd, buff, sizeof(buff))] = 0;
 	return (strdup(buff));
 }
 
-char	*verbose_type(int type) {
+static char	*verbose_type(int type) {
 	switch (type) {
 		case TEST_FAILED:
 			return "fail";
@@ -68,7 +68,7 @@ char	*verbose_type(int type) {
 	}
 }
 
-char	*verbose_color(int type) {
+static char	*verbose_color(int type) {
 	switch(type) {
 		case TEST_KO:
 			return (COLOR_KO);
@@ -82,27 +82,62 @@ char	*verbose_color(int type) {
 	}
 }
 
-void	display_part(char *s) {
+static void	display_part(char *s) {
 	if (!strcmp(s, "ft_memset")) {
+		printf(COLOR_CLEAR"speed scale: > x10:"COLOR_SPEED_10"\u25CF"COLOR_CLEAR
+				" > x5:"COLOR_SPEED_5"\u25CF"COLOR_CLEAR
+				" > x2:"COLOR_SPEED_2"\u25CF"COLOR_CLEAR
+				" > x1:"COLOR_SPEED_1"\u25CF"COLOR_CLEAR
+				" > x0.5:"COLOR_SPEED_05"\u25CF"COLOR_CLEAR
+				" < x0.5:"COLOR_SPEED_0"\u25CF"COLOR_CLEAR
+				"\n");
 		printf(COLOR_PART1"                      First part\n");
 		printf("%s\n", ".-\"-.     .-\"-.     .-\"-.     .-\"-.     .-\"-.     .-\"-.\n"
 				       "     \"-.-\"     \"-.-\"     \"-.-\"     \"-.-\"     \"-.-\"    "COLOR_CLEAR);
 	}
 	if (!strcmp(s, "ft_memalloc")) {
-		printf(COLOR_INFO"\n%s"COLOR_CLEAR, "In this part, you can choose to protect your function or not protect them,\na color code will tell you if your function is protected/not But stay coherent !\n"COLOR_PROTECTED"[||]"COLOR_INFO" --> protected\n"COLOR_NPROTECTED"[||]"COLOR_INFO" --> not protected"COLOR_CLEAR);
+		printf(COLOR_INFO"\n%s"COLOR_CLEAR, "In this part, you can choose to protect "
+				"your function or not protect them,\na color code will tell you if your "
+				"function is protected/not But stay coherent !\n"COLOR_PROTECTED"[||]"COLOR_INFO
+				" --> protected\n"COLOR_NPROTECTED"[||]"COLOR_INFO" --> not protected"COLOR_CLEAR);
 		printf(COLOR_PART2"\n                     Second part\n");
 		printf("%s\n", " __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)\n"
 					   "(______)(______)(______)(______)(______)(______)(______)(___\n");
 	}
 
 	if (!strcmp(s, "ft_lstnew")) {
-		printf(COLOR_PART3"\n%s\n", " /~~~\\/~~\\/~~~\\/~~~\\/~~\\/~~~\\                    /~~~\\/~~\\/~~~\\/~~~\\/~~\\/~~~\\\n"
+		printf(COLOR_PART3"\n%s\n",
+			     "	/~~~\\/~~\\/~~~\\/~~~\\/~~\\/~~~\\                    /~~~\\/~~\\/~~~\\/~~~\\/~~\\/~~~\\\n"
 				 "| /\\/ /\\/ /\\ || /\\/ /\\/ /\\ |                    | /\\ \\/\\ \\/\\ || /\\ \\/\\ \\/\\ |\n"
 				 " \\ \\/ /\\/ /\\/ /\\ \\/ /\\/ /\\/ /     Bonus part     \\ \\/\\ \\/\\ \\/ /\\ \\/\\ \\/\\ \\/ /\n"
 				 "   \\ \\/\\ \\/\\ \\/  \\ \\/\\ \\/\\ \\/                      \\/ /\\/ /\\/ /  \\/ /\\/ /\\/ /\n"
 				 ",_/\\ \\/\\ \\/\\ \\__/\\ \\/\\ \\/\\ \\______________________/ /\\/ /\\/ /\\__/ /\\/ /\\/ /\\_,\n"
 				 "(__/\\__/\\__/\\____/\\__/\\__/\\________________________/\\__/\\__/\\____/\\__/\\__/\\__)\n");
 	}
+}
+
+static char	*get_speed_color(void) {
+	if (!TIME_DIFF_LIB) {
+		dprintf(g_log_fd, " x0 (function time is 0, this is not possible)");
+		return (COLOR_SPEED_CRASH);
+	}
+	float	diff = ((float)(TIME_DIFF_SYS) / (float)(TIME_DIFF_LIB));
+
+	dprintf(g_log_fd, "x%.2f exec time", diff);
+//	printf("%llu - %llu\n", TIME_DIFF_SYS, TIME_DIFF_LIB);
+//	printf("%f\n", diff);
+	if (diff > 10)
+		return (COLOR_SPEED_10);
+	else if (diff > 5)
+		return (COLOR_SPEED_5);
+	else if (diff > 2)
+		return (COLOR_SPEED_2);
+	else if (diff > 1)
+		return (COLOR_SPEED_1);
+	else if (diff > 0.5)
+		return (COLOR_SPEED_05);
+	else
+		return (COLOR_SPEED_0);
 }
 
 void    display_test_result(int value, char *explications)
@@ -201,6 +236,13 @@ void    display_test_result(int value, char *explications)
 				dprintf(g_log_fd, "%s", (current_protected == PROTECTED) ? "{protected}" : "{not protected}");
 				first = 0;
 			}
+			break ;
+		case TEST_SPEED:
+			if (g_time.state == INVISIBLE)
+				break ;
+			printf("%s\u25CF%s", (g_time.state == TEST_CRASH) ? COLOR_SPEED_CRASH : get_speed_color(), "\033[38;0m");
+			if (g_time.state == TEST_CRASH)
+				dprintf(g_log_fd, "x??? the test has crash ...");
 			break ;
 	}
 	fflush(stdout);

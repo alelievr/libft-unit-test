@@ -152,6 +152,20 @@ void			test_ft_memset_zero_value(void *ptr) {
 		   );
 }
 
+void			test_ft_memset_speed(void *ptr) {
+	typeof(memset)	*ft_memset = ptr;
+
+	SANDBOX_SPEED(
+			size_t	size = BFSIZE * 16;
+			char	*b1 = (char *)malloc(sizeof(char) * size);
+			char	*b2 = (char *)malloc(sizeof(char) * size);
+			,
+			memset(b1, 'A', size);
+			,
+			ft_memset(b2, 'A', size);
+			);
+}
+
 void            test_ft_memset(void) {
 	add_fun_subtest(test_ft_memset_basic);
 	add_fun_subtest(test_ft_memset_return);
@@ -159,6 +173,7 @@ void            test_ft_memset(void) {
 	add_fun_subtest(test_ft_memset_null);
 	add_fun_subtest(test_ft_memset_zero_value);
 	add_fun_subtest(test_ft_memset_fat);
+	add_fun_subtest(test_ft_memset_speed);
 }
 
 ////////////////////////////////
@@ -188,7 +203,6 @@ void			test_ft_bzero_basic(void *ptr) {
 
 void			test_ft_bzero_zero_value(void *ptr) {
 	typeof(bzero)	*ft_bzero = ptr;
-
 	SET_EXPLICATION("your bzero change something when call with 0 !");
 
 	SANDBOX_RAISE(
@@ -213,11 +227,28 @@ void			test_ft_bzero_null(void *ptr) {
 			);
 }
 
+void			test_ft_bzero_speed(void *ptr) {
+	typeof(bzero)	*ft_bzero = ptr;
+
+	SANDBOX_SPEED(
+			size_t	size = BFSIZE;
+			char	*str = (char *)malloc(sizeof(char) * size);
+			char	*str2 = (char *)malloc(sizeof(char) * size);
+
+			memset(str, 'a', size);
+			memset(str2, 'a', size);
+			,
+			bzero(str, size);
+			,
+			ft_bzero(str2, size);
+			);
+}
 
 void            test_ft_bzero(void){
 	add_fun_subtest(test_ft_bzero_basic);
 	add_fun_subtest(test_ft_bzero_zero_value);
 	add_fun_subtest(test_ft_bzero_null);
+	add_fun_subtest(test_ft_bzero_speed);
 }
 
 ////////////////////////////////
@@ -346,6 +377,21 @@ void			test_ft_memcpy_null2(void *ptr) {
 			);
 }
 
+void			test_ft_memcpy_speed(void *ptr) {
+	typeof(memcpy)	*ft_memcpy = ptr;
+
+	SANDBOX_SPEED(
+			size_t	size = BFSIZE * 16;
+			char	*src = malloc(size + 1);
+			char	*buff1 = malloc(size + 1);
+
+			memset(src, 'A', size);
+			,
+			memcpy(buff1, src, size);
+			,
+			ft_memcpy(buff1, src, size);
+			);
+}
 void            test_ft_memcpy(void){
 	add_fun_subtest(test_ft_memcpy_basic_test);
 	add_fun_subtest(test_ft_memcpy_return);
@@ -355,6 +401,7 @@ void            test_ft_memcpy(void){
 	add_fun_subtest(test_ft_memcpy_struct);
 	add_fun_subtest(test_ft_memcpy_null1);
 	add_fun_subtest(test_ft_memcpy_null2);
+	add_fun_subtest(test_ft_memcpy_speed);
 }
 
 ////////////////////////////////
@@ -521,6 +568,22 @@ void			test_ft_memccpy_null2(void *ptr) {
 			);
 }
 
+void			test_ft_memccpy_speed(void *ptr) {
+	typeof(memccpy)	*ft_memccpy = ptr;
+
+	SANDBOX_SPEED(
+			size_t	size = BFSIZE * 16;
+			char	*src = malloc(size + 1);
+			char	*buff1 = malloc(size + 1);
+
+			memset(src, 'A', size);
+			,
+			memccpy(buff1, src, '\\', size);
+			,
+			ft_memccpy(buff1, src, '\\', size);
+			);
+}
+
 void            test_ft_memccpy(void){
 	add_fun_subtest(test_ft_memccpy_basic_test);
 	add_fun_subtest(test_ft_memccpy_unsigned);
@@ -532,6 +595,7 @@ void            test_ft_memccpy(void){
 	add_fun_subtest(test_ft_memcpy_struct);
 	add_fun_subtest(test_ft_memccpy_null1);
 	add_fun_subtest(test_ft_memccpy_null2);
+	add_fun_subtest(test_ft_memccpy_speed);
 }
 
 ////////////////////////////////
@@ -732,6 +796,22 @@ void			test_ft_memmove_malloc(void *ptr) {
 	(void)ft_memmove;
 }
 
+void			test_ft_memmove_speed(void *ptr) {
+	typeof(memmove)		*ft_memmove = ptr;
+
+	SANDBOX_SPEED(
+			int		size = BFSIZE * 128;
+			char	*dst = (char *)malloc(sizeof(char) * size);
+			char	*data = (char *)malloc(sizeof(char) * size);
+
+			memset(data, 'A', size);
+			,
+			memmove(dst, data, size);
+			,
+			ft_memmove(dst, data, size);
+			);
+}
+
 void            test_ft_memmove(void){
 	add_fun_subtest(test_ft_memmove_basic);
 	add_fun_subtest(test_ft_memmove_return);
@@ -744,6 +824,7 @@ void            test_ft_memmove(void){
 	add_fun_subtest(test_ft_memmove_null1);
 	add_fun_subtest(test_ft_memmove_null2);
 	add_fun_subtest(test_ft_memmove_malloc);
+	add_fun_subtest(test_ft_memmove_speed);
 }
 
 ////////////////////////////////
@@ -833,6 +914,22 @@ void			test_ft_memchr_null(void *ptr) {
 			);
 }
 
+void			test_ft_memchr_speed(void *ptr) {
+	typeof(memchr)		*ft_memchr = ptr;
+	SET_EXPLICATION("your memchr does not work");
+
+	SANDBOX_SPEED(
+			size_t			size = BFSIZE * 16;
+			char			*src = malloc(size);
+
+			memset(src, 'A', size);
+			,
+			memchr(src, '\xde', size);
+			,
+			ft_memchr(src, '\xde', size);
+			);
+}
+
 void            test_ft_memchr(void) {
 	add_fun_subtest(test_ft_memchr_basic);
 	add_fun_subtest(test_ft_memchr_unsigned);
@@ -840,6 +937,7 @@ void            test_ft_memchr(void) {
 	add_fun_subtest(test_ft_memchr_not_found2);
 	add_fun_subtest(test_ft_memchr_null_byte);
 	add_fun_subtest(test_ft_memchr_null);
+	add_fun_subtest(test_ft_memchr_speed);
 }
 
 ////////////////////////////////
@@ -871,7 +969,7 @@ void			test_ft_memcmp_basic1(void *ptr) {
 			uint8_t	*s2 = (uint8_t *)"\xff\xaa\xde\x12MACOSX";
 			size_t	size = 7;
 
-			int		i1 = memcmp(s1, s2, size);
+			int		i1 = REG(memcmp(s1, s2, size));
 			int		i2 = REG(ft_memcmp(s1, s2, size));
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
@@ -967,6 +1065,24 @@ void			test_ft_memcmp_null2(void *ptr) {
 			);
 }
 
+void			test_ft_memcmp_speed(void *ptr) {
+	typeof(memcmp)		*ft_memcmp = ptr;
+	SET_EXPLICATION("your memcmp does not cast the memory in unsigned char");
+
+	SANDBOX_SPEED(
+			size_t	size = BFSIZE * 16;
+			uint8_t	*s1 = malloc(sizeof(uint8_t) * size);
+			uint8_t	*s2 = malloc(sizeof(uint8_t) * size);
+
+			memset(s1, 'A', size);
+			memset(s2, 'A', size);
+			,
+			memcmp(s1, s2, size);
+			,
+			ft_memcmp(s1, s2, size);
+			);
+}
+
 void            test_ft_memcmp(void){
 	add_fun_subtest(test_ft_memcmp_basic);
 	add_fun_subtest(test_ft_memcmp_basic1);
@@ -976,6 +1092,7 @@ void            test_ft_memcmp(void){
 	add_fun_subtest(test_ft_memcmp_null_byte);
 	add_fun_subtest(test_ft_memcmp_null1);
 	add_fun_subtest(test_ft_memcmp_null2);
+	add_fun_subtest(test_ft_memcmp_speed);
 }
 
 ////////////////////////////////
@@ -1022,12 +1139,32 @@ void			test_ft_strlen_basic(void *ptr) {
 	SET_EXPLICATION("your strlen doesn't work with basic test");
 
 	SANDBOX_RAISE(
+			int		r1;
+		  	int		r2;
+			char	*str = "sais-tu compter ?";
 
-			if (ft_strlen("sais-tu compter ?") != strlen("parceque lui oui!"))
+			if ((r1 = ft_strlen(str)) != (r2 = strlen(str))) {
+				SET_DIFF_INT(r1, r2);
 				exit(TEST_FAILED);
+			}
 			exit(TEST_SUCCESS);
 			);
+}
 
+void			test_ft_strlen_speed(void *ptr) {
+	typeof(strlen)	*ft_strlen = ptr;
+
+	SANDBOX_SPEED(
+			size_t	size = BFSIZE * 16;
+			char	*str = malloc(size + 1);
+
+			memset(str, 'A', size);
+			str[size] = 0;
+			,
+			strlen(str);
+			,
+			ft_strlen(str);
+			);
 }
 
 void            test_ft_strlen(void){
@@ -1036,6 +1173,7 @@ void            test_ft_strlen(void){
 	add_fun_subtest(test_ft_strlen_null);
 	add_fun_subtest(test_ft_strlen_empty);
 	add_fun_subtest(test_ft_strlen_zero);
+	add_fun_subtest(test_ft_strlen_speed);
 }
 
 ////////////////////////////////
@@ -1141,7 +1279,24 @@ void			test_ft_strdup_basic(void *ptr) {
 
 }
 
-void            test_ft_strdup(void){
+void			test_ft_strdup_speed(void *ptr) {
+	typeof(strdup)	*ft_strdup = ptr;
+
+	SANDBOX_SPEED(
+			size_t	size = BFSIZE * 16;
+			char	*str = malloc(size + 1);
+
+			memset(str, 'A', size);
+			str[size] = 0;
+			,
+			strdup(str);
+			,
+			ft_strdup(str);
+			);
+
+}
+
+void            test_ft_strdup(void) {
 
 	add_fun_subtest(test_ft_strdup_malloc_null);
 	add_fun_subtest(test_ft_strdup_basic);
@@ -1149,6 +1304,7 @@ void            test_ft_strdup(void){
 	add_fun_subtest(test_ft_strdup_size);
 	add_fun_subtest(test_ft_strdup_last_char);
 	add_fun_subtest(test_ft_strdup_null);
+	add_fun_subtest(test_ft_strdup_speed);
 }
 
 ////////////////////////////////
@@ -1212,6 +1368,25 @@ void			test_ft_strcpy_unicode(void *ptr) {
 			);
 }
 
+void			test_ft_strcpy_zero(void *ptr) {
+	typeof(strcpy)	*ft_strcpy = ptr;
+	SET_EXPLICATION("your strcpy does not set \\0 at the end of the string");
+
+	SANDBOX_RAISE(
+			char	*src = "zero test !";
+			char	dst1[80];
+			size_t	len = strlen(src);
+
+			memset(dst1, 'A', 79);
+			ft_strcpy(dst1, src);
+			if (dst1[len]) {
+				SET_DIFF(src, dst1);
+				exit(TEST_FAILED);
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
 void			test_ft_strcpy_empty(void *ptr) {
 	typeof(strcpy)	*ft_strcpy = ptr;
 	SET_EXPLICATION("your strcpy does not work with an empty string");
@@ -1251,13 +1426,32 @@ void			test_ft_strcpy_null2(void *ptr) {
 			);
 }
 
+void			test_ft_strcpy_speed(void *ptr) {
+	typeof(strcpy)	*ft_strcpy = ptr;
+
+	SANDBOX_SPEED(
+			size_t	size = BFSIZE * 2;
+			char	*src = malloc(size + 1);
+			char	*dst = malloc(size + 1);
+
+			memset(src, 'A', size);
+			src[size] = 0;
+			,
+			strcpy(dst, src);
+			,
+			ft_strcpy(dst, src);
+			);
+}
+
 void            test_ft_strcpy(void) {
 	add_fun_subtest(test_ft_strcpy_basic);
 	add_fun_subtest(test_ft_strcpy_return);
 	add_fun_subtest(test_ft_strcpy_unicode);
+	add_fun_subtest(test_ft_strcpy_zero);
 	add_fun_subtest(test_ft_strcpy_empty);
 	add_fun_subtest(test_ft_strcpy_null1);
 	add_fun_subtest(test_ft_strcpy_null2);
+	add_fun_subtest(test_ft_strcpy_speed);
 }
 
 ////////////////////////////////
@@ -1447,6 +1641,23 @@ void			test_ft_strncpy_null2(void *ptr) {
 			);
 }
 
+void			test_ft_strncpy_speed(void *ptr) {
+	typeof(strncpy)	*ft_strncpy = ptr;
+
+	SANDBOX_SPEED(
+			size_t	size = BFSIZE * 2;
+			char	*src = malloc(size + 1);
+			char	*dst = malloc(size + 1);
+
+			memset(src, 'A', size);
+			src[size] = 0;
+			,
+			strncpy(dst, src, size);
+			,
+			ft_strncpy(dst, src, size);
+			);
+}
+
 void            test_ft_strncpy(void){
 	add_fun_subtest(test_ft_strncpy_basic);
 	add_fun_subtest(test_ft_strncpy_return);
@@ -1458,6 +1669,7 @@ void            test_ft_strncpy(void){
 	add_fun_subtest(test_ft_strncpy_final_0);
 	add_fun_subtest(test_ft_strncpy_null1);
 	add_fun_subtest(test_ft_strncpy_null2);
+	add_fun_subtest(test_ft_strncpy_speed);
 }
 
 ////////////////////////////////
@@ -2548,7 +2760,7 @@ void			test_ft_strcmp_basic1(void *ptr) {
 			char	*s1 = STRING_1;
 			char	*s2 = STRING_2;
 
-			int		i1 = strcmp(s1, s2);
+			int		i1 = REG(strcmp(s1, s2));
 			int		i2 = REG(ft_strcmp(s1, s2));
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
@@ -2565,7 +2777,7 @@ void			test_ft_strcmp_basic2(void *ptr) {
 			char	*s1 = "omg1";
 			char	*s2 = "omg3";
 
-			int		i1 = strcmp(s1, s2);
+			int		i1 = REG(strcmp(s1, s2));
 			int		i2 = REG(ft_strcmp(s1, s2));
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
@@ -2582,7 +2794,7 @@ void			test_ft_strcmp_basic3(void *ptr) {
 			char	*s1 = "";
 			char	*s2 = "";
 
-			int		i1 = strcmp(s1, s2);
+			int		i1 = REG(strcmp(s1, s2));
 			int		i2 = REG(ft_strcmp(s1, s2));
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
@@ -2599,7 +2811,7 @@ void			test_ft_strcmp_zero1(void *ptr) {
 			char	*s1 = "AAAAAA";
 			char	*s2 = "";
 
-			int		i1 = strcmp(s1, s2);
+			int		i1 = REG(strcmp(s1, s2));
 			int		i2 = REG(ft_strcmp(s1, s2));
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
@@ -2616,7 +2828,7 @@ void			test_ft_strcmp_zero2(void *ptr) {
 			char	*s1 = "";
 			char	*s2 = "AAAAAA";
 
-			int		i1 = strcmp(s1, s2);
+			int		i1 = REG(strcmp(s1, s2));
 			int		i2 = REG(ft_strcmp(s1, s2));
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
@@ -2650,7 +2862,7 @@ void			test_ft_strcmp_ascii(void *ptr) {
 			char	*s1 = "\x12\xff\x65\x12\xbd\xde\xad";
 			char	*s2 = "\x12\x02";
 
-			int		i1 = strcmp(s1, s2);
+			int		i1 = REG(strcmp(s1, s2));
 			int		i2 = REG(ft_strcmp(s1, s2));
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
@@ -2703,7 +2915,7 @@ void			test_ft_strncmp_basic1(void *ptr) {
 			char	*s2 = STRING_2;
 			size_t	size = strlen(STRING_1);
 
-			int		i1 = strncmp(s1, s2, size);
+			int		i1 = REG(strncmp(s1, s2, size));
 			int		i2 = REG(ft_strncmp(s1, s2, size));
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
@@ -2721,7 +2933,7 @@ void			test_ft_strncmp_basic2(void *ptr) {
 			char	*s2 = "omg3";
 			size_t	size = 4;
 
-			int		i1 = strncmp(s1, s2, size);
+			int		i1 = REG(strncmp(s1, s2, size));
 			int		i2 = REG(ft_strncmp(s1, s2, size));
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
@@ -2738,7 +2950,7 @@ void			test_ft_strncmp_basic3(void *ptr) {
 			char	*s1 = "";
 			char	*s2 = "";
 
-			int		i1 = strncmp(s1, s2, 1);
+			int		i1 = REG(strncmp(s1, s2, 1));
 			int		i2 = REG(ft_strncmp(s1, s2, 1));
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
@@ -2755,7 +2967,7 @@ void			test_ft_strncmp_zero1(void *ptr) {
 			char	*s1 = "AAAAAA";
 			char	*s2 = "";
 
-			int		i1 = strncmp(s1, s2, 6);
+			int		i1 = REG(strncmp(s1, s2, 6));
 			int		i2 = REG(ft_strncmp(s1, s2, 6));
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
@@ -2772,7 +2984,7 @@ void			test_ft_strncmp_zero2(void *ptr) {
 			char	*s1 = "";
 			char	*s2 = "AAAAAA";
 
-			int		i1 = strncmp(s1, s2, 6);
+			int		i1 = REG(strncmp(s1, s2, 6));
 			int		i2 = REG(ft_strncmp(s1, s2, 6));
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
@@ -2807,7 +3019,7 @@ void			test_ft_strncmp_over_len(void *ptr) {
 			char	*s2 = "omg3                ";
 			size_t	size = 100000;
 
-			int		i1 = strncmp(s1, s2, size);
+			int		i1 = REG(strncmp(s1, s2, size));
 			int		i2 = REG(ft_strncmp(s1, s2, size));
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
@@ -2824,7 +3036,7 @@ void			test_ft_strncmp_ascii(void *ptr) {
 			char	*s2 = "\x12\x02";
 			size_t	size = 6;
 
-			int		i1 = strncmp(s1, s2, size);
+			int		i1 = REG(strncmp(s1, s2, size));
 			int		i2 = REG(ft_strncmp(s1, s2, size));
 			if (i1 == i2)
 				exit(TEST_SUCCESS);

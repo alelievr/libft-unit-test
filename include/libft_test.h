@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2016/01/24 18:14:36 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/03/04 02:10:50 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@
 typedef struct	s_subtest {
 	char	*fun_name;
 	void	(*fun_test_ptr)(void *ptr);
-	char	visible;
+	_Bool	visible;
 }				t_libft_subtest;
 
 typedef struct	s_test {
 	char	*fun_name;
 	void	(*fun_test_ptr)(void);
-	char	visible;
+	_Bool	visible;
 }				t_libft_test;
 
 typedef struct	s_errs {
@@ -55,6 +55,13 @@ typedef struct	s_list {
 	struct s_list	*next;
 }				t_list;
 
+typedef struct	s_tdiff {
+	uint64_t	begin;
+	uint64_t	mid;
+	uint64_t	end;
+	char		state;
+}				t_tdiff;
+
 enum		e_values {
 	TEST_SUCCESS,
 	TEST_FAILED,
@@ -65,15 +72,23 @@ enum		e_values {
 	TEST_NOCRASH,
 	TEST_KO,
 	TEST_PROT,
+	TEST_SPEED,
 	TEST_INVISIBLE,
 	TEST_FINISHED
 };
 
 enum		e_prot {
 	INVISIBLE,
+	VISIBLE,
 	PROTECTED,
 	NOT_PROTECTED
 };
+
+# define	OFF_ALLOC_BYTE1	((unsigned long long *)g_shared_mem)[0x0]
+# define	OFF_ALLOC_BYTE2	((unsigned long long *)g_shared_mem)[0x1]
+# define	OFF_TIME_BEGIN	((unsigned long long *)g_shared_mem)[0x10]
+# define	OFF_TIME_MID	((unsigned long long *)g_shared_mem)[0x20]
+# define	OFF_TIME_END	((unsigned long long *)g_shared_mem)[0x30]
 
 # define	LOG_FILE		"result.log"
 # define	TMP_FILE		".over_malloc"
@@ -93,6 +108,13 @@ enum		e_prot {
 # define	COLOR_PROTECTED	"\033[38;5;229m"
 # define	COLOR_NPROTECTED "\033[38;5;80m"
 # define	COLOR_INFO		"\033[38;5;10m"
+# define	COLOR_SPEED_CRASH "\033[38;5;245m"
+# define	COLOR_SPEED_10	"\033[38;5;197m"
+# define	COLOR_SPEED_5	"\033[38;5;202m"
+# define	COLOR_SPEED_2	"\033[38;5;220m"
+# define	COLOR_SPEED_1	"\033[38;5;118m"
+# define	COLOR_SPEED_05	"\033[38;5;44m"
+# define	COLOR_SPEED_0	"\033[38;5;27m"
 
 # define	BSIZE			0xF00
 # define	BFSIZE			0xF0000
@@ -110,6 +132,8 @@ enum		e_prot {
 # define	SANDBOX_RAISE(x)	SANDBOX(x); if (SANDBOX_CRASH) ft_raise(TEST_CRASH); else if (SANDBOX_RETURN != SIGKILL) ft_raise(g_ret[1]);
 # define	SANDBOX_IRAISE(x)	SANDBOX(x); if (SANDBOX_CRASH) ft_raise(TEST_SUCCESS); else if (SANDBOX_RETURN != SIGKILL) ft_raise(TEST_NOCRASH);
 # define	SANDBOX_PROT(x);	SANDBOX(x); if (SANDBOX_CRASH) current_protected = NOT_PROTECTED; else current_protected = PROTECTED; ft_raise(TEST_PROT);
+//			SANDBOX_SPEED(initialization state, system function, libft function)
+# define	SANDBOX_SPEED(x,y,z)SANDBOX(x; TIME_BEGIN; y; TIME_MID; z; TIME_END; TIME_SET_DATA;) if (SANDBOX_CRASH) g_time.state = TEST_CRASH; else g_time.state = VISIBLE; TIME_READ_DATA; ft_raise(TEST_SPEED);
 # define	SANDBOX_RESULT		(g_ret[1])
 # define	SANDBOX_RETURN		(g_ret[0])
 # define	_SANDBOX_RAISE(x)	if (x == SIGKILL) ft_raise(TEST_TIMEOUT); if (x == SIGQUIT) ft_raise(TEST_INTERUPT);
@@ -141,6 +165,15 @@ enum		e_prot {
 # define	SET_DIFF_ASCII(x, y, z)	lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |", current_fun_name + 3); PRINT_DIFF_ASCII(x, z); dprintf(g_diff_fd, "|\n%12s: |", current_fun_name); PRINT_DIFF_ASCII(y, z); dprintf(g_diff_fd, "|");
 # define	RESET_DIFF			lseek(g_diff_fd, 0, SEEK_SET); write(g_diff_fd, "\0", 1);
 
+# define	TIME_BEGIN			g_time.begin = ft_clock(); g_time.state = VISIBLE;// printf("begin = %llu\n", g_time.begin);
+# define	TIME_MID			g_time.mid = ft_clock();// printf("mid = %llu\n", g_time.mid);
+# define	TIME_END			g_time.end = ft_clock();// printf("end = %llu\n", g_time.end);
+# define	TIME_DIFF_SYS		(g_time.end - g_time.mid)
+# define	TIME_DIFF_LIB		(g_time.mid - g_time.begin)
+# define	TIME_SPEEDRATE		(((float)TIME_DIFF_SYS / (float)TIME_DIFF_LIB))
+# define	TIME_SET_DATA		OFF_TIME_BEGIN = g_time.begin; OFF_TIME_MID = g_time.mid; OFF_TIME_END = g_time.end;
+# define	TIME_READ_DATA		g_time.begin = OFF_TIME_BEGIN; g_time.mid = OFF_TIME_MID; g_time.end =  OFF_TIME_END;
+
 # define	STDOUT_TO_BUFF		fd_to_buffer(STDOUT_FILENO);
 # define	STDERR_TO_BUFF		fd_to_buffer(STDERR_FILENO);
 # define	GET_STDOUT(y, z)	write(STDOUT_FILENO, "", 1); get_fd_buffer(STDOUT_FILENO, y, z);
@@ -164,6 +197,8 @@ extern		int				g_malloc_fd;
 extern		int				g_diff_fd;
 extern		char			*current_test_code;
 extern		int				current_protected;
+extern		t_tdiff			g_time;
+extern		char			*g_shared_mem;
 
 /*  Display functions  */
 void	display_test_result(int value, char *explications);
@@ -253,6 +288,7 @@ void			ft_raise(int s);
 void			fd_to_buffer(int fd);
 char			*get_fd_buffer(int fd, char *buff, size_t size);
 int				get_last_malloc_size(void);
+unsigned long long	ft_clock(void);
 
 /*  sanbox:  */
 void			sandbox(void);

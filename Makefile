@@ -49,13 +49,13 @@ WRAPNAME	=	run_test
 FRAMEWORK	=	
 
 #	Compiler
-CFLAGS		=	-Werror -Wall -Wextra -g
+CFLAGS		=	-Werror -Wall -Wextra
 CSOFLAGS	=	-shared -fPIC
 CSOFLAGS2	=	
 CC			=	clang
 
 #	Optimization
-OPTFLAGS	=	-funroll-loops -O3 -pipe
+OPTFLAGS	=	-funroll-loops -pipe
 
 ################
 ##   COLORS   ##
@@ -133,6 +133,7 @@ $(ASSETDIR)/$(LIBMALLOC):
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", $(CC) -dynamiclib $(ASSETDIR)/malloc.c -I $(INCDIR) -o $(ASSETDIR)/$(LIBMALLOC))
 
 $(ASSETDIR)/$(ANAME):
+	@rm -f $(SONAME)
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", make -C "$(LIBFTDIR)")
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", cp "$(LIBFTDIR)/libft.a" $(ASSETDIR)/)
 	

@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2015/12/23 20:31:41 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/03/04 03:17:13 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,23 @@
 #include <dlfcn.h>
 #include <time.h>
 #include <execinfo.h>
+#include <locale.h>
+#include <sys/mman.h>
 #include "libft_test.h"
 #include "init.c"
 #include <errno.h>
+#include <time.h>
+#include <sys/time.h>
 
 int		fd_pipe[2];
 int		_stdout;
+
+unsigned long long	ft_clock(void) {
+//	struct timeval	tv;
+//	gettimeofday(&tv, 0);
+//	return (tv.tv_usec);
+	return (clock());
+}
 
 void	fd_to_buffer(int fd) {
 	_stdout = dup(fd);
@@ -113,6 +124,7 @@ void	*timer(void *t) {
 			time = 0;
 		if (time >= TIMEOUT_MILLIS) {
 			time = 0;
+			g_time.state = TEST_CRASH;
 			kill(g_pid, SIGKILL);
 		}
 		time++;
@@ -132,6 +144,9 @@ void	load_timer(void) {
 int		main(void) {
 	void	*handle;
 
+	setlocale(LC_ALL, "");
+	if ((g_shared_mem = mmap(NULL, 0xF00, PROT_READ | PROT_WRITE, MAP_ANONYMOUS | MAP_SHARED, -1, 0)) == MAP_FAILED)
+		puts("failed to create shared memory map !"), raise(SIGKILL);
 	if ((g_log_fd = open(LOG_FILE, O_WRONLY | O_TRUNC | O_CREAT, 0600)) == -1)
 		ft_exit("can't open/create logfile !");
 	if ((g_malloc_fd = open(TMP_FILE, O_WRONLY | O_TRUNC | O_CREAT, 0600)) == -1)

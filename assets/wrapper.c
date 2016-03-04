@@ -6,12 +6,13 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/21 19:48:59 by alelievr          #+#    #+#             */
-/*   Updated: 2016/01/24 18:31:57 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/03/03 22:44:12 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/mman.h>
 #include "libft_test.h"
 
 typedef struct	s_sig {
@@ -20,7 +21,8 @@ typedef struct	s_sig {
 	char	*str;
 }				t_sig;
 
-t_sig	sigs[] = {{1, "SIGHUP", "terminal line hangup"},
+t_sig	sigs[] = {
+	{1, "SIGHUP", "terminal line hangup"},
 	{2, "SIGINT", "interrupt program"},
 	{3, "SIGQUIT", "quit program"},
 	{4, "SIGILL", "illegal instruction"},
@@ -50,12 +52,21 @@ t_sig	sigs[] = {{1, "SIGHUP", "terminal line hangup"},
 	{28, "SIGWINCH", "Window size change"},
 	{29, "SIGINFO", "status request from keyboard"},
 	{30, "SIGUSR1", "User defined signal 1"},
-	{31, "SIGUSR2", "User defined signal 2"}};
+	{31, "SIGUSR2", "User defined signal 2"}
+};
 
 int		main(void) {
-	char	*argv[] = {"run_test", NULL};
-	char	*env[] = {"DYLD_INSERT_LIBRARIES=./assets/malloc.dylib", "DYLD_FORCE_FLAT_NAMESPACE=1", NULL};
+	char	*argv[] = {
+		"run_test",
+		NULL
+	};
+	char	*env[] = {
+		"DYLD_INSERT_LIBRARIES=./assets/malloc.dylib",
+		"DYLD_FORCE_FLAT_NAMESPACE=1",
+	   	NULL
+	};
 	pid_t	pid;
+	char	*mem;
 	char	ret[2];
 
 	if ((pid = fork()) == 0)
