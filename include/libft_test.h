@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2016/03/04 02:10:50 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/03/04 16:13:57 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,16 +84,27 @@ enum		e_prot {
 	NOT_PROTECTED
 };
 
-# define	OFF_ALLOC_BYTE1	((unsigned long long *)g_shared_mem)[0x0]
-# define	OFF_ALLOC_BYTE2	((unsigned long long *)g_shared_mem)[0x1]
-# define	OFF_TIME_BEGIN	((unsigned long long *)g_shared_mem)[0x10]
-# define	OFF_TIME_MID	((unsigned long long *)g_shared_mem)[0x20]
-# define	OFF_TIME_END	((unsigned long long *)g_shared_mem)[0x30]
+enum		e_offset {
+	O_ALLOC_BYTE1 = 0x0,
+	O_ALLOC_BYTE2 = 0x1,
+	O_ALLOC_SIZE = 0x2,
+	O_TIME_BEGIN = 0x10,
+	O_TIME_MID = 0x20,
+	O_TIME_END = 0x30
+};
+
+# define	unused			__attribute__((unused))
+
+# define	OFF_ALLOC_BYTE1	((unsigned long long *)g_shared_mem)[O_ALLOC_BYTE1]
+# define	OFF_ALLOC_BYTE2	((unsigned long long *)g_shared_mem)[O_ALLOC_BYTE2]
+# define	OFF_ALLOC_SIZE	((unsigned long long *)g_shared_mem)[O_ALLOC_SIZE]
+# define	OFF_TIME_BEGIN	((unsigned long long *)g_shared_mem)[O_TIME_BEGIN]
+# define	OFF_TIME_MID	((unsigned long long *)g_shared_mem)[O_TIME_MID]
+# define	OFF_TIME_END	((unsigned long long *)g_shared_mem)[O_TIME_END]
 
 # define	LOG_FILE		"result.log"
-# define	TMP_FILE		".over_malloc"
 # define	DIFF_FILE		".fun_diff"
-# define	MALLOC_FILE		".malloc_size"
+# define	SHARED_MEM_FILE	".shmem"
 # define	BACKTRACE_FILE	"backtrace.crash"
 
 # define	COLOR_SUCCESS	"\033[38;5;46m"
@@ -147,12 +158,12 @@ enum		e_prot {
 # define	_MALLOC_SIZE		'S'
 # define	_MALLOC_DEBUG		'D'
 
-# define	MALLOC_NULL			lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[2]){_MALLOC_NULL, _MALLOC_DISABLE}, 2);
-# define	MALLOC_RESET		lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[2]){_MALLOC_RESET, _MALLOC_DISABLE}, 2);
-# define	MALLOC_MEMSET		lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[2]){_MALLOC_MEMSET, _MALLOC_DISABLE}, 2);
-# define	MALLOC_DEBUG		lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[2]){_MALLOC_DEBUG, _MALLOC_DISABLE}, 2);
-# define	MALLOC_SIZE			lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[2]){_MALLOC_SIZE, _MALLOC_DISABLE}, 2);
-# define	MALLOC_DEBUG		lseek(g_malloc_fd, 0, SEEK_SET); write(g_malloc_fd, (char *)(char[2]){_MALLOC_DEBUG, _MALLOC_DISABLE}, 2);
+# define	MALLOC_SET_BYTE(x)	OFF_ALLOC_BYTE1 = x; OFF_ALLOC_BYTE2 = _MALLOC_DISABLE;
+# define	MALLOC_NULL			MALLOC_SET_BYTE(_MALLOC_NULL)
+# define	MALLOC_RESET		MALLOC_SET_BYTE(_MALLOC_RESET)
+# define	MALLOC_MEMSET		MALLOC_SET_BYTE(_MALLOC_MEMSET)
+# define	MALLOC_DEBUG		MALLOC_SET_BYTE(_MALLOC_DEBUG)
+# define	MALLOC_SIZE			MALLOC_SET_BYTE(_MALLOC_SIZE)
 
 //# define	PRINT_BITS(x, y)	print_double_bits(x, y);
 # define	SET_DIFF(x, y)		lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%.300s|\n%12s: |%.300s|", current_fun_name + 3, x, current_fun_name, y); write(g_diff_fd, "\0", 1);
@@ -193,12 +204,12 @@ extern		char			*current_test;
 extern		pid_t			g_pid;
 extern		char			g_ret[2];
 extern		int				g_log_fd;
-extern		int				g_malloc_fd;
 extern		int				g_diff_fd;
+extern		char			*g_shared_mem;
 extern		char			*current_test_code;
 extern		int				current_protected;
+extern		char			g_nospeed;
 extern		t_tdiff			g_time;
-extern		char			*g_shared_mem;
 
 /*  Display functions  */
 void	display_test_result(int value, char *explications);

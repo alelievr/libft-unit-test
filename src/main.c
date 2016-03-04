@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2016/03/04 03:17:13 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/03/04 16:17:41 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,15 @@ void	fd_to_buffer(int fd) {
 }
 
 int		get_last_malloc_size(void) {
-	int		fd;
+/*	int		fd;
 	char	buff[0xF0];
 
 	if ((fd = open(MALLOC_FILE, O_RDONLY)) == -1)
 		return (0);
 	if ((read(fd, buff, sizeof(buff))) == -1)
 		return (0);
-	return (atoi(buff));
+	return (atoi(buff));*/
+	return ((int)OFF_ALLOC_SIZE);
 }
 
 char	*get_fd_buffer(int fd, char *buff, size_t size) {
@@ -110,7 +111,6 @@ void	run_subtests(void *h, int start) {
 	printf("\nSee %s for more informations !\n", LOG_FILE);
 	dprintf(g_log_fd, "\n");
 	close(g_log_fd);
-	unlink(TMP_FILE);
 	exit(0);
 }
 
@@ -141,16 +141,22 @@ void	load_timer(void) {
 		ft_exit("thread inits failed !");
 }
 
-int		main(void) {
+int		main(unused int ac, char **av) {
 	void	*handle;
 
+	if (av[1])
+		g_nospeed = 1;
 	setlocale(LC_ALL, "");
 	if ((g_shared_mem = mmap(NULL, 0xF00, PROT_READ | PROT_WRITE, MAP_ANONYMOUS | MAP_SHARED, -1, 0)) == MAP_FAILED)
 		puts("failed to create shared memory map !"), raise(SIGKILL);
+	int	fd;
+	if ((fd = open(SHARED_MEM_FILE, O_WRONLY | O_TRUNC | O_CREAT, 0600)) == -1)
+		ft_exit("can't open/create shared memory file !");
+	write(fd, &g_shared_mem, 8);
+//	printf("shared map addr = %p\n", g_shared_mem);
+	close(fd);
 	if ((g_log_fd = open(LOG_FILE, O_WRONLY | O_TRUNC | O_CREAT, 0600)) == -1)
 		ft_exit("can't open/create logfile !");
-	if ((g_malloc_fd = open(TMP_FILE, O_WRONLY | O_TRUNC | O_CREAT, 0600)) == -1)
-		ft_exit("can't create tmp file !");
 	if ((g_diff_fd = open(DIFF_FILE, O_RDWR | O_TRUNC | O_CREAT, 0600)) == -1)
 		ft_exit("can't create/open diff file !");
 	MALLOC_RESET;

@@ -26,26 +26,39 @@ int     ft_convert(char *buffer, int64_t n, int b, int maj)
 	return (strlen(buffer));
 }
 
-void *malloc(size_t size)
+void		*malloc(size_t size)
 {
 	static void	*(*real_malloc)(size_t) = NULL;
+	static unsigned long *shmem = NULL;
 	int		fd;
 	void	*tmp;
 	char	buff[16] = {[15]=0};
+	char		c[2] = {0, 0};
 	int		fd2;
+	static int	once = 1;
 
-	if (real_malloc == NULL)
-		real_malloc = dlsym(RTLD_NEXT, "malloc");
-	if ((fd = open(TMP_FILE, O_RDWR)) != -1) {
-		char		c[2];
-
-		read(fd, c, 2);
-		if (c[1] == _MALLOC_DISABLE) {
-			lseek(fd, 1, SEEK_SET);
-			write(fd, (char[1]){_MALLOC_ENABLE}, 1);
-			return real_malloc(size);
+	if (shmem == NULL)
+		if ((fd = open(SHARED_MEM_FILE, O_RDONLY)) != -1)
+		{
+			if (!(read(fd, &shmem, 8) > 0))
+				shmem = NULL;
+			close(fd);
 		}
-		close(fd);
+
+	if (real_malloc == NULL) {
+		real_malloc = dlsym(RTLD_NEXT, "malloc");
+	}
+	if (shmem) {
+		if (once) {
+			once = 0;
+		//	printf("addr = %p\n", shmem);
+		}
+		c[0] = shmem[O_ALLOC_BYTE1];
+		c[1] = shmem[O_ALLOC_BYTE2];
+	}
+	if (c[1] == _MALLOC_DISABLE)
+		shmem[O_ALLOC_BYTE2] = _MALLOC_ENABLE;
+	if (c[0] && c[1] == _MALLOC_ENABLE)
 		switch (c[0]) {
 			case _MALLOC_NULL:
 				return (NULL);
@@ -56,12 +69,7 @@ void *malloc(size_t size)
 				return tmp;
 				break ;
 			case _MALLOC_SIZE:
-				ft_convert(buff, size, 10, 0);
-				if ((fd2 = open(MALLOC_FILE, O_WRONLY | O_TRUNC | O_CREAT, 0600)) == -1)
-					return (real_malloc(size));
-
-				write(fd2, buff, strlen(buff) + 1);
-				close(fd2);
+				shmem[O_ALLOC_SIZE] = size;
 				break ;
 			case _MALLOC_DEBUG:
 				ft_convert(buff, size, 10, 0);
@@ -69,6 +77,5 @@ void *malloc(size_t size)
 				write(1, " bytes allocated\n", 18);
 				break ;
 		}
-	}
 	return real_malloc(size);
 }

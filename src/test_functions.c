@@ -19,10 +19,11 @@
 
 #define		REG(x)		((x > 0) ? 1 : ((x < 0) ? -1 : 0))
 
-void			add_fun_subtest(void (*fun)(void *ptr)) {
+#define			add_fun_subtest(x) add_fun_subtest_(x, (char *)# x)
+void			add_fun_subtest_(void (*fun)(void *ptr), char *funname) {
 	static int		index = 0;
 
-	if (index >= SUBTEST_SIZE)
+	if (index >= SUBTEST_SIZE || (g_nospeed == 1 && strstr(funname, "_speed")))
 		return ;
 	fun_subtest_table[index].fun_name = current_fun_name;
 	fun_subtest_table[index].fun_test_ptr = fun;
@@ -1237,7 +1238,7 @@ void			test_ft_strdup_size(void *ptr) {
 
 void			test_ft_strdup_null(void *ptr) {
 	typeof(strdup)	*ft_strdup = ptr;
-	SET_EXPLICATION("your strdup does not segv with NULL");
+	SET_EXPLICATION("your strdup does not segv with NULL parameter");
 
 	SANDBOX_IRAISE(
 			ft_strdup(NULL);
@@ -1788,6 +1789,27 @@ void			test_ft_strcat_null2(void *ptr) {
 			);
 }
 
+void			test_ft_strcat_speed(void *ptr) {
+	typeof(strcat)	*ft_strcat = ptr;
+	SET_EXPLICATION("your strcat does not set a \\0 to the end");
+
+	SANDBOX_SPEED(
+			size_t	size = BFSIZE * 4;
+			char	*str = malloc(size + 1);
+			char	*buff1 = malloc(size + 1);
+			char	*buff2 = malloc(size + 1);
+
+			*buff1 = 0;
+			*buff2 = 0;
+			memset(str, 'A', size);
+			str[size] = 0;
+			,
+			strcat(buff1, str);
+			,
+			ft_strcat(buff2, str);
+			);
+}
+
 void            test_ft_strcat(void){
 	add_fun_subtest(test_ft_strcat_basic);
 	add_fun_subtest(test_ft_strcat_return);
@@ -1796,6 +1818,7 @@ void            test_ft_strcat(void){
 	add_fun_subtest(test_ft_strcat_null_byte);
 	add_fun_subtest(test_ft_strcat_null1);
 	add_fun_subtest(test_ft_strcat_null2);
+	add_fun_subtest(test_ft_strcat_speed);
 }
 
 ////////////////////////////////
@@ -1957,6 +1980,27 @@ void			test_ft_strncat_null2(void *ptr) {
 			);
 }
 
+void			test_ft_strncat_speed(void *ptr) {
+	typeof(strncat)	*ft_strncat = ptr;
+	SET_EXPLICATION("your strncat does not set a \\0 to the end");
+
+	SANDBOX_SPEED(
+			size_t	size = BFSIZE * 4;
+			char	*str = malloc(size + 1);
+			char	*buff1 = malloc(size + 1);
+			char	*buff2 = malloc(size + 1);
+
+			*buff1 = 0;
+			*buff2 = 0;
+			memset(str, 'A', size);
+			str[size] = 0;
+			,
+			strncat(buff1, str, size);
+			,
+			ft_strncat(buff2, str, size);
+			);
+}
+
 void            test_ft_strncat(void){
 	add_fun_subtest(test_ft_strncat_basic);
 	add_fun_subtest(test_ft_strncat_return);
@@ -1967,6 +2011,7 @@ void            test_ft_strncat(void){
 	add_fun_subtest(test_ft_strncat_null_byte);
 	add_fun_subtest(test_ft_strncat_null1);
 	add_fun_subtest(test_ft_strncat_null2);
+	add_fun_subtest(test_ft_strncat_speed);
 }
 
 ////////////////////////////////
@@ -2154,6 +2199,27 @@ void			test_ft_strlcat_null2(void *ptr) {
 			);
 }
 
+void			test_ft_strlcat_speed(void *ptr) {
+	typeof(strlcat)	*ft_strlcat = ptr;
+	SET_EXPLICATION("your strlcat does not set a \\0 to the end");
+
+	SANDBOX_SPEED(
+			size_t	size = BFSIZE * 4;
+			char	*str = malloc(size + 1);
+			char	*buff1 = malloc(size + 1);
+			char	*buff2 = malloc(size + 1);
+
+			*buff1 = 0;
+			*buff2 = 0;
+			memset(str, 'A', size);
+			str[size] = 0;
+			,
+			strlcat(buff1, str, size);
+			,
+			ft_strlcat(buff2, str, size);
+			);
+}
+
 void            test_ft_strlcat(void){
 	add_fun_subtest(test_ft_strlcat_basic);
 	add_fun_subtest(test_ft_strlcat_return);
@@ -2165,6 +2231,7 @@ void            test_ft_strlcat(void){
 	add_fun_subtest(test_ft_strlcat_return_value);
 	add_fun_subtest(test_ft_strlcat_null1);
 	add_fun_subtest(test_ft_strlcat_null2);
+	add_fun_subtest(test_ft_strlcat_speed);
 }
 
 ////////////////////////////////
@@ -2253,10 +2320,27 @@ void			test_ft_strchr_empty(void *ptr) {
 
 void			test_ft_strchr_null(void *ptr) {
 	typeof(strchr)	*ft_strchr = ptr;
+	SET_EXPLICATION("your strchr does not segv with NULL parameter");
 
 	SANDBOX_IRAISE(
 			ft_strchr(NULL, '\0');
 			)
+}
+
+void			test_ft_strchr_speed(void *ptr) {
+	typeof(strchr)	*ft_strchr = ptr;
+
+	SANDBOX_SPEED(
+			size_t	size = BFSIZE * 16;
+			char	*src = malloc(size + 1);
+
+			memset(src, 'A', size);
+			src[size] = 0;
+			,
+			strchr(src, 'B');
+			,
+			ft_strchr(src, 'B');
+			);
 }
 
 void            test_ft_strchr(void){
@@ -2265,7 +2349,7 @@ void            test_ft_strchr(void){
 	add_fun_subtest(test_ft_strchr_unicode);
 	add_fun_subtest(test_ft_strchr_zero);
 	add_fun_subtest(test_ft_strchr_empty);
-	add_fun_subtest(test_ft_strchr_null);
+	add_fun_subtest(test_ft_strchr_speed);
 }
 
 ////////////////////////////////
@@ -2360,6 +2444,22 @@ void			test_ft_strrchr_null(void *ptr) {
 			)
 }
 
+void			test_ft_strrchr_speed(void *ptr) {
+	typeof(strrchr)	*ft_strrchr = ptr;
+
+	SANDBOX_SPEED(
+			size_t	size = BFSIZE * 16;
+			char	*src = malloc(size + 1);
+
+			memset(src, 'A', size);
+			src[size] = 0;
+			,
+			strrchr(src, 'B');
+			,
+			ft_strrchr(src, 'B');
+			);
+}
+
 void            test_ft_strrchr(void){
 	add_fun_subtest(test_ft_strrchr_basic);
 	add_fun_subtest(test_ft_strrchr_not_found);
@@ -2367,6 +2467,7 @@ void            test_ft_strrchr(void){
 	add_fun_subtest(test_ft_strrchr_zero);
 	add_fun_subtest(test_ft_strrchr_empty);
 	add_fun_subtest(test_ft_strrchr_null);
+	add_fun_subtest(test_ft_strrchr_speed);
 }
 
 ////////////////////////////////
@@ -2559,6 +2660,23 @@ void			test_ft_strstr_null2(void *ptr) {
 			);
 }
 
+void			test_ft_strstr_speed(void *ptr) {
+	typeof(strstr)	*ft_strstr = ptr;
+
+	SANDBOX_SPEED(
+			size_t	size = BFSIZE * 4;
+			char	*s1 = malloc(size + 1);
+			char	*s2 = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB";
+
+			memset(s1, 'A', size);
+			s1[size] = 0;
+			,
+			strstr(s1, s2);
+			,
+			ft_strstr(s1, s2);
+			);
+}
+
 void            test_ft_strstr(void){
 	add_fun_subtest(test_ft_strstr_basic);
 	add_fun_subtest(test_ft_strstr_basic2);
@@ -2572,6 +2690,7 @@ void            test_ft_strstr(void){
 	add_fun_subtest(test_ft_strstr_same_ptr);
 	add_fun_subtest(test_ft_strstr_null2);
 	add_fun_subtest(test_ft_strstr_null1);
+	add_fun_subtest(test_ft_strstr_speed);
 }
 
 ////////////////////////////////
@@ -2734,6 +2853,23 @@ void			test_ft_strnstr_null2(void *ptr) {
 			);
 }
 
+void			test_ft_strnstr_speed(void *ptr) {
+	typeof(strnstr)	*ft_strnstr = ptr;
+
+	SANDBOX_SPEED(
+			size_t	size = BFSIZE * 4;
+			char	*s1 = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB";
+			char	*s2 = malloc(size + 1);
+
+			memset(s2, 'A', size);
+			s2[size] = 0;
+			,
+			strnstr(s1, s2, size);
+			,
+			ft_strnstr(s1, s2, size);
+			);
+}
+
 void            test_ft_strnstr(void){
 	add_fun_subtest(test_ft_strnstr_basic);
 	add_fun_subtest(test_ft_strnstr_basic2);
@@ -2745,6 +2881,7 @@ void            test_ft_strnstr(void){
 	add_fun_subtest(test_ft_strnstr_zero);
 	add_fun_subtest(test_ft_strnstr_null2);
 	add_fun_subtest(test_ft_strnstr_null1);
+	add_fun_subtest(test_ft_strnstr_speed);
 }
 
 ////////////////////////////////
@@ -2890,6 +3027,26 @@ void			test_ft_strcmp_null2(void *ptr) {
 			);
 }
 
+void			test_ft_strcmp_speed(void *ptr) {
+	typeof(strcmp)	*ft_strcmp = ptr;
+	SET_EXPLICATION("your strcmp does not work with zero length string");
+
+	SANDBOX_SPEED(
+			size_t	size = BFSIZE * 4;
+			char	*s1 = malloc(size + 1);
+			char	*s2 = malloc(size + 1);
+
+			memset(s1, 'A', size);
+			memset(s2, 'A', size);
+			s1[size] = s2[size] = 0;
+
+			,
+			strcmp(s1, s2);
+			,
+			ft_strcmp(s1, s2);
+			);
+}
+
 void            test_ft_strcmp(void){
 	add_fun_subtest(test_ft_strcmp_basic1);
 	add_fun_subtest(test_ft_strcmp_basic2);
@@ -2900,6 +3057,7 @@ void            test_ft_strcmp(void){
 	add_fun_subtest(test_ft_strcmp_ascii);
 	add_fun_subtest(test_ft_strcmp_null1);
 	add_fun_subtest(test_ft_strcmp_null2);
+	add_fun_subtest(test_ft_strcmp_speed);
 }
 
 ////////////////////////////////
@@ -3064,6 +3222,26 @@ void			test_ft_strncmp_null2(void *ptr) {
 			);
 }
 
+void			test_ft_strncmp_speed(void *ptr) {
+	typeof(strncmp)	*ft_strncmp = ptr;
+	SET_EXPLICATION("your strncmp does not work with zero length string");
+
+	SANDBOX_SPEED(
+			size_t	size = BFSIZE * 4;
+			char	*s1 = malloc(size + 1);
+			char	*s2 = malloc(size + 1);
+
+			memset(s1, 'A', size);
+			memset(s2, 'A', size);
+			s1[size] = s2[size] = 0;
+
+			,
+			strncmp(s1, s2, size);
+			,
+			ft_strncmp(s1, s2, size);
+			);
+}
+
 void            test_ft_strncmp(void){
 	add_fun_subtest(test_ft_strncmp_basic1);
 	add_fun_subtest(test_ft_strncmp_basic2);
@@ -3075,6 +3253,7 @@ void            test_ft_strncmp(void){
 	add_fun_subtest(test_ft_strncmp_ascii);
 	add_fun_subtest(test_ft_strncmp_null1);
 	add_fun_subtest(test_ft_strncmp_null2);
+	add_fun_subtest(test_ft_strncmp_speed);
 }
 
 ////////////////////////////////
@@ -3258,6 +3437,25 @@ void			test_ft_atoi_null(void *ptr) {
 			);
 }
 
+void			test_ft_atoi_speed(void *ptr) {
+	typeof(atoi)	*ft_atoi = ptr;
+	SET_EXPLICATION("your atoi does not work with random numbers");
+
+	SANDBOX_SPEED(
+			char	*nbrs = malloc(BFSIZE * 4);
+
+			srand(clock());
+			for (int i = 0; i < 10000; i++)
+				sprintf(nbrs + (i * 14), "%-11i", rand());
+			,
+			for (int i = 0; i < 10000; i++)
+				atoi(nbrs + (i * 14));
+			,
+			for (int i = 0; i < 10000; i++)
+				ft_atoi(nbrs + (i * 14));
+			);
+}
+
 void            test_ft_atoi(void){
 	add_fun_subtest(test_ft_atoi_basic);
 	add_fun_subtest(test_ft_atoi_negative);
@@ -3270,6 +3468,7 @@ void            test_ft_atoi(void){
 	add_fun_subtest(test_ft_atoi_max_long);
 	add_fun_subtest(test_ft_atoi_min_long);
 	add_fun_subtest(test_ft_atoi_null);
+	add_fun_subtest(test_ft_atoi_speed);
 }
 
 ////////////////////////////////

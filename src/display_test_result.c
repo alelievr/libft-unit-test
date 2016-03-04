@@ -90,7 +90,8 @@ static void	display_part(char *s) {
 				" > x1:"COLOR_SPEED_1"\u25CF"COLOR_CLEAR
 				" > x0.5:"COLOR_SPEED_05"\u25CF"COLOR_CLEAR
 				" < x0.5:"COLOR_SPEED_0"\u25CF"COLOR_CLEAR
-				"\n");
+				"\n"
+				"\033[38;5;244mto disable this, run \"make f NOSPEED=1\" or \"./run_test nospeed\"\033[0m\n");
 		printf(COLOR_PART1"                      First part\n");
 		printf("%s\n", ".-\"-.     .-\"-.     .-\"-.     .-\"-.     .-\"-.     .-\"-.\n"
 				       "     \"-.-\"     \"-.-\"     \"-.-\"     \"-.-\"     \"-.-\"    "COLOR_CLEAR);

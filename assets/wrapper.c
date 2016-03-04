@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/21 19:48:59 by alelievr          #+#    #+#             */
-/*   Updated: 2016/03/03 22:44:12 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/03/04 16:10:33 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,10 @@ t_sig	sigs[] = {
 	{31, "SIGUSR2", "User defined signal 2"}
 };
 
-int		main(void) {
+int		main(int ac, char **av) {
 	char	*argv[] = {
 		"run_test",
+		av[1],
 		NULL
 	};
 	char	*env[] = {
@@ -72,13 +73,24 @@ int		main(void) {
 	if ((pid = fork()) == 0)
 		exit(execve("./assets/libtests", argv, env));
 	else {
+		signal(SIGSTOP, SIG_IGN);
+		signal(SIGKILL, SIG_IGN);
+		signal(SIGINT, SIG_IGN);
+		signal(SIGKILL, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
+		signal(SIGTSTP, SIG_IGN);
+		signal(SIGTTOU, SIG_IGN);
+		signal(SIGTTIN, SIG_IGN);
+		signal(SIGTRAP, SIG_IGN);
+		signal(SIGTERM, SIG_IGN);
+		signal(SIGUSR1, SIG_IGN);
+		signal(SIGUSR2, SIG_IGN);
 		wait((int *)ret);
-		if (ret[0] != 0) {
+		if (ret[0] != SIGINT && ret[0] != SIGSTOP && ret[0] != SIGKILL && ret[0] != SIGQUIT && ret[0] != SIGTERM && ret[0]) {
 			printf("[%s]: %s\n", sigs[ret[0] - 1].name, sigs[ret[0] - 1].str);
 			printf("\033[38;5;201mOMG you crashed my program, please report this bug to @alelievr !\nthanks\n\033[0m");
 		}
-		unlink(TMP_FILE);
-		unlink(MALLOC_FILE);
+		unlink(SHARED_MEM_FILE);
 	}
 	return (0);
 }
