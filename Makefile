@@ -176,8 +176,11 @@ fclean: clean
 libclean:
 	@rm -rf $(ASSETDIR)/$(ANAME) $(ASSETDIR)/$(NAME)
 
+relib:
+	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", make re -C "$(LIBFTDIR)")
+
 #	All removing then compiling
-re: fclean libclean all
+re: relib fclean libclean all
 
 #	Checking norme
 norme:

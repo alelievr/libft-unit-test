@@ -196,11 +196,11 @@ void			test_ft_bzero_basic(void *ptr) {
 			memset(str, 'a', BSIZE);
 			memset(str2, 'a', BSIZE);
 
-			bzero(str, 60);
-			ft_bzero(str2, 60);
+			bzero(str, 20);
+			ft_bzero(str2, 20);
 			if (!memcmp(str, str2, BSIZE))
 				exit(TEST_SUCCESS);
-			SET_DIFF(str, str2);
+			SET_DIFF_BYTES(str, str2, 20);
 			exit(TEST_FAILED);
 			);
 }
@@ -220,7 +220,7 @@ void			test_ft_bzero_zero_value(void *ptr) {
 			bzero(buff2, 0);
 			if (!memcmp(buff, buff2, BSIZE))
 				exit(TEST_SUCCESS);
-			SET_DIFF(buff, buff2);
+			SET_DIFF_BYTES(buff, buff2, 10);
 			exit(TEST_FAILED);
 		   );
 }
@@ -238,7 +238,7 @@ void			test_ft_bzero_speed(void *ptr) {
 	typeof(bzero)	*ft_bzero = ptr;
 
 	SANDBOX_SPEED(
-			size_t	size = BFSIZE;
+			size_t	size = BFSIZE * 4;
 			char	*str = (char *)malloc(sizeof(char) * size);
 			char	*str2 = (char *)malloc(sizeof(char) * size);
 
@@ -3054,11 +3054,11 @@ void			test_ft_strnstr_speed(void *ptr) {
 
 	SANDBOX_SPEED(
 			size_t	size = BFSIZE * 4;
-			char	*s1 = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB";
-			char	*s2 = malloc(size + 1);
+			char	*s2 = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB";
+			char	*s1 = malloc(size + 1);
 
-			memset(s2, 'A', size);
-			s2[size] = 0;
+			memset(s1, 'A', size);
+			s1[size] = 0;
 			,
 			strnstr(s1, s2, size);
 			,
