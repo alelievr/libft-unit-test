@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2016/03/06 18:17:02 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/03/07 15:35:28 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,6 +292,7 @@ void			test_ft_isblank(void);
 void			test_ft_strtrimc(void);
 void			test_ft_strndup(void);
 void			test_ft_atof(void);
+void			test_ft_strlcpy(void);
 
 /*  others:  */
 void    		run_subtests(void *h, int start);

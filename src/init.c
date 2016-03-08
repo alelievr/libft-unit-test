@@ -96,6 +96,7 @@ t_libft_test	fun_test_table[] = {
 	{"ft_strtrimc", test_ft_strtrimc, 0},
 	{"ft_strndup", test_ft_strndup, 0},
 	{"ft_atof", test_ft_atof, 0},
+	{"ft_strlcpy", test_ft_strlcpy, 0},
 
 	{NULL, NULL, 0}
 };

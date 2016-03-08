@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2016/03/04 16:17:41 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/03/07 19:08:51 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,4 +174,6 @@ int		main(unused int ac, char **av) {
 	/* Running test for evry function: */
 	load_test(handle, 0);
 	run_subtests(handle, 0);
+	munmap(g_shared_mem, 0xF00);
+	return (0);
 }

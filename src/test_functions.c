@@ -602,7 +602,7 @@ void            test_ft_memccpy(void){
 	add_fun_subtest(test_ft_memccpy_zero_value);
 	add_fun_subtest(test_ft_memccpy_basic_test2);
 	add_fun_subtest(test_ft_memccpy_to_small);
-	add_fun_subtest(test_ft_memcpy_struct);
+	add_fun_subtest(test_ft_memccpy_struct);
 	add_fun_subtest(test_ft_memccpy_null1);
 	add_fun_subtest(test_ft_memccpy_null2);
 	add_fun_subtest(test_ft_memccpy_speed);
@@ -7532,4 +7532,140 @@ void			test_ft_atof(void) {
 	add_fun_subtest(test_ft_atof_exp1);
 	add_fun_subtest(test_ft_atof_exp2);
 	add_fun_subtest(test_ft_atof_null);
+}
+
+void		test_ft_strlcpy_basic(void *ptr) {
+	typeof(strlcpy)	*ft_strlcpy = ptr;
+	SET_EXPLANATION("your strlcpy does not works with basic input");
+
+	SANDBOX_RAISE(
+			char	*str = STRING_1;
+			char	buff1[0xF00];
+			char	buff2[0xF00];
+
+			memset(buff1, 'A', sizeof(buff1) - 1);
+			memset(buff2, 'A', sizeof(buff2) - 1);
+			buff1[sizeof(buff1) - 1] = 0;
+			buff2[sizeof(buff1) - 1] = 0;
+			
+			strlcpy(buff1, str, sizeof(buff1));
+			ft_strlcpy(buff2, str, sizeof(buff2));
+			if (!memcmp(buff1, buff2, strlen(str) + 1))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+}
+
+void		test_ft_strlcpy_return(void *ptr) {
+	typeof(strlcpy)	*ft_strlcpy = ptr;
+	SET_EXPLANATION("your strlcpy does not return the good value");
+
+	SANDBOX_RAISE(
+			char	*str = STRING_1;
+			char	buff1[0xF00];
+			char	buff2[0xF00];
+			size_t	r1;
+			size_t	r2;
+			
+			r1 = strlcpy(buff1, str, sizeof(buff1));
+			r2 = ft_strlcpy(buff2, str, sizeof(buff2));
+			if (r1 == r2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT((int)r1, (int)r2);
+			exit(TEST_FAILED);
+			);
+}
+
+void		test_ft_strlcpy_min(void *ptr) {
+	typeof(strlcpy)	*ft_strlcpy = ptr;
+	SET_EXPLANATION("your strlcpy does works whe size < strlen(src)");
+
+	SANDBOX_RAISE(
+			char	*str = "hello !";
+			char	buff1[0xF00];
+			char	buff2[0xF00];
+			size_t	r1;
+			size_t	r2;
+
+			memset(buff1, 'A', 20);
+			memset(buff2, 'A', 20);
+			
+			r1 = strlcpy(buff1, str, 2);
+			r2 = ft_strlcpy(buff2, str, 2);
+			if (r1 == r2 && !memcmp(buff1, buff2, 20))
+				exit(TEST_SUCCESS);
+			if (r1 != r2) {
+				SET_DIFF_INT((int)r1, (int)r2);
+			} else {
+				SET_DIFF_BYTES(buff1, buff2, 20);
+			}
+			exit(TEST_FAILED);
+			);
+}
+
+void		test_ft_strlcpy_zero(void *ptr) {
+	typeof(strlcpy)	*ft_strlcpy = ptr;
+	SET_EXPLANATION("your strlcpy does not works with 0-length string");
+
+	SANDBOX_RAISE(
+			char	*str = "";
+			char	buff1[0xF00];
+			char	buff2[0xF00];
+			size_t	r1;
+			size_t	r2;
+			
+			memset(buff1, 'A', 20);
+			memset(buff2, 'A', 20);
+
+			r1 = strlcpy(buff1, str, sizeof(buff1));
+			r2 = ft_strlcpy(buff2, str, sizeof(buff2));
+			if (r1 == r2 && !memcmp(buff1, buff2, 20))
+				exit(TEST_SUCCESS);
+			if (r1 != r2) {
+				SET_DIFF_INT((int)r1, (int)r2);
+			} else {
+				SET_DIFF_BYTES(buff1, buff2, 20);
+			}
+			exit(TEST_FAILED);
+			);
+}
+
+void		test_ft_strlcpy_overflow(void *ptr) {
+	typeof(strlcpy)	*ft_strlcpy = ptr;
+	SET_EXPLANATION("your strlcpy overflow the dest");
+
+	SANDBOX_RAISE(
+			char	*str = "BBBB";
+			char	buff1[0xF00];
+			char	buff2[0xF00];
+
+			memset(buff1, 'A', 20);
+			memset(buff2, 'A', 20);
+
+			strlcpy(buff1, str, sizeof(buff1));
+			ft_strlcpy(buff2, str, sizeof(buff2));
+			if (!memcmp(buff1, buff2, 20))
+				exit(TEST_SUCCESS);
+			SET_DIFF_BYTES(buff1, buff2, 20);
+			exit(TEST_FAILED);
+			);
+}
+
+void		test_ft_strlcpy_null(void *ptr) {
+	typeof(strlcpy)	*ft_strlcpy = ptr;
+	SET_EXPLANATION("your strlcpy doe not segfault when null parameter is sent");
+
+	SANDBOX_PROT(
+			ft_strlcpy(NULL, NULL, 10);
+			);
+}
+
+void		test_ft_strlcpy(void) {
+	add_fun_subtest(test_ft_strlcpy_basic);
+	add_fun_subtest(test_ft_strlcpy_return);
+	add_fun_subtest(test_ft_strlcpy_overflow);
+	add_fun_subtest(test_ft_strlcpy_min);
+	add_fun_subtest(test_ft_strlcpy_zero);
+	add_fun_subtest(test_ft_strlcpy_null);
 }
