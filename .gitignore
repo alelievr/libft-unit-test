@@ -4,3 +4,8 @@ obj/
 *.o
 *.a
 *.so
+.fun_diff
+*.dylib
+assets/tmp
+run_test
+assets/libtests

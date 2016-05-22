@@ -3331,6 +3331,23 @@ void			test_ft_strncmp_basic3(void *ptr) {
 			);
 }
 
+void			test_ft_strncmp_basic4(void *ptr) {
+	typeof(strncmp)	*ft_strncmp = ptr;
+	SET_EXPLANATION("your strncmp does not work with basic input");
+
+	SANDBOX_RAISE(
+			char	*s1 = "lol1";
+			char	*s2 = "lol2";
+
+			int		i1 = REG(strncmp(s1, s2, 3));
+			int		i2 = REG(ft_strncmp(s1, s2, 3));
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
 void			test_ft_strncmp_zero1(void *ptr) {
 	typeof(strncmp)	*ft_strncmp = ptr;
 	SET_EXPLANATION("your strncmp does not work with zero length string");
@@ -3460,6 +3477,7 @@ void            test_ft_strncmp(void){
 	add_fun_subtest(test_ft_strncmp_basic1);
 	add_fun_subtest(test_ft_strncmp_basic2);
 	add_fun_subtest(test_ft_strncmp_basic3);
+	add_fun_subtest(test_ft_strncmp_basic4);
 	add_fun_subtest(test_ft_strncmp_zero1);
 	add_fun_subtest(test_ft_strncmp_zero2);
 	add_fun_subtest(test_ft_strncmp_cast);
