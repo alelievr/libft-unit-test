@@ -3136,6 +3136,23 @@ void			test_ft_strcmp_basic3(void *ptr) {
 			);
 }
 
+void			test_ft_strcmp_basic4(void *ptr) {
+	typeof(strcmp)	*ft_strcmp = ptr;
+	SET_EXPLANATION("your strcmp does not work with basic input");
+
+	SANDBOX_RAISE(
+			char	*s1 = "AAAAAAAAAB";
+			char	*s2 = "AAAAAAAAAC";
+
+			int		i1 = REG(strcmp(s1, s2));
+			int		i2 = REG(ft_strcmp(s1, s2));
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
 void			test_ft_strcmp_after_0(void *ptr) {
 	typeof(strcmp)	*ft_strcmp = ptr;
 	SET_EXPLANATION("your strcmp check bytes after \\0");
@@ -3264,6 +3281,7 @@ void            test_ft_strcmp(void){
 	add_fun_subtest(test_ft_strcmp_basic1);
 	add_fun_subtest(test_ft_strcmp_basic2);
 	add_fun_subtest(test_ft_strcmp_basic3);
+	add_fun_subtest(test_ft_strcmp_basic4);
 	add_fun_subtest(test_ft_strcmp_after_0);
 	add_fun_subtest(test_ft_strcmp_zero1);
 	add_fun_subtest(test_ft_strcmp_zero2);
@@ -3336,8 +3354,8 @@ void			test_ft_strncmp_basic4(void *ptr) {
 	SET_EXPLANATION("your strncmp does not work with basic input");
 
 	SANDBOX_RAISE(
-			char	*s1 = "lol1";
-			char	*s2 = "lol2";
+			char	*s1 = "AAAAAAAAA1";
+			char	*s2 = "AAAAAAAAA2";
 
 			int		i1 = REG(strncmp(s1, s2, 3));
 			int		i2 = REG(ft_strncmp(s1, s2, 3));
