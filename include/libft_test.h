@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2016/08/06 16:51:35 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/08/06 17:02:48 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,12 @@ enum		e_values {
 	TEST_PROT,
 	TEST_SPEED,
 	TEST_INVISIBLE,
-	TEST_FINISHED
+	TEST_FINISHED,
+
+	BENCH_FAT,
+	BENCH_MEDIUM,
+	BENCH_SMALL,
+	BENCH_RANDOM
 };
 
 enum		e_prot {
