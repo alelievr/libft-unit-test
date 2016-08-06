@@ -26,7 +26,10 @@ char			g_ret[2];
 t_tdiff			g_time;
 char			*g_shared_mem;
 char			g_nospeed = 0;
+char			g_bench = 0;
+char			*g_versus = NULL;
 t_libft_subtest	fun_subtest_table[SUBTEST_SIZE];
+t_libft_subtest fun_subbench_table[SUBTEST_SIZE];
 t_libft_test	fun_test_table[] = {
 	{"ft_memset", test_ft_memset, 1},
 	{"ft_bzero", test_ft_bzero, 1},
@@ -99,4 +102,28 @@ t_libft_test	fun_test_table[] = {
 	{"ft_strlcpy", test_ft_strlcpy, 0},
 
 	{NULL, NULL, 0}
+};
+
+t_libft_test	fun_bench_table[] = {
+	{"ft_memset", bench_ft_memset, 1},
+	{"ft_bzero", bench_ft_bzero, 1},
+	{"ft_memcpy", bench_ft_memcpy, 1},
+	{"ft_memccpy", bench_ft_memccpy, 1},
+	{"ft_memmove", bench_ft_memmove, 1},
+	{"ft_memchr", bench_ft_memchr, 1},
+	{"ft_memcmp", bench_ft_memcmp, 1},
+	{"ft_strlen", bench_ft_strlen, 1},
+	{"ft_strdup", bench_ft_strdup, 1},
+	{"ft_strcpy", bench_ft_strcpy, 1},
+	{"ft_strncpy", bench_ft_strncpy, 1},
+	{"ft_strcat", bench_ft_strcat, 1},
+	{"ft_strncat", bench_ft_strncat, 1},
+	{"ft_strlcat", bench_ft_strlcat, 1},
+	{"ft_strchr", bench_ft_strchr, 1},
+	{"ft_strrchr", bench_ft_strrchr, 1},
+	{"ft_strstr", bench_ft_strstr, 1},
+	{"ft_strnstr", bench_ft_strnstr, 1},
+	{"ft_strcmp", bench_ft_strcmp, 1},
+	{"ft_strncmp", bench_ft_strncmp, 1},
+	{"ft_atoi", test_ft_atoi, 1},
 };

@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2016/03/07 19:08:51 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/08/06 16:58:15 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,14 @@
 int		fd_pipe[2];
 int		_stdout;
 
+static t_option options[] = {
+	{"-versus", 'v', &g_versus},
+	{"-bench", 'b', &g_bench},
+	{"-nospeed", 'n', &g_nospeed},
+	{NULL, 0, NULL}
+};
+
 unsigned long long	ft_clock(void) {
-//	struct timeval	tv;
-//	gettimeofday(&tv, 0);
-//	return (tv.tv_usec);
 	return (clock());
 }
 
@@ -43,14 +47,6 @@ void	fd_to_buffer(int fd) {
 }
 
 int		get_last_malloc_size(void) {
-/*	int		fd;
-	char	buff[0xF0];
-
-	if ((fd = open(MALLOC_FILE, O_RDONLY)) == -1)
-		return (0);
-	if ((read(fd, buff, sizeof(buff))) == -1)
-		return (0);
-	return (atoi(buff));*/
 	return ((int)OFF_ALLOC_SIZE);
 }
 
@@ -78,14 +74,23 @@ void	ft_raise(int s) {
 	display_test_result(s, current_explication);
 }
 
-void	load_test(void *handle, int start) {
-	for (int i = start; fun_test_table[i].fun_name; i++) {
+void	load_test(void) {
+	for (int i = 0; fun_test_table[i].fun_name; i++) {
 		current_test_id++;
 		current_fun_name = fun_test_table[i].fun_name;
 		current_fun_visibility = fun_test_table[i].visible;
 		fun_test_table[i].fun_test_ptr();
 	}
-	(void)handle;
+}
+
+void	load_bench(void)
+{
+	for (int i = 0; fun_bench_table[i].fun_name; i++) {
+		current_test_id++;
+		current_fun_name = fun_bench_table[i].fun_name;
+		current_fun_visibility = fun_bench_table[i].visible;
+		fun_bench_table[i].fun_test_ptr();
+	}
 }
 
 void	run_subtests(void *h, int start) {
@@ -94,15 +99,38 @@ void	run_subtests(void *h, int start) {
 
 	if (!handle)
 		handle = h;
-	for (int i = start; fun_subtest_table[i].fun_name; i++, current_subtest_id++) {
+	for (int i = start; fun_subtest_table[i].fun_name; i++, current_subtest_id++)
+	{
 		MALLOC_RESET;
 		RESET_DIFF;
 		SET_CURRENT_PROTECTED(INVISIBLE);
 		current_fun_name = fun_subtest_table[i].fun_name;
 		tmpfun = dlsym(handle, fun_subtest_table[i].fun_name);
-		if (tmpfun) {
+		if (tmpfun)
 			fun_subtest_table[i].fun_test_ptr(tmpfun);
-		}
+		else if (fun_subtest_table[i].visible)
+			ft_raise(TEST_MISSING);
+	}
+	current_fun_name = "";
+	display_test_result(TEST_FINISHED, "");
+	printf("\nSee %s for more informations !\n", LOG_FILE);
+	dprintf(g_log_fd, "\n");
+	close(g_log_fd);
+	exit(0);
+}
+
+void	run_benchtests(void *h)
+{
+	void		*tmpfun;
+
+	for (int i = 0; fun_subbench_table[i].fun_name; i++, current_subtest_id++)
+	{
+		RESET_DIFF;
+		SET_CURRENT_PROTECTED(INVISIBLE);
+		current_fun_name = fun_subbench_table[i].fun_name;
+		tmpfun = dlsym(h, fun_subbench_table[i].fun_name);
+		if (tmpfun)
+			fun_subbench_table[i].fun_test_ptr(tmpfun);
 		else if (fun_subtest_table[i].visible)
 			ft_raise(TEST_MISSING);
 	}
@@ -141,11 +169,29 @@ void	load_timer(void) {
 		ft_exit("thread inits failed !");
 }
 
+void	get_options(char **av)
+{
+	int		i = 0, j;
+
+	while (av[++i])
+	{
+		j = -1;
+		while (options[++j].long_name)
+			if (!strcmp(options[j].long_name, av[i]) ||
+					!strcmp((char *)(short[3]){'-', options[j].short_name, 0}, av[i]))
+			{
+				if (av[i + 1] && options[j].arg)
+					*(unsigned long *)options[j].arg = (unsigned long)av[i + 1];
+				else if (options[j].arg)
+					*(int *)options[j].arg = 1;
+			}
+	}
+}
+
 int		main(unused int ac, char **av) {
 	void	*handle;
 
-	if (av[1])
-		g_nospeed = 1;
+	get_options(av);
 	setlocale(LC_ALL, "");
 	if ((g_shared_mem = mmap(NULL, 0xF00, PROT_READ | PROT_WRITE, MAP_ANONYMOUS | MAP_SHARED, -1, 0)) == MAP_FAILED)
 		puts("failed to create shared memory map !"), raise(SIGKILL);
@@ -172,8 +218,12 @@ int		main(unused int ac, char **av) {
 	load_timer();
 
 	/* Running test for evry function: */
-	load_test(handle, 0);
-	run_subtests(handle, 0);
+	load_test();
+	load_bench();
+	if (g_bench == 0 && g_versus == NULL)
+		run_subtests(handle, 0);
+	if (g_bench == 1)
+		run_benchtests(handle);
 	munmap(g_shared_mem, 0xF00);
 	return (0);
 }

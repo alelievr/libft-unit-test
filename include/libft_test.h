@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2016/03/07 15:35:28 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/08/06 16:51:35 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,13 @@ typedef struct	s_tdiff {
 	uint64_t	end;
 	char		state;
 }				t_tdiff;
+
+typedef struct	s_option
+{
+	char	*long_name;
+	char	short_name;
+	void	*arg;
+}				t_option;
 
 enum		e_values {
 	TEST_SUCCESS,
@@ -197,7 +204,9 @@ extern		char			*current_fun_name;
 extern		int				current_fun_visibility;
 extern		int				current_test_id;
 extern		t_libft_test	fun_test_table[];
+extern		t_libft_test	fun_bench_table[];
 extern		t_libft_subtest	fun_subtest_table[SUBTEST_SIZE];
+extern		t_libft_subtest	fun_subbench_table[SUBTEST_SIZE];
 extern		int				current_subtest_id;
 extern		int				total_subtest;
 extern		char			*current_explication;
@@ -210,6 +219,8 @@ extern		char			*g_shared_mem;
 extern		char			*current_test_code;
 extern		int				current_protected;
 extern		char			g_nospeed;
+extern		char			g_bench;
+extern		char			*g_versus;
 extern		t_tdiff			g_time;
 
 /*  Display functions  */
@@ -293,6 +304,29 @@ void			test_ft_strtrimc(void);
 void			test_ft_strndup(void);
 void			test_ft_atof(void);
 void			test_ft_strlcpy(void);
+
+/*	bench functions:  */
+void			bench_ft_memset(void);
+void			bench_ft_bzero(void);
+void			bench_ft_memcpy(void);
+void			bench_ft_memccpy(void);
+void			bench_ft_memmove(void);
+void			bench_ft_memchr(void);
+void			bench_ft_memcmp(void);
+void			bench_ft_strlen(void);
+void			bench_ft_strdup(void);
+void			bench_ft_strcpy(void);
+void			bench_ft_strncpy(void);
+void			bench_ft_strcat(void);
+void			bench_ft_strncat(void);
+void			bench_ft_strlcat(void);
+void			bench_ft_strchr(void);
+void			bench_ft_strrchr(void);
+void			bench_ft_strstr(void);
+void			bench_ft_strnstr(void);
+void			bench_ft_strcmp(void);
+void			bench_ft_strncmp(void);
+void			bench_ft_atoi(void);
 
 /*  others:  */
 void    		run_subtests(void *h, int start);

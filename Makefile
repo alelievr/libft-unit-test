@@ -24,6 +24,7 @@ SRC			=	main.c					\
 				display_test_result.c	\
 				signal.c				\
 				sandbox.c				\
+				bench_functions.c		\
 
 #	Objects
 OBJDIR		=	obj
