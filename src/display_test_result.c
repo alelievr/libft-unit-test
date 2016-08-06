@@ -249,6 +249,7 @@ void    display_test_result(int value, char *explications)
 				errs[index].diff = NULL;
 				errs[index++].code = current_test_code;
 			}
+			break ;
 		case BENCH_FAT:
 		case BENCH_MEDIUM:
 		case BENCH_SMALL:

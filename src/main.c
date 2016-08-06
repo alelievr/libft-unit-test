@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2016/08/06 23:45:38 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/08/07 00:28:19 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static t_option options[] = {
 	{"-versus", 'v', &g_versus},
 	{"-bench", 'b', &g_bench},
 	{"-nospeed", 'n', &g_nospeed},
+	{"-help", 'h', &g_help},
 	{NULL, 0, NULL}
 };
 
@@ -202,11 +203,24 @@ void	get_options(char **av)
 	}
 }
 
+static void	usage() __attribute((noreturn));
+static void	usage() {
+	printf("usage ./run_test <opt>\n"
+			"-h or -help: display help\n"
+			"-n or -nospeed: run the test without speed evaluation\n"
+			"-b or -bench: speed test of your library (vs system)\n"
+			"-v or -versus: run with a shared library in parameter, "
+			"do the same than -b but with the parameter instead of the system's library\n");
+	exit(0);
+}
+
 int		main(unused int ac, char **av) {
 	void	*handle = NULL;
 	void	*handle_vs = NULL;
 
 	get_options(av);
+	if (g_help)
+		usage();
 	setlocale(LC_ALL, "");
 	if ((g_shared_mem = mmap(NULL, 0xF00, PROT_READ | PROT_WRITE, MAP_ANONYMOUS | MAP_SHARED, -1, 0)) == MAP_FAILED)
 		puts("failed to create shared memory map !"), raise(SIGKILL);
@@ -221,7 +235,7 @@ int		main(unused int ac, char **av) {
 		ft_exit("can't create/open diff file !\n");
 	MALLOC_RESET;
 	RESET_DIFF;
-	if (!(handle = dlopen("./libft.so", RTLD_NOW)))
+	if (!(handle = dlopen("./libft.so", RTLD_LAZY)))
 		ft_exit(dlerror());
 
 	/* Ignore user interupt signals: */
@@ -232,16 +246,18 @@ int		main(unused int ac, char **av) {
 	load_timer();
 
 	/* Running test for evry function: */
-	load_test();
-	load_bench();
 	if (g_bench == 0 && g_versus == NULL)
+	{
+		load_test();
 		run_subtests(handle, 0);
+	}
 	else
 	{
+		load_bench();
 		if (g_versus == (char *)0x1)
 			ft_exit("versus: bad argument, please enter a shared library file\n");
 		if (g_versus != NULL)
-			if (!(handle_vs = dlopen(g_versus, RTLD_NOW)))
+			if (!(handle_vs = dlopen(g_versus, RTLD_LAZY)))
 				ft_exit("failed to load [%s] shared library\n", g_versus);
 		run_subbench(handle, handle);
 	}
