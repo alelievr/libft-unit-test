@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2016/08/07 00:28:19 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/08/07 00:31:07 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,7 +259,7 @@ int		main(unused int ac, char **av) {
 		if (g_versus != NULL)
 			if (!(handle_vs = dlopen(g_versus, RTLD_LAZY)))
 				ft_exit("failed to load [%s] shared library\n", g_versus);
-		run_subbench(handle, handle);
+		run_subbench(handle, handle_vs);
 	}
 	munmap(g_shared_mem, 0xF00);
 	return (0);
