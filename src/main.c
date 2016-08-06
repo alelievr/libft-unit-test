@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2016/08/06 18:34:27 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/08/06 23:45:38 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,6 @@ void	run_subbench(void *h, void *h2)
 		if (h2)
 			vsfun = dlsym(h2, fun_subbench_table[i].fun_name);
 
-		vsfun = NULL;
 		if (tmpfun)
 			fun_subbench_table[i].fun_bench_ptr(tmpfun, vsfun);
 		else
@@ -215,7 +214,6 @@ int		main(unused int ac, char **av) {
 	if ((fd = open(SHARED_MEM_FILE, O_WRONLY | O_TRUNC | O_CREAT, 0600)) == -1)
 		ft_exit("can't open/create shared memory file !\n");
 	write(fd, &g_shared_mem, 8);
-//	printf("shared map addr = %p\n", g_shared_mem);
 	close(fd);
 	if ((g_log_fd = open(LOG_FILE, O_WRONLY | O_TRUNC | O_CREAT, 0600)) == -1)
 		ft_exit("can't open/create logfile !\n");
@@ -223,7 +221,7 @@ int		main(unused int ac, char **av) {
 		ft_exit("can't create/open diff file !\n");
 	MALLOC_RESET;
 	RESET_DIFF;
-	if (!(handle = dlopen("./libft.so", RTLD_LAZY)))
+	if (!(handle = dlopen("./libft.so", RTLD_NOW)))
 		ft_exit(dlerror());
 
 	/* Ignore user interupt signals: */
@@ -243,9 +241,9 @@ int		main(unused int ac, char **av) {
 		if (g_versus == (char *)0x1)
 			ft_exit("versus: bad argument, please enter a shared library file\n");
 		if (g_versus != NULL)
-			if (!(handle_vs = dlopen(g_versus, RTLD_LAZY)))
+			if (!(handle_vs = dlopen(g_versus, RTLD_NOW)))
 				ft_exit("failed to load [%s] shared library\n", g_versus);
-		run_subbench(handle, handle_vs);
+		run_subbench(handle, handle);
 	}
 	munmap(g_shared_mem, 0xF00);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/08/06 16:42:40 by alelievr          #+#    #+#             */
-/*   Updated: 2016/08/06 18:42:35 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/08/06 23:57:31 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,15 +203,13 @@ void			bench_ft_memcmp_speed(void *ptr, void *vsptr) {
 			size_t	size = MEGABYTE * 64;
 			uint8_t	*s1 = malloc(sizeof(uint8_t) * size);
 			uint8_t	*s2 = malloc(sizeof(uint8_t) * size);
-			uint8_t	*t1 = malloc(sizeof(uint8_t) * size);
-			uint8_t	*t2 = malloc(sizeof(uint8_t) * size);
 
 			memset(s1, 'A', size);
 			memset(s2, 'A', size);
 			,
 			vsfun(s1, s2, size);
 			,
-			ft_memcmp(t1, t2, size);
+			ft_memcmp(s1, s2, size);
 			);
 }
 
@@ -480,9 +478,9 @@ void			bench_ft_strstr_speed(void *ptr, void *vsptr) {
 	SET_BENCHTYPE(BENCH_FAT);
 
 	SANDBOX_BENCH(
-			size_t	size = MEGABYTE * 4;
+			size_t	size = MEGABYTE * 64;
 			char	*s1 = malloc(size + 1);
-			char	*s2 = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB";
+			char	*s2 = "AAAAB";
 
 			memset(s1, 'A', size);
 			s1[size] = 0;
@@ -507,8 +505,8 @@ void			bench_ft_strnstr_speed(void *ptr, void *vsptr) {
 	SET_BENCHTYPE(BENCH_FAT);
 
 	SANDBOX_BENCH(
-			size_t	size = MEGABYTE * 4;
-			char	*s2 = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB";
+			size_t	size = MEGABYTE * 64;
+			char	*s2 = "AAAAB";
 			char	*s1 = malloc(size + 1);
 
 			memset(s1, 'A', size);
@@ -534,7 +532,7 @@ void			bench_ft_strcmp_speed(void *ptr, void *vsptr) {
 	SET_BENCHTYPE(BENCH_FAT);
 
 	SANDBOX_BENCH(
-			size_t	size = MEGABYTE * 64;
+			size_t	size = MEGABYTE * 128;
 			char	*s1 = malloc(size + 1);
 			char	*s2 = malloc(size + 1);
 
@@ -563,7 +561,7 @@ void			bench_ft_strncmp_speed(void *ptr, void *vsptr) {
 	SET_BENCHTYPE(BENCH_FAT);
 
 	SANDBOX_BENCH(
-			size_t	size = MEGABYTE * 64;
+			size_t	size = MEGABYTE * 128;
 			char	*s1 = malloc(size + 1);
 			char	*s2 = malloc(size + 1);
 
