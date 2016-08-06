@@ -91,7 +91,7 @@ static void	display_part(char *s) {
 				" > x0.5:"COLOR_SPEED_05"\u25CF"COLOR_CLEAR
 				" < x0.5:"COLOR_SPEED_0"\u25CF"COLOR_CLEAR
 				"\n"
-				"\033[38;5;244mto disable this, run \"make f NOSPEED=1\" or \"./run_test nospeed\"\033[0m\n");
+				"\033[38;5;244mto disable this, run \"make f NOSPEED=1\" or \"./run_test -nospeed\"\033[0m\n");
 		printf(COLOR_PART1"                      First part\n");
 		printf("%s\n", ".-\"-.     .-\"-.     .-\"-.     .-\"-.     .-\"-.     .-\"-.\n"
 				       "     \"-.-\"     \"-.-\"     \"-.-\"     \"-.-\"     \"-.-\"    "COLOR_CLEAR);
@@ -246,6 +246,23 @@ void    display_test_result(int value, char *explications)
 				dprintf(g_log_fd, "x??? the test has crash ...");
 				errs[index].type = TEST_CRASH;
 				errs[index].data = "speed test";
+				errs[index].diff = NULL;
+				errs[index++].code = current_test_code;
+			}
+		case BENCH_FAT:
+		case BENCH_MEDIUM:
+		case BENCH_SMALL:
+		case BENCH_RANDOM:
+			printf("%s\u25CF%s x%.2f (%7llu tick vs %-7llu)",
+					(g_time.state == TEST_CRASH) ? COLOR_SPEED_CRASH : get_speed_color(),
+					"\033[38;0m",
+					((float)(TIME_DIFF_SYS) / (float)(TIME_DIFF_LIB)),
+					TIME_DIFF_SYS,
+					TIME_DIFF_LIB);
+			if (g_time.state == TEST_CRASH) {
+				dprintf(g_log_fd, "x??? the test has crash ...");
+				errs[index].type = TEST_CRASH;
+				errs[index].data = "bench test";
 				errs[index].diff = NULL;
 				errs[index++].code = current_test_code;
 			}

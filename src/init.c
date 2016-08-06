@@ -15,6 +15,7 @@ int				current_fun_visibility = 0;
 int				current_protected = 0;
 int				current_test_id = 0;
 int				current_subtest_id = 0;
+int				current_benchtype = 0;
 int				total_subtest = 0;
 char			*current_test = "";
 char			*current_explication = "";
@@ -29,7 +30,7 @@ char			g_nospeed = 0;
 char			g_bench = 0;
 char			*g_versus = NULL;
 t_libft_subtest	fun_subtest_table[SUBTEST_SIZE];
-t_libft_subtest fun_subbench_table[SUBTEST_SIZE];
+t_libft_subbench fun_subbench_table[SUBTEST_SIZE];
 t_libft_test	fun_test_table[] = {
 	{"ft_memset", test_ft_memset, 1},
 	{"ft_bzero", test_ft_bzero, 1},

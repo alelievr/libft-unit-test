@@ -56,7 +56,7 @@ CSOFLAGS2	=
 CC			=	clang
 
 #	Optimization
-OPTFLAGS	=	-funroll-loops -pipe
+OPTFLAGS	=	-O0 -funroll-loops
 
 ################
 ##   COLORS   ##

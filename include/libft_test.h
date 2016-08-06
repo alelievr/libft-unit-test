@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2016/08/06 17:02:48 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/08/06 18:06:43 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,12 @@ typedef struct	s_subtest {
 	void	(*fun_test_ptr)(void *ptr);
 	_Bool	visible;
 }				t_libft_subtest;
+
+typedef struct	s_subbench {
+	char	*fun_name;
+	void	(*fun_bench_ptr)(void* ptr1, void *ptr2);
+//	_Bool	visible;
+}				t_libft_subbench;
 
 typedef struct	s_test {
 	char	*fun_name;
@@ -148,6 +154,7 @@ enum		e_offset {
 # define	SET_TEST_TEXT(x)	current_test = x;
 # define	SET_CURRENT_TEST_CODE(x) current_test_code = x;
 # define	SET_CURRENT_PROTECTED(x) current_protected = x;
+# define	SET_BENCHTYPE(x)	current_benchtype = x;
 
 # define	SANDBOX_STRINGIFY(x)	SET_CURRENT_TEST_CODE(#x)
 # define	SANDBOX(x)			SANDBOX_STRINGIFY(x); sandbox();if (!(g_pid = fork())) {x;exit(TEST_SUCCESS);} if (g_pid > 0) { wait((int*)g_ret); _SANDBOX_RAISE(g_ret[0]); unsandbox(); }
@@ -157,6 +164,8 @@ enum		e_offset {
 # define	SANDBOX_PROT(x);	SANDBOX(x); if (SANDBOX_CRASH) current_protected = NOT_PROTECTED; else current_protected = PROTECTED; ft_raise(TEST_PROT);
 //			SANDBOX_SPEED(initialization state, system function, libft function)
 # define	SANDBOX_SPEED(x,y,z)SANDBOX(x; TIME_BEGIN; y; TIME_MID; z; TIME_END; TIME_SET_DATA;) if (SANDBOX_CRASH) g_time.state = TEST_CRASH; else g_time.state = VISIBLE; TIME_READ_DATA; ft_raise(TEST_SPEED);
+//			SANDBOX_SPEED(initialization state, system function, libft function) but use the bench type variable to raise display
+# define	SANDBOX_BENCH(x,y,z)SANDBOX(x; TIME_BEGIN; y; TIME_MID; z; TIME_END; TIME_SET_DATA;) if (SANDBOX_CRASH) g_time.state = TEST_CRASH; else g_time.state = VISIBLE; TIME_READ_DATA; ft_raise(current_benchtype);
 # define	SANDBOX_RESULT		(g_ret[1])
 # define	SANDBOX_RETURN		(g_ret[0])
 # define	_SANDBOX_RAISE(x)	if (x == SIGKILL) ft_raise(TEST_TIMEOUT); if (x == SIGQUIT) ft_raise(TEST_INTERUPT);
@@ -211,7 +220,7 @@ extern		int				current_test_id;
 extern		t_libft_test	fun_test_table[];
 extern		t_libft_test	fun_bench_table[];
 extern		t_libft_subtest	fun_subtest_table[SUBTEST_SIZE];
-extern		t_libft_subtest	fun_subbench_table[SUBTEST_SIZE];
+extern		t_libft_subbench fun_subbench_table[SUBTEST_SIZE];
 extern		int				current_subtest_id;
 extern		int				total_subtest;
 extern		char			*current_explication;
@@ -223,6 +232,7 @@ extern		int				g_diff_fd;
 extern		char			*g_shared_mem;
 extern		char			*current_test_code;
 extern		int				current_protected;
+extern		int				current_benchtype;
 extern		char			g_nospeed;
 extern		char			g_bench;
 extern		char			*g_versus;

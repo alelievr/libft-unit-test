@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/21 19:48:59 by alelievr          #+#    #+#             */
-/*   Updated: 2016/03/04 16:10:33 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/08/06 17:50:40 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,6 @@ t_sig	sigs[] = {
 };
 
 int		main(int ac, char **av) {
-	char	*argv[] = {
-		"run_test",
-		av[1],
-		NULL
-	};
 	char	*env[] = {
 		"DYLD_INSERT_LIBRARIES=./assets/malloc.dylib",
 		"DYLD_FORCE_FLAT_NAMESPACE=1",
@@ -71,7 +66,7 @@ int		main(int ac, char **av) {
 	char	ret[2];
 
 	if ((pid = fork()) == 0)
-		exit(execve("./assets/libtests", argv, env));
+		exit(execve("./assets/libtests", av, env));
 	else {
 		signal(SIGSTOP, SIG_IGN);
 		signal(SIGKILL, SIG_IGN);
