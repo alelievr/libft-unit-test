@@ -12,6 +12,7 @@
 
 #include "libft_test.h"
 #include <ctype.h>
+#include <stdbool.h>
 
 static char	*butify(char *code) {
 	char	*tmp;
@@ -92,9 +93,18 @@ static void	display_part(char *s) {
 				" < x0.5:"COLOR_SPEED_0"\u25CF"COLOR_CLEAR
 				"\n"
 				"\033[38;5;244mto disable this, run \"make f NOSPEED=1\" or \"./run_test -nospeed\"\033[0m\n");
-		printf(COLOR_PART1"                      First part\n");
-		printf("%s\n", ".-\"-.     .-\"-.     .-\"-.     .-\"-.     .-\"-.     .-\"-.\n"
-				       "     \"-.-\"     \"-.-\"     \"-.-\"     \"-.-\"     \"-.-\"    "COLOR_CLEAR);
+		if (g_bench == 0 && g_versus == NULL)
+		{
+			printf(COLOR_PART1"                      First part\n");
+			printf("%s\n", ".-\"-.     .-\"-.     .-\"-.     .-\"-.     .-\"-.     .-\"-.\n"
+					"     \"-.-\"     \"-.-\"     \"-.-\"     \"-.-\"     \"-.-\"    "COLOR_CLEAR);
+		}
+		else
+		{
+			printf(COLOR_PART1"                               STARTING BENCH MODE\n");
+			printf("   _.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._\n"
+				   	".-'---      - ---     --     ---   -----   - --       ----  ----   -     ---`-.\n"COLOR_CLEAR);
+		}
 	}
 	if (!strcmp(s, "ft_memalloc")) {
 		printf(COLOR_INFO"\n%s"COLOR_CLEAR, "In this part, you can choose to protect "
@@ -103,30 +113,34 @@ static void	display_part(char *s) {
 				" --> protected\n"COLOR_NPROTECTED"[||]"COLOR_INFO" --> not protected"COLOR_CLEAR);
 		printf(COLOR_PART2"\n                     Second part\n");
 		printf("%s\n", " __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)\n"
-					   "(______)(______)(______)(______)(______)(______)(______)(___\n");
+				"(______)(______)(______)(______)(______)(______)(______)(___\n");
 	}
 
 	if (!strcmp(s, "ft_lstnew")) {
 		printf(COLOR_PART3"\n%s\n",
-			     "/~~~\\/~~\\/~~~\\/~~~\\/~~\\/~~~\\                    /~~~\\/~~\\/~~~\\/~~~\\/~~\\/~~~\\\n"
-				 "| /\\/ /\\/ /\\ || /\\/ /\\/ /\\ |                    | /\\ \\/\\ \\/\\ || /\\ \\/\\ \\/\\ |\n"
-				 " \\ \\/ /\\/ /\\/ /\\ \\/ /\\/ /\\/ /     Bonus part     \\ \\/\\ \\/\\ \\/ /\\ \\/\\ \\/\\ \\/ /\n"
-				 "   \\ \\/\\ \\/\\ \\/  \\ \\/\\ \\/\\ \\/                      \\/ /\\/ /\\/ /  \\/ /\\/ /\\/ /\n"
-				 ",_/\\ \\/\\ \\/\\ \\__/\\ \\/\\ \\/\\ \\______________________/ /\\/ /\\/ /\\__/ /\\/ /\\/ /\\_,\n"
-				 "(__/\\__/\\__/\\____/\\__/\\__/\\________________________/\\__/\\__/\\____/\\__/\\__/\\__)\n");
+			    "/~~~\\/~~\\/~~~\\/~~~\\/~~\\/~~~\\                    /~~~\\/~~\\/~~~\\/~~~\\/~~\\/~~~\\\n"
+				"| /\\/ /\\/ /\\ || /\\/ /\\/ /\\ |                    | /\\ \\/\\ \\/\\ || /\\ \\/\\ \\/\\ |\n"
+				" \\ \\/ /\\/ /\\/ /\\ \\/ /\\/ /\\/ /     Bonus part     \\ \\/\\ \\/\\ \\/ /\\ \\/\\ \\/\\ \\/ /\n"
+				"   \\ \\/\\ \\/\\ \\/  \\ \\/\\ \\/\\ \\/                      \\/ /\\/ /\\/ /  \\/ /\\/ /\\/ /\n"
+				",_/\\ \\/\\ \\/\\ \\__/\\ \\/\\ \\/\\ \\______________________/ /\\/ /\\/ /\\__/ /\\/ /\\/ /\\_,\n"
+				"(__/\\__/\\__/\\____/\\__/\\__/\\________________________/\\__/\\__/\\____/\\__/\\__/\\__)\n");
 	}
 }
 
-static char	*get_speed_color(void) {
+static char	*get_speed_color(_Bool inverted) {
 	if (!TIME_DIFF_LIB) {
 		dprintf(g_log_fd, " x0 (function time is 0, this is not possible)");
 		return (COLOR_SPEED_CRASH);
 	}
-	float	diff = ((float)(TIME_DIFF_SYS) / (float)(TIME_DIFF_LIB));
+	float	diff = 0;
+	if (inverted)
+		diff = ((float)(TIME_DIFF_LIB) / (float)(TIME_DIFF_SYS));
+	else
+		diff = ((float)(TIME_DIFF_SYS) / (float)(TIME_DIFF_LIB));
 
 	dprintf(g_log_fd, "x%.2f exec time", diff);
-//	printf("%llu - %llu\n", TIME_DIFF_SYS, TIME_DIFF_LIB);
-//	printf("%f\n", diff);
+	//	printf("%llu - %llu\n", TIME_DIFF_SYS, TIME_DIFF_LIB);
+	//	printf("%f\n", diff);
 	if (diff > 10)
 		return (COLOR_SPEED_10);
 	else if (diff > 5)
@@ -147,14 +161,22 @@ void    display_test_result(int value, char *explications)
 	static int		index = 0;
 	static int		once = 0;
 	static int		first = 0;
+	static int		count = 0;
+	static int		total_player_points = 0;
+	static int		total_versus_points = 0;
 	static t_err	errs[0xF00] = {{0, NULL, NULL, NULL}};
 
+	count++;
 	if (!old_fun_name || strcmp(old_fun_name, current_fun_name)) {
 		first = 1;
 		if (index != 0) {
 			printf("\n");
-			for (int i = 0; i < index && i < 0xF00 - 1; i++) {
-				printf("[%s%s"COLOR_CLEAR"]: %s\n", verbose_color(errs[i].type), verbose_type(errs[i].type), errs[i].data);
+			for (int i = 0; i < index && i < 0xF00 - 1; i++)
+			{
+				printf("[%s%s"COLOR_CLEAR"]: %s\n",
+						verbose_color(errs[i].type),
+						verbose_type(errs[i].type),
+						errs[i].data);
 				if (errs[i].type != TEST_TIMEOUT)
 					dprintf(g_log_fd, "\n[%s]: %s\n", verbose_type(errs[i].type), errs[i].data);
 				dprintf(g_log_fd, "Test code:\n%s\n", butify(errs[i].code));
@@ -166,16 +188,58 @@ void    display_test_result(int value, char *explications)
 			index = 0;
 		}
 		if (value == TEST_FINISHED)
+		{
+			if (g_bench != 0 || g_versus != NULL)
+			{
+				char	*winner = (total_player_points > total_versus_points) ? "WINNER: local libft" : "WINNER: john cena !";
+				int		winner_len = strlen(winner);
+				char	*sep1 = (count % 2) ? "( " : " )";
+				char	*sep2 = !(count % 2) ? "( " : " )";
+				printf(COLOR_PART1"%s"COLOR_CLEAR"  | | %2i pts %*s "COLOR_BENCH_WINNER"%s"COLOR_CLEAR" %*s %2i pts | |  "COLOR_PART1"%s\n"COLOR_CLEAR,
+						sep1,
+						total_player_points,
+						24 - winner_len / 2 - 1, "",
+						winner,
+						24 - winner_len / 2 - !(winner_len % 2) - 1, "",
+						total_versus_points,
+						sep2);
+				printf(COLOR_PART1
+						"(___       _       _       _       _       _       _       _       _       ___)\n"
+    					"    (__  _) ( __ _) (__  _) (__ _ ) `-._.-' ( _ __) (_  __) (_ __ ) (_  __)\n"
+    					"    ( _ __) (_  __) (__ __) `-._.-'         `-._.-' (__ __) (__  _) (__ _ )\n"
+    					"    (__  _) (_ _ _) `-._.-'                         `-._.-' (_ _ _) (_  __)\n"
+    					"    (_ ___) `-._.-'                                         `-._.-' (___ _)\n"
+    					"    `-._.-'                                                         `-._.-'\n"
+					COLOR_CLEAR);
+			}
 			return ;
+		}
 		if (old_fun_name) {
+			if (g_bench == 0 && g_versus == NULL)
 			printf("\n");
 			dprintf(g_log_fd, "\n");
 			once = 1;
 		}
 		display_part(current_fun_name);
-		printf(COLOR_CLEAR"%s:%*s"COLOR_CLEAR, current_fun_name, 14 - (int)strlen(current_fun_name), "");
-		dprintf(g_log_fd, "%s:%*s", current_fun_name, 14 - (int)strlen(current_fun_name), "");
+		if (g_bench == 0 && g_versus == NULL)
+		{
+			printf(COLOR_CLEAR"%s:%*s"COLOR_CLEAR,
+					current_fun_name,
+					14 - (int)strlen(current_fun_name),
+					"");
+			dprintf(g_log_fd, "%s:%*s", current_fun_name, 14 - (int)strlen(current_fun_name), "");
+		}
+		else
+		{
+			int		fun_len = strlen(current_fun_name);
+			int		fun_padd = (14 - fun_len) / 2;
+			char	*sep1 = (count % 2) ? "( " : " )";
+			char	*sep2 = !(count++ % 2) ? "( " : " )";
+			printf(COLOR_PART1"%s"COLOR_CLEAR"  | | %*s|%*s"COLOR_PART1"%s"COLOR_CLEAR"%*s|%*s | |  "COLOR_PART1"%s\n"COLOR_CLEAR, sep1, 24, "========================", fun_padd, "", current_fun_name, fun_padd - !(fun_len % 2), "", 24, "========================", sep2);
+		}
 	}
+	char	*bench_name = NULL;
+	int		bench_name_len = 0;
 	switch (value) {
 		case TEST_SUCCESS:
 			printf(COLOR_SUCCESS"[OK] "COLOR_CLEAR);
@@ -241,7 +305,7 @@ void    display_test_result(int value, char *explications)
 		case TEST_SPEED:
 			if (g_time.state == INVISIBLE)
 				break ;
-			printf("%s\u25CF%s", (g_time.state == TEST_CRASH) ? COLOR_SPEED_CRASH : get_speed_color(), "\033[38;0m");
+			printf("%s\u25CF%s", (g_time.state == TEST_CRASH) ? COLOR_SPEED_CRASH : get_speed_color(false), "\033[38;0m");
 			if (g_time.state == TEST_CRASH) {
 				dprintf(g_log_fd, "x??? the test has crash ...");
 				errs[index].type = TEST_CRASH;
@@ -251,15 +315,55 @@ void    display_test_result(int value, char *explications)
 			}
 			break ;
 		case BENCH_FAT:
+			bench_name = COLOR_BENCH_FAT"fat"COLOR_CLEAR;
+			bench_name_len = 3;
 		case BENCH_MEDIUM:
+			if (!bench_name)
+				bench_name = COLOR_BENCH_MEDIUM"medium"COLOR_CLEAR, bench_name_len = 6;
 		case BENCH_SMALL:
+			if (!bench_name)
+				bench_name = COLOR_BENCH_SMALL"small"COLOR_CLEAR, bench_name_len = 5;
 		case BENCH_RANDOM:
-			printf("%s\u25CF%s x%.2f (%7llu tick vs %-7llu)",
-					(g_time.state == TEST_CRASH) ? COLOR_SPEED_CRASH : get_speed_color(),
-					"\033[38;0m",
-					((float)(TIME_DIFF_SYS) / (float)(TIME_DIFF_LIB)),
-					TIME_DIFF_SYS,
-					TIME_DIFF_LIB);
+			if (!bench_name)
+				bench_name = "random"COLOR_CLEAR, bench_name_len = 6;
+			clock_t	global_ticks = TIME_DIFF_SYS + TIME_DIFF_LIB;
+			float	p1 = (float)TIME_DIFF_LIB / (float)global_ticks;
+			float	p2 = (float)TIME_DIFF_SYS / (float)global_ticks;
+			if (p1 > p2)
+				total_versus_points++;
+			else
+				total_player_points++;
+			int		fun_padd = (14 - bench_name_len) / 2;
+			int		nc1 = p1 * 20;
+			int		nc2 = p2 * 20;
+			char	*c1 = (nc1 < nc2) ? "\u25CF" : " ";
+			char	*c2 = (nc2 < nc1) ? "\u25CF" : " ";
+			char	*sep1 = (count % 2) ? "( " : " )";
+			char	*sep2 = !(count % 2) ? "( " : " )";
+			char	*color1 = (g_time.state == TEST_CRASH) ? COLOR_SPEED_CRASH : get_speed_color(false);
+			char	*color2 = (g_time.state == TEST_CRASH) ? COLOR_SPEED_CRASH : get_speed_color(true);
+				printf(COLOR_PART1"%s  "COLOR_CLEAR"|%s%s"COLOR_CLEAR"| %s%2.0f%% %*s"COLOR_BENCH_PLAYER"%*s"COLOR_CLEAR
+						"|%*s%s%*s|"
+						COLOR_BENCH_VERSUS"%*s"COLOR_CLEAR"%*s %s%2.0f%% |%s%s"COLOR_CLEAR"|  "COLOR_PART1"%s\n"COLOR_CLEAR,
+						sep1,
+						color2, c1,
+						color2, p1 * 100,
+						20 - nc1, "",
+						nc1, "",
+						fun_padd, "",
+						bench_name,
+						fun_padd - !(bench_name_len % 2), "",
+						nc2, "",
+						20 - nc2, "",
+						color1, p2 * 100,
+						color1, c2,
+						sep2);
+			/*					printf("%s\u25CF%s x%.2f (%7llu tick vs %-7llu)",
+								(g_time.state == TEST_CRASH) ? COLOR_SPEED_CRASH : get_speed_color(),
+								"\033[38;0m",
+								((float)(TIME_DIFF_SYS) / (float)(TIME_DIFF_LIB)),
+								TIME_DIFF_SYS,
+								TIME_DIFF_LIB);*/
 			if (g_time.state == TEST_CRASH) {
 				dprintf(g_log_fd, "x??? the test has crash ...");
 				errs[index].type = TEST_CRASH;
@@ -272,5 +376,5 @@ void    display_test_result(int value, char *explications)
 	fflush(stdout);
 	old_fun_name = current_fun_name;
 	once = 0;
-//	printf("current_subtest_id = %i\n", current_subtest_id);
+	//	printf("current_subtest_id = %i\n", current_subtest_id);
 }

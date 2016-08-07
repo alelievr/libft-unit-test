@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2016/08/06 18:06:43 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/08/07 17:03:23 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,12 @@ enum		e_offset {
 # define	COLOR_SPEED_1	"\033[38;5;118m"
 # define	COLOR_SPEED_05	"\033[38;5;44m"
 # define	COLOR_SPEED_0	"\033[38;5;27m"
+# define	COLOR_BENCH_PLAYER "\033[48;5;123m"
+# define	COLOR_BENCH_VERSUS "\033[48;5;118m"
+# define	COLOR_BENCH_FAT	"\033[38;5;208m"
+# define	COLOR_BENCH_MEDIUM "\033[38;5;220m"
+# define	COLOR_BENCH_SMALL "\033[38;5;191m"
+# define	COLOR_BENCH_WINNER "\033[38;5;201m"
 
 # define	BSIZE			0xF00
 # define	BFSIZE			0xF0000
@@ -155,6 +161,7 @@ enum		e_offset {
 # define	SET_CURRENT_TEST_CODE(x) current_test_code = x;
 # define	SET_CURRENT_PROTECTED(x) current_protected = x;
 # define	SET_BENCHTYPE(x)	current_benchtype = x;
+# define	SET_BENCHITER(x)	current_benchiter = x;
 
 # define	SANDBOX_STRINGIFY(x)	SET_CURRENT_TEST_CODE(#x)
 # define	SANDBOX(x)			SANDBOX_STRINGIFY(x); sandbox();if (!(g_pid = fork())) {x;exit(TEST_SUCCESS);} if (g_pid > 0) { wait((int*)g_ret); _SANDBOX_RAISE(g_ret[0]); unsandbox(); }
@@ -165,7 +172,7 @@ enum		e_offset {
 //			SANDBOX_SPEED(initialization state, system function, libft function)
 # define	SANDBOX_SPEED(x,y,z)SANDBOX(x; TIME_BEGIN; y; TIME_MID; z; TIME_END; TIME_SET_DATA;) if (SANDBOX_CRASH) g_time.state = TEST_CRASH; else g_time.state = VISIBLE; TIME_READ_DATA; ft_raise(TEST_SPEED);
 //			SANDBOX_SPEED(initialization state, system function, libft function) but use the bench type variable to raise display
-# define	SANDBOX_BENCH(x,y,z)SANDBOX(x; TIME_BEGIN; y; TIME_MID; z; TIME_END; TIME_SET_DATA;) if (SANDBOX_CRASH) g_time.state = TEST_CRASH; else g_time.state = VISIBLE; TIME_READ_DATA; ft_raise(current_benchtype);
+# define	SANDBOX_BENCH(x,y,z)SANDBOX(x; TIME_BEGIN; for (register int _i = 0; _i < current_benchiter; _i++) { y; } TIME_MID; for (register int _i = 0; _i < current_benchiter; _i++) { z; } TIME_END; TIME_SET_DATA;) if (SANDBOX_CRASH) g_time.state = TEST_CRASH; else g_time.state = VISIBLE; TIME_READ_DATA; ft_raise(current_benchtype);
 # define	SANDBOX_RESULT		(g_ret[1])
 # define	SANDBOX_RETURN		(g_ret[0])
 # define	_SANDBOX_RAISE(x)	if (x == SIGKILL) ft_raise(TEST_TIMEOUT); if (x == SIGQUIT) ft_raise(TEST_INTERUPT);
@@ -233,6 +240,7 @@ extern		char			*g_shared_mem;
 extern		char			*current_test_code;
 extern		int				current_protected;
 extern		int				current_benchtype;
+extern		int				current_benchiter;
 extern		char			g_nospeed;
 extern		char			g_bench;
 extern		char			*g_versus;

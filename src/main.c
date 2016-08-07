@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2016/08/07 00:31:07 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/08/07 15:45:03 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ void	run_subbench(void *h, void *h2)
 	{
 		RESET_DIFF;
 		SET_CURRENT_PROTECTED(INVISIBLE);
+		SET_BENCHITER(1);
 		current_fun_name = fun_subbench_table[i].fun_name;
 		tmpfun = dlsym(h, fun_subbench_table[i].fun_name);
 
@@ -157,7 +158,7 @@ void	*timer(void *t) {
 	static int	last_test_id = 0;
 
 	int			timeout_millis = TIMEOUT_MILLIS;
-	if (g_bench || (g_versus != NULL && g_versus != (char *)0x1))
+	if (g_bench || g_versus != NULL)
 		timeout_millis *= 10;
 	(void)t;
 	while (42) {

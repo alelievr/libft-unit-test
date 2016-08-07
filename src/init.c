@@ -16,6 +16,7 @@ int				current_protected = 0;
 int				current_test_id = 0;
 int				current_subtest_id = 0;
 int				current_benchtype = 0;
+int				current_benchiter = 1;
 int				total_subtest = 0;
 char			*current_test = "";
 char			*current_explication = "";
