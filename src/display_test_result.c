@@ -101,9 +101,11 @@ static void	display_part(char *s) {
 		}
 		else
 		{
+			char	*opponent = (g_versus) ? g_versus : "system's libc";
 			printf(COLOR_PART1"                               STARTING BENCH MODE\n");
 			printf("   _.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._\n"
-				   	".-'---      - ---     --     ---   -----   - --       ----  ----   -     ---`-.\n"COLOR_CLEAR);
+				   ".-'---      - ---     --     ---   -----   - --       ----  ----   -     ---`-.\n"
+				   " )  pts   time used by your libft      VS     %-25s pts  ( \n"COLOR_CLEAR, opponent);
 		}
 	}
 	if (!strcmp(s, "ft_memalloc")) {
@@ -138,9 +140,18 @@ static char	*get_speed_color(_Bool inverted) {
 	else
 		diff = ((float)(TIME_DIFF_SYS) / (float)(TIME_DIFF_LIB));
 
-	dprintf(g_log_fd, "x%.2f exec time", diff);
-	//	printf("%llu - %llu\n", TIME_DIFF_SYS, TIME_DIFF_LIB);
-	//	printf("%f\n", diff);
+	if (g_bench == 0 && g_versus == NULL)
+		dprintf(g_log_fd, "x%.2f exec time", diff);
+	else if (!inverted)
+	{
+		float	vdiff = diff;
+		char	*opponent = (g_versus) ? g_versus : "system";
+		char	*speeder = (vdiff > 1) ? "slower" : "faster";
+		//if (vdiff < 1)
+		//	vdiff = 1 / vdiff;
+		dprintf(g_log_fd, "%s: x%.2f %s than %s's function (%llu cpu ticks vs %llu)\n",
+				current_fun_name, vdiff, speeder, opponent, TIME_DIFF_LIB, TIME_DIFF_SYS);
+	}
 	if (diff > 10)
 		return (COLOR_SPEED_10);
 	else if (diff > 5)
@@ -170,13 +181,15 @@ void    display_test_result(int value, char *explications)
 	if (!old_fun_name || strcmp(old_fun_name, current_fun_name)) {
 		first = 1;
 		if (index != 0) {
-			printf("\n");
+			if (g_bench == 0 && g_versus == NULL)
+				printf("\n");
 			for (int i = 0; i < index && i < 0xF00 - 1; i++)
 			{
-				printf("[%s%s"COLOR_CLEAR"]: %s\n",
-						verbose_color(errs[i].type),
-						verbose_type(errs[i].type),
-						errs[i].data);
+				if (g_bench == 0 && g_versus == NULL)
+					printf("[%s%s"COLOR_CLEAR"]: %s\n",
+							verbose_color(errs[i].type),
+							verbose_type(errs[i].type),
+							errs[i].data);
 				if (errs[i].type != TEST_TIMEOUT)
 					dprintf(g_log_fd, "\n[%s]: %s\n", verbose_type(errs[i].type), errs[i].data);
 				dprintf(g_log_fd, "Test code:\n%s\n", butify(errs[i].code));
@@ -192,6 +205,8 @@ void    display_test_result(int value, char *explications)
 			if (g_bench != 0 || g_versus != NULL)
 			{
 				char	*winner = (total_player_points > total_versus_points) ? "WINNER: local libft" : "WINNER: john cena !";
+				if (g_versus == NULL)
+					winner = "WINNER: system's libc";
 				int		winner_len = strlen(winner);
 				char	*sep1 = (count % 2) ? "( " : " )";
 				char	*sep2 = !(count % 2) ? "( " : " )";
@@ -330,9 +345,9 @@ void    display_test_result(int value, char *explications)
 			float	p1 = (float)TIME_DIFF_LIB / (float)global_ticks;
 			float	p2 = (float)TIME_DIFF_SYS / (float)global_ticks;
 			if (p1 > p2)
-				total_versus_points++;
-			else
 				total_player_points++;
+			else
+				total_versus_points++;
 			int		fun_padd = (14 - bench_name_len) / 2;
 			int		nc1 = p1 * 20;
 			int		nc2 = p2 * 20;
@@ -344,19 +359,19 @@ void    display_test_result(int value, char *explications)
 			char	*color2 = (g_time.state == TEST_CRASH) ? COLOR_SPEED_CRASH : get_speed_color(true);
 				printf(COLOR_PART1"%s  "COLOR_CLEAR"|%s%s"COLOR_CLEAR"| %s%2.0f%% %*s"COLOR_BENCH_PLAYER"%*s"COLOR_CLEAR
 						"|%*s%s%*s|"
-						COLOR_BENCH_VERSUS"%*s"COLOR_CLEAR"%*s %s%2.0f%% |%s%s"COLOR_CLEAR"|  "COLOR_PART1"%s\n"COLOR_CLEAR,
+						COLOR_BENCH_VERSUS"%*s"COLOR_CLEAR"%*s %s%2.0f%% "COLOR_CLEAR"|%s%s"COLOR_CLEAR"|  "COLOR_PART1"%s\n"COLOR_CLEAR,
 						sep1,
-						color2, c1,
-						color2, p1 * 100,
-						20 - nc1, "",
-						nc1, "",
+						color1, c2,
+						color1, p2 * 100,
+						20 - nc2, "",
+						nc2, "",
 						fun_padd, "",
 						bench_name,
 						fun_padd - !(bench_name_len % 2), "",
-						nc2, "",
-						20 - nc2, "",
-						color1, p2 * 100,
-						color1, c2,
+						nc1, "",
+						20 - nc1, "",
+						color2, p1 * 100,
+						color2, c1,
 						sep2);
 			/*					printf("%s\u25CF%s x%.2f (%7llu tick vs %-7llu)",
 								(g_time.state == TEST_CRASH) ? COLOR_SPEED_CRASH : get_speed_color(),

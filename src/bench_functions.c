@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/08/06 16:42:40 by alelievr          #+#    #+#             */
-/*   Updated: 2016/08/07 16:51:04 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/08/07 19:39:34 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,50 @@ void			bench_ft_bzero_fatbench(void *ptr, void *vsptr) {
 			);
 }
 
+void			bench_ft_bzero_medbench(void *ptr, void *vsptr) {
+	typeof(bzero)	*ft_bzero = ptr;
+	INIT_VSFUN(vsptr, vsfun, bzero);
+	SET_BENCHTYPE(BENCH_MEDIUM);
+	SET_BENCHITER(KILOBYTE * 16);
+
+	SANDBOX_BENCH(
+			size_t	size = KILOBYTE * 64;
+			char	*str = (char *)malloc(sizeof(char) * size);
+			char	*str2 = (char *)malloc(sizeof(char) * size);
+
+			memset(str, 'a', size);
+			memset(str2, 'a', size);
+			,
+			vsfun(str, size);
+			,
+			ft_bzero(str2, size);
+			);
+}
+
+void			bench_ft_bzero_smallbench(void *ptr, void *vsptr) {
+	typeof(bzero)	*ft_bzero = ptr;
+	INIT_VSFUN(vsptr, vsfun, bzero);
+	SET_BENCHTYPE(BENCH_SMALL);
+	SET_BENCHITER(16);
+
+	SANDBOX_BENCH(
+			size_t	size = MEGABYTE * 128;
+			char	*str = (char *)malloc(sizeof(char) * size);
+			char	*str2 = (char *)malloc(sizeof(char) * size);
+
+			memset(str, 'a', size);
+			memset(str2, 'a', size);
+			,
+			vsfun(str, size);
+			,
+			ft_bzero(str2, size);
+			);
+}
+
 void            bench_ft_bzero(void){
 	add_fun_subbench(bench_ft_bzero_fatbench);
+	add_fun_subbench(bench_ft_bzero_medbench);
+	add_fun_subbench(bench_ft_bzero_smallbench);
 }
 
 ////////////////////////////////
