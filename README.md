@@ -8,7 +8,7 @@ git clone this repository libft-unit-test
 
 cd libft-unit-test
 
-make f or make and the ./run_test
+make f or make and then ./run_test
 
 type ./run_test -h for help
 
