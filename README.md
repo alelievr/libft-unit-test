@@ -8,7 +8,9 @@ git clone this repository libft-unit-test
 
 cd libft-unit-test
 
-make f
+make f or make and then ./run_test
+
+type ./run_test -h for help
 
 you can change te default libft path in the makefile (LIBFTDIR variable)
 
