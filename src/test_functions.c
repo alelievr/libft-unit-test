@@ -28,6 +28,7 @@ void			add_fun_subtest_(void (*fun)(void *ptr), char *funname) {
 	fun_subtest_table[index].fun_name = current_fun_name;
 	fun_subtest_table[index].fun_test_ptr = fun;
 	fun_subtest_table[index].visible = current_fun_visibility;
+	fun_subtest_table[index].part = current_part;
 	index++;
 	total_subtest++;
 }

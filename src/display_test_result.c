@@ -95,8 +95,10 @@ static char	*verbose_color(int type) {
 	}
 }
 
-static void	display_part(char *s) {
-	if (!strcmp(s, "ft_memset")) {
+static void	display_part(void) {
+	static int last_part = -2;
+
+	if (last_part != current_part && current_part == 1) {
 		printf(COLOR_CLEAR"speed scale: > x10:"COLOR_SPEED_10"\u25CF"COLOR_CLEAR
 				" > x5:"COLOR_SPEED_5"\u25CF"COLOR_CLEAR
 				" > x2:"COLOR_SPEED_2"\u25CF"COLOR_CLEAR
@@ -105,22 +107,12 @@ static void	display_part(char *s) {
 				" < x0.5:"COLOR_SPEED_0"\u25CF"COLOR_CLEAR
 				"\n"
 				"\033[38;5;244mto disable this, run \"make f NOSPEED=1\" or \"./run_test -nospeed\"\033[0m\n");
-		if (g_bench == 0 && g_versus == NULL)
-		{
-			printf(COLOR_PART1"                      First part\n");
-			printf("%s\n", ".-\"-.     .-\"-.     .-\"-.     .-\"-.     .-\"-.     .-\"-.\n"
-					"     \"-.-\"     \"-.-\"     \"-.-\"     \"-.-\"     \"-.-\"    "COLOR_CLEAR);
-		}
-		else
-		{
-			char	*opponent = (g_versus) ? g_versus : "system's libc";
-			printf(COLOR_PART1"                               STARTING BENCH MODE\n");
-			printf("   _.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._\n"
-				   ".-'---      - ---     --     ---   -----   - --       ----  ----   -     ---`-.\n"
-				   " )  pts   time used by your libft      VS     %-25s pts  ( \n"COLOR_CLEAR, opponent);
-		}
+		printf(COLOR_PART1"                      First part\n");
+		printf("%s\n", ".-\"-.     .-\"-.     .-\"-.     .-\"-.     .-\"-.     .-\"-.\n"
+				"     \"-.-\"     \"-.-\"     \"-.-\"     \"-.-\"     \"-.-\"    "COLOR_CLEAR);
 	}
-	if (!strcmp(s, "ft_memalloc")) {
+
+	if (last_part != current_part && current_part == 2) {
 		printf(COLOR_INFO"\n%s"COLOR_CLEAR, "In this part, you can choose to protect "
 				"your function or not protect them,\na color code will tell you if your "
 				"function is protected/not But stay coherent !\n"COLOR_PROTECTED"[||]"COLOR_INFO
@@ -130,7 +122,7 @@ static void	display_part(char *s) {
 				"(______)(______)(______)(______)(______)(______)(______)(___\n");
 	}
 
-	if (!strcmp(s, "ft_lstnew")) {
+	if (last_part != current_part && current_part == 3) {
 		printf(COLOR_PART3"\n%s\n",
 			    "/~~~\\/~~\\/~~~\\/~~~\\/~~\\/~~~\\                    /~~~\\/~~\\/~~~\\/~~~\\/~~\\/~~~\\\n"
 				"| /\\/ /\\/ /\\ || /\\/ /\\/ /\\ |                    | /\\ \\/\\ \\/\\ || /\\ \\/\\ \\/\\ |\n"
@@ -139,6 +131,18 @@ static void	display_part(char *s) {
 				",_/\\ \\/\\ \\/\\ \\__/\\ \\/\\ \\/\\ \\______________________/ /\\/ /\\/ /\\__/ /\\/ /\\/ /\\_,\n"
 				"(__/\\__/\\__/\\____/\\__/\\__/\\________________________/\\__/\\__/\\____/\\__/\\__/\\__)\n");
 	}
+
+	//bench mode header
+	if (last_part == -2 && (g_bench || g_versus))
+	{
+		char	*opponent = (g_versus) ? g_versus : "system's libc";
+		printf(COLOR_PART1"                               STARTING BENCH MODE\n");
+		printf("   _.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._\n"
+				".-'---      - ---     --     ---   -----   - --       ----  ----   -     ---`-.\n"
+				" )  pts   time used by your libft      VS     %-25s pts  ( \n"COLOR_CLEAR, opponent);
+	}
+
+	last_part = current_part;
 }
 
 static char	*get_speed_color(_Bool inverted) {
@@ -256,7 +260,7 @@ void    display_test_result(int value, char *explications)
 			dprintf(g_log_fd, "\n");
 			once = 1;
 		}
-		display_part(current_fun_name);
+		display_part();
 		if (g_bench == 0 && g_versus == NULL)
 		{
 			printf(COLOR_CLEAR"%s:%*s"COLOR_CLEAR,

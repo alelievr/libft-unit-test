@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2016/08/07 17:03:23 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/09/03 17:46:10 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 typedef struct	s_subtest {
 	char	*fun_name;
 	void	(*fun_test_ptr)(void *ptr);
+	int		part;
 	_Bool	visible;
 }				t_libft_subtest;
 
@@ -38,8 +39,15 @@ typedef struct	s_subbench {
 typedef struct	s_test {
 	char	*fun_name;
 	void	(*fun_test_ptr)(void);
+	int		part;
 	_Bool	visible;
 }				t_libft_test;
+
+typedef struct	s_bench {
+	char	*fun_name;
+	void	(*fun_test_ptr)(void);
+	_Bool	visible;
+}				t_libft_bench;
 
 typedef struct	s_errs {
 	int		type;
@@ -225,7 +233,7 @@ extern		char			*current_fun_name;
 extern		int				current_fun_visibility;
 extern		int				current_test_id;
 extern		t_libft_test	fun_test_table[];
-extern		t_libft_test	fun_bench_table[];
+extern		t_libft_bench	fun_bench_table[];
 extern		t_libft_subtest	fun_subtest_table[SUBTEST_SIZE];
 extern		t_libft_subbench fun_subbench_table[SUBTEST_SIZE];
 extern		int				current_subtest_id;
@@ -241,6 +249,7 @@ extern		char			*current_test_code;
 extern		int				current_protected;
 extern		int				current_benchtype;
 extern		int				current_benchiter;
+extern		int				current_part;
 extern		char			g_nospeed;
 extern		char			g_bench;
 extern		char			*g_versus;
