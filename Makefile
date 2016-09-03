@@ -50,13 +50,13 @@ WRAPNAME	=	run_test
 FRAMEWORK	=	
 
 #	Compiler
-CFLAGS		=	-Werror -Wall -Wextra
+CFLAGS		=	-Werror -Wall -Wextra# -ggdb -fsanitize=address
 CSOFLAGS	=	-shared -fPIC
 CSOFLAGS2	=	
 CC			=	clang
 
 #	Optimization
-OPTFLAGS	=	-O0 -funroll-loops
+OPTFLAGS	=	-O2 -funroll-loops
 
 ################
 ##   COLORS   ##

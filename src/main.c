@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2016/08/07 15:45:03 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/09/03 17:29:09 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,23 +79,35 @@ void	ft_raise(int s) {
 	display_test_result(s, current_explication);
 }
 
-void	load_test(void) {
-	for (int i = 0; fun_test_table[i].fun_name; i++) {
-		current_test_id++;
-		current_fun_name = fun_test_table[i].fun_name;
-		current_fun_visibility = fun_test_table[i].visible;
-		fun_test_table[i].fun_test_ptr();
-	}
+_Bool	str_find_array(char **array, char *str)
+{
+	while (*array)
+		if (strstr(str, *array++))
+			return true;
+	return false;
 }
 
-void	load_bench(void)
+void	load_test(char **function_list) {
+	for (int i = 0; fun_test_table[i].fun_name; i++)
+		if (!*function_list || str_find_array(function_list, fun_test_table[i].fun_name))
+		{
+			current_test_id++;
+			current_fun_name = fun_test_table[i].fun_name;
+			current_fun_visibility = fun_test_table[i].visible;
+			fun_test_table[i].fun_test_ptr();
+		}
+}
+
+void	load_bench(char **function_list)
 {
-	for (int i = 0; fun_bench_table[i].fun_name; i++) {
-		current_test_id++;
-		current_fun_name = fun_bench_table[i].fun_name;
-		current_fun_visibility = fun_bench_table[i].visible;
-		fun_bench_table[i].fun_test_ptr();
-	}
+	for (int i = 0; fun_bench_table[i].fun_name; i++)
+		if (!*function_list || str_find_array(function_list, fun_bench_table[i].fun_name))
+		{
+			current_test_id++;
+			current_fun_name = fun_bench_table[i].fun_name;
+			current_fun_visibility = fun_bench_table[i].visible;
+			fun_bench_table[i].fun_test_ptr();
+		}
 }
 
 void	run_subtests(void *h, int start) {
@@ -159,7 +171,7 @@ void	*timer(void *t) {
 
 	int			timeout_millis = TIMEOUT_MILLIS;
 	if (g_bench || g_versus != NULL)
-		timeout_millis *= 10;
+		timeout_millis *= 20;
 	(void)t;
 	while (42) {
 		if (last_test_id != current_subtest_id)
@@ -183,43 +195,53 @@ void	load_timer(void) {
 		ft_exit("thread inits failed !");
 }
 
-void	get_options(char **av)
+char	**get_options(char **av)
 {
 	int		i = 0, j;
+	_Bool	is_option;
 
 	while (av[++i])
 	{
 		j = -1;
+		is_option = false;
 		while (options[++j].long_name)
 		{
 			if (!strcmp(options[j].long_name, av[i]) ||
 					!strcmp((char *)(char[3]){'-', options[j].short_name, 0}, av[i]))
 			{
-				if (av[i + 1] && options[j].arg)
-					*(unsigned long *)options[j].arg = (unsigned long)av[i + 1];
+				if (av[i + 1] && options[j].short_name == 'v')
+					*(unsigned long *)options[j].arg = (unsigned long)av[++i];
 				else if (options[j].arg)
-					*(int *)options[j].arg = 1;
+					*(char *)options[j].arg = 1;
+				is_option = true;
 			}
 		}
+		if (!is_option || !strcmp("--", av[i]))
+			break ;
 	}
+	return av + i;
 }
 
 static void	usage() __attribute((noreturn));
 static void	usage() {
-	printf("usage ./run_test <opt>\n"
+	printf("usage ./run_test <opt> <functions>\n"
 			"-h or -help: display help\n"
 			"-n or -nospeed: run the test without speed evaluation\n"
 			"-b or -bench: speed test of your library (vs system)\n"
 			"-v or -versus: run with a shared library in parameter, "
-			"do the same than -b but with the parameter instead of the system's library\n");
+			"do the same than -b but with the parameter instead of the system's library\n"
+			"you can additionally specify function name to test only these function\n\n"
+			"ex1: ./run_test -v beat-me.so ft_mem # test all mem function with beat-me.so functions in reference\n"
+			"ex2: ./run_test ft_strdup # test strdup function\n");
 	exit(0);
 }
 
 int		main(unused int ac, char **av) {
 	void	*handle = NULL;
 	void	*handle_vs = NULL;
+	char	**function_list = NULL;
 
-	get_options(av);
+	function_list = get_options(av);
 	if (g_help)
 		usage();
 	setlocale(LC_ALL, "");
@@ -249,12 +271,16 @@ int		main(unused int ac, char **av) {
 	/* Running test for evry function: */
 	if (g_bench == 0 && g_versus == NULL)
 	{
-		load_test();
+		load_test(function_list);
+		if (current_test_id == 0)
+			ft_exit("can't find the specified function(s)\n");
 		run_subtests(handle, 0);
 	}
 	else
 	{
-		load_bench();
+		load_bench(function_list);
+		if (current_test_id == 0)
+			ft_exit("can't find the specified function(s)\n");
 		if (g_versus == (char *)0x1)
 			ft_exit("versus: bad argument, please enter a shared library file\n");
 		if (g_versus != NULL)

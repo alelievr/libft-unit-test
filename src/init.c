@@ -129,4 +129,6 @@ t_libft_test	fun_bench_table[] = {
 	{"ft_strcmp", bench_ft_strcmp, 1},
 	{"ft_strncmp", bench_ft_strncmp, 1},
 	{"ft_atoi", bench_ft_atoi, 1},
+
+	{NULL, NULL, 0}
 };

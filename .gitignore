@@ -9,3 +9,4 @@ obj/
 assets/tmp
 run_test
 assets/libtests
+*~

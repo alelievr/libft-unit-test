@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/08/06 16:42:40 by alelievr          #+#    #+#             */
-/*   Updated: 2016/09/03 02:34:04 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/09/03 17:32:48 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -389,10 +389,46 @@ void			bench_ft_memchr_fatbench(void *ptr, void *vsptr) {
 	typeof(memchr)		*ft_memchr = ptr;
 	INIT_VSFUN(vsptr, vsfun, memchr);
 	SET_BENCHTYPE(BENCH_FAT);
-	SET_BENCHITER(16);
+	SET_BENCHITER(32);
 
 	SANDBOX_BENCH(
-			size_t			size = MEGABYTE * 128;
+			size_t			size = MEGABYTE * 16;
+			char			*src = malloc(size);
+
+			memset(src, 'A', size);
+			,
+			vsfun(src, '\xde', size);
+			,
+			ft_memchr(src, '\xde', size);
+			);
+}
+
+void			bench_ft_memchr_medbench(void *ptr, void *vsptr) {
+	typeof(memchr)		*ft_memchr = ptr;
+	INIT_VSFUN(vsptr, vsfun, memchr);
+	SET_BENCHTYPE(BENCH_MEDIUM);
+	SET_BENCHITER(KILOBYTE * 128);
+
+	SANDBOX_BENCH(
+			size_t			size = KILOBYTE * 64;
+			char			*src = malloc(size);
+
+			memset(src, 'A', size);
+			,
+			vsfun(src, '\xde', size);
+			,
+			ft_memchr(src, '\xde', size);
+			);
+}
+
+void			bench_ft_memchr_smallbench(void *ptr, void *vsptr) {
+	typeof(memchr)		*ft_memchr = ptr;
+	INIT_VSFUN(vsptr, vsfun, memchr);
+	SET_BENCHTYPE(BENCH_SMALL);
+	SET_BENCHITER(MEGABYTE * 16);
+
+	SANDBOX_BENCH(
+			size_t			size = 128;
 			char			*src = malloc(size);
 
 			memset(src, 'A', size);
@@ -405,6 +441,8 @@ void			bench_ft_memchr_fatbench(void *ptr, void *vsptr) {
 
 void            bench_ft_memchr(void) {
 	add_fun_subbench(bench_ft_memchr_fatbench);
+	add_fun_subbench(bench_ft_memchr_medbench);
+	add_fun_subbench(bench_ft_memchr_smallbench);
 }
 
 ////////////////////////////////
@@ -431,8 +469,50 @@ void			bench_ft_memcmp_fatbench(void *ptr, void *vsptr) {
 			);
 }
 
+void			bench_ft_memcmp_medbench(void *ptr, void *vsptr) {
+	typeof(memcmp)		*ft_memcmp = ptr;
+	INIT_VSFUN(vsptr, vsfun, memcmp);
+	SET_BENCHTYPE(BENCH_MEDIUM);
+	SET_BENCHITER(KILOBYTE * 64);
+
+	SANDBOX_BENCH(
+			size_t	size = KILOBYTE * 128;
+			uint8_t	*s1 = malloc(sizeof(uint8_t) * size);
+			uint8_t	*s2 = malloc(sizeof(uint8_t) * size);
+
+			memset(s1, 'A', size);
+			memset(s2, 'A', size);
+			,
+			vsfun(s1, s2, size);
+			,
+			ft_memcmp(s1, s2, size);
+			);
+}
+
+void			bench_ft_memcmp_smallbench(void *ptr, void *vsptr) {
+	typeof(memcmp)		*ft_memcmp = ptr;
+	INIT_VSFUN(vsptr, vsfun, memcmp);
+	SET_BENCHTYPE(BENCH_FAT);
+	SET_BENCHITER(MEGABYTE * 16);
+
+	SANDBOX_BENCH(
+			size_t	size = 64;
+			uint8_t	*s1 = malloc(sizeof(uint8_t) * size);
+			uint8_t	*s2 = malloc(sizeof(uint8_t) * size);
+
+			memset(s1, 'A', size);
+			memset(s2, 'A', size);
+			,
+			vsfun(s1, s2, size);
+			,
+			ft_memcmp(s1, s2, size);
+			);
+}
+
 void            bench_ft_memcmp(void){
 	add_fun_subbench(bench_ft_memcmp_fatbench);
+	add_fun_subbench(bench_ft_memcmp_medbench);
+	add_fun_subbench(bench_ft_memcmp_smallbench);
 }
 
 ////////////////////////////////
@@ -458,8 +538,48 @@ void			bench_ft_strlen_fatbench(void *ptr, void *vsptr) {
 			);
 }
 
+void			bench_ft_strlen_medbench(void *ptr, void *vsptr) {
+	typeof(strlen)	*ft_strlen = ptr;
+	INIT_VSFUN(vsptr, vsfun, strlen);
+	SET_BENCHTYPE(BENCH_MEDIUM);
+	SET_BENCHITER(KILOBYTE * 64);
+
+	SANDBOX_BENCH(
+			size_t	size = KILOBYTE * 128;
+			char	*str = malloc(size + 1);
+
+			memset(str, 'A', size);
+			str[size] = 0;
+			,
+			vsfun(str);
+			,
+			ft_strlen(str);
+			);
+}
+
+void			bench_ft_strlen_smallbench(void *ptr, void *vsptr) {
+	typeof(strlen)	*ft_strlen = ptr;
+	INIT_VSFUN(vsptr, vsfun, strlen);
+	SET_BENCHTYPE(BENCH_SMALL);
+	SET_BENCHITER(MEGABYTE * 8);
+
+	SANDBOX_BENCH(
+			size_t	size = 128;
+			char	*str = malloc(size + 1);
+
+			memset(str, 'A', size);
+			str[size] = 0;
+			,
+			vsfun(str);
+			,
+			ft_strlen(str);
+			);
+}
+
 void            bench_ft_strlen(void) {
 	add_fun_subbench(bench_ft_strlen_fatbench);
+	add_fun_subbench(bench_ft_strlen_medbench);
+	add_fun_subbench(bench_ft_strlen_smallbench);
 }
 
 ////////////////////////////////

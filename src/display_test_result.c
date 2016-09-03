@@ -13,6 +13,7 @@
 #include "libft_test.h"
 #include <ctype.h>
 #include <stdbool.h>
+#include <math.h>
 
 #define NEXT_LINE_CONTAINS(x) strnstr(code, x, code - strchr(code + 1, ';'))
 
@@ -369,15 +370,15 @@ void    display_test_result(int value, char *explications)
 			else
 				total_versus_points++;
 			int		fun_padd = (14 - bench_name_len) / 2;
-			int		nc1 = p1 * 20;
-			int		nc2 = p2 * 20;
+			int		nc1 = round(p1 * 20);
+			int		nc2 = round(p2 * 20);
 			char	*c1 = (nc1 < nc2) ? "\u25CF" : " ";
 			char	*c2 = (nc2 < nc1) ? "\u25CF" : " ";
 			char	*sep1 = (count % 2) ? "( " : " )";
 			char	*sep2 = !(count % 2) ? "( " : " )";
 			char	*color1 = (g_time.state == TEST_CRASH) ? COLOR_SPEED_CRASH : get_speed_color(false);
 			char	*color2 = (g_time.state == TEST_CRASH) ? COLOR_SPEED_CRASH : get_speed_color(true);
-				printf(COLOR_PART1"%s  "COLOR_CLEAR"|%s%s"COLOR_CLEAR"| %s%2.0f%% %*s%s%*s"COLOR_CLEAR
+			printf(COLOR_PART1"%s  "COLOR_CLEAR"|%s%s"COLOR_CLEAR"| %s%2.0f%% %*s%s%*s"COLOR_CLEAR
 						"|%*s%s%*s|"
 						"%s%*s"COLOR_CLEAR"%*s %s%2.0f%% "COLOR_CLEAR"|%s%s"COLOR_CLEAR"|  "COLOR_PART1"%s\n"COLOR_CLEAR,
 						sep1,									// left decoration
