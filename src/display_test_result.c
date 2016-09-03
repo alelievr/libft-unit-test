@@ -14,6 +14,8 @@
 #include <ctype.h>
 #include <stdbool.h>
 
+#define NEXT_LINE_CONTAINS(x) strnstr(code, x, code - strchr(code + 1, ';'))
+
 static char	*butify(char *code) {
 	char	*tmp;
 	size_t	size = (strlen(code) + 0xF00);
@@ -21,10 +23,15 @@ static char	*butify(char *code) {
 		return ("//BUFFER ERROR\\\\");
 	char	*ret = tmp;
 	int		indent = 1;
+	int		bracket = 0;
 
 	*tmp++ = '\t';
 	while (*code) {
-		if (*code == ';' && (isspace(code[1]) || (code[1] == ';' && isspace(code[2])))) {
+		if (bracket == 0 && *code == ';' && strchr(code + 1, ';'))
+			while (NEXT_LINE_CONTAINS("g_shared_mem"))
+				code = strchr(code + 1, ';');
+		if (bracket == 0 && *code == ';' && (isspace(code[1]) || (code[1] == ';' && isspace(code[2]))))
+		{
 			while (*code && (isspace(*code) || *code == ';'))
 				code++;
 			*tmp++ = ';';
@@ -34,6 +41,10 @@ static char	*butify(char *code) {
 		}
 		else
 			*tmp++ = *code++;
+		if (*code == '(')
+			bracket++;
+		if (*code == ')')
+			bracket--;
 	}
 	*tmp = 0;
 	return (ret);
@@ -164,6 +175,15 @@ static char	*get_speed_color(_Bool inverted) {
 		return (COLOR_SPEED_05);
 	else
 		return (COLOR_SPEED_0);
+}
+
+static char *fg_color_to_bg(char *color, int buffer)
+{
+	static char	buff[2][0xF0];
+	int		c = atoi(color + 7);
+
+	sprintf(buff[buffer], "\033[48;5;%im", c);
+	return buff[buffer];
 }
 
 void    display_test_result(int value, char *explications)
@@ -357,22 +377,24 @@ void    display_test_result(int value, char *explications)
 			char	*sep2 = !(count % 2) ? "( " : " )";
 			char	*color1 = (g_time.state == TEST_CRASH) ? COLOR_SPEED_CRASH : get_speed_color(false);
 			char	*color2 = (g_time.state == TEST_CRASH) ? COLOR_SPEED_CRASH : get_speed_color(true);
-				printf(COLOR_PART1"%s  "COLOR_CLEAR"|%s%s"COLOR_CLEAR"| %s%2.0f%% %*s"COLOR_BENCH_PLAYER"%*s"COLOR_CLEAR
+				printf(COLOR_PART1"%s  "COLOR_CLEAR"|%s%s"COLOR_CLEAR"| %s%2.0f%% %*s%s%*s"COLOR_CLEAR
 						"|%*s%s%*s|"
-						COLOR_BENCH_VERSUS"%*s"COLOR_CLEAR"%*s %s%2.0f%% "COLOR_CLEAR"|%s%s"COLOR_CLEAR"|  "COLOR_PART1"%s\n"COLOR_CLEAR,
-						sep1,
-						color1, c2,
-						color1, p2 * 100,
-						20 - nc2, "",
-						nc2, "",
-						fun_padd, "",
-						bench_name,
-						fun_padd - !(bench_name_len % 2), "",
-						nc1, "",
-						20 - nc1, "",
-						color2, p1 * 100,
-						color2, c1,
-						sep2);
+						"%s%*s"COLOR_CLEAR"%*s %s%2.0f%% "COLOR_CLEAR"|%s%s"COLOR_CLEAR"|  "COLOR_PART1"%s\n"COLOR_CLEAR,
+						sep1,									// left decoration
+						color1, c2,								// left color and point
+						color1, p2 * 100,						// left color and percent
+						20 - nc2, "",							// padding for colored spaces
+						fg_color_to_bg(color1, 0),				// right colored spaces color
+						nc2, "",								// colored spaces
+						fun_padd, "",							// left padding for function name
+						bench_name,								// function name / bench type
+						fun_padd - !(bench_name_len % 2), "",	// right padding for function name
+						fg_color_to_bg(color2, 1),				// right colored spaces color
+						nc1, "",								// colored spaces
+						20 - nc1, "",							// padding for colored spaces
+						color2, p1 * 100,						// right color and percent
+						color2, c1,								// right color and point
+						sep2);									// right decoration
 			/*					printf("%s\u25CF%s x%.2f (%7llu tick vs %-7llu)",
 								(g_time.state == TEST_CRASH) ? COLOR_SPEED_CRASH : get_speed_color(),
 								"\033[38;0m",

@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/08/06 16:42:40 by alelievr          #+#    #+#             */
-/*   Updated: 2016/08/07 19:39:34 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/09/03 02:34:04 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,8 +186,53 @@ void			bench_ft_memcpy_fatbench(void *ptr, void *vsptr) {
 			);
 	(void)vsfun;
 }
+
+void			bench_ft_memcpy_medbench(void *ptr, void *vsptr) {
+	typeof(memcpy)	*ft_memcpy = ptr;
+	INIT_VSFUN(vsptr, vsfun, memcpy);
+	SET_BENCHTYPE(BENCH_MEDIUM);
+	SET_BENCHITER(KILOBYTE * 128);
+
+	SANDBOX_BENCH(
+			size_t	size = KILOBYTE * 8;
+			char	*src = malloc(size);
+			char	*buff1 = malloc(size);
+			char	*buff2 = malloc(size);
+
+			memset(src, 'A', size);
+			,
+			ft_memcpy(buff1, src, size);
+			,
+			ft_memcpy(buff2, src, size);
+			);
+	(void)vsfun;
+}
+
+void			bench_ft_memcpy_smallbench(void *ptr, void *vsptr) {
+	typeof(memcpy)	*ft_memcpy = ptr;
+	INIT_VSFUN(vsptr, vsfun, memcpy);
+	SET_BENCHTYPE(BENCH_SMALL);
+	SET_BENCHITER(MEGABYTE * 16);
+
+	SANDBOX_BENCH(
+			size_t	size = 64;
+			char	*src = malloc(size);
+			char	*buff1 = malloc(size);
+			char	*buff2 = malloc(size);
+
+			memset(src, 'A', size);
+			,
+			ft_memcpy(buff1, src, size);
+			,
+			ft_memcpy(buff2, src, size);
+			);
+	(void)vsfun;
+}
+
 void            bench_ft_memcpy(void){
 	add_fun_subbench(bench_ft_memcpy_fatbench);
+	add_fun_subbench(bench_ft_memcpy_medbench);
+	add_fun_subbench(bench_ft_memcpy_smallbench);
 }
 
 ////////////////////////////////
@@ -216,8 +261,54 @@ void			bench_ft_memccpy_fatbench(void *ptr, void *vsptr) {
 			);
 }
 
+void			bench_ft_memccpy_medbench(void *ptr, void *vsptr) {
+	typeof(memccpy)	*ft_memccpy = ptr;
+	INIT_VSFUN(vsptr, vsfun, memccpy);
+	SET_BENCHTYPE(BENCH_MEDIUM);
+	SET_BENCHITER(KILOBYTE * 128);
+
+	SANDBOX_BENCH(
+			size_t	size = KILOBYTE * 8;
+			char	*src1 = malloc(size);
+			char	*src2 = malloc(size);
+			char	*buff1 = malloc(size);
+			char	*buff2 = malloc(size);
+
+			memset(src1, 'A', size);
+			memset(src2, 'A', size);
+			,
+			vsfun(buff1, src1, '\\', size);
+			,
+			ft_memccpy(buff2, src2, '\\', size);
+			);
+}
+
+void			bench_ft_memccpy_smallbench(void *ptr, void *vsptr) {
+	typeof(memccpy)	*ft_memccpy = ptr;
+	INIT_VSFUN(vsptr, vsfun, memccpy);
+	SET_BENCHTYPE(BENCH_SMALL);
+	SET_BENCHITER(MEGABYTE * 16);
+
+	SANDBOX_BENCH(
+			size_t	size = 64;
+			char	*src1 = malloc(size);
+			char	*src2 = malloc(size);
+			char	*buff1 = malloc(size);
+			char	*buff2 = malloc(size);
+
+			memset(src1, 'A', size);
+			memset(src2, 'A', size);
+			,
+			vsfun(buff1, src1, '\\', size);
+			,
+			ft_memccpy(buff2, src2, '\\', size);
+			);
+}
+
 void            bench_ft_memccpy(void){
 	add_fun_subbench(bench_ft_memccpy_fatbench);
+	add_fun_subbench(bench_ft_memccpy_medbench);
+	add_fun_subbench(bench_ft_memccpy_smallbench);
 }
 
 ////////////////////////////////
@@ -244,8 +335,50 @@ void			bench_ft_memmove_fatbench(void *ptr, void *vsptr) {
 			);
 }
 
+void			bench_ft_memmove_medbench(void *ptr, void *vsptr) {
+	typeof(memmove)		*ft_memmove = ptr;
+	INIT_VSFUN(vsptr, vsfun, memmove);
+	SET_BENCHTYPE(BENCH_MEDIUM);
+	SET_BENCHITER(KILOBYTE * 64);
+
+	SANDBOX_BENCH(
+			int		size = KILOBYTE * 16;
+			char	*dst1 = (char *)malloc(sizeof(char) * size);
+			char	*dst2 = (char *)malloc(sizeof(char) * size);
+			char	*data = (char *)malloc(sizeof(char) * size);
+
+			memset(data, 'A', size);
+			,
+			vsfun(dst1, data, size);
+			,
+			ft_memmove(dst2, data, size);
+			);
+}
+
+void			bench_ft_memmove_smallbench(void *ptr, void *vsptr) {
+	typeof(memmove)		*ft_memmove = ptr;
+	INIT_VSFUN(vsptr, vsfun, memmove);
+	SET_BENCHTYPE(BENCH_SMALL);
+	SET_BENCHITER(MEGABYTE * 16);
+
+	SANDBOX_BENCH(
+			int		size = 64;
+			char	*dst1 = (char *)malloc(sizeof(char) * size);
+			char	*dst2 = (char *)malloc(sizeof(char) * size);
+			char	*data = (char *)malloc(sizeof(char) * size);
+
+			memset(data, 'A', size);
+			,
+			vsfun(dst1, data, size);
+			,
+			ft_memmove(dst2, data, size);
+			);
+}
+
 void            bench_ft_memmove(void){
 	add_fun_subbench(bench_ft_memmove_fatbench);
+	add_fun_subbench(bench_ft_memmove_medbench);
+	add_fun_subbench(bench_ft_memmove_smallbench);
 }
 
 ////////////////////////////////
