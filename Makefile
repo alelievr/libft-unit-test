@@ -199,7 +199,7 @@ codesize:
 f: libclean all
 	@rm -rf $(ASSETDIR)/$(ANAME)
 	@echo "\033[38;5;93mRUNING TESTS:"
-	@./$(WRAPNAME) ${NOSPEED}
+	@./$(WRAPNAME) ${SPEED}
 
 coffee:
 	@clear

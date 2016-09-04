@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2016/09/03 17:47:13 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/09/04 20:08:29 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int		_stdout;
 static t_option options[] = {
 	{"-versus", 'v', &g_versus},
 	{"-bench", 'b', &g_bench},
-	{"-nospeed", 'n', &g_nospeed},
+	{"-speed", 's', &g_nospeed},
 	{"-help", 'h', &g_help},
 	{NULL, 0, NULL}
 };
@@ -228,7 +228,7 @@ static void	usage() __attribute((noreturn));
 static void	usage() {
 	printf("usage ./run_test <opt> <functions>\n"
 			"-h or -help: display help\n"
-			"-n or -nospeed: run the test without speed evaluation\n"
+			"-s or -speed: run the test without speed evaluation\n"
 			"-b or -bench: speed test of your library (vs system)\n"
 			"-v or -versus: run with a shared library in parameter, "
 			"do the same than -b but with the parameter instead of the system's library\n"
@@ -244,6 +244,7 @@ int		main(unused int ac, char **av) {
 	char	**function_list = NULL;
 
 	function_list = get_options(av);
+	g_nospeed = !g_nospeed;
 	if (g_help)
 		usage();
 	setlocale(LC_ALL, "");

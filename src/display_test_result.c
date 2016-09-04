@@ -99,14 +99,14 @@ static void	display_part(void) {
 	static int last_part = -2;
 
 	if (last_part != current_part && current_part == 1) {
-		printf(COLOR_CLEAR"speed scale: > x10:"COLOR_SPEED_10"\u25CF"COLOR_CLEAR
-				" > x5:"COLOR_SPEED_5"\u25CF"COLOR_CLEAR
-				" > x2:"COLOR_SPEED_2"\u25CF"COLOR_CLEAR
-				" > x1:"COLOR_SPEED_1"\u25CF"COLOR_CLEAR
-				" > x0.5:"COLOR_SPEED_05"\u25CF"COLOR_CLEAR
-				" < x0.5:"COLOR_SPEED_0"\u25CF"COLOR_CLEAR
-				"\n"
-				"\033[38;5;244mto disable this, run \"make f NOSPEED=1\" or \"./run_test -nospeed\"\033[0m\n");
+		if (!g_nospeed)
+			printf(COLOR_CLEAR"speed scale: > x10:"COLOR_SPEED_10"\u25CF"COLOR_CLEAR
+					" > x5:"COLOR_SPEED_5"\u25CF"COLOR_CLEAR
+					" > x2:"COLOR_SPEED_2"\u25CF"COLOR_CLEAR
+					" > x1:"COLOR_SPEED_1"\u25CF"COLOR_CLEAR
+					" > x0.5:"COLOR_SPEED_05"\u25CF"COLOR_CLEAR
+					" < x0.5:"COLOR_SPEED_0"\u25CF"COLOR_CLEAR
+					"\n");
 		printf(COLOR_PART1"                      First part\n");
 		printf("%s\n", ".-\"-.     .-\"-.     .-\"-.     .-\"-.     .-\"-.     .-\"-.\n"
 				"     \"-.-\"     \"-.-\"     \"-.-\"     \"-.-\"     \"-.-\"    "COLOR_CLEAR);
