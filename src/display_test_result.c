@@ -382,9 +382,9 @@ void    display_test_result(int value, char *explications)
 			char	*sep2 = !(count % 2) ? "( " : " )";
 			char	*color1 = (g_time.state == TEST_CRASH) ? COLOR_SPEED_CRASH : get_speed_color(false);
 			char	*color2 = (g_time.state == TEST_CRASH) ? COLOR_SPEED_CRASH : get_speed_color(true);
-			printf(COLOR_PART1"%s  "COLOR_CLEAR"|%s%s"COLOR_CLEAR"| %s%2.0f%% %*s%s%*s"COLOR_CLEAR
+			printf(COLOR_PART1"%s  "COLOR_CLEAR"|%s%s"COLOR_CLEAR"|%s%3.0f%% %*s%s%*s"COLOR_CLEAR
 						"|%*s%s%*s|"
-						"%s%*s"COLOR_CLEAR"%*s %s%2.0f%% "COLOR_CLEAR"|%s%s"COLOR_CLEAR"|  "COLOR_PART1"%s\n"COLOR_CLEAR,
+						"%s%*s"COLOR_CLEAR"%*s%s%3.0f%% "COLOR_CLEAR"|%s%s"COLOR_CLEAR"|  "COLOR_PART1"%s\n"COLOR_CLEAR,
 						sep1,									// left decoration
 						color1, c2,								// left color and point
 						color1, p2 * 100,						// left color and percent

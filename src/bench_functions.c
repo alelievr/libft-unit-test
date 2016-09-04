@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/08/06 16:42:40 by alelievr          #+#    #+#             */
-/*   Updated: 2016/09/03 18:18:13 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/09/04 19:53:25 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -322,7 +322,7 @@ void			bench_ft_memmove_fatbench(void *ptr, void *vsptr) {
 	SET_BENCHITER(16);
 
 	SANDBOX_BENCH(
-			int		size = MEGABYTE * 32;
+			int		size = MEGABYTE * 16;
 			char	*dst1 = (char *)malloc(sizeof(char) * size);
 			char	*dst2 = (char *)malloc(sizeof(char) * size);
 			char	*data = (char *)malloc(sizeof(char) * size);
@@ -456,7 +456,7 @@ void			bench_ft_memcmp_fatbench(void *ptr, void *vsptr) {
 	SET_BENCHITER(16);
 
 	SANDBOX_BENCH(
-			size_t	size = MEGABYTE * 64;
+			size_t	size = MEGABYTE * 32;
 			uint8_t	*s1 = malloc(sizeof(uint8_t) * size);
 			uint8_t	*s2 = malloc(sizeof(uint8_t) * size);
 
@@ -473,7 +473,7 @@ void			bench_ft_memcmp_medbench(void *ptr, void *vsptr) {
 	typeof(memcmp)		*ft_memcmp = ptr;
 	INIT_VSFUN(vsptr, vsfun, memcmp);
 	SET_BENCHTYPE(BENCH_MEDIUM);
-	SET_BENCHITER(KILOBYTE * 64);
+	SET_BENCHITER(KILOBYTE * 48);
 
 	SANDBOX_BENCH(
 			size_t	size = KILOBYTE * 128;
@@ -885,7 +885,7 @@ void			bench_ft_strncat_fatbench(void *ptr, void *vsptr) {
 	SET_BENCHITER(16);
 
 	SANDBOX_BENCH(
-			size_t	size = MEGABYTE * 128;
+			size_t	size = MEGABYTE * 64;
 			char	*str = malloc(size + 1);
 			char	*buff1 = malloc(size + 1);
 			char	*buff2 = malloc(size + 1);
@@ -964,7 +964,7 @@ void			bench_ft_strlcat_fatbench(void *ptr, void *vsptr) {
 	SET_BENCHITER(24);
 
 	SANDBOX_BENCH(
-			size_t	size = MEGABYTE * 32;
+			size_t	size = MEGABYTE * 16;
 			char	*str = malloc(size + 1);
 			char	*buff1 = malloc(size + 1);
 			char	*buff2 = malloc(size + 1);
@@ -1055,8 +1055,48 @@ void			bench_ft_strchr_fatbench(void *ptr, void *vsptr) {
 			);
 }
 
+void			bench_ft_strchr_medbench(void *ptr, void *vsptr) {
+	typeof(strchr)	*ft_strchr = ptr;
+	INIT_VSFUN(vsptr, vsfun, strchr);
+	SET_BENCHTYPE(BENCH_MEDIUM);
+	SET_BENCHITER(KILOBYTE * 64);
+
+	SANDBOX_BENCH(
+			size_t	size = KILOBYTE * 32;
+			char	*src = malloc(size + 1);
+
+			memset(src, 'A', size);
+			src[size] = 0;
+			,
+			vsfun(src, 'B');
+			,
+			ft_strchr(src, 'B');
+			);
+}
+
+void			bench_ft_strchr_smallbench(void *ptr, void *vsptr) {
+	typeof(strchr)	*ft_strchr = ptr;
+	INIT_VSFUN(vsptr, vsfun, strchr);
+	SET_BENCHTYPE(BENCH_SMALL);
+	SET_BENCHITER(MEGABYTE * 16);
+
+	SANDBOX_BENCH(
+			size_t	size = 128;
+			char	*src = malloc(size + 1);
+
+			memset(src, 'A', size);
+			src[size] = 0;
+			,
+			vsfun(src, 'B');
+			,
+			ft_strchr(src, 'B');
+			);
+}
+
 void            bench_ft_strchr(void){
 	add_fun_subbench(bench_ft_strchr_fatbench);
+	add_fun_subbench(bench_ft_strchr_medbench);
+	add_fun_subbench(bench_ft_strchr_smallbench);
 }
 
 ////////////////////////////////
@@ -1082,8 +1122,48 @@ void			bench_ft_strrchr_fatbench(void *ptr, void *vsptr) {
 			);
 }
 
+void			bench_ft_strrchr_medbench(void *ptr, void *vsptr) {
+	typeof(strrchr)	*ft_strrchr = ptr;
+	INIT_VSFUN(vsptr, vsfun, strrchr);
+	SET_BENCHTYPE(BENCH_FAT);
+	SET_BENCHITER(KILOBYTE * 16);
+
+	SANDBOX_BENCH(
+			size_t	size = KILOBYTE * 32;
+			char	*src = malloc(size + 1);
+
+			memset(src, 'A', size);
+			src[size] = 0;
+			,
+			vsfun(src, 'B');
+			,
+			ft_strrchr(src, 'B');
+			);
+}
+
+void			bench_ft_strrchr_smallbench(void *ptr, void *vsptr) {
+	typeof(strrchr)	*ft_strrchr = ptr;
+	INIT_VSFUN(vsptr, vsfun, strrchr);
+	SET_BENCHTYPE(BENCH_SMALL);
+	SET_BENCHITER(MEGABYTE * 8);
+
+	SANDBOX_BENCH(
+			size_t	size = 32;
+			char	*src = malloc(size + 1);
+
+			memset(src, 'A', size);
+			src[size] = 0;
+			,
+			vsfun(src, 'B');
+			,
+			ft_strrchr(src, 'B');
+			);
+}
+
 void            bench_ft_strrchr(void){
 	add_fun_subbench(bench_ft_strrchr_fatbench);
+	add_fun_subbench(bench_ft_strrchr_medbench);
+	add_fun_subbench(bench_ft_strrchr_smallbench);
 }
 
 ////////////////////////////////
@@ -1094,7 +1174,7 @@ void			bench_ft_strstr_fatbench(void *ptr, void *vsptr) {
 	typeof(strstr)	*ft_strstr = ptr;
 	INIT_VSFUN(vsptr, vsfun, strstr);
 	SET_BENCHTYPE(BENCH_FAT);
-	SET_BENCHITER(16);
+	SET_BENCHITER(8);
 
 	SANDBOX_BENCH(
 			size_t	size = MEGABYTE * 8;
@@ -1110,8 +1190,50 @@ void			bench_ft_strstr_fatbench(void *ptr, void *vsptr) {
 			);
 }
 
+void			bench_ft_strstr_medbench(void *ptr, void *vsptr) {
+	typeof(strstr)	*ft_strstr = ptr;
+	INIT_VSFUN(vsptr, vsfun, strstr);
+	SET_BENCHTYPE(BENCH_MEDIUM);
+	SET_BENCHITER(KILOBYTE * 2);
+
+	SANDBOX_BENCH(
+			size_t	size = KILOBYTE * 8;
+			char	*s1 = malloc(size + 1);
+			char	*s2 = "AAAAAAAAAAAAAAAAAAB";
+
+			memset(s1, 'A', size);
+			s1[size] = 0;
+			,
+			vsfun(s1, s2);
+			,
+			ft_strstr(s1, s2);
+			);
+}
+
+void			bench_ft_strstr_smallbench(void *ptr, void *vsptr) {
+	typeof(strstr)	*ft_strstr = ptr;
+	INIT_VSFUN(vsptr, vsfun, strstr);
+	SET_BENCHTYPE(BENCH_SMALL);
+	SET_BENCHITER(MEGABYTE);
+
+	SANDBOX_BENCH(
+			size_t	size = 16;
+			char	*s1 = malloc(size + 1);
+			char	*s2 = "AAAAAAAAAAAAAAAAAAAAAB";
+
+			memset(s1, 'A', size);
+			s1[size] = 0;
+			,
+			vsfun(s1, s2);
+			,
+			ft_strstr(s1, s2);
+			);
+}
+
 void            bench_ft_strstr(void){
 	add_fun_subbench(bench_ft_strstr_fatbench);
+	add_fun_subbench(bench_ft_strstr_medbench);
+	add_fun_subbench(bench_ft_strstr_smallbench);
 }
 
 ////////////////////////////////
@@ -1125,8 +1247,48 @@ void			bench_ft_strnstr_fatbench(void *ptr, void *vsptr) {
 	SET_BENCHITER(16);
 
 	SANDBOX_BENCH(
-			size_t	size = MEGABYTE * 32;
+			size_t	size = MEGABYTE * 4;
 			char	*s2 = "AAAAB";
+			char	*s1 = malloc(size + 1);
+
+			memset(s1, 'A', size);
+			s1[size] = 0;
+			,
+			vsfun(s1, s2, size);
+			,
+			ft_strnstr(s1, s2, size);
+			);
+}
+
+void			bench_ft_strnstr_medbench(void *ptr, void *vsptr) {
+	typeof(strnstr)	*ft_strnstr = ptr;
+	INIT_VSFUN(vsptr, vsfun, strnstr);
+	SET_BENCHTYPE(BENCH_MEDIUM);
+	SET_BENCHITER(KILOBYTE * 2);
+
+	SANDBOX_BENCH(
+			size_t	size = KILOBYTE * 16;
+			char	*s2 = "AAAAAAAAAAAAAAAAAAAAB";
+			char	*s1 = malloc(size + 1);
+
+			memset(s1, 'A', size);
+			s1[size] = 0;
+			,
+			vsfun(s1, s2, size);
+			,
+			ft_strnstr(s1, s2, size);
+			);
+}
+
+void			bench_ft_strnstr_smallbench(void *ptr, void *vsptr) {
+	typeof(strnstr)	*ft_strnstr = ptr;
+	INIT_VSFUN(vsptr, vsfun, strnstr);
+	SET_BENCHTYPE(BENCH_SMALL);
+	SET_BENCHITER(MEGABYTE);
+
+	SANDBOX_BENCH(
+			size_t	size = 32;
+			char	*s2 = "AAAAAAAAAAAAAAAAAAAAAAAB";
 			char	*s1 = malloc(size + 1);
 
 			memset(s1, 'A', size);
@@ -1140,6 +1302,8 @@ void			bench_ft_strnstr_fatbench(void *ptr, void *vsptr) {
 
 void            bench_ft_strnstr(void){
 	add_fun_subbench(bench_ft_strnstr_fatbench);
+	add_fun_subbench(bench_ft_strnstr_medbench);
+	add_fun_subbench(bench_ft_strnstr_smallbench);
 }
 
 ////////////////////////////////
@@ -1168,8 +1332,54 @@ void			bench_ft_strcmp_fatbench(void *ptr, void *vsptr) {
 			);
 }
 
+void			bench_ft_strcmp_medbench(void *ptr, void *vsptr) {
+	typeof(strcmp)	*ft_strcmp = ptr;
+	INIT_VSFUN(vsptr, vsfun, strcmp);
+	SET_BENCHTYPE(BENCH_MEDIUM);
+	SET_BENCHITER(KILOBYTE * 32);
+
+	SANDBOX_BENCH(
+			size_t	size = KILOBYTE * 128;
+			char	*s1 = malloc(size + 1);
+			char	*s2 = malloc(size + 1);
+
+			memset(s1, 'A', size);
+			memset(s2, 'A', size);
+			s1[size] = s2[size] = 0;
+
+			,
+			vsfun(s1, s2);
+			,
+			ft_strcmp(s1, s2);
+			);
+}
+
+void			bench_ft_strcmp_smallbench(void *ptr, void *vsptr) {
+	typeof(strcmp)	*ft_strcmp = ptr;
+	INIT_VSFUN(vsptr, vsfun, strcmp);
+	SET_BENCHTYPE(BENCH_SMALL);
+	SET_BENCHITER(MEGABYTE * 16);
+
+	SANDBOX_BENCH(
+			size_t	size = 128;
+			char	*s1 = malloc(size + 1);
+			char	*s2 = malloc(size + 1);
+
+			memset(s1, 'A', size);
+			memset(s2, 'A', size);
+			s1[size] = s2[size] = 0;
+
+			,
+			vsfun(s1, s2);
+			,
+			ft_strcmp(s1, s2);
+			);
+}
+
 void            bench_ft_strcmp(void){
 	add_fun_subbench(bench_ft_strcmp_fatbench);
+	add_fun_subbench(bench_ft_strcmp_medbench);
+	add_fun_subbench(bench_ft_strcmp_smallbench);
 }
 
 ////////////////////////////////
@@ -1198,8 +1408,54 @@ void			bench_ft_strncmp_fatbench(void *ptr, void *vsptr) {
 			);
 }
 
+void			bench_ft_strncmp_medbench(void *ptr, void *vsptr) {
+	typeof(strncmp)	*ft_strncmp = ptr;
+	INIT_VSFUN(vsptr, vsfun, strncmp);
+	SET_BENCHTYPE(BENCH_MEDIUM);
+	SET_BENCHITER(KILOBYTE * 32);
+
+	SANDBOX_BENCH(
+			size_t	size = KILOBYTE * 128;
+			char	*s1 = malloc(size + 1);
+			char	*s2 = malloc(size + 1);
+
+			memset(s1, 'A', size);
+			memset(s2, 'A', size);
+			s1[size] = s2[size] = 0;
+
+			,
+			vsfun(s1, s2, size);
+			,
+			ft_strncmp(s1, s2, size);
+			);
+}
+
+void			bench_ft_strncmp_smallbench(void *ptr, void *vsptr) {
+	typeof(strncmp)	*ft_strncmp = ptr;
+	INIT_VSFUN(vsptr, vsfun, strncmp);
+	SET_BENCHTYPE(BENCH_SMALL);
+	SET_BENCHITER(MEGABYTE * 16);
+
+	SANDBOX_BENCH(
+			size_t	size = 128;
+			char	*s1 = malloc(size + 1);
+			char	*s2 = malloc(size + 1);
+
+			memset(s1, 'A', size);
+			memset(s2, 'A', size);
+			s1[size] = s2[size] = 0;
+
+			,
+			vsfun(s1, s2, size);
+			,
+			ft_strncmp(s1, s2, size);
+			);
+}
+
 void            bench_ft_strncmp(void){
 	add_fun_subbench(bench_ft_strncmp_fatbench);
+	add_fun_subbench(bench_ft_strncmp_medbench);
+	add_fun_subbench(bench_ft_strncmp_smallbench);
 }
 
 ////////////////////////////////
