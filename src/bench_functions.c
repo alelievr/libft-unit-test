@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/08/06 16:42:40 by alelievr          #+#    #+#             */
-/*   Updated: 2016/09/04 19:53:25 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/09/05 17:11:00 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,7 @@ void			bench_ft_memcpy_fatbench(void *ptr, void *vsptr) {
 
 			memset(src, 'A', size);
 			,
-			ft_memcpy(buff1, src, size);
+			vsfun(buff1, src, size);
 			,
 			ft_memcpy(buff2, src, size);
 			);
@@ -201,7 +201,7 @@ void			bench_ft_memcpy_medbench(void *ptr, void *vsptr) {
 
 			memset(src, 'A', size);
 			,
-			ft_memcpy(buff1, src, size);
+			vsfun(buff1, src, size);
 			,
 			ft_memcpy(buff2, src, size);
 			);
@@ -222,7 +222,7 @@ void			bench_ft_memcpy_smallbench(void *ptr, void *vsptr) {
 
 			memset(src, 'A', size);
 			,
-			ft_memcpy(buff1, src, size);
+			vsfun(buff1, src, size);
 			,
 			ft_memcpy(buff2, src, size);
 			);
