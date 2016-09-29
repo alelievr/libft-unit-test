@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2016/09/29 21:02:26 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/09/29 21:26:01 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,7 +273,7 @@ int		main(unused int ac, char **av) {
 	/* Threads for timeout */
 	load_timer();
 
-	if (!*function_list)
+	if (*function_list)
 		g_nobenchlog = 1;
 
 	/* Running test for evry function: */
