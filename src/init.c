@@ -30,6 +30,7 @@ t_tdiff			g_time;
 char			*g_shared_mem;
 char			g_nospeed = 0;
 char			g_bench = 0;
+char			g_nobenchlog = 0;
 char			g_help = 0;
 char			*g_versus = NULL;
 t_libft_subtest	fun_subtest_table[SUBTEST_SIZE];

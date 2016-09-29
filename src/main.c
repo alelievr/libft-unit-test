@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2016/09/04 20:08:29 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/09/29 21:02:26 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ static t_option options[] = {
 	{"-bench", 'b', &g_bench},
 	{"-speed", 's', &g_nospeed},
 	{"-help", 'h', &g_help},
+	{"-nobenchlog", 'n', &g_nobenchlog},
 	{NULL, 0, NULL}
 };
 
@@ -230,6 +231,7 @@ static void	usage() {
 			"-h or -help: display help\n"
 			"-s or -speed: run the test without speed evaluation\n"
 			"-b or -bench: speed test of your library (vs system)\n"
+			"-n or --nobenchlog: disable the bench test result output in the ranking file\n"
 			"-v or -versus: run with a shared library in parameter, "
 			"do the same than -b but with the parameter instead of the system's library\n"
 			"you can additionally specify function name to test only these function\n\n"
@@ -270,6 +272,9 @@ int		main(unused int ac, char **av) {
 
 	/* Threads for timeout */
 	load_timer();
+
+	if (!*function_list)
+		g_nobenchlog = 1;
 
 	/* Running test for evry function: */
 	if (g_bench == 0 && g_versus == NULL)

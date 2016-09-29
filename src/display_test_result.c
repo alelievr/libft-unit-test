@@ -314,7 +314,7 @@ void    display_test_result(int value, char *explications)
 					COLOR_CLEAR);
 
 				//log file:
-				if (g_bench != 0 && g_versus == NULL)
+				if (g_bench != 0 && g_versus == NULL && g_nobenchlog == 0)
 					updateLogFile(total_player_points);
 			}
 			return ;
@@ -434,7 +434,7 @@ void    display_test_result(int value, char *explications)
 			clock_t	global_ticks = TIME_DIFF_SYS + TIME_DIFF_LIB;
 			float	p1 = (float)TIME_DIFF_LIB / (float)global_ticks;
 			float	p2 = (float)TIME_DIFF_SYS / (float)global_ticks;
-			if (p1 > p2)
+			if (p1 > p2 && g_time.state != TEST_CRASH)
 				total_player_points++;
 			else
 				total_versus_points++;

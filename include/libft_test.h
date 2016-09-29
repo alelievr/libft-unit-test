@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2016/09/29 20:47:17 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/09/29 20:53:38 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,6 +253,7 @@ extern		int				current_benchiter;
 extern		int				current_part;
 extern		char			g_nospeed;
 extern		char			g_bench;
+extern		char			g_nobenchlog;
 extern		char			*g_versus;
 extern		t_tdiff			g_time;
 
