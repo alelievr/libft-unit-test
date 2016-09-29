@@ -14,7 +14,10 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include <math.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
 
+#define MAX(x, y) ((x) > (y)) ? (x) : (y)
 #define NEXT_LINE_CONTAINS(x) strnstr(code, x, code - strchr(code + 1, ';'))
 
 static char	*butify(char *code) {
@@ -191,6 +194,64 @@ static char *fg_color_to_bg(char *color, int buffer)
 	return buff[buffer];
 }
 
+static _Bool login_cmp(const char *l1, char *l2)
+{
+	while (*l1 && *l2 && *l1 == *l2 && *l2 != ' ')
+		l1++, l2++;
+	if (!*l1 && (!*l2 || *l2 == ' '))
+		return true;
+	return false;
+}
+
+static void updateLogFile(int total_player_points)
+{
+	int			fd;
+	struct stat	st;
+	char		*file;
+	char		*fstart;
+	int			i = 1;
+	const char *login = getlogin();
+	struct {char name[9]; int points;}	users[0xF00];
+
+	if ((fd = open(BENCH_LOG_FILE, O_RDONLY)) != -1 && !fstat(fd, &st))
+	{
+		if ((fstart = file = mmap(NULL, st.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0)) != MAP_FAILED)
+			while (*file != '\0')
+			{
+				if (fstart - file + st.st_size < 10)
+					break ;
+				strlcpy(users[i].name, file, 9);
+				users[i].points = atoi(file + 10);
+				strsep(&file, "\n");
+				i += 2;
+			}
+		for (int j = 1; j < i; j += 2)
+			if (login_cmp(login, users[j].name))
+				users[j].name[0] = 0;
+		for (int j = 1; j < i + 2 || i == 1; j += 2)
+		{
+			if (users[j].points < total_player_points || users[j].points == 0 || i == 1)
+			{
+				strlcpy(users[j - 1].name, login, 9);
+				users[j - 1].points = total_player_points;
+				break ;
+			}
+		}
+		close(fd);
+		if ((fd = open(BENCH_LOG_FILE, O_WRONLY | O_TRUNC)) != -1)
+		{
+			for (int j = 0; j < i; j++)
+			{
+				if (!users[j].name[0])
+					continue ;
+				dprintf(fd, "%-8s: %i pts\n", users[j].name, users[j].points);
+			}
+		}
+		close(fd);
+		munmap(fstart, st.st_size);
+	}
+}
+
 void    display_test_result(int value, char *explications)
 {
 	static char		*old_fun_name = NULL;
@@ -251,6 +312,10 @@ void    display_test_result(int value, char *explications)
     					"    (_ ___) `-._.-'                                         `-._.-' (___ _)\n"
     					"    `-._.-'                                                         `-._.-'\n"
 					COLOR_CLEAR);
+
+				//log file:
+				if (g_bench != 0 && g_versus == NULL)
+					updateLogFile(total_player_points);
 			}
 			return ;
 		}
