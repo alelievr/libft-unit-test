@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2016/09/03 17:46:10 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/09/29 20:47:17 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ enum		e_offset {
 # define	DIFF_FILE		".fun_diff"
 # define	SHARED_MEM_FILE	".shmem"
 # define	BACKTRACE_FILE	"backtrace.crash"
+# define	BENCH_LOG_FILE	"/sgoinfre/goinfre/Misc/libft-unit-test-bench.txt"
 
 # define	COLOR_SUCCESS	"\033[38;5;46m"
 # define	COLOR_FAILED	"\033[38;5;160m"
