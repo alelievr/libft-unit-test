@@ -118,8 +118,8 @@ static void	display_part(void) {
 	if (last_part != current_part && current_part == 2) {
 		printf(COLOR_INFO"\n%s"COLOR_CLEAR, "In this part, you can choose to protect "
 				"your function or not protect them,\na color code will tell you if your "
-				"function is protected/not But stay coherent !\n"COLOR_PROTECTED"[||]"COLOR_INFO
-				" --> protected\n"COLOR_NPROTECTED"[||]"COLOR_INFO" --> not protected"COLOR_CLEAR);
+				"function is protected/not But stay coherent !\n"COLOR_PROTECTED"[\U0001F6E1 ]"COLOR_INFO
+				" --> protected\n"COLOR_NPROTECTED"[\U0001F4A5 ]"COLOR_INFO" --> not protected"COLOR_CLEAR);
 		printf(COLOR_PART2"\n                     Second part\n");
 		printf("%s\n", " __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)\n"
 				"(______)(______)(______)(______)(______)(______)(______)(___\n");
@@ -402,7 +402,7 @@ void    display_test_result(int value, char *explications)
 			break ;
 		case TEST_PROT:
 			if (current_protected != INVISIBLE && first) {
-				printf("%s[||] %s", (current_protected == PROTECTED) ? COLOR_PROTECTED : COLOR_NPROTECTED, COLOR_CLEAR);
+				printf("%s] %s", (current_protected == PROTECTED) ? COLOR_PROTECTED"[\U0001F6E1 ": COLOR_NPROTECTED"[\U0001F4A5 ", COLOR_CLEAR);
 				dprintf(g_log_fd, "%s", (current_protected == PROTECTED) ? "{protected}" : "{not protected}");
 				first = 0;
 			}

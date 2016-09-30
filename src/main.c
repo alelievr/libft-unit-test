@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2016/09/29 21:26:01 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/09/30 18:54:11 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,14 @@ static t_option options[] = {
 	{"-nobenchlog", 'n', &g_nobenchlog},
 	{NULL, 0, NULL}
 };
+
+void	*electric_alloc(size_t size)
+{
+	void	*ptr = mmap(NULL, 8192lu, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+	mprotect(ptr + 4096, 4096, PROT_NONE);
+
+	return (ptr + 4096 - size);
+}
 
 unsigned long long	ft_clock(void) {
 	return (clock());

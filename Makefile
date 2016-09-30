@@ -201,6 +201,11 @@ f: libclean all
 	@echo "\033[38;5;93mRUNING TESTS:"
 	@./$(WRAPNAME) ${SPEED}
 
+b: libclean all
+	@rm -rf $(ASSETDIR)/$(ANAME)
+	@echo "\033[38;5;93mRUNING BENCH:"
+	@./$(WRAPNAME) -b ${ARGS}
+
 coffee:
 	@clear
 	@echo ""

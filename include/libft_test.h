@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2016/09/29 21:03:55 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/10/01 00:32:18 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,8 +143,8 @@ enum		e_offset {
 # define	COLOR_PART2		"\033[38;5;226m"
 # define	COLOR_PART3		"\033[38;5;9m"
 # define	COLOR_CLEAR		"\033[0m"
-# define	COLOR_PROTECTED	"\033[38;5;229m"
-# define	COLOR_NPROTECTED "\033[38;5;80m"
+# define	COLOR_PROTECTED	"\033[38;5;250m"
+# define	COLOR_NPROTECTED "\033[38;5;203m"
 # define	COLOR_INFO		"\033[38;5;10m"
 # define	COLOR_SPEED_CRASH "\033[38;5;245m"
 # define	COLOR_SPEED_10	"\033[38;5;197m"
@@ -370,6 +370,7 @@ void			fd_to_buffer(int fd);
 char			*get_fd_buffer(int fd, char *buff, size_t size);
 int				get_last_malloc_size(void);
 unsigned long long	ft_clock(void);
+void			*electric_alloc(size_t size);
 
 /*  sanbox:  */
 void			sandbox(void);
