@@ -206,6 +206,9 @@ b: libclean all
 	@echo "\033[38;5;93mRUNING BENCH:"
 	@./$(WRAPNAME) -b ${ARGS}
 
+libft: libclean all
+	@rm -rf $(ASSETDIR)/$(ANAME)
+
 coffee:
 	@clear
 	@echo ""

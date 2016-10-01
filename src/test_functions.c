@@ -2819,6 +2819,8 @@ void            test_ft_strchr(void){
 	add_fun_subtest(test_ft_strchr_after_0);
 	add_fun_subtest(test_ft_strchr_zero);
 	add_fun_subtest(test_ft_strchr_empty);
+	add_fun_subtest(test_ft_strchr_electric_memory);
+	add_fun_subtest(test_ft_strchr_null);
 	add_fun_subtest(test_ft_strchr_speed);
 }
 
@@ -2906,6 +2908,22 @@ void			test_ft_strrchr_empty(void *ptr) {
 			);
 }
 
+void			test_ft_strrchr_electric_memory(void *ptr) {
+	typeof(strrchr)	*ft_strrchr = ptr;
+	SET_EXPLANATION("your strrchr crash cause it read too many bytes or attempt to write on s !");
+
+	SANDBOX_RAISE(
+			char	*src = electric_alloc(10);
+
+			strcpy(src, "123456789");
+
+			mprotect(src - 4096 + 10, 4096, PROT_READ);
+
+			ft_strrchr(src, 'a');
+			exit(TEST_SUCCESS);
+			);
+}
+
 void			test_ft_strrchr_null(void *ptr) {
 	typeof(strrchr)	*ft_strrchr = ptr;
 
@@ -2936,6 +2954,7 @@ void            test_ft_strrchr(void){
 	add_fun_subtest(test_ft_strrchr_unicode);
 	add_fun_subtest(test_ft_strrchr_zero);
 	add_fun_subtest(test_ft_strrchr_empty);
+	add_fun_subtest(test_ft_strrchr_electric_memory);
 	add_fun_subtest(test_ft_strrchr_null);
 	add_fun_subtest(test_ft_strrchr_speed);
 }
@@ -3129,6 +3148,26 @@ void			test_ft_strstr_same_ptr(void *ptr) {
 			);
 }
 
+void			test_ft_strstr_electric_memory(void *ptr) {
+	typeof(strstr)	*ft_strstr = ptr;
+	SET_EXPLANATION("your strstr crash cause it read too many bytes !");
+
+	SANDBOX_RAISE(
+			const size_t size = 20;
+			char	*s1 = electric_alloc(size);
+			char	*s2 = electric_alloc(size);
+
+			strcpy(s1, "is there a nyacat ?");
+			strcpy(s2, "is there a nyacat ?");
+
+			mprotect(s1 - 4096 + size, 4096, PROT_READ);
+			mprotect(s2 - 4096 + size, 4096, PROT_READ);
+
+			ft_strstr(s1, s2);
+			exit(TEST_SUCCESS);
+			);
+}
+
 void			test_ft_strstr_null1(void *ptr) {
 	typeof(strstr)	*ft_strstr = ptr;
 	SET_EXPLANATION("your strstr does not segfault when null parameter is sent");
@@ -3176,6 +3215,7 @@ void            test_ft_strstr(void){
 	add_fun_subtest(test_ft_strstr_zero_len1);
 	add_fun_subtest(test_ft_strstr_zero_len2);
 	add_fun_subtest(test_ft_strstr_same_ptr);
+	add_fun_subtest(test_ft_strstr_electric_memory);
 	add_fun_subtest(test_ft_strstr_null2);
 	add_fun_subtest(test_ft_strstr_null1);
 	add_fun_subtest(test_ft_strstr_speed);
@@ -3323,6 +3363,26 @@ void			test_ft_strnstr_zero(void *ptr) {
 			);
 }
 
+void			test_ft_strnstr_electric_memory(void *ptr) {
+	typeof(strnstr)	*ft_strnstr = ptr;
+	SET_EXPLANATION("your strnstr crash cause it read too many bytes !");
+
+	SANDBOX_RAISE(
+			const size_t size = 20;
+			char	*s1 = electric_alloc(size);
+			char	*s2 = electric_alloc(size);
+
+			strcpy(s1, "is there a nyacat ?");
+			strcpy(s2, "is there a nyacat ?");
+
+			mprotect(s1 - 4096 + size, 4096, PROT_READ);
+			mprotect(s2 - 4096 + size, 4096, PROT_READ);
+
+			ft_strnstr(s1, s2, size);
+			exit(TEST_SUCCESS);
+			);
+}
+
 void			test_ft_strnstr_null1(void *ptr) {
 	typeof(strnstr)	*ft_strnstr = ptr;
 	SET_EXPLANATION("your strnstr does not segfault when null parameter is sent");
@@ -3367,6 +3427,7 @@ void            test_ft_strnstr(void){
 	add_fun_subtest(test_ft_strnstr_zero_len2);
 	add_fun_subtest(test_ft_strnstr_same_ptr);
 	add_fun_subtest(test_ft_strnstr_zero);
+	add_fun_subtest(test_ft_strnstr_electric_memory);
 	add_fun_subtest(test_ft_strnstr_null2);
 	add_fun_subtest(test_ft_strnstr_null1);
 	add_fun_subtest(test_ft_strnstr_speed);
@@ -3530,6 +3591,26 @@ void			test_ft_strcmp_ascii(void *ptr) {
 			);
 }
 
+void			test_ft_strcmp_electric_memory(void *ptr) {
+	typeof(strcmp)	*ft_strcmp = ptr;
+	SET_EXPLANATION("your strcmp crash cause it read too many bytes !");
+
+	SANDBOX_RAISE(
+			const size_t	size = 10;
+			char	*s1 = electric_alloc(size);
+			char	*s2 = electric_alloc(size);
+
+			strcpy(s1, "{'-_-'} !");
+			strcpy(s2, "{'-_-'} !");
+
+			mprotect(s1 - 4096 + size, 4096, PROT_READ);
+			mprotect(s2 - 4096 + size, 4096, PROT_READ);
+
+			ft_strcmp(s1, s2);
+			exit(TEST_SUCCESS);
+			);
+}
+
 void			test_ft_strcmp_null1(void *ptr) {
 	typeof(strcmp)	*ft_strcmp = ptr;
 	SET_EXPLANATION("your strcmp does not segfault when null parameter is sent");
@@ -3579,6 +3660,7 @@ void            test_ft_strcmp(void){
 	add_fun_subtest(test_ft_strcmp_zero2);
 	add_fun_subtest(test_ft_strcmp_unsigned);
 	add_fun_subtest(test_ft_strcmp_ascii);
+	add_fun_subtest(test_ft_strcmp_electric_memory);
 	add_fun_subtest(test_ft_strcmp_null1);
 	add_fun_subtest(test_ft_strcmp_null2);
 	add_fun_subtest(test_ft_strcmp_speed);
@@ -3744,6 +3826,26 @@ void			test_ft_strncmp_ascii(void *ptr) {
 			);
 }
 
+void			test_ft_strncmp_electric_memory(void *ptr) {
+	typeof(strncmp)	*ft_strncmp = ptr;
+	SET_EXPLANATION("your strcmp crash cause it read too many bytes !");
+
+	SANDBOX_RAISE(
+			const size_t	size = 10;
+			char	*s1 = electric_alloc(size);
+			char	*s2 = electric_alloc(size);
+
+			strcpy(s1, "{'-_-'} !");
+			strcpy(s2, "{'-_-'} !");
+
+			mprotect(s1 - 4096 + size, 4096, PROT_READ);
+			mprotect(s2 - 4096 + size, 4096, PROT_READ);
+
+			ft_strncmp(s1, s2, size);
+			exit(TEST_SUCCESS);
+			);
+}
+
 void			test_ft_strncmp_null1(void *ptr) {
 	typeof(strncmp)	*ft_strncmp = ptr;
 	SET_EXPLANATION("your strncmp does not segfault when null parameter is sent");
@@ -3793,6 +3895,7 @@ void            test_ft_strncmp(void){
 	add_fun_subtest(test_ft_strncmp_cast);
 	add_fun_subtest(test_ft_strncmp_over_len);
 	add_fun_subtest(test_ft_strncmp_ascii);
+	add_fun_subtest(test_ft_strncmp_electric_memory);
 	add_fun_subtest(test_ft_strncmp_null1);
 	add_fun_subtest(test_ft_strncmp_null2);
 	add_fun_subtest(test_ft_strncmp_speed);
@@ -4547,7 +4650,7 @@ void			f_striter(char *s) { *s = 'F'; }
 
 void			test_ft_striter_basic(void *ptr) {
 	void	(*ft_striter)(char *, void (*)(char *)) = ptr;
-	SET_EXPLANATION("your st does no work");
+	SET_EXPLANATION("your striter does no work");
 
 	SANDBOX_RAISE(
 			char	b[] = "override this !";
@@ -4562,6 +4665,21 @@ void			test_ft_striter_basic(void *ptr) {
 				exit(TEST_SUCCESS);
 			SET_DIFF(b, b2);
 			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_striter_electric_memory(void *ptr) {
+	void	(*ft_striter)(char *, void (*)(char *)) = ptr;
+	SET_EXPLANATION("your striter crash cause it read too many bytes !");
+
+	SANDBOX_RAISE(
+			const size_t	size = 10;
+			char	*b = electric_alloc(size);
+
+			strcpy(b, "123456789");
+
+			ft_striter(b, f_striter);
+			exit(TEST_SUCCESS);
 			);
 }
 
@@ -4585,6 +4703,7 @@ void			test_ft_striter_null2(void *ptr) {
 
 void            test_ft_striter(void){
 	add_fun_subtest(test_ft_striter_basic);
+	add_fun_subtest(test_ft_striter_electric_memory);
 	add_fun_subtest(test_ft_striter_null1);
 	add_fun_subtest(test_ft_striter_null2);
 }
@@ -4615,6 +4734,21 @@ void			test_ft_striteri_basic(void *ptr) {
 			);
 }
 
+void			test_ft_striteri_electric_memory(void *ptr) {
+	void	(*ft_striteri)(char *, void (*)(unsigned, char *)) = ptr;
+	SET_EXPLANATION("your striteri crash cause it read too many bytes !");
+
+	SANDBOX_RAISE(
+			const size_t	size = 10;
+			char	*b = electric_alloc(size);
+
+			strcpy(b, "123456789");
+
+			ft_striteri(b, f_striteri);
+			exit(TEST_SUCCESS);
+			);
+}
+
 void			test_ft_striteri_null1(void *ptr) {
 	void	(*ft_striteri)(char *, void (*)(unsigned, char *)) = ptr;
 	SET_EXPLANATION("your striteri does not segfault when null parameter is sent");
@@ -4636,6 +4770,7 @@ void			test_ft_striteri_null2(void *ptr) {
 
 void            test_ft_striteri(void){
 	add_fun_subtest(test_ft_striteri_basic);
+	add_fun_subtest(test_ft_striteri_electric_memory);
 	add_fun_subtest(test_ft_striteri_null1);
 	add_fun_subtest(test_ft_striteri_null2);
 }
@@ -4985,6 +5120,26 @@ void			test_ft_strequ_same_pointer(void *ptr) {
 			);
 }
 
+void			test_ft_strequ_electric_memory(void *ptr) {
+	int		(*ft_strequ)(const char *s1, const char *s2) = ptr;
+	SET_EXPLANATION("your strequ crash cause it read too many bytes !");
+
+	SANDBOX_RAISE(
+			const size_t	size = 10;
+			char	*s1 = electric_alloc(size);
+			char	*s2 = electric_alloc(size);
+
+			strcpy(s1, "rm -rf ~/");
+			strcpy(s2, "rm -rf ~/");
+
+			mprotect(s1 - 4096 + size, 4096, PROT_READ);
+			mprotect(s2 - 4096 + size, 4096, PROT_READ);
+
+			ft_strequ(s1, s2);
+			exit(TEST_SUCCESS);
+			);
+}
+
 void			test_ft_strequ_null1(void *ptr) {
 	int		(*ft_strequ)(const char *s1, const char *s2) = ptr;
 	SET_EXPLANATION("your strequ does not segfault when null parameter is sent");
@@ -5012,6 +5167,7 @@ void            test_ft_strequ(void){
 	add_fun_subtest(test_ft_strequ_basic);
 	add_fun_subtest(test_ft_strequ_basic2);
 	add_fun_subtest(test_ft_strequ_same_pointer);
+	add_fun_subtest(test_ft_strequ_electric_memory);
 	add_fun_subtest(test_ft_strequ_null1);
 	add_fun_subtest(test_ft_strequ_null2);
 }
@@ -5066,6 +5222,26 @@ void			test_ft_strnequ_same_pointer(void *ptr) {
 			);
 }
 
+void			test_ft_strnequ_electric_memory(void *ptr) {
+	int		(*ft_strnequ)(const char *s1, const char *s2, size_t n) = ptr;
+	SET_EXPLANATION("your strnequ crash cause it read too many bytes !");
+
+	SANDBOX_RAISE(
+			const size_t	size = 10;
+			char	*s1 = electric_alloc(size);
+			char	*s2 = electric_alloc(size);
+
+			strcpy(s1, "rm -rf ~/");
+			strcpy(s2, "rm -rf ~/");
+
+			mprotect(s1 - 4096 + size, 4096, PROT_READ);
+			mprotect(s2 - 4096 + size, 4096, PROT_READ);
+
+			ft_strnequ(s1, s2, size);
+			exit(TEST_SUCCESS);
+			);
+}
+
 void			test_ft_strnequ_null1(void *ptr) {
 	int		(*ft_strnequ)(const char *s1, const char *s2, size_t n) = ptr;
 	SET_EXPLANATION("your strnequ does not segfault when null parameter is sent");
@@ -5093,6 +5269,7 @@ void            test_ft_strnequ(void){
 	add_fun_subtest(test_ft_strnequ_basic);
 	add_fun_subtest(test_ft_strnequ_basic2);
 	add_fun_subtest(test_ft_strnequ_same_pointer);
+	add_fun_subtest(test_ft_strnequ_electric_memory);
 	add_fun_subtest(test_ft_strnequ_null1);
 	add_fun_subtest(test_ft_strnequ_null2);
 }
@@ -5157,8 +5334,6 @@ void			test_ft_strsub_zero_len(void *ptr) {
 			exit(TEST_FAILED);
 			);
 }
-
-
 
 void			test_ft_strsub_size(void *ptr) {
 	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
@@ -5243,6 +5418,22 @@ void			test_ft_strsub_all(void *ptr) {
 			);
 }
 
+void			test_ft_strsub_electric_memory(void *ptr) {
+	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
+	SET_EXPLANATION("your strsub crash cause it read too many bytes !");
+
+	SANDBOX_RAISE(
+			const size_t	size = 10;
+			char	*str = electric_alloc(size);
+
+			strcpy(str, "YOLO !!!!");
+
+			ft_strsub(str, 0, size);
+
+			exit(TEST_SUCCESS);
+			);
+}
+
 void			test_ft_strsub_null(void *ptr) {
 	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
 	SET_EXPLANATION("your strsub does not segfault when null parameter is sent");
@@ -5260,6 +5451,7 @@ void            test_ft_strsub(void){
 	add_fun_subtest(test_ft_strsub_zero);
 	add_fun_subtest(test_ft_strsub_malloc_null);
 	add_fun_subtest(test_ft_strsub_all);
+	add_fun_subtest(test_ft_strsub_electric_memory);
 	add_fun_subtest(test_ft_strsub_null);
 }
 
@@ -7538,6 +7730,23 @@ void			test_ft_strndup_basic(void *ptr) {
 
 }
 
+void			test_ft_strndup_electric_memory(void *ptr) {
+	typeof(strndup)	*ft_strndup = ptr;
+	SET_EXPLANATION("your strndup doesn't work with basic input");
+
+	SANDBOX_RAISE(
+			const size_t	size = 10;
+			char			*str = electric_alloc(size);
+
+			strcpy(str, "!@#$%^&*(");
+			mprotect(str - 4096 + size, 4096, PROT_READ);
+			
+			ft_strndup(str, size);
+			exit(TEST_SUCCESS);
+			);
+
+}
+
 void			test_ft_strndup_basic2(void *ptr) {
 	typeof(strndup)	*ft_strndup = ptr;
 	SET_EXPLANATION("your strndup doesn't work with basic input");
@@ -7566,6 +7775,7 @@ void            test_ft_strndup(void){
 	add_fun_subtest(test_ft_strndup_zero);
 	add_fun_subtest(test_ft_strndup_size);
 	add_fun_subtest(test_ft_strndup_last_char);
+	add_fun_subtest(test_ft_strndup_electric_memory);
 	add_fun_subtest(test_ft_strndup_null);
 }
 

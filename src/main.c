@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2016/09/30 18:54:11 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/10/01 19:16:59 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ static t_option options[] = {
 void	*electric_alloc(size_t size)
 {
 	void	*ptr = mmap(NULL, 8192lu, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
-	mprotect(ptr + 4096, 4096, PROT_NONE);
 
+	mprotect(ptr + 4096, 4096, PROT_NONE);
 	return (ptr + 4096 - size);
 }
 
@@ -182,7 +182,7 @@ void	*timer(void *t) {
 
 	int			timeout_millis = TIMEOUT_MILLIS;
 	if (g_bench || g_versus != NULL)
-		timeout_millis *= 20;
+		timeout_millis *= 10;
 	(void)t;
 	while (42) {
 		if (last_test_id != current_subtest_id)
