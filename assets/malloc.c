@@ -1,6 +1,7 @@
 #include <dlfcn.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/mman.h>
 #include "libft_test.h"
 
 int     ft_convert(char *buffer, int64_t n, int b, int maj)
@@ -41,6 +42,8 @@ void		*malloc(size_t size)
 		if ((fd = open(SHARED_MEM_FILE, O_RDONLY)) != -1)
 		{
 			if (!(read(fd, &shmem, 8) > 0))
+				shmem = NULL;
+			if (msync(shmem, 0xF00, MS_ASYNC) == -1)
 				shmem = NULL;
 			close(fd);
 		}
