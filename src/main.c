@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2016/10/04 00:55:06 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/10/05 15:46:10 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,7 +258,7 @@ int		main(unused int ac, char **av) {
 	if (g_help)
 		usage();
 	setlocale(LC_ALL, "");
-	if ((g_shared_mem = mmap(NULL, 0xF00, PROT_READ | PROT_WRITE, MAP_ANONYMOUS | MAP_SHARED, -1, 0)) == MAP_FAILED)
+	if ((g_shared_mem = mmap(NULL, sizeof(t_map), PROT_READ | PROT_WRITE, MAP_ANONYMOUS | MAP_SHARED, -1, 0)) == MAP_FAILED)
 		puts("failed to create shared memory map !"), raise(SIGKILL);
 	int	fd;
 	if ((fd = open(SHARED_MEM_FILE, O_WRONLY | O_TRUNC | O_CREAT, 0600)) == -1)

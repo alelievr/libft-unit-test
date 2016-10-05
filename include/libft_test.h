@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2016/10/01 00:32:18 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/10/05 15:43:32 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,17 @@ typedef struct	s_option
 	void	*arg;
 }				t_option;
 
+typedef struct	s_shared_mem_map
+{
+	char		alloc_byte_1;
+	char		alloc_byte_2;
+	long		:48;
+	size_t		alloc_size;
+	size_t		time_begin;
+	size_t		time_mid;
+	size_t		time_end;
+}				t_map;
+
 enum		e_values {
 	TEST_SUCCESS,
 	TEST_FAILED,
@@ -110,23 +121,14 @@ enum		e_prot {
 	NOT_PROTECTED
 };
 
-enum		e_offset {
-	O_ALLOC_BYTE1 = 0x0,
-	O_ALLOC_BYTE2 = 0x1,
-	O_ALLOC_SIZE = 0x2,
-	O_TIME_BEGIN = 0x10,
-	O_TIME_MID = 0x20,
-	O_TIME_END = 0x30
-};
-
 # define	unused			__attribute__((unused))
 
-# define	OFF_ALLOC_BYTE1	((unsigned long long *)g_shared_mem)[O_ALLOC_BYTE1]
-# define	OFF_ALLOC_BYTE2	((unsigned long long *)g_shared_mem)[O_ALLOC_BYTE2]
-# define	OFF_ALLOC_SIZE	((unsigned long long *)g_shared_mem)[O_ALLOC_SIZE]
-# define	OFF_TIME_BEGIN	((unsigned long long *)g_shared_mem)[O_TIME_BEGIN]
-# define	OFF_TIME_MID	((unsigned long long *)g_shared_mem)[O_TIME_MID]
-# define	OFF_TIME_END	((unsigned long long *)g_shared_mem)[O_TIME_END]
+# define	OFF_ALLOC_BYTE1	(g_shared_mem->alloc_byte_1)
+# define	OFF_ALLOC_BYTE2	(g_shared_mem->alloc_byte_2)
+# define	OFF_ALLOC_SIZE	(g_shared_mem->alloc_size)
+# define	OFF_TIME_BEGIN	(g_shared_mem->time_begin)
+# define	OFF_TIME_MID	(g_shared_mem->time_mid)
+# define	OFF_TIME_END	(g_shared_mem->time_end)
 
 # define	LOG_FILE		"result.log"
 # define	DIFF_FILE		".fun_diff"
@@ -245,7 +247,7 @@ extern		pid_t			g_pid;
 extern		char			g_ret[2];
 extern		int				g_log_fd;
 extern		int				g_diff_fd;
-extern		char			*g_shared_mem;
+extern		t_map			*g_shared_mem;
 extern		char			*current_test_code;
 extern		int				current_protected;
 extern		int				current_benchtype;

@@ -3,6 +3,10 @@
 #include <string.h>
 #include <sys/mman.h>
 #include "libft_test.h"
+#define DYLD_INTERPOSE(_replacement,_replacee) \
+	   __attribute__((used)) static struct{ const void* replacement; const void* replacee; } _interpose_##_replacee \
+            __attribute__ ((section ("__DATA,__interpose"))) = { (const void*)(unsigned long)&_replacement, (const void*)(unsigned long)&_replacee };
+
 
 int     ft_convert(char *buffer, int64_t n, int b, int maj)
 {
@@ -27,16 +31,15 @@ int     ft_convert(char *buffer, int64_t n, int b, int maj)
 	return (strlen(buffer));
 }
 
-void		*malloc(size_t size)
+void		*lut_malloc(size_t size)
 {
-	static void	*(*real_malloc)(size_t) = NULL;
-	static unsigned long *shmem = NULL;
-	int		fd;
-	void	*tmp;
-	char	buff[16] = {[15]=0};
-	char		c[2] = {0, 0};
-	int		fd2;
-	static int	once = 1;
+	static void	*(*real_malloc)(size_t) = malloc;
+	static t_map	*shmem = NULL;
+	int				fd;
+	void			*tmp;
+	char			buff[16] = {[15]=0};
+	char			c[2] = {0, 0};
+	static int		once = 1;
 
 	if (shmem == NULL)
 		if ((fd = open(SHARED_MEM_FILE, O_RDONLY)) != -1)
@@ -47,21 +50,17 @@ void		*malloc(size_t size)
 				shmem = NULL;
 			close(fd);
 		}
-
-	if (real_malloc == NULL) {
-		real_malloc = dlsym(RTLD_NEXT, "malloc");
-	}
 	if (shmem) {
 		if (once) {
 			once = 0;
-		//	printf("addr = %p\n", shmem);
+			//printf("addr = %p\n", shmem);
 		}
-		c[0] = shmem[O_ALLOC_BYTE1];
-		c[1] = shmem[O_ALLOC_BYTE2];
+		c[0] = shmem->alloc_byte_1;
+		c[1] = shmem->alloc_byte_2;
 	}
 	if (c[1] == _MALLOC_DISABLE)
-		shmem[O_ALLOC_BYTE2] = _MALLOC_ENABLE;
-	if (c[0] && c[1] == _MALLOC_ENABLE)
+		shmem->alloc_byte_2 = _MALLOC_ENABLE;
+	if (c[0])
 		switch (c[0]) {
 			case _MALLOC_NULL:
 				return (NULL);
@@ -72,7 +71,7 @@ void		*malloc(size_t size)
 				return tmp;
 				break ;
 			case _MALLOC_SIZE:
-				shmem[O_ALLOC_SIZE] = size;
+				shmem->alloc_size = size;
 				break ;
 			case _MALLOC_DEBUG:
 				ft_convert(buff, size, 10, 0);
@@ -82,3 +81,4 @@ void		*malloc(size_t size)
 		}
 	return real_malloc(size);
 }
+DYLD_INTERPOSE(lut_malloc, malloc)

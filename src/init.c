@@ -27,7 +27,7 @@ int				g_log_fd = 0;
 int				g_diff_fd = 0;
 char			g_ret[2];
 t_tdiff			g_time;
-char			*g_shared_mem;
+t_map			*g_shared_mem;
 char			g_nospeed = 0;
 char			g_bench = 0;
 char			g_nobenchlog = 0;

@@ -50,7 +50,7 @@ WRAPNAME	=	run_test
 FRAMEWORK	=	
 
 #	Compiler
-CFLAGS		=	-Werror -Wall -Wextra# -ggdb -fsanitize=address
+CFLAGS		=	-Werror -Wall -Wextra# -ggdb# -fsanitize=address
 CSOFLAGS	=	-shared -fPIC
 CSOFLAGS2	=	
 CC			=	clang
@@ -127,11 +127,11 @@ $(SONAME):
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m➤ \033[38;5;$(LINK_COLOR)m",\
 		$(CC), $(CSOFLAGS), $(TMPLIB)/*.o, -o, $(SONAME))
 
-$(WRAPNAME):
-	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", $(CC) $(ASSETDIR)/wrapper.c -I $(INCDIR) -o $(WRAPNAME))
+$(WRAPNAME): $(ASSETDIR)/wrapper.c
+	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", $(CC) $(CFLAGS) $(ASSETDIR)/wrapper.c -I $(INCDIR) -o $(WRAPNAME))
 
-$(ASSETDIR)/$(LIBMALLOC):
-	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", $(CC) -dynamiclib $(ASSETDIR)/malloc.c -I $(INCDIR) -o $(ASSETDIR)/$(LIBMALLOC))
+$(ASSETDIR)/$(LIBMALLOC): $(ASSETDIR)/malloc.c
+	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", $(CC) $(CFLAGS) -dynamiclib $(ASSETDIR)/malloc.c -I $(INCDIR) -o $(ASSETDIR)/$(LIBMALLOC))
 
 $(ASSETDIR)/$(ANAME):
 	@rm -f $(SONAME)
