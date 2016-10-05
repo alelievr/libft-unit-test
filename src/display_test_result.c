@@ -17,6 +17,29 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 
+const char		*forbidden_functions[] = {
+	"memset",
+	"bzero",
+	"memcpy",
+	"memchr",
+	"memcmp",
+	"strlen",
+	"strdup",
+	"strcpy",
+	"strncpy",
+	"strcat",
+	"strncat",
+	"strlcat",
+	"strchr",
+	"strrchr",
+	"strstr",
+	"strnstr",
+	"strcmp",
+	"strncmp",
+	"atoi",
+	NULL
+};
+
 #define MAX(x, y) ((x) > (y)) ? (x) : (y)
 #define NEXT_LINE_CONTAINS(x) strnstr(code, x, code - strchr(code + 1, ';'))
 
@@ -203,7 +226,29 @@ static _Bool login_cmp(const char *l1, char *l2)
 	return false;
 }
 
-static void updateLogFile(int total_player_points)
+static bool isCheater(void)
+{
+	char	buff[0xF00];
+	pid_t	pid;
+	int		i = 0;
+
+	STDOUT_TO_BUFF;
+	if ((pid = vfork()) == 0)
+	{
+		execl("/usr/bin/nm", "nm", "-u", "libft.so", NULL);
+	} else if (pid != -1) {
+		waitpid(pid, NULL, 0);
+		GET_STDOUT(buff, sizeof(buff));
+		while (forbidden_functions[i])
+			if (strstr(buff, forbidden_functions[i++]))
+				return true;
+	} else {
+		VOID_STDOUT;
+	}
+	return false;
+}
+
+static void updateRankingFile(int total_player_points)
 {
 	int			fd;
 	struct stat	st;
@@ -315,7 +360,16 @@ void    display_test_result(int value, char *explications)
 
 				//log file:
 				if (g_bench != 0 && g_versus == NULL && g_nobenchlog == 0)
-					updateLogFile(total_player_points);
+				{
+					if (isCheater())
+						printf("cheaters will not be added to the ranking file !\n");
+					else
+						updateRankingFile(total_player_points);
+				}
+			}
+			else if (isCheater())
+			{
+				printf(COLOR_WARNING"\n\n\u26A0 : your libft is using forbidden functions so the result may not be relevant !\n"COLOR_CLEAR);
 			}
 			return ;
 		}

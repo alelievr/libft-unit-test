@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2016/10/05 15:43:32 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/10/05 19:53:00 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,7 @@ enum		e_prot {
 # define	COLOR_BENCH_MEDIUM "\033[38;5;220m"
 # define	COLOR_BENCH_SMALL "\033[38;5;191m"
 # define	COLOR_BENCH_WINNER "\033[38;5;201m"
+# define	COLOR_WARNING	"\033[38;5;9m"
 
 # define	BSIZE			0xF00
 # define	BFSIZE			0xF0000
