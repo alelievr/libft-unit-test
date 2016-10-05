@@ -362,7 +362,7 @@ void    display_test_result(int value, char *explications)
 				if (g_bench != 0 && g_versus == NULL && g_nobenchlog == 0)
 				{
 					if (isCheater())
-						printf("cheaters will not be added to the ranking file !\n");
+						printf(COLOR_WARNING"\n\u26A0 :cheaters will not be added to the ranking file !\n"COLOR_CLEAR);
 					else
 						updateRankingFile(total_player_points);
 				}

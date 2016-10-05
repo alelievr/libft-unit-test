@@ -220,7 +220,7 @@ void			test_ft_bzero_basic(void *ptr) {
 			ft_bzero(str2, 20);
 			if (!memcmp(str, str2, BSIZE))
 				exit(TEST_SUCCESS);
-			SET_DIFF_BYTES(str, str2, 20);
+			SET_DIFF_BYTES(str, str2, 22);
 			exit(TEST_FAILED);
 			);
 }
