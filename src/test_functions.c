@@ -45,17 +45,19 @@ void			test_ft_memset_basic(void *ptr) {
 
 	//Auto raise: if crash => a TEST_CRASH is raised otherwise the return of the sandbox is raised
 	SANDBOX_RAISE(
-			char	b1[BSIZE + 1];
-			char	b2[BSIZE + 1];
+			const int	size = 20;
+			char	b1[BSIZE];
+			char	b2[BSIZE];
 
-			b1[BSIZE] = 0;
-			b2[BSIZE] = 0;
-			memset(b1, 'A', BSIZE);
-			ft_memset(b2, 'A', BSIZE);
+			memset(b1, 'B', BSIZE);
+			memset(b2, 'B', BSIZE);
 
-			if (!strcmp(b1, b2))
+			memset(b1, 'A', size);
+			ft_memset(b2, 'A', size);
+
+			if (!memcmp(b1, b2, BSIZE))
 				exit(TEST_SUCCESS);
-			SET_DIFF(b1, b2);
+			SET_DIFF_BYTES(b1, b2, size + 2);
 			exit(TEST_SUCCESS);
 			);
 }
@@ -66,17 +68,19 @@ void			test_ft_memset_unsigned(void *ptr) {
 	SET_EXPLANATION("your memset does not cast the memory into unsigned chars");
 
 	SANDBOX_RAISE(
-			char	b1[BSIZE + 1];
-			char	b2[BSIZE + 1];
+			const int	size = 22;
+			char	b1[BSIZE];
+			char	b2[BSIZE];
 
-			b1[BSIZE] = 0;
-			b2[BSIZE] = 0;
-			memset(b1, '\200', BSIZE);
-			ft_memset(b2, '\200', BSIZE);
+			memset(b1, 'B', BSIZE);
+			memset(b2, 'B', BSIZE);
 
-			if (!strcmp(b1, b2))
+			memset(b1, '\200', size);
+			ft_memset(b2, '\200', size);
+
+			if (!memcmp(b1, b2, BFSIZE))
 				exit(TEST_SUCCESS);
-			SET_DIFF(b1, b2);
+			SET_DIFF_BYTES(b1, b2, size);
 			exit(TEST_SUCCESS);
 			);
 }
@@ -87,17 +91,19 @@ void			test_ft_memset_return(void *ptr) {
 	SET_EXPLANATION("your memset return address is false/your memset does not work");
 
 	SANDBOX_RAISE(
-			char	b1[BSIZE + 1];
-			char	b2[BSIZE + 1];
+			const int	size = 18;
+			char	b1[BSIZE];
+			char	b2[BSIZE];
 
-			b1[BSIZE] = 0;
-			b2[BSIZE] = 0;
-			char	*r1 = memset(b1, 'A', BSIZE);
-			char	*r2 = ft_memset(b2, 'A', BSIZE);
+			memset(b1, 'B', BSIZE);
+			memset(b2, 'B', BSIZE);
 
-			if (!strcmp(r1, r2))
+			char	*r1 = memset(b1, 'A', size);
+			char	*r2 = ft_memset(b2, 'A', size);
+
+			if (!memcmp(r1, r2, BSIZE))
 				exit(TEST_SUCCESS);
-			SET_DIFF(r1, r2);
+			SET_DIFF_BYTES(r1, r2, size);
 			exit(TEST_SUCCESS);
 			);
 }
