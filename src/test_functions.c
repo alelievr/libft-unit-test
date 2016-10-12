@@ -1355,14 +1355,14 @@ void			test_ft_strlen_electric_memory(void *ptr) {
 
 void			test_ft_strlen_little(void *ptr) {
 	typeof(strlen)	*ft_strlen = ptr;
-	SET_EXPLANATION("your strlen doesn't work with a basic test");
+	SET_EXPLANATION("your strlen doesn't work with a non aligned on 8 address");
 
 	SANDBOX_RAISE(
 			int			r1;
 			int			r2;
 			const char	*s = "YOLO";
 
-			if ((unsigned long)s % 8)
+			if ((unsigned long)s & 0b111)
 				s++;
 
 			if ((r2 = ft_strlen(s)) != (r1 = strlen(s))) {

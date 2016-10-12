@@ -233,7 +233,7 @@ static bool isCheater(void)
 	int		i = 0;
 
 	STDOUT_TO_BUFF;
-	if ((pid = vfork()) == 0)
+	if ((pid = fork()) == 0)
 	{
 		execl("/usr/bin/nm", "nm", "-u", "libft.so", NULL);
 	} else if (pid != -1) {
