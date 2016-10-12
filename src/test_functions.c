@@ -1303,6 +1303,7 @@ void			test_ft_strlen_empty(void *ptr) {
 			if (ft_strlen(""))
 				exit(TEST_FAILED);
 			exit(TEST_SUCCESS);
+
 			);
 
 }
@@ -1352,6 +1353,27 @@ void			test_ft_strlen_electric_memory(void *ptr) {
 
 }
 
+void			test_ft_strlen_little(void *ptr) {
+	typeof(strlen)	*ft_strlen = ptr;
+	SET_EXPLANATION("your strlen doesn't work with a basic test");
+
+	SANDBOX_RAISE(
+			int			r1;
+			int			r2;
+			const char	*s = "YOLO";
+
+			if ((unsigned long)s % 8)
+				s++;
+
+			if ((r2 = ft_strlen(s)) != (r1 = strlen(s))) {
+				SET_DIFF_INT(r1, r2)
+				exit(TEST_FAILED);
+			}
+			exit(TEST_SUCCESS);
+			);
+
+}
+
 void			test_ft_strlen_speed(void *ptr) {
 	typeof(strlen)	*ft_strlen = ptr;
 
@@ -1376,6 +1398,7 @@ void            test_ft_strlen(void){
 	add_fun_subtest(test_ft_strlen_empty);
 	add_fun_subtest(test_ft_strlen_zero);
 	add_fun_subtest(test_ft_strlen_electric_memory);
+	add_fun_subtest(test_ft_strlen_little);
 	add_fun_subtest(test_ft_strlen_speed);
 }
 

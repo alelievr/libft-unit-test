@@ -375,7 +375,7 @@ void    display_test_result(int value, char *explications)
 		}
 		if (old_fun_name) {
 			if (g_bench == 0 && g_versus == NULL)
-			printf("\n");
+				printf("\n");
 			dprintf(g_log_fd, "\n");
 			once = 1;
 		}
