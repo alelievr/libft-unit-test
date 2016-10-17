@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/21 19:48:59 by alelievr          #+#    #+#             */
-/*   Updated: 2016/10/05 15:15:40 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/10/17 16:07:03 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,16 +59,18 @@ int		main(unused int ac, char **av) {
 	char	*env[] = {
 		"DYLD_INSERT_LIBRARIES=./assets/malloc.dylib",
 		"DYLD_FORCE_FLAT_NAMESPACE=1",
+		"LD_PRELOAD=./assets/malloc.dylib",
 	   	NULL
 	};
 	pid_t	pid;
-	char	ret[2];
+	int		ret;
 
 	if ((pid = fork()) == 0)
 	{
 		exit(execve("./assets/libtests", av, env));
 	}
-	else {
+	else
+	{
 		signal(SIGSTOP, SIG_IGN);
 		signal(SIGKILL, SIG_IGN);
 		signal(SIGINT, SIG_IGN);
@@ -81,10 +83,15 @@ int		main(unused int ac, char **av) {
 		signal(SIGTERM, SIG_IGN);
 		signal(SIGUSR1, SIG_IGN);
 		signal(SIGUSR2, SIG_IGN);
-		wait((int *)ret);
-		if (ret[0] != SIGINT && ret[0] != SIGSTOP && ret[0] != SIGKILL && ret[0] != SIGQUIT && ret[0] != SIGTERM && ret[0]) {
-			printf("[%s]: %s\n", sigs[ret[0] - 1].name, sigs[ret[0] - 1].str);
-			printf("\033[38;5;201mOMG you crashed my program, please report this bug to @alelievr !\nthanks\n\033[0m");
+		wait(&ret);
+		if (WIFSIGNALED(ret))
+		{
+			int sig = WTERMSIG(ret);
+			if (sig != SIGINT && sig != SIGSTOP && sig != SIGKILL && sig != SIGQUIT && sig != SIGTERM && sig)
+			{
+				printf("[%s]: %s\n", sigs[sig - 1].name, sigs[sig - 1].str);
+				printf("\033[38;5;201mOMG you crashed my program, please report this bug to @alelievr !\nthanks\n\033[0m");
+			}
 		}
 		unlink(SHARED_MEM_FILE);
 	}
