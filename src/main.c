@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2016/10/05 15:46:10 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/10/17 14:48:23 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,6 +210,7 @@ char	**get_options(char **av)
 {
 	int		i = 0, j;
 	_Bool	is_option;
+	int (*strcmp_sys)(const char *s1, const char *s2) = strcmp;
 
 	while (av[++i])
 	{
@@ -218,7 +219,7 @@ char	**get_options(char **av)
 		while (options[++j].long_name)
 		{
 			if (!strcmp(options[j].long_name, av[i]) ||
-					!strcmp((char *)(char[3]){'-', options[j].short_name, 0}, av[i]))
+					!strcmp_sys((char *)(char[3]){'-', options[j].short_name, 0}, av[i]))
 			{
 				if (av[i + 1] && options[j].short_name == 'v')
 					*(unsigned long *)options[j].arg = (unsigned long)av[++i];

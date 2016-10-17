@@ -84,6 +84,7 @@ SHELL		=	/bin/zsh
 OBJ			=	$(addprefix $(OBJDIR)/, $(addsuffix .o, $(basename $(SRC))))
 INCFLAG		=	$(addprefix -I,$(INCDIR))
 NORME		=	$(addsuffix /*.h,$(INCDIR)) $(addprefix $(SRCDIR)/,$(SRC))
+OS			:=	$(shell uname -s)
 
 $(foreach L, $(LIBS), \
 	$(eval VLIB += -l$(L)) \
@@ -113,6 +114,16 @@ exec_color	=	$(call disp_indent); \
 disp_title	=	$(call disp_indent); \
 				echo "\033[38;5;$(2);m[  $(1) \#$(MAKELEVEL)  ]\033[0m"
 
+ifeq ($(OS),Linux)
+	LIBS += -lbsd -ldl -lpthread -lm
+endif
+
+ifeq ($(OS),Linux)
+	DYLIBFLAG = -fPIC -shared
+else
+	DYLIBFLAG = -dynamiclib
+endif
+
 
 #################
 ##  TARGETS    ##
@@ -121,17 +132,28 @@ disp_title	=	$(call disp_indent); \
 #	First target
 all: $(ASSETDIR)/$(ANAME) $(SONAME) $(ASSETDIR)/$(NAME) $(ASSETDIR)/$(LIBMALLOC) $(WRAPNAME)
 
+ifneq ($(OS),Linux)
 $(SONAME):
 	@mkdir -p $(TMPLIB)
 	@cd $(TMPLIB) && ar -xv ../libft.a 1>/dev/null
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m➤ \033[38;5;$(LINK_COLOR)m",\
 		$(CC), $(CSOFLAGS), $(TMPLIB)/*.o, -o, $(SONAME))
+else
+$(SONAME):
+	@make -C $(LIBFTDIR) so
+	@if [ -e $(LIBFTDIR)/libft.so ]; \
+		then; \
+		cp $(LIBFTDIR)/libft.so . ;\
+	else;\
+		echo Please provide a libft.so in the directory $(shell pwd); \
+	fi;
+endif
 
 $(WRAPNAME): $(ASSETDIR)/wrapper.c
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", $(CC) $(CFLAGS) $(ASSETDIR)/wrapper.c -I $(INCDIR) -o $(WRAPNAME))
 
 $(ASSETDIR)/$(LIBMALLOC): $(ASSETDIR)/malloc.c
-	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", $(CC) $(CFLAGS) -dynamiclib $(ASSETDIR)/malloc.c -I $(INCDIR) -o $(ASSETDIR)/$(LIBMALLOC))
+	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", $(CC) $(CFLAGS) $(DYLIBFLAG) $(ASSETDIR)/malloc.c -I $(INCDIR) -o $(ASSETDIR)/$(LIBMALLOC))
 
 $(ASSETDIR)/$(ANAME):
 	@rm -f $(SONAME)
@@ -142,10 +164,10 @@ $(ASSETDIR)/$(ANAME):
 $(ASSETDIR)/$(NAME): $(OBJ)
 	@$(call disp_title,Linking,$(LINK_COLOR_T));
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m➤ \033[38;5;$(LINK_COLOR)m",\
-		$(CC), $(CFLAGS), $(OPTFLAGS), $(VLIBDIR), $(VLIB), $(RFRAME), -o, $(ASSETDIR)/$(NAME), $(OBJ))
+		$(CC), $(CFLAGS), $(OPTFLAGS), $(VLIBDIR), $(VLIB), $(RFRAME) $(LIBS), -o, $(ASSETDIR)/$(NAME), $(OBJ))
 
 #	Objects compilation
-$(OBJDIR)/%.o: $(SRCDIR)/%.c
+$(OBJDIR)/%.o: $(SRCDIR)/%.c include/libft_test.h
 	@mkdir -p $(OBJDIR)
 	@$(call disp_title,Building,$(OBJ_COLOR_T))
 	@$(call exec_color,"\033[38;5;$(OBJ_COLOR_T)m➤ \033[0m\033[38;5;$(OBJ_COLOR)m",\
