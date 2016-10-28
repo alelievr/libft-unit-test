@@ -41,39 +41,168 @@ const char		*forbidden_functions[] = {
 };
 
 #define MAX(x, y) ((x) > (y)) ? (x) : (y)
-#define NEXT_LINE_CONTAINS(x) strnstr(code, x, code - strchr(code + 1, ';'))
+#define SKIP_SPACE(x) while (isspace(**x)) (*x)++;
+#define SKIP_SEMICOLON(x) while (**x == ';') (*x)++;
+
+bool		single_bracket_on_line(char *line, int n)
+{
+	while (n--)
+		if (!isspace(line[n]) && (line[n] != '}' || line[n] != '{'))
+			return false;
+	return true;
+}
+
+char		*get_next_code_line(char **code, bool reset)
+{
+	static char	ret[0xF00];
+	static int	indent = 1;
+	static bool	next_line_indent = false;
+	bool		new_block_statement = false;
+	bool		set_now = false;
+	int			parent = 0;
+	int			i = 0;
+	int			shift = 0;
+
+	if (reset)
+	{
+		indent = 1;
+		return NULL;
+	}
+
+	if (next_line_indent)
+		indent++;
+	while (i < indent)
+		ret[i++] = '\t';
+	while (**code)
+	{
+		if (**code == '(')
+			parent++;
+		if (**code == ')')
+		{
+			parent--;
+			if (parent == 0 && new_block_statement)
+			{
+				set_now = true;
+				ret[i++] = *(*code)++;
+				SKIP_SPACE(code);
+				next_line_indent = true;
+				break ;
+			}
+		}
+		if (**code == '{')
+		{
+			indent++;
+			if (single_bracket_on_line(ret, i))
+			{
+				if (next_line_indent)
+					shift = 1;
+				ret[i++] = *(*code)++;
+				SKIP_SPACE(code);
+				break ;
+			}
+		}
+		if (**code == '}')
+		{
+			indent--;
+			if (single_bracket_on_line(ret, i))
+			{
+				shift = 1;
+				ret[i++] = *(*code)++;
+				SKIP_SPACE(code);
+				break ;
+			}
+		}
+		if (!strncmp(*code, "if ", 3) || !strncmp(*code, "while ", 6) || !strncmp(*code, "for ", 4))
+			new_block_statement = true;
+		ret[i++] = **code;
+		if (**code == ';' && parent == 0)
+		{
+			SKIP_SEMICOLON(code);
+			SKIP_SPACE(code);
+			break ;
+		}
+		(*code)++;
+	}
+	ret[i] = 0;
+	if (next_line_indent && set_now == false)
+	{
+		indent--;
+		next_line_indent = false;
+	}
+	return ret + shift;
+}
+
+static bool	is_var_declaration(const char *code_line)
+{
+	const char	* const *identifiers = (const char * const *)(const char * const []){
+		"const",
+		"int",
+		"char",
+		"wchar_t",
+		"float",
+		"double",
+		"size_t",
+		"t_list",
+		NULL};
+
+	while (*identifiers)
+	{
+		while (isspace(*code_line))
+			code_line++;
+		if (!strncmp(code_line, *identifiers, strlen(*identifiers)))
+			return true;
+		identifiers++;
+	}
+	return false;
+}
+
+static bool	contains_forbidden_content(const char *code_line)
+{
+	const char	* const *identifiers = (const char * const *)(const char * const []){
+		"write(g_diff_fd, \"\\0\", 1)",
+		"dprintf",
+		"lseek",
+		"g_shared_mem",
+		"mprotect",
+		NULL};
+
+	while (*identifiers)
+	{
+		if (strstr(code_line, *identifiers))
+			return true;
+		identifiers++;
+	}
+	return false;
+}
 
 static char	*butify(char *code) {
-	char	*tmp;
-	size_t	size = (strlen(code) + 0xF00);
+	const size_t	size = (strlen(code) + 0xF00);
+	char			*tmp;
+	char			*ret;
+	char			*code_line;
+	bool			decl_blank = true;
+	bool			first = true;
+
 	if (!(tmp = (char*)malloc(sizeof(char) * size)))
 		return ("//BUFFER ERROR\\\\");
-	char	*ret = tmp;
-	int		indent = 1;
-	int		bracket = 0;
-
-	*tmp++ = '\t';
-	while (*code) {
-		if (bracket == 0 && *code == ';' && strchr(code + 1, ';'))
-			while (NEXT_LINE_CONTAINS("g_shared_mem"))
-				code = strchr(code + 1, ';');
-		if (bracket == 0 && *code == ';' && (isspace(code[1]) || (code[1] == ';' && isspace(code[2]))))
-		{
-			while (*code && (isspace(*code) || *code == ';'))
-				code++;
-			*tmp++ = ';';
-			*tmp++ = '\n';
-			for (int i = 0; i < indent; i++)
-				*tmp++ = '\t';
-		}
-		else
-			*tmp++ = *code++;
-		if (*code == '(')
-			bracket++;
-		if (*code == ')')
-			bracket--;
-	}
+	ret = tmp;
 	*tmp = 0;
+	get_next_code_line(NULL, true);
+	while (*code)
+	{
+		code_line = get_next_code_line(&code, false);
+		if (decl_blank == true && !first && !is_var_declaration(code_line))
+		{
+			decl_blank = false;
+			tmp = strcat(tmp, "\n");
+		}
+		if (!contains_forbidden_content(code_line))
+		{
+			tmp = strcat(tmp, code_line);
+			tmp = strcat(tmp, "\n");
+		}
+		first = false;
+	}
 	return (ret);
 }
 
@@ -150,9 +279,9 @@ static void	display_part(void) {
 
 	if (last_part != current_part && current_part == 3) {
 		printf(COLOR_PART3"\n%s\n",
-			    "/~~~\\/~~\\/~~~\\/~~~\\/~~\\/~~~\\                    /~~~\\/~~\\/~~~\\/~~~\\/~~\\/~~~\\\n"
-				"| /\\/ /\\/ /\\ || /\\/ /\\/ /\\ |                    | /\\ \\/\\ \\/\\ || /\\ \\/\\ \\/\\ |\n"
-				" \\ \\/ /\\/ /\\/ /\\ \\/ /\\/ /\\/ /     Bonus part     \\ \\/\\ \\/\\ \\/ /\\ \\/\\ \\/\\ \\/ /\n"
+			    " /~~~\\/~~\\/~~~\\/~~~\\/~~\\/~~~\\                    /~~~\\/~~\\/~~~\\/~~~\\/~~\\/~~~\\\n"
+				" | /\\/ /\\/ /\\ || /\\/ /\\/ /\\ |                    | /\\ \\/\\ \\/\\ || /\\ \\/\\ \\/\\ |\n"
+				"  \\ \\/ /\\/ /\\/ /\\ \\/ /\\/ /\\/ /     Bonus part     \\ \\/\\ \\/\\ \\/ /\\ \\/\\ \\/\\ \\/ /\n"
 				"   \\ \\/\\ \\/\\ \\/  \\ \\/\\ \\/\\ \\/                      \\/ /\\/ /\\/ /  \\/ /\\/ /\\/ /\n"
 				",_/\\ \\/\\ \\/\\ \\__/\\ \\/\\ \\/\\ \\______________________/ /\\/ /\\/ /\\__/ /\\/ /\\/ /\\_,\n"
 				"(__/\\__/\\__/\\____/\\__/\\__/\\________________________/\\__/\\__/\\____/\\__/\\__/\\__)\n");
@@ -229,22 +358,14 @@ static _Bool login_cmp(const char *l1, char *l2)
 static bool isCheater(void)
 {
 	char	buff[0xF00];
-	pid_t	pid;
 	int		i = 0;
 
 	STDOUT_TO_BUFF;
-	if ((pid = fork()) == 0)
-	{
-		execl("/usr/bin/nm", "nm", "-u", "libft.so", NULL);
-	} else if (pid != -1) {
-		waitpid(pid, NULL, 0);
-		GET_STDOUT(buff, sizeof(buff));
-		while (forbidden_functions[i])
-			if (strstr(buff, forbidden_functions[i++]))
-				return true;
-	} else {
-		VOID_STDOUT;
-	}
+	system("nm -u libft.so");
+	GET_STDOUT(buff, sizeof(buff));
+	while (forbidden_functions[i])
+		if (strstr(buff, forbidden_functions[i++]))
+			return true;
 	return false;
 }
 
@@ -323,7 +444,9 @@ void    display_test_result(int value, char *explications)
 							errs[i].data);
 				if (errs[i].type != TEST_TIMEOUT)
 					dprintf(g_log_fd, "\n[%s]: %s\n", verbose_type(errs[i].type), errs[i].data);
-				dprintf(g_log_fd, "Test code:\n%s\n", butify(errs[i].code));
+				char *butified_code = butify(errs[i].code);
+				dprintf(g_log_fd, "Test code:\n%s\n", butified_code);
+				free(butified_code);
 				if (errs[i].diff != NULL) {
 					dprintf(g_log_fd, "Diffs:\n%s\n", errs[i].diff);
 					free(errs[i].diff);
