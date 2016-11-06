@@ -19,6 +19,7 @@
 #define		STRING_3	"test basic !"
 
 #define		REG(x)		((x > 0) ? 1 : ((x < 0) ? -1 : 0))
+#define		ASSERT_RETURN_VALUE(x, y) if (x != y) exit(TEST_FAILED)
 
 #define			add_fun_subtest(x) add_fun_subtest_(x, (char *)# x)
 void			add_fun_subtest_(void (*fun)(void *ptr), char *funname) {
@@ -58,7 +59,7 @@ void			test_ft_memset_basic(void *ptr) {
 			if (!memcmp(b1, b2, BSIZE))
 				exit(TEST_SUCCESS);
 			SET_DIFF_BYTES(b1, b2, size + 2);
-			exit(TEST_SUCCESS);
+			exit(TEST_FAILED);
 			);
 }
 
@@ -78,10 +79,10 @@ void			test_ft_memset_unsigned(void *ptr) {
 			memset(b1, '\200', size);
 			ft_memset(b2, '\200', size);
 
-			if (!memcmp(b1, b2, BFSIZE))
+			if (!memcmp(b1, b2, BSIZE))
 				exit(TEST_SUCCESS);
 			SET_DIFF_BYTES(b1, b2, size);
-			exit(TEST_SUCCESS);
+			exit(TEST_FAILED);
 			);
 }
 
@@ -92,18 +93,19 @@ void			test_ft_memset_return(void *ptr) {
 
 	SANDBOX_RAISE(
 			const int	size = 18;
-			char	b1[BSIZE];
-			char	b2[BSIZE];
+			char		b1[BSIZE];
 
 			memset(b1, 'B', BSIZE);
-			memset(b2, 'B', BSIZE);
 
 			char	*r1 = memset(b1, 'A', size);
-			char	*r2 = ft_memset(b2, 'A', size);
+			char	*r2 = ft_memset(b1, 'A', size);
 
-			if (!memcmp(r1, r2, BSIZE))
-				exit(TEST_SUCCESS);
 			SET_DIFF_BYTES(r1, r2, size);
+			ASSERT_RETURN_VALUE(r1, r2);
+
+			r1 = memset("", 'A', 0);
+			r2 = ft_memset("", 'A', 0);
+			ASSERT_RETURN_VALUE(r1, r2);
 			exit(TEST_SUCCESS);
 			);
 }
@@ -333,14 +335,16 @@ void			test_ft_memcpy_return(void *ptr) {
 	SANDBOX_RAISE(
 			char	src[] = "test basic du memcpy !";
 			char	buff1[22];
-			char	buff2[22];
 
 			char	*r1 = memcpy(buff1, src, 22);
-			char	*r2 = ft_memcpy(buff2, src, 22);
-			if (!memcmp(r1, r2, 22))
-				exit(TEST_SUCCESS);
+			char	*r2 = ft_memcpy(buff1, src, 22);
 			SET_DIFF(r1, r2);
-			exit(TEST_FAILED);
+			ASSERT_RETURN_VALUE(r1, r2);
+
+			r1 = memcpy("", src, 0);
+			r2 = ft_memcpy("", src, 0);
+			ASSERT_RETURN_VALUE(r1, r2);
+			exit(TEST_SUCCESS);
 			);
 
 }
@@ -526,17 +530,19 @@ void			test_ft_memccpy_return(void *ptr) {
 	SANDBOX_RAISE(
 			char	src[] = "test basic du memccpy !";
 			char	buff1[22];
-			char	buff2[22];
 
 			memset(buff1, 0, sizeof(buff1));
-			memset(buff2, 0, sizeof(buff2));
 
 			char	*r1 = memccpy(buff1, src, 'm', 22);
-			char	*r2 = ft_memccpy(buff2, src, 'm', 22);
-			if (!memcmp(r1, r2, 1))
-				exit(TEST_SUCCESS);
+			char	*r2 = ft_memccpy(buff1, src, 'm', 22);
 			SET_DIFF(r1, r2);
-			exit(TEST_FAILED);
+			ASSERT_RETURN_VALUE(r1, r2);
+
+			r1 = memccpy("", src, 'm', 0);
+			r2 = ft_memccpy("", src, 'm', 0);
+			SET_DIFF("", "");
+			ASSERT_RETURN_VALUE(r1, r2);
+			exit(TEST_SUCCESS);
 			);
 
 }
@@ -724,15 +730,17 @@ void			test_ft_memmove_return(void *ptr) {
 	SANDBOX_RAISE(
 			char	*src = "thanks to @apellicc for this test !\r\n";
 			char	dst1[0xF0];
-			char	dst2[0xF0];
 			int		size = strlen(src);
 
 			char	*r1 = memmove(dst1, src, size);
-			char	*r2 = ft_memmove(dst2, src, size);
-			if (!memcmp(r1, r2, size))
-				exit(TEST_SUCCESS);
+			char	*r2 = ft_memmove(dst1, src, size);
 			SET_DIFF(r1, r2);
-			exit(TEST_FAILED);
+			ASSERT_RETURN_VALUE(r1, r2);
+			r1 = memmove("", "" - 1, 0);
+			r2 = ft_memmove("", "" - 1, 0);
+			SET_DIFF(r1, r2);
+			ASSERT_RETURN_VALUE(r1, r2);
+			exit(TEST_SUCCESS);
 			);
 }
 
@@ -1579,22 +1587,26 @@ void			test_ft_strcpy_basic(void *ptr) {
 
 void			test_ft_strcpy_return(void *ptr) {
 	typeof(strcpy)	*ft_strcpy = ptr;
-	SET_EXPLANATION("your strcpy does not work with basic input");
+	SET_EXPLANATION("your strcpy return value is false / your strcpy does not work");
 
 	SANDBOX_RAISE(
 			char	*src = "--> nyancat <--\n\r";
 			char	dst1[30];
-			char	dst2[30];
 
 			memset(dst1, 'a', sizeof(dst1));
-			memset(dst2, 'a', sizeof(dst2));
 
 			char	*r1 = strcpy(dst1, src);
-			char	*r2 = ft_strcpy(dst2, src);
-			if (strcmp(r1, r2)) {
-				SET_DIFF(r1, r2);
-				exit(TEST_FAILED);
-			}
+			char	*r2 = ft_strcpy(dst1, src);
+
+			SET_DIFF(r1, r2);
+			ASSERT_RETURN_VALUE(r1, r2);
+
+			char	b[1];
+			r1 = strcpy(b, "");
+			r2 = ft_strcpy(b, "");
+
+			SET_DIFF(r1, r2);
+			ASSERT_RETURN_VALUE(r1, r2);
 			exit(TEST_SUCCESS);
 			);
 }
@@ -1779,23 +1791,20 @@ void			test_ft_strncpy_basic(void *ptr) {
 
 void			test_ft_strncpy_return(void *ptr) {
 	typeof(strncpy)	*ft_strncpy = ptr;
-	SET_EXPLANATION("your strncpy does not work with basic input");
+	SET_EXPLANATION("your strncpy return value is false / your strncpy does not works");
 
 	SANDBOX_RAISE(
 			char	*src = "--> nyancat <--\n\r";
 			char	dst1[30];
-			char	dst2[30];
 			size_t	max = 12;
 
 			memset(dst1, 'B', sizeof(dst1));
-			memset(dst2, 'B', sizeof(dst2));
 
 			char	*r1 = strncpy(dst1, src, max);
-			char	*r2 = ft_strncpy(dst2, src, max);
-			if (memcmp(r1, r2, 20)) {
-				SET_DIFF(r1, r2);
-				exit(TEST_FAILED);
-			}
+			char	*r2 = ft_strncpy(dst1, src, max);
+
+			SET_DIFF(r1, r2);
+			ASSERT_RETURN_VALUE(r1, r2);
 			exit(TEST_SUCCESS);
 			);
 }
@@ -2030,19 +2039,31 @@ void			test_ft_strcat_basic(void *ptr) {
 
 void			test_ft_strcat_return(void *ptr) {
 	typeof(strcat)	*ft_strcat = ptr;
-	SET_EXPLANATION("your strcat does not work with basic input");
+	SET_EXPLANATION("your strcat return value is false / does not works");
 
 	SANDBOX_RAISE(
 			char	*str = STRING_1;
+			char	*str2 = "yolo !";
 			char	buff1[0xF00] = STRING_2;
-			char	buff2[0xF00] = STRING_2;
 
 			char	*r1 = strcat(buff1, str);
-			char	*r2 = ft_strcat(buff2, str);
-			if (!strcmp(r1, r2))
-				exit(TEST_SUCCESS);
+			char	*r2 = ft_strcat(buff1, str);
 			SET_DIFF(r1, r2);
-			exit(TEST_FAILED);
+			ASSERT_RETURN_VALUE(r1, r2);
+
+			char	buff2[0xF00] = "yolo";
+			r1 = strcat(buff2, str);
+			r2 = ft_strcat(buff2, str);
+			SET_DIFF(r1, r2);
+			ASSERT_RETURN_VALUE(r1, r2);
+
+			char	buff3[0xF00] = "";
+			r1 = strcat(buff3, str2);
+			r2 = ft_strcat(buff3, str2);
+			SET_DIFF(r1, r2);
+			ASSERT_RETURN_VALUE(r1, r2);
+
+			exit(TEST_SUCCESS);
 			);
 }
 
@@ -2247,20 +2268,25 @@ void			test_ft_strncat_basic(void *ptr) {
 
 void			test_ft_strncat_return(void *ptr) {
 	typeof(strncat)	*ft_strncat = ptr;
-	SET_EXPLANATION("your strncat does not work with basic input");
+	SET_EXPLANATION("your strncat return is false / does not works");
 
 	SANDBOX_RAISE(
 			char	*str = STRING_1;
 			char	buff1[0xF00] = STRING_2;
-			char	buff2[0xF00] = STRING_2;
 			size_t	max = 5;
 
 			char	*r1 = strncat(buff1, str, max);
-			char	*r2 = ft_strncat(buff2, str, max);
-			if (!strcmp(r1, r2))
-				exit(TEST_SUCCESS);
+			char	*r2 = ft_strncat(buff1, str, max);
 			SET_DIFF(r1, r2);
-			exit(TEST_FAILED);
+			ASSERT_RETURN_VALUE(r1, r2);
+
+			char	buff2[0xF0] = "AAA";
+			r1 = strncat(buff2, "BBB", 1);
+			r2 = ft_strncat(buff2, "BBB", 1);
+			SET_DIFF(r1, r2);
+			ASSERT_RETURN_VALUE(r1, r2);
+
+			exit(TEST_SUCCESS);
 			);
 }
 
@@ -2491,10 +2517,17 @@ void			test_ft_strlcat_return(void *ptr) {
 
 			size_t	r1 = strlcat(buff1, str, max);
 			size_t	r2 = ft_strlcat(buff2, str, max);
-			if (r1 == r2)
-				exit(TEST_SUCCESS);
 			SET_DIFF_INT((int)r1, (int)r2);
-			exit(TEST_FAILED);
+			ASSERT_RETURN_VALUE(r1, r2);
+
+			char	s1[4] = "";
+			char	s2[4] = "";
+			r1 = strlcat(s1, "thx to ntoniolo for this test !", 4);
+			r2 = ft_strlcat(s2, "thx to ntoniolo for this test !", 4);
+			SET_DIFF_INT((int)r1, (int)r2);
+			ASSERT_RETURN_VALUE(r1, r2);
+
+			exit(TEST_SUCCESS);
 			);
 }
 
