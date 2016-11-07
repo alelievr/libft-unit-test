@@ -5137,6 +5137,7 @@ void            test_ft_strmapi(void){
 ////////////////////////////////
 
 void			test_ft_strequ_basic(void *ptr) {
+	SET_EXPLANATION("your strequ does not work basic input");
 	int		(*ft_strequ)(const char *s1, const char *s2) = ptr;
 
 	SANDBOX_RAISE(
@@ -5239,6 +5240,7 @@ void            test_ft_strequ(void){
 ////////////////////////////////
 
 void			test_ft_strnequ_basic(void *ptr) {
+	SET_EXPLANATION("your strnequ does not work with basic input");
 	int		(*ft_strnequ)(const char *s1, const char *s2, size_t n) = ptr;
 
 	SANDBOX_RAISE(
