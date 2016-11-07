@@ -371,26 +371,32 @@ static bool isCheater(void)
 
 static void updateRankingFile(int total_player_points)
 {
+	struct {char name[9]; int points;}	users[0xF000];
+	const char *login = getlogin();
 	int			fd;
 	struct stat	st;
 	char		*file;
 	char		*fstart;
 	int			i = 1;
-	const char *login = getlogin();
-	struct {char name[9]; int points;}	users[0xF00];
 
+	if (!login)
+		return ;
 	if ((fd = open(BENCH_LOG_FILE, O_RDONLY)) != -1 && !fstat(fd, &st))
 	{
-		if ((fstart = file = mmap(NULL, st.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0)) != MAP_FAILED)
+		if ((fstart = file = mmap(NULL, st.st_size + 1, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0)) != MAP_FAILED)
+		{
+			file[st.st_size] = 0;
 			while (*file != '\0')
 			{
 				if (fstart - file + st.st_size < 10)
 					break ;
 				strlcpy(users[i].name, file, 9);
 				users[i].points = atoi(file + 10);
-				strsep(&file, "\n");
+				if (!(strsep(&file, "\n")))
+					break ;
 				i += 2;
 			}
+		}
 		for (int j = 1; j < i; j += 2)
 			if (login_cmp(login, users[j].name))
 				users[j].name[0] = 0;

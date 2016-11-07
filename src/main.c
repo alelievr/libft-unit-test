@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2016/10/05 15:46:10 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/11/07 14:16:09 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,15 @@ char	*get_fd_buffer(int fd, char *buff, size_t size) {
 
 	if (buff == NULL) {
 		char	b[0xF000];
-		read(fd_pipe[0], b, sizeof(b));
+		ret = read(fd_pipe[0], b, sizeof(b));
+		if (ret != -1)
+			fd_pipe[ret] = 0;
 		dup2(_stdout, fd);
 		return (NULL);
 	}
 	ret = read(fd_pipe[0], buff, size);
-	buff[ret] = 0;
+	if (ret != -1)
+		buff[ret] = 0;
 	dup2(_stdout, fd);
 	return (buff);
 }

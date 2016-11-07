@@ -3890,7 +3890,7 @@ void			test_ft_strncmp_ascii(void *ptr) {
 
 void			test_ft_strncmp_electric_memory(void *ptr) {
 	typeof(strncmp)	*ft_strncmp = ptr;
-	SET_EXPLANATION("your strcmp crash cause it read too many bytes !");
+	SET_EXPLANATION("your strncmp crash cause it read too many bytes !");
 
 	SANDBOX_RAISE(
 			const size_t	size = 10;
