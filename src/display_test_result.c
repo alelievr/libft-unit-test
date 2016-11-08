@@ -371,7 +371,7 @@ static bool isCheater(void)
 
 static void updateRankingFile(int total_player_points)
 {
-	struct {char name[9]; int points;}	users[0xF000];
+	static struct {char name[9]; int points;}	users[0xF000];
 	const char *login = getlogin();
 	int			fd;
 	struct stat	st;
