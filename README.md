@@ -1,39 +1,32 @@
-# libft-unit-test
+##	libft Unit tests
 
-## INSTALLATION
+libft-unit-test is a complete testing suite for 42's libft project, allowing you to test your lib, track your progress and benchmarking your lib (with system's libc or with another lib)
 
-git clone your_libft_repository libft/
+# Installation
+You must have the following file structure:
+```
+.
+|- libft/
+|- libft-unit-tests/
+```
+Whereas:
+	`libft` is your project folder.
+	`libft-unit-tests` is the folder containing this repository.
 
-git clone this repository libft-unit-test
+Afterwards, you can just `make`.
 
-cd libft-unit-test
+(NOTE: Before running `make`, you can edit the `LIBFTDIR` variable containing the path to your libft folder.)
 
-make f or make && ./run_test
+# Usage
 
-type ./run_test -h for help
+Run `make f` or `./run_test` when inside the repo's directory. `./run_test -b` to use the Benchmark mode. (`-b` option to compare with system's libc and `-v <libft file>` option to compare with another libft file (should be `libft.so`).
 
-you can change te default libft path in the makefile (LIBFTDIR variable)
+the `-nospeed` option is available if you're mad enough at your optimization. :)
 
+# Screenshots
 
-## THE TESTS
+### Default mode
+![Unit Testing](https://camo.githubusercontent.com/d48094cc4a8bccb4610a3990794916ee74be9614/687474703a2f2f696d6167652e6e6f656c736861636b2e636f6d2f66696368696572732f323031362f33352f313437323932333734302d636170747572652d642d656372616e2d323031362d30392d30332d612d31392d32362d33322e706e67)
 
-This project use the dynamic version of your libft to extract function so:
-  * if you haven't finished your libft the test will just display a [MISSING] to the function test.
-  * the test will check some bonus function if you code them (ft_strlcpy, ft_atof, ft_strndup, ft_strtrimc, ...)
-
-### Default mode:
-  run with ./run_test
-  this mode will test the integrity of your functions
-  ![alt tag](http://image.noelshack.com/fichiers/2016/35/1472923740-capture-d-ecran-2016-09-03-a-19-26-32.png)
-
-### Bench mode:
-  run with ./run_test -b OR ./run_test -v vs_libft.so
-  this mode will compare the speed of your libft's first part functions with the system's libc (-b) or with another libft (shared library in parameter with -v)
-  ![alt tag](http://image.noelshack.com/fichiers/2016/35/1472923749-capture-d-ecran-2016-09-03-a-19-27-09.png)
-  
-### Colors:
-  red: slow, blue: fast
-
-## CONTRIBUTE
-
-if you want to add new tests/functions to this project, just contact me (@alelievr on slack)
+### Benchmark mode
+![Benchmarking](https://camo.githubusercontent.com/89f54b0ab69793e585c503ac2d35ac73f09d053a/687474703a2f2f696d6167652e6e6f656c736861636b2e636f6d2f66696368696572732f323031362f33352f313437323932333734392d636170747572652d642d656372616e2d323031362d30392d30332d612d31392d32372d30392e706e67)
