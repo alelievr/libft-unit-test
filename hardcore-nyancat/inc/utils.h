@@ -1,0 +1,91 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/11/11 16:22:51 by alelievr          #+#    #+#             */
+/*   Updated: 2016/11/11 17:49:34 by alelievr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <stdio.h>
+#include <limits.h>
+#include <ctype.h>
+#include <sys/types.h>
+#include <sys/mman.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+#include <wchar.h>
+
+#pragma once
+#pragma clang diagnostic ignored "-Wlanguage-extension-token"
+
+//////////////////////////////////STRING TESTS//////////////////////////////////
+
+//no bench
+# define HP_TIMING_AVAIL 0
+# define ITERATIONS 100000
+
+# define CHAR char
+# define UCHAR unsigned char
+
+# define SMALL_CHAR 127
+# define sfmt "s"
+# define BIG_CHAR CHAR_MAX
+# define STRCMP strcmp
+# define MEMCMP memcmp
+# define MEMSET memset
+# define STRCPY strcpy
+# define STRCMP strcmp
+# define STRLEN strlen
+# define MEMCPY memcpy
+# define CHARBYTES 1
+# define CHARBYTESLOG 0
+# define CHARALIGN 1
+# define MIDCHAR 0x7f
+# define LARGECHAR 0xfe
+# define CHAR__MAX CHAR_MAX
+# define CHAR__MIN CHAR_MIN
+
+# define BUF1PAGES 1
+
+#define IMPL(name, test) \
+	impl_t tst_ ## name	= { __STRING (name), (void (*) (void))name, test }; \
+	__start_impls[__i++] = tst_ ## name;
+
+#define CALL(impl, ...)	\
+	  (* (proto_t) (impl)->fn) (__VA_ARGS__)
+
+typedef struct
+{
+	const char *name;
+	void (*fn) (void);
+	long test;
+} impl_t;
+
+extern impl_t			*__start_impls;
+
+extern unsigned char	*buf1, *buf2;
+extern int				ret, do_srandom;
+extern unsigned int		seed;
+extern size_t			page_size;
+extern int				__i;
+
+# define OPT_ITERATIONS 10000
+# define OPT_RANDOM 10001
+# define OPT_SEED 10002
+# define TEST_FUNCTION test_main()
+
+#define FOR_EACH_IMPL(impl, notall) \
+	for (impl_t *impl = __start_impls; impl < __start_impls + __i; ++impl)	\
+    	if (!notall || impl->test)
+
+void	test_init();
+void	error(int code, int a, const char *pattern, ...);
+
+int		test_main_strcmp(void);
+int		test_main_strcpy(void);
