@@ -21,7 +21,7 @@ void test_init (void)
     	error (EXIT_FAILURE, errno, "mprotect failed");
   	if (do_srandom)
     {
-      	printf ("Setting seed to 0x%x\n", seed);
+//     	printf ("Setting seed to 0x%x\n", seed);
       	srandom (seed);
     }
 

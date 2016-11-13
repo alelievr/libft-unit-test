@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: inyancat         <inyancat@student.42.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/11 16:22:51 by alelievr          #+#    #+#             */
-/*   Updated: 2016/11/11 17:49:34 by alelievr         ###   ########.fr       */
+/*   Created  2016/11/11 16:22:51 by inyancat          #+#    #+#             */
+/*   Updated  2016/11/12 20:18:11 by inyancat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <string.h>
 #include <errno.h>
 #include <wchar.h>
+#include <stdbool.h>
 
 #pragma once
 #pragma clang diagnostic ignored "-Wlanguage-extension-token"
@@ -43,6 +44,7 @@
 # define STRCMP strcmp
 # define STRLEN strlen
 # define MEMCPY memcpy
+# define STREQ(a, b)	(strcmp((a), (b)) == 0)
 # define CHARBYTES 1
 # define CHARBYTESLOG 0
 # define CHARALIGN 1
@@ -60,6 +62,8 @@
 #define CALL(impl, ...)	\
 	  (* (proto_t) (impl)->fn) (__VA_ARGS__)
 
+#define INIT() __start_impls = malloc(sizeof(impl_t) * 10);
+
 typedef struct
 {
 	const char *name;
@@ -67,13 +71,15 @@ typedef struct
 	long test;
 } impl_t;
 
-extern impl_t			*__start_impls;
+static impl_t			*__start_impls;
+static int				__i;
 
 extern unsigned char	*buf1, *buf2;
 extern int				ret, do_srandom;
 extern unsigned int		seed;
 extern size_t			page_size;
-extern int				__i;
+extern char				*it;
+extern int				errors;
 
 # define OPT_ITERATIONS 10000
 # define OPT_RANDOM 10001
@@ -87,5 +93,12 @@ extern int				__i;
 void	test_init();
 void	error(int code, int a, const char *pattern, ...);
 
-int		test_main_strcmp(void);
-int		test_main_strcpy(void);
+int		test_main_strcmp(void *fun);
+int		test_main_strcpy(void *fun);
+
+void	check (int thing, int number);
+void	equal (const char *a, const char *b, int number);
+
+void	ncurses_init();
+void	ncurses_deinit();
+void	write_result(char *fun_name, bool succeed);

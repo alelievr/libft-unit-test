@@ -1,25 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   test-utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: inyancat <inyancat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created  2016/11/11 16:47:32 by inyancat          #+#    #+#             */
-/*   Updated  2016/11/12 20:21:42 by inyancat         ###   ########.fr       */
+/*   Created  2016/11/12 21:04:36 by inyancat          #+#    #+#             */
+/*   Updated  2016/11/12 21:04:44 by inyancat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
-#include <stdarg.h>
 
-void error(int code, int a, const char *pattern, ...)
+	void
+check (int thing, int number)
 {
-	va_list	va;
+	if (!thing)
+	{
+		printf ("%s flunked test %d\n", it, number);
+		++errors;
+	}
+}
 
-	va_start(va, pattern);
-	(void)a;
-	vprintf(pattern, va);
-	va_end(va);
-	exit(code);
+/* Complain if first two args don't strcmp as equal.  */
+	void
+equal (const char *a, const char *b, int number)
+{
+	check (a != NULL && b != NULL && STREQ (a, b), number);
 }
