@@ -81,6 +81,10 @@ extern size_t			page_size;
 extern char				*it;
 extern int				errors;
 
+char one[50];
+char two[50];
+char *cp;
+
 # define OPT_ITERATIONS 10000
 # define OPT_RANDOM 10001
 # define OPT_SEED 10002
@@ -90,11 +94,15 @@ extern int				errors;
 	for (impl_t *impl = __start_impls; impl < __start_impls + __i; ++impl)	\
     	if (!notall || impl->test)
 
-void	test_init();
+void	test_init(void) __attribute__((overloadable));
+void	test_init(size_t min_page_size) __attribute__((overloadable));
 void	error(int code, int a, const char *pattern, ...);
 
 int		test_main_strcmp(void *fun);
 int		test_main_strcpy(void *fun);
+int		test_main_memset(void *fun);
+int		test_main_memcpy(void *fun);
+int		test_main_memccpy(void *fun);
 
 void	check (int thing, int number);
 void	equal (const char *a, const char *b, int number);

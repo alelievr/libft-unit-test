@@ -32,5 +32,8 @@ int		main(void)
 	__start_impls = calloc(sizeof(impl_t), 0xF00);
 	test_main_strcpy((void *)strcpy);
 	test_main_strcmp((void *)ft_strcmp);
+	test_main_memset((void *)memset);
+	test_main_memcpy((void *)memcpy);
+	test_main_memccpy((void *)memccpy);
 	return (0);
 }

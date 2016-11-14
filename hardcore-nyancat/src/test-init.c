@@ -1,12 +1,10 @@
 #include "utils.h"
 
-void test_init (void)
+void test_init (size_t min_page_size) __attribute__((overloadable))
 {
   	page_size = 2 * getpagesize ();
-#ifdef MIN_PAGE_SIZE
-  	if (page_size < MIN_PAGE_SIZE)
-    	page_size = MIN_PAGE_SIZE;
-#endif
+  	if (page_size < min_page_size)
+    	page_size = min_page_size;
   	buf1 = mmap (0, (BUF1PAGES + 1) * page_size, PROT_READ | PROT_WRITE,
 	       	MAP_PRIVATE | MAP_ANON, -1, 0);
   	if (buf1 == MAP_FAILED)
@@ -27,4 +25,9 @@ void test_init (void)
 
   	memset (buf1, 0xa5, BUF1PAGES * page_size);
   	memset (buf2, 0x5a, page_size);
+}
+
+void test_init (void) __attribute__((overloadable))
+{
+	test_init(0llu);
 }
