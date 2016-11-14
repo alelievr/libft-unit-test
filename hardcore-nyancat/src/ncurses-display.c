@@ -10,9 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
+#include "utils.h"
 #include <math.h>
 #include <ctype.h>
 #include <signal.h>
@@ -114,17 +112,19 @@ void	ncurses_deinit(void)
 
 void	write_box(void)
 {
-
+	printw(ASCII_HEADER);
 }
 
-void	write_result(char *fun, bool succeed)
-
-	lolwrite(buff);
-
-	for (int i = 0; i < 1000; i++)
+void	ncurses_loop(void)
+{
+	for (int i = 0; i < 10000; i++)
 	{
 		setup_rainbow(i);
 		usleep(1000);
 	}
-	return (0);
+}
+
+void	write_result(char *fun, bool succeed)
+{
+	write_box();
 }

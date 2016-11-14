@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#pragma once
+
 #include <stdio.h>
 #include <limits.h>
 #include <ctype.h>
@@ -21,8 +23,8 @@
 #include <errno.h>
 #include <wchar.h>
 #include <stdbool.h>
+#include "ascii.h"
 
-#pragma once
 #pragma clang diagnostic ignored "-Wlanguage-extension-token"
 
 //////////////////////////////////STRING TESTS//////////////////////////////////
@@ -102,3 +104,4 @@ void	equal (const char *a, const char *b, int number);
 void	ncurses_init();
 void	ncurses_deinit();
 void	write_result(char *fun_name, bool succeed);
+void	ncurses_loop(void);
