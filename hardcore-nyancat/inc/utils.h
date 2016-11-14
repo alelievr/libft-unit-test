@@ -104,6 +104,7 @@ int		test_main_memset(void *fun);
 int		test_main_memcpy(void *fun);
 int		test_main_memccpy(void *fun);
 int		test_main_memmove(void *fun);
+int		test_main_memchr(void *fun);
 
 void	check (int thing, int number);
 void	equal (const char *a, const char *b, int number);
