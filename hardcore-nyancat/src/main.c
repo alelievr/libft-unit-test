@@ -35,5 +35,6 @@ int		main(void)
 	test_main_memset((void *)memset);
 	test_main_memcpy((void *)memcpy);
 	test_main_memccpy((void *)memccpy);
+	test_main_memmove((void *)memmove);
 	return (0);
 }
