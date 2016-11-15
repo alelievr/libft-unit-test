@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/21 19:48:59 by alelievr          #+#    #+#             */
-/*   Updated: 2016/10/05 15:15:40 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/11/15 23:19:39 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int		main(unused int ac, char **av) {
 	char	*env[] = {
 		"DYLD_INSERT_LIBRARIES=./assets/malloc.dylib",
 		"DYLD_FORCE_FLAT_NAMESPACE=1",
+		"TERM=xterm-256color",
 	   	NULL
 	};
 	pid_t	pid;

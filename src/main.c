@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2016/11/07 14:16:09 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/11/15 21:33:14 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,15 @@
 
 int		fd_pipe[2];
 int		_stdout;
+bool	g_hardcore = false;
 
 static t_option options[] = {
-	{"-versus", 'v', &g_versus},
-	{"-bench", 'b', &g_bench},
-	{"-speed", 's', &g_nospeed},
-	{"-help", 'h', &g_help},
-	{"-nobenchlog", 'n', &g_nobenchlog},
+	{"--versus", 'v', &g_versus},
+	{"--bench", 'b', &g_bench},
+	{"--speed", 's', &g_nospeed},
+	{"--help", 'h', &g_help},
+	{"--nobenchlog", 'n', &g_nobenchlog},
+	{"--hardcore", '\0', &g_hardcore},
 	{NULL, 0, NULL}
 };
 
@@ -239,11 +241,11 @@ char	**get_options(char **av)
 static void	usage() __attribute((noreturn));
 static void	usage() {
 	printf("usage ./run_test <opt> <functions>\n"
-			"-h or -help: display help\n"
-			"-s or -speed: run the test without speed evaluation\n"
-			"-b or -bench: speed test of your library (vs system)\n"
+			"-h or --help: display help\n"
+			"-s or --speed: run the test without speed evaluation\n"
+			"-b or --bench: speed test of your library (vs system)\n"
 			"-n or --nobenchlog: disable the bench test result output in the ranking file\n"
-			"-v or -versus: run with a shared library in parameter, "
+			"-v or --versus: run with a shared library in parameter, "
 			"do the same than -b but with the parameter instead of the system's library\n"
 			"you can additionally specify function name to test only these function\n\n"
 			"ex1: ./run_test -v beat-me.so ft_mem # test all mem function with beat-me.so functions in reference\n"
@@ -276,6 +278,13 @@ int		main(unused int ac, char **av) {
 	RESET_DIFF;
 	if (!(handle = dlopen("./libft.so", RTLD_LAZY)))
 		ft_exit(dlerror());
+
+	//hardcore mode:
+	if (g_hardcore)
+	{
+		hardcore_main(handle);
+		return (0);
+	}
 
 	/* Ignore user interupt signals: */
 //	signal(SIGINT, SIG_IGN);

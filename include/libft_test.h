@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2016/10/06 00:03:17 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/11/15 21:47:32 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -374,6 +374,7 @@ char			*get_fd_buffer(int fd, char *buff, size_t size);
 int				get_last_malloc_size(void);
 unsigned long long	ft_clock(void);
 void			*electric_alloc(size_t size);
+int				hardcore_main(void *libft_so_handler);
 
 /*  sanbox:  */
 void			sandbox(void);
