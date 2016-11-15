@@ -120,6 +120,10 @@ int		test_main_memcmp(void *fun);
 int		test_main_strlen(void *fun);
 int		test_main_strncpy(void *fun);
 int		test_main_strcat(void *fun);
+int		test_main_strncat(void *fun);
+int		test_main_strchr(void *fun);
+int		test_main_strrchr(void *fun);
+int		test_main_strstr(void *fun);
 
 void	check (int thing, int number);
 void	equal (const char *a, const char *b, int number);

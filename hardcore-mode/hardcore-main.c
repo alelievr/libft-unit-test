@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "utils.h"
+#include <dlfcn.h>
 unsigned char	*buf1, *buf2;
 int				ret, do_srandom = 1;
 unsigned int	seed = 0x42;
@@ -23,21 +24,58 @@ char			g_ret[2];
 # define LOMAGIC        0x0101010101010101lu
 # define LONGCHR_NULL(x)    (((x - LOMAGIC) & HIMAGIC) != 0)
 
-int		ft_strcmp(char *s1, char *s2)
-{
-	return strcmp(s1, s2);
-}
-
 # define	SANDBOX(x)	if (!(g_pid = vfork())) {x;exit(TEST_SUCCESS);} if (g_pid > 0) { wait((int*)g_ret); }
 #define SANDBOX_HARDCORE(x) SANDBOX(x); if (SANDBOX_CRASH || SANDBOX_RESULT == TEST_FAILED) write_result(it, false); else write_result(it, true);
 
-int		main(void)
+const char *mtable[] = {
+	"Hardcore mode refuse to start, he think your libft isn't ready !",
+	"Hardcore mode refuse to start, he need a sacrifice to be started !",
+	"Hardcore mode refuse to start, you may execute the ritual before start him !",
+};
+
+const struct { int (*fun)(void *); char *name; } test_table[18] = {
+	{test_main_memset, "ft_memset"},
+	{test_main_memcpy, "ft_memcpy"},
+	{test_main_memccpy, "ft_memccpy"},
+	{test_main_memmove, "ft_memmove"},
+	{test_main_memchr, "ft_memchr"},
+	{test_main_memcmp, "ft_memcmp"},
+	{test_main_strlen, "ft_strlen"},
+	{test_main_strcpy, "ft_strcpy"},
+	{test_main_strncpy, "ft_strncpy"},
+	{test_main_strcat, "ft_strcat"},
+	{test_main_strncat, "ft_strncat"},
+	{test_main_strchr, "ft_strchr"},
+	{test_main_strrchr, "ft_strrchr"},
+	{test_main_strstr, "ft_strstr"},
+	{test_main_strcmp, "ft_strcmp"},
+	{test_main_strncmp, "ft_strncmp"},
+	{NULL, NULL}
+};
+
+int		hardcore_main(void *libft_so_handler)
 {
-	ncurses_init();
+	int		i = -1;
+
+	srand(time(NULL));
+	while (test_table[++i].fun)
+		if (!dlsym(libft_so_handler, test_table[i].name))
+		{
+			printf("Hardcore mode is only for the good ones !\n");
+			return (-1);
+		}
+
+	if (rand() % 10 > 2)
+	{
+		printf("%s\n", mtable[rand() % 3]);
+		return (-1);
+	}
 
 	__start_impls = calloc(sizeof(impl_t), 0xF00);
-	SANDBOX_HARDCORE(test_main_strcmp((void *)ft_strcmp));
-	SANDBOX_HARDCORE(test_main_strncmp((void *)strncmp));
+
+	ncurses_init();
+
+
 	SANDBOX_HARDCORE(test_main_memset((void *)memset));
 	SANDBOX_HARDCORE(test_main_memcpy((void *)memcpy));
 	SANDBOX_HARDCORE(test_main_memccpy((void *)memccpy));
@@ -48,6 +86,12 @@ int		main(void)
 	SANDBOX_HARDCORE(test_main_strcpy((void *)strcpy));
 	SANDBOX_HARDCORE(test_main_strncpy((void *)strncpy));
 	SANDBOX_HARDCORE(test_main_strcat((void *)strcat));
+	SANDBOX_HARDCORE(test_main_strncat((void *)strncat));
+	SANDBOX_HARDCORE(test_main_strchr((void *)strchr));
+	SANDBOX_HARDCORE(test_main_strrchr((void *)strrchr));
+	SANDBOX_HARDCORE(test_main_strstr((void *)strstr));
+	SANDBOX_HARDCORE(test_main_strcmp((void *)strcmp));
+	SANDBOX_HARDCORE(test_main_strncmp((void *)strncmp));
 
 	ncurses_loop();
 

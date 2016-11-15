@@ -133,6 +133,7 @@ void	ncurses_init(void)
 	start_color();
 
 	scrollok(stdscr, TRUE);
+	cbreak();
 
 	//setup colors:
 	setup_rainbow(0);
@@ -146,13 +147,14 @@ void	ncurses_deinit(void)
 void	write_box(void)
 {
 	lolwrite(ASCII_HEADER, 0, 0, COLOR_SET_RAINBOW);
+	lolwrite(ASCII_FOOTER, 0, 66, COLOR_SET_RAINBOW);
 }
 
 void	write_borders(void)
 {
 	int		start_y = 7;
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 15; i++)
 	{
 		lolwrite(ASCII_BORDER, 0, start_y + 4 * i, COLOR_SET_RAINBOW);
 		lolwrite(ASCII_BORDER, 64, start_y + 4 * i, COLOR_SET_RAINBOW);
@@ -161,12 +163,11 @@ void	write_borders(void)
 
 void	ncurses_loop(void)
 {
-/*	for (int i = 0; i < 1000; i++)
+	for (int i = 0; i < 1000; i++)
 	{
 		setup_rainbow(i);
 		usleep(1000 * 10);
-	}*/
-	getch();
+	}
 }
 
 //x, y
@@ -186,7 +187,7 @@ static void get_next_position(int *ret_x, int *ret_y)
 	else if (x == 40)
 	{
 		x = 12;
-		y += 10;
+		y += 7;
 	}
 }
 
