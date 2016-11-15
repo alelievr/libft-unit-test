@@ -212,9 +212,6 @@ test_main_memcpy (void *ft_memcpy)
 
 	test_memcpy(ft_memcpy);
 
-  	FOR_EACH_IMPL (impl, 0)
-    	printf ("%s ", impl->name);
-
   	for (i = 0; i < 18; ++i)
     {
       	do_test (0, 0, 1 << i);
@@ -244,6 +241,5 @@ test_main_memcpy (void *ft_memcpy)
   	do_test (0, 0, getpagesize ());
 
   	do_random_tests ();
-  	printf("OK !\n");
   	return ret;
 }

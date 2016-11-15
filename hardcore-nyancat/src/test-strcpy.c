@@ -232,9 +232,6 @@ test_main_strcpy(void *ft_strcpy)
 
 	test_strcpy();
 
-  	FOR_EACH_IMPL (impl, 0)
-    	printf ("%s ", impl->name);
-
   	for (i = 0; i < 16; ++i)
     {
       	do_test (0, 0, i, SMALL_CHAR);
@@ -258,6 +255,5 @@ test_main_strcpy(void *ft_strcpy)
     }
 
   	do_random_tests ();
-	printf("OK !\n");
   	return ret;
 }

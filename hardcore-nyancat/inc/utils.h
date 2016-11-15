@@ -66,6 +66,11 @@
 
 #define INIT() __start_impls = malloc(sizeof(impl_t) * 10);
 
+enum e_tests {
+	TEST_FAILED,
+	TEST_SUCCESS
+};
+
 typedef struct
 {
 	const char *name;
@@ -82,6 +87,9 @@ extern unsigned int		seed;
 extern size_t			page_size;
 extern char				*it;
 extern int				errors;
+
+extern pid_t			g_pid;
+extern char				g_ret[2];
 
 char one[50];
 char two[50];
@@ -101,12 +109,17 @@ void	test_init(size_t min_page_size) __attribute__((overloadable));
 void	error(int code, int a, const char *pattern, ...);
 
 int		test_main_strcmp(void *fun);
+int		test_main_strncmp(void *fun);
 int		test_main_strcpy(void *fun);
 int		test_main_memset(void *fun);
 int		test_main_memcpy(void *fun);
 int		test_main_memccpy(void *fun);
 int		test_main_memmove(void *fun);
 int		test_main_memchr(void *fun);
+int		test_main_memcmp(void *fun);
+int		test_main_strlen(void *fun);
+int		test_main_strncpy(void *fun);
+int		test_main_strcat(void *fun);
 
 void	check (int thing, int number);
 void	equal (const char *a, const char *b, int number);
@@ -115,3 +128,13 @@ void	ncurses_init();
 void	ncurses_deinit();
 void	write_result(char *fun_name, bool succeed);
 void	ncurses_loop(void);
+
+# define	SANDBOX_CRASH		(g_ret[0] == SIGSEGV || g_ret[0] == SIGBUS || g_ret[0] == SIGABRT)
+# define	SANDBOX_RESULT		(g_ret[1])
+
+enum e_color_set
+{
+	COLOR_SET_RAINBOW,
+	COLOR_SET_OK,
+	COLOR_SET_KO,
+};

@@ -185,7 +185,7 @@ test_memccpy (void *ft_memccpy)
      place where memccpy_fun is mentioned, says overlap might fail, so we
      don't try it.  Besides, it's hard to see the rationale for a
      non-left-to-right memccpy_fun.  */
-  it = "memccpy";
+  it = "ft_memccpy";
   check(memccpy_fun(one, "abc", 'q', 4) == NULL, 1);	/* Returned value. */
   equal(one, "abc", 2);			/* Did the copy go right? */
 
@@ -234,9 +234,6 @@ test_main_memccpy (void *ft_memccpy)
 
   	test_init ();
 
-  	FOR_EACH_IMPL (impl, 0)
-    	printf ("%s ", impl->name);
-
   	for (i = 1; i < 8; ++i)
     {
       	do_test (i, i, 12, 16, 16, 127);
@@ -258,6 +255,5 @@ test_main_memccpy (void *ft_memccpy)
     }
 
   	do_random_tests ();
-	printf("OK !\n");
   	return ret;
 }

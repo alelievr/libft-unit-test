@@ -164,9 +164,6 @@ test_main_memchr (void*ft_memchr)
 
   test_memchr(ft_memchr);
 
-  FOR_EACH_IMPL (impl, 0)
-    printf ("%s ", impl->name);
-
   for (i = 1; i < 8; ++i)
     {
       do_test (0, 16 << i, 2048, 23);
@@ -181,7 +178,6 @@ test_main_memchr (void*ft_memchr)
     }
 
   do_random_tests ();
-  printf("OK !\n");
   return ret;
 }
 

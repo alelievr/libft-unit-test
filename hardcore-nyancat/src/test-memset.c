@@ -198,9 +198,6 @@ test_main_memset (void *ft_memset)
 
 	test_memset(ft_memset);
 
-  	FOR_EACH_IMPL (impl, 0)
-    	printf ("%s ", impl->name);
-
   	for (c = -65; c <= 130; c += 65)
     {
       	for (i = 0; i < 18; ++i)
@@ -218,6 +215,5 @@ test_main_memset (void *ft_memset)
     }
 
   	do_random_tests ();
-	printf("OK !\n");
   	return ret;
 }

@@ -275,9 +275,6 @@ test_main_strcmp (void *ft_strcmp)
 
 	test_strcmp();
 
-  	FOR_EACH_IMPL (impl, 0)
-    	printf ("%s ", impl->name);
-
   	for (i = 1; i < 32; ++i)
     {
       	do_test (CHARBYTES * i, CHARBYTES * i, i, MIDCHAR, 0);
@@ -308,6 +305,5 @@ test_main_strcmp (void *ft_strcmp)
     }
 
   	do_random_tests ();
-	printf("OK !\n");
   	return ret;
 }

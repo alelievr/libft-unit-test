@@ -220,9 +220,6 @@ test_main_memmove (void *ft_memmove)
 
   test_memmove(ft_memmove);
 
-  FOR_EACH_IMPL (impl, 0)
-    printf ("%s ", impl->name);
-
   for (i = 0; i < 14; ++i)
     {
       do_test (0, 32, 1 << i);
@@ -250,6 +247,5 @@ test_main_memmove (void *ft_memmove)
     }
 
   do_random_tests ();
-  printf("OK !\n");
   return ret;
 }
