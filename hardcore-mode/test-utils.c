@@ -11,15 +11,17 @@
 /* ************************************************************************** */
 
 #include "utils.h"
+extern int g_log_fd;
 
 	void
 check (int thing, int number)
 {
 	if (!thing)
 	{
-		printf ("%s flunked test %d\n", it, number);
+		//dprintf (g_log_fd, "%s flunked test %d\n", it, number);
 		++errors;
 	}
+	(void)number;
 }
 
 /* Complain if first two args don't strcmp as equal.  */

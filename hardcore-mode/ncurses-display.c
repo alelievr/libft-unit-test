@@ -133,7 +133,6 @@ void	ncurses_init(void)
 	start_color();
 
 	scrollok(stdscr, TRUE);
-	cbreak();
 
 	//setup colors:
 	setup_rainbow(0);
