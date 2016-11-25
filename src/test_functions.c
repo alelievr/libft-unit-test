@@ -1480,7 +1480,7 @@ void			test_ft_strdup_null(void *ptr) {
 
 void			test_ft_strdup_malloc_null(void *ptr) {
 	typeof(strdup)	*ft_strdup = ptr;
-	SET_EXPLANATION("you dindn't protect your malloc return");
+	SET_EXPLANATION("you didn't protect your malloc return");
 
 	SANDBOX_RAISE(
 			char	*ptr;
