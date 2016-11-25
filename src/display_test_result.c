@@ -386,7 +386,7 @@ static void updateRankingFile(int total_player_points)
 		if ((fstart = file = mmap(NULL, st.st_size + 1, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0)) != MAP_FAILED)
 		{
 			file[st.st_size] = 0;
-			while (*file != '\0')
+			while (*file != '\0' && i < 0xF000 - 2)
 			{
 				if (fstart - file + st.st_size < 10)
 					break ;
