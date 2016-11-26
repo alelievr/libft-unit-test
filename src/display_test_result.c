@@ -435,6 +435,7 @@ void    display_test_result(int value, char *explications)
 	static int		total_versus_points = 0;
 	static t_err	errs[0xF00] = {{0, NULL, NULL, NULL}};
 
+	MALLOC_RESET;
 	count++;
 	if (!old_fun_name || strcmp(old_fun_name, current_fun_name)) {
 		first = 1;

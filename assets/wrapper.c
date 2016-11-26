@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/21 19:48:59 by alelievr          #+#    #+#             */
-/*   Updated: 2016/11/15 23:19:39 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/11/26 11:57:06 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,10 @@ int		main(unused int ac, char **av) {
 	   	NULL
 	};
 	pid_t	pid;
-	char	ret[2];
+	char	ret[4];
 
 	if ((pid = fork()) == 0)
-	{
 		exit(execve("./assets/libtests", av, env));
-	}
 	else {
 		signal(SIGSTOP, SIG_IGN);
 		signal(SIGKILL, SIG_IGN);

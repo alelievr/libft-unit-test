@@ -33,7 +33,7 @@ int     ft_convert(char *buffer, int64_t n, int b, int maj)
 
 void		*lut_malloc(size_t size)
 {
-	static void	*(*real_malloc)(size_t) = malloc;
+	static void		*(*real_malloc)(size_t) = malloc;
 	static t_map	*shmem = NULL;
 	int				fd;
 	void			*tmp;

@@ -71,7 +71,7 @@ WRAPNAME	=	run_test
 FRAMEWORK	=	
 
 #	Compiler
-CFLAGS		=	-Werror -Wall -Wextra -ggdb# -fsanitize=address
+CFLAGS		=	-Werror -Wall -Wextra# -ggdb# -fsanitize=address
 CSOFLAGS	=	-shared -fPIC
 CSOFLAGS2	=	
 CC			=	clang
@@ -196,7 +196,7 @@ fclean: clean
 	@$(eval ALREADY_RM=x)
 
 libclean:
-	@rm -rf $(ASSETDIR)/$(ANAME) $(ASSETDIR)/$(NAME)
+	@rm -rf $(ASSETDIR)/$(ANAME) $(ASSETDIR)/$(NAME) $(TMPLIB)
 
 relib:
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", make -j 3 re -C "$(LIBFTDIR)")
