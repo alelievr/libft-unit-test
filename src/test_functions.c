@@ -5811,7 +5811,7 @@ void			test_ft_strtrim_zero(void *ptr) {
 				free(ret);
 				exit(TEST_SUCCESS);
 			}
-			SET_DIFF(ret, s2);
+			SET_DIFF(s2, ret);
 			free(ret);
 			exit(TEST_FAILED);
 			);

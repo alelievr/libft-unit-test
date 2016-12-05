@@ -71,7 +71,7 @@ WRAPNAME	=	run_test
 FRAMEWORK	=	
 
 #	Compiler
-CFLAGS		=	-Werror -Wall -Wextra -ggdb# -fsanitize=address
+CFLAGS		=	-Werror -Wall -Wextra# -ggdb# -fsanitize=address
 CSOFLAGS	=	-shared -fPIC
 CSOFLAGS2	=	
 CC			=	clang
@@ -101,7 +101,6 @@ RUN_COLOR		=	147
 ##    AUTO     ##
 #################
 
-SHELL		=	/bin/zsh
 OBJ			=	$(addprefix $(OBJDIR)/, $(addsuffix .o, $(basename $(SRC))))
 INCFLAG		=	$(addprefix -I,$(INCDIR))
 NORME		=	$(addsuffix /*.h,$(INCDIR)) $(addprefix $(SRCDIR)/,$(SRC))
@@ -143,6 +142,7 @@ disp_title	=	$(call disp_indent); \
 all: $(ASSETDIR)/$(ANAME) $(SONAME) $(ASSETDIR)/$(NAME) $(ASSETDIR)/$(LIBMALLOC) $(WRAPNAME)
 
 $(SONAME):
+	@rm -rf $(TMPLIB) || echo -n
 	@mkdir -p $(TMPLIB)
 	@cd $(TMPLIB) && ar -xv ../libft.a 1>/dev/null
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m➤ \033[38;5;$(LINK_COLOR)m",\
@@ -178,7 +178,6 @@ clean:
 	@if [ $(ALREADY_RM)x != xx ]; then \
 		$(call disp_title,Cleaning,$(CLEAN_COLOR_T)); \
 		fi
-	@rm -rf $(TMPLIB)
 	@$(call exec_color,"\033[38;5;$(CLEAN_COLOR_T)m➤ \033[38;5;$(CLEAN_COLOR)m",\
 		rm -f, $(OBJ)) # <- Cleaning objs
 	@$(call exec_color,"\033[38;5;$(CLEAN_COLOR_T)m➤ \033[38;5;$(CLEAN_COLOR)m",\
