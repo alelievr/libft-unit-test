@@ -321,7 +321,7 @@ static char	*get_speed_color(_Bool inverted) {
 		//if (vdiff < 1)
 		//	vdiff = 1 / vdiff;
 		dprintf(g_log_fd, "%s: x%.2f %s than %s's function (%llu cpu ticks vs %llu)\n",
-				current_fun_name, vdiff, speeder, opponent, TIME_DIFF_LIB, TIME_DIFF_SYS);
+				current_fun_name, vdiff, speeder, opponent, (unsigned long long)TIME_DIFF_LIB, (unsigned long long)TIME_DIFF_SYS);
 	}
 	if (diff > 10)
 		return (COLOR_SPEED_10);

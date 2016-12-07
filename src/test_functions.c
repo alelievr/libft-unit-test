@@ -7476,6 +7476,10 @@ void			test_ft_isupper(void) {
 //         ft_isnumber         //
 ////////////////////////////////
 
+#ifdef linux
+int				isnumber(char c) { const char *numbers="0123456789"; return strchr(numbers, c) != NULL; }
+#endif
+
 void			test_ft_isnumber_(void *ptr) {
 	typeof(isnumber)	*ft_isnumber = ptr;
 	SET_EXPLANATION("your isnumber does not work ...");

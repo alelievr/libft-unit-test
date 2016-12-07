@@ -25,7 +25,7 @@ char			*current_test_code = "";
 pid_t			g_pid = 0;
 int				g_log_fd = 0;
 int				g_diff_fd = 0;
-char			g_ret[2];
+int				g_ret;
 t_tdiff			g_time;
 t_map			*g_shared_mem;
 char			g_nospeed = 0;

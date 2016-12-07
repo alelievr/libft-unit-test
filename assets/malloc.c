@@ -1,11 +1,18 @@
-#include <dlfcn.h>
+#ifdef linux
+# define _GNU_SOURCE
+# define MALLOC_FUN_NAME malloc
+#else
+# define MALLOC_FUN_NAME lut_malloc
+# define DYLD_INTERPOSE(_replacement,_replacee) \
+	__attribute__((used)) static struct{ const void* replacement; const void* replacee; } _interpose_##_replacee \
+	__attribute__ ((section ("__DATA,__interpose"))) = { (const void*)(unsigned long)&_replacement, (const void*)(unsigned long)&_replacee };
+#endif
+
 #include <stdio.h>
 #include <string.h>
 #include <sys/mman.h>
+#include <dlfcn.h>
 #include "libft_test.h"
-#define DYLD_INTERPOSE(_replacement,_replacee) \
-	__attribute__((used)) static struct{ const void* replacement; const void* replacee; } _interpose_##_replacee \
-	__attribute__ ((section ("__DATA,__interpose"))) = { (const void*)(unsigned long)&_replacement, (const void*)(unsigned long)&_replacee };
 
 
 int     ft_convert(char *buffer, int64_t n, int b, int maj)
@@ -31,9 +38,15 @@ int     ft_convert(char *buffer, int64_t n, int b, int maj)
 	return (strlen(buffer));
 }
 
-void		*lut_malloc(size_t size)
+void		*MALLOC_FUN_NAME(size_t size)
 {
-	static void		*(*real_malloc)(size_t) = malloc;
+#ifdef linux
+	static void	*(*real_malloc)(size_t) = NULL;
+	if (real_malloc == NULL)
+		real_malloc = dlsym(RTLD_NEXT, "malloc");
+#else
+	static void	*(*real_malloc)(size_t) = malloc;
+#endif
 	static t_map	*shmem = NULL;
 	int				fd;
 	void			*tmp;
@@ -53,7 +66,6 @@ void		*lut_malloc(size_t size)
 	if (shmem) {
 		if (once) {
 			once = 0;
-			//printf("addr = %p\n", shmem);
 		}
 		c[0] = shmem->alloc_byte_1;
 		c[1] = shmem->alloc_byte_2;
@@ -81,4 +93,6 @@ void		*lut_malloc(size_t size)
 		}
 	return real_malloc(size);
 }
-DYLD_INTERPOSE(lut_malloc, malloc)
+#ifndef linux
+ DYLD_INTERPOSE(MALLOC_FUN_NAME, malloc)
+#endif

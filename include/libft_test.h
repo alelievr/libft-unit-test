@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2016/11/15 21:47:32 by alelievr         ###   ########.fr       */
+/*   Created  2015/11/13 20:23:36 by alelievr          #+#    #+#             */
+/*   Updated  2016/12/07 17:10:08 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,14 @@
 # include <stdint.h>
 # include <limits.h>
 # include <time.h>
+# include <stdbool.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+
+# ifdef linux
+#  pragma GCC diagnostic ignored "-Wunused-value"
+#  include <bsd/string.h>
+# endif
 
 typedef struct	s_subtest {
 	char	*fun_name;
@@ -83,6 +91,7 @@ typedef struct	s_option
 	void	*arg;
 }				t_option;
 
+#ifdef __x86_64__
 typedef struct	s_shared_mem_map
 {
 	char		alloc_byte_1;
@@ -93,6 +102,18 @@ typedef struct	s_shared_mem_map
 	size_t		time_mid;
 	size_t		time_end;
 }				t_map;
+#else
+typedef struct	s_shared_mem_map
+{
+	char		alloc_byte_1;
+	char		alloc_byte_2;
+	long		:16;
+	size_t		alloc_size;
+	size_t		time_begin;
+	size_t		time_mid;
+	size_t		time_end;
+}				t_map;
+#endif
 
 enum		e_values {
 	TEST_SUCCESS,
@@ -176,19 +197,19 @@ enum		e_prot {
 # define	SET_BENCHITER(x)	current_benchiter = x;
 
 # define	SANDBOX_STRINGIFY(x)	SET_CURRENT_TEST_CODE(#x)
-# define	SANDBOX(x)			SANDBOX_STRINGIFY(x); sandbox();if (!(g_pid = fork())) {x;exit(TEST_SUCCESS);} if (g_pid > 0) { wait((int*)g_ret); _SANDBOX_RAISE(g_ret[0]); unsandbox(); }
+# define	SANDBOX(x)			SANDBOX_STRINGIFY(x); sandbox();if (!(g_pid = fork())) {x;exit(TEST_SUCCESS);} if (g_pid > 0) { wait(&g_ret); if (WIFSIGNALED(g_ret)) _SANDBOX_RAISE(WTERMSIG(g_ret)); unsandbox(); }
 # define	SANDBOX_KO(x)		SANDBOX(x); if (SANDBOX_CRASH) ft_raise(TEST_SUCCESS); else if (SANDBOX_RETURN != SIGKILL) ft_raise(TEST_KO);
-# define	SANDBOX_RAISE(x)	SANDBOX(x); if (SANDBOX_CRASH) ft_raise(TEST_CRASH); else if (SANDBOX_RETURN != SIGKILL) ft_raise(g_ret[1]);
+# define	SANDBOX_RAISE(x)	SANDBOX(x); if (SANDBOX_CRASH) ft_raise(TEST_CRASH); else if (SANDBOX_RETURN != SIGKILL) ft_raise(SANDBOX_RESULT);
 # define	SANDBOX_IRAISE(x)	SANDBOX(x); if (SANDBOX_CRASH) ft_raise(TEST_SUCCESS); else if (SANDBOX_RETURN != SIGKILL) ft_raise(TEST_NOCRASH);
 # define	SANDBOX_PROT(x);	SANDBOX(x); if (SANDBOX_CRASH) current_protected = NOT_PROTECTED; else current_protected = PROTECTED; ft_raise(TEST_PROT);
 //			SANDBOX_SPEED(initialization state, system function, libft function)
 # define	SANDBOX_SPEED(x,y,z)SANDBOX(x; TIME_BEGIN; y; TIME_MID; z; TIME_END; TIME_SET_DATA;) if (SANDBOX_CRASH) g_time.state = TEST_CRASH; else g_time.state = VISIBLE; TIME_READ_DATA; ft_raise(TEST_SPEED);
 //			SANDBOX_SPEED(initialization state, system function, libft function) but use the bench type variable to raise display
 # define	SANDBOX_BENCH(x,y,z)SANDBOX(x; TIME_BEGIN; for (register int _i = 0; _i < current_benchiter; _i++) { y; } TIME_MID; for (register int _i = 0; _i < current_benchiter; _i++) { z; } TIME_END; TIME_SET_DATA;) if (SANDBOX_CRASH) g_time.state = TEST_CRASH; else g_time.state = VISIBLE; TIME_READ_DATA; ft_raise(current_benchtype);
-# define	SANDBOX_RESULT		(g_ret[1])
-# define	SANDBOX_RETURN		(g_ret[0])
+# define	SANDBOX_RESULT		(WEXITSTATUS(g_ret))
+# define	SANDBOX_RETURN		(WTERMSIG(g_ret))
 # define	_SANDBOX_RAISE(x)	if (x == SIGKILL) ft_raise(TEST_TIMEOUT); if (x == SIGQUIT) ft_raise(TEST_INTERUPT);
-# define	SANDBOX_CRASH		(g_ret[0] == SIGSEGV || g_ret[0] == SIGBUS || g_ret[0] == SIGABRT)
+# define	SANDBOX_CRASH		(SANDBOX_RETURN == SIGSEGV || SANDBOX_RETURN == SIGBUS || SANDBOX_RETURN == SIGABRT)
 
 # define	_MALLOC_ENABLE		'e'
 # define	_MALLOC_DISABLE		'd'
@@ -245,7 +266,7 @@ extern		int				total_subtest;
 extern		char			*current_explication;
 extern		char			*current_test;
 extern		pid_t			g_pid;
-extern		char			g_ret[2];
+extern		int				g_ret;
 extern		int				g_log_fd;
 extern		int				g_diff_fd;
 extern		t_map			*g_shared_mem;

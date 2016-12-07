@@ -24,6 +24,10 @@
 #include <wchar.h>
 #include <stdbool.h>
 #include "ascii.h"
+#include <time.h>
+#include <signal.h>
+#include <sys/wait.h>
+#include <stdint.h>
 
 #pragma clang diagnostic ignored "-Wlanguage-extension-token"
 
