@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated: 2016/10/17 16:04:47 by alelievr         ###   ########.fr       */
+/*   Updated: 2016/12/07 17:10:08 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ typedef struct	s_option
 	void	*arg;
 }				t_option;
 
+#ifdef __x86_64__
 typedef struct	s_shared_mem_map
 {
 	char		alloc_byte_1;
@@ -101,6 +102,18 @@ typedef struct	s_shared_mem_map
 	size_t		time_mid;
 	size_t		time_end;
 }				t_map;
+#else
+typedef struct	s_shared_mem_map
+{
+	char		alloc_byte_1;
+	char		alloc_byte_2;
+	long		:16;
+	size_t		alloc_size;
+	size_t		time_begin;
+	size_t		time_mid;
+	size_t		time_end;
+}				t_map;
+#endif
 
 enum		e_values {
 	TEST_SUCCESS,

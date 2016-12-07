@@ -80,7 +80,6 @@ RUN_COLOR		=	147
 ##    AUTO     ##
 #################
 
-SHELL		=	/bin/zsh
 OBJ			=	$(addprefix $(OBJDIR)/, $(addsuffix .o, $(basename $(SRC))))
 INCFLAG		=	$(addprefix -I,$(INCDIR))
 NORME		=	$(addsuffix /*.h,$(INCDIR)) $(addprefix $(SRCDIR)/,$(SRC))
@@ -141,12 +140,12 @@ $(SONAME):
 else
 $(SONAME):
 	@make -C $(LIBFTDIR) so
-	@if [ -e $(LIBFTDIR)/libft.so ]; \
-		then; \
+	@if [ -e $(LIBFTDIR)/libft.so ];\
+		then\
 		cp $(LIBFTDIR)/libft.so . ;\
-	else;\
+	else\
 		echo Please provide a libft.so in the directory $(shell pwd); \
-	fi;
+	fi
 endif
 
 $(WRAPNAME): $(ASSETDIR)/wrapper.c
