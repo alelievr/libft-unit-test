@@ -25,7 +25,10 @@ the `-nospeed` option is available if you're mad enough at your optimization. :)
 
 # Linux
 
-For linux users, there is a brach called 'linux'. You will need to add a rule called 'so' in your Makefile to compile your libft in dynamic library instead of static (must be called "libft.so").
+To get it work on linux:
+
++ Install this two packages libbsd-dev and libncurses-dev
++ Add a rule called 'so' in your Makefile to compile your libft in dynamic library instead of static (must be called "libft.so").
 
 # Screenshots
 
