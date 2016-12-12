@@ -395,6 +395,7 @@ char			*get_fd_buffer(int fd, char *buff, size_t size);
 int				get_last_malloc_size(void);
 unsigned long long	ft_clock(void);
 void			*electric_alloc(size_t size);
+void			*electric_alloc_rev(size_t size);
 int				hardcore_main(void *libft_so_handler);
 
 /*  sanbox:  */

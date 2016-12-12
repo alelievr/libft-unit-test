@@ -861,6 +861,16 @@ void			test_ft_memmove_electric_memory(void *ptr) {
 			mprotect(data - 4096 + size, 4096, PROT_READ);
 
 			ft_memmove(dst, data, size);
+
+			dst = electric_alloc_rev(size);
+			data = electric_alloc_rev(size);
+
+			memset(data, 'A', size);
+
+			mprotect(dst- size, 4096, PROT_WRITE);
+			mprotect(data - size, 4096, PROT_READ);
+
+			ft_memmove(dst, data, size);
 			exit(TEST_SUCCESS);
 			);
 }
@@ -2982,6 +2992,14 @@ void			test_ft_strrchr_electric_memory(void *ptr) {
 			mprotect(src - 4096 + 10, 4096, PROT_READ);
 
 			ft_strrchr(src, 'a');
+
+			src = electric_alloc_rev(10);
+
+			strcpy(src, "123456789");
+
+			mprotect(src - 10, 4096, PROT_READ);
+
+			ft_strrchr(src, 'a');
 			exit(TEST_SUCCESS);
 			);
 }
@@ -3010,7 +3028,7 @@ void			test_ft_strrchr_speed(void *ptr) {
 			);
 }
 
-void            test_ft_strrchr(void){
+void            test_ft_strrchr(void) {
 	add_fun_subtest(test_ft_strrchr_basic);
 	add_fun_subtest(test_ft_strrchr_not_found);
 	add_fun_subtest(test_ft_strrchr_unicode);
