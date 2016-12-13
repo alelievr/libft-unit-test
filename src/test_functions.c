@@ -4154,6 +4154,38 @@ void			test_ft_atoi_min_long(void *ptr) {
 			);
 }
 
+void			test_ft_atoi_over_max_long(void *ptr) {
+	typeof(atoi)	*ft_atoi = ptr;
+	SET_EXPLANATION("your atoi does not work with over long max value");
+
+	SANDBOX_RAISE(
+			char	n[40] = "99999999999999999999999999";
+
+			int		i1 = atoi(n);
+			int		i2 = ft_atoi(n);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_KO);
+			);
+}
+
+void			test_ft_atoi_over_min_long(void *ptr) {
+	typeof(atoi)	*ft_atoi = ptr;
+	SET_EXPLANATION("your atoi does not work with over long min value");
+
+	SANDBOX_RAISE(
+			char	n[40] = "-99999999999999999999999999";
+
+			int		i1 = atoi(n);
+			int		i2 = ft_atoi(n);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_KO);
+			);
+}
+
 void			test_ft_atoi_null(void *ptr) {
 	typeof(atoi)	*ft_atoi = ptr;
 
