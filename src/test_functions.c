@@ -4224,6 +4224,8 @@ void            test_ft_atoi(void){
 	add_fun_subtest(test_ft_atoi_min_int);
 	add_fun_subtest(test_ft_atoi_max_long);
 	add_fun_subtest(test_ft_atoi_min_long);
+	add_fun_subtest(test_ft_atoi_over_max_long);
+	add_fun_subtest(test_ft_atoi_over_min_long);
 	add_fun_subtest(test_ft_atoi_null);
 	add_fun_subtest(test_ft_atoi_speed);
 }
