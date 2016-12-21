@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created  2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2016/12/21 15:40:55 by bwaegene         ###   ########.fr       */
+/*   Updated  2016/12/21 16:33:09 by bwaegene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -2763,6 +2763,38 @@ void			test_ft_strchr_basic(void *ptr) {
 			);
 }
 
+void			test_ft_strchr_first(void *ptr) {
+	typeof(strchr)	*ft_strchr = ptr;
+	SET_EXPLANATION("your strchr does not work with the first char of input");
+
+	SANDBOX_RAISE(
+		char	*src = STRING_1;
+
+		char	*d1 = strchr(src, 't');
+		char	*d2 = ft_strchr(src, 't');
+		if (d1 == d2)
+			exit(TEST_SUCCESS);
+		SET_DIFF(d1, d2);
+		exit(TEST_FAILED);
+		);
+}
+
+void			test_ft_strchr_before_0(void *ptr) {
+	typeof(strchr)	*ft_strchr = ptr;
+	SET_EXPLANATION("your strchr does not work with the char before \\0");
+
+	SANDBOX_RAISE(
+		char	*src = STRING_1;
+
+		char	*d1 = strchr(src, '!');
+		char	*d2 = ft_strchr(src, '!');
+		if (d1 == d2)
+			exit(TEST_SUCCESS);
+		SET_DIFF(d1, d2);
+		exit(TEST_FAILED);
+		);
+}
+
 void			test_ft_strchr_not_found(void *ptr) {
 	typeof(strchr)	*ft_strchr = ptr;
 	SET_EXPLANATION("your strchr does not work with not found char");
@@ -2886,6 +2918,8 @@ void			test_ft_strchr_speed(void *ptr) {
 
 void            test_ft_strchr(void){
 	add_fun_subtest(test_ft_strchr_basic);
+	add_fun_subtest(test_ft_strchr_first);
+	add_fun_subtest(test_ft_strchr_before_0);
 	add_fun_subtest(test_ft_strchr_not_found);
 	add_fun_subtest(test_ft_strchr_unicode);
 	add_fun_subtest(test_ft_strchr_after_0);
