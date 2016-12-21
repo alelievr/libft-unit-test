@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created  2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated  2015/12/17 18:01:20 by fdaudre-         ###   ########.fr       */
+/*   Updated: 2016/12/21 15:40:55 by bwaegene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -2770,8 +2770,8 @@ void			test_ft_strchr_not_found(void *ptr) {
 	SANDBOX_RAISE(
 			char	*src = STRING_1;
 
-			char	*d1 = strchr(src, ' ');
-			char	*d2 = ft_strchr(src, ' ');
+			char	*d1 = strchr(src, 'x');
+			char	*d2 = ft_strchr(src, 'x');
 			if (d1 == d2)
 				exit(TEST_SUCCESS);
 			SET_DIFF(d1, d2);
