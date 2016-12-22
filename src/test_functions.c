@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created  2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated  2016/12/21 16:33:09 by bwaegene         ###   ########.fr       */
+/*   Updated: 2016/12/22 12:16:48 by bwaegene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1169,6 +1169,22 @@ void			test_ft_memcmp_basic3(void *ptr) {
 			);
 }
 
+void			test_ft_memcmp_hidden(void *ptr) {
+	typeof(memcmp)		*ft_memcmp = ptr;
+	SET_EXPLANATION("your memcmp stop at \0");
+
+	SANDBOX_RAISE(
+		uint8_t	*s1 = (uint8_t *)"atoms\0\0\0\0";
+		uint8_t	*s2 = (uint8_t *)"atoms\0abc";
+		size_t	size = 8;
+
+		if (memcmp(s1, s2, size) == ft_memcmp(s1, s2, size))
+			exit(TEST_SUCCESS);
+		SET_DIFF_INT(memcmp(s1, s2, size), ft_memcmp(s1, s2, size));
+		exit(TEST_FAILED);
+		);
+}
+
 void			test_ft_memcmp_unsigned(void *ptr) {
 	typeof(memcmp)		*ft_memcmp = ptr;
 	SET_EXPLANATION("your memcmp does not cast the memory in unsigned char");
@@ -1267,6 +1283,7 @@ void            test_ft_memcmp(void){
 	add_fun_subtest(test_ft_memcmp_basic2);
 	add_fun_subtest(test_ft_memcmp_basic3);
 	add_fun_subtest(test_ft_memcmp_unsigned);
+	add_fun_subtest(test_ft_memcmp_hidden);
 	add_fun_subtest(test_ft_memcmp_null_byte);
 	add_fun_subtest(test_ft_memcmp_electric_memory);
 	add_fun_subtest(test_ft_memcmp_null1);
@@ -3922,6 +3939,25 @@ void			test_ft_strncmp_over_len(void *ptr) {
 			exit(TEST_FAILED);
 			);
 }
+
+void			test_ft_strncmp_hidden(void *ptr) {
+	typeof(strncmp)	*ft_strncmp = ptr;
+	SET_EXPLANATION("your strncmp doesn't stop at \\0");
+
+	SANDBOX_RAISE(
+		char	*s1 = "atoms\0\0\0\0";
+		char	*s2 = "atoms\0abc";
+		size_t  size = 8;
+
+		int		i1 = REG(strncmp(s1, s2, size));
+		int		i2 = REG(ft_strncmp(s1, s2, size));
+		if (i1 == i2)
+			exit(TEST_SUCCESS);
+		SET_DIFF_INT(i1, i2);
+		exit(TEST_FAILED);
+		);
+}
+
 void			test_ft_strncmp_ascii(void *ptr) {
 	typeof(strncmp)	*ft_strncmp = ptr;
 	SET_EXPLANATION("your strncmp does not work with non ascii chars");
@@ -4007,6 +4043,7 @@ void            test_ft_strncmp(void){
 	add_fun_subtest(test_ft_strncmp_zero1);
 	add_fun_subtest(test_ft_strncmp_zero2);
 	add_fun_subtest(test_ft_strncmp_cast);
+	add_fun_subtest(test_ft_strncmp_hidden);
 	add_fun_subtest(test_ft_strncmp_over_len);
 	add_fun_subtest(test_ft_strncmp_ascii);
 	add_fun_subtest(test_ft_strncmp_electric_memory);
