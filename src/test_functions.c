@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created  2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2016/12/24 16:10:15 by bwaegene         ###   ########.fr       */
+/*   Updated: 2016/12/24 17:07:49 by bwaegene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -4161,6 +4161,22 @@ void			test_ft_atoi_blank2(void *ptr) {
 			);
 }
 
+void			test_ft_atoi_invisible(void *ptr) {
+	typeof(atoi)	*ft_atoi = ptr;
+	SET_EXPLANATION("your atoi is not working with non space invisible char");
+
+	SANDBOX_RAISE(
+		char	*n = "\e06050";
+
+		int		i1 = atoi(n);
+		int		i2 = ft_atoi(n);
+		if (i1 == i2)
+			exit(TEST_SUCCESS);
+		SET_DIFF_INT(i1, i2);
+		exit(TEST_FAILED);
+		);
+}
+
 void			test_ft_atoi_string(void *ptr) {
 	typeof(atoi)	*ft_atoi = ptr;
 	SET_EXPLANATION("your atoi is not working with blanks");
@@ -4310,6 +4326,7 @@ void            test_ft_atoi(void){
 	add_fun_subtest(test_ft_atoi_rand);
 	add_fun_subtest(test_ft_atoi_blank1);
 	add_fun_subtest(test_ft_atoi_blank2);
+	add_fun_subtest(test_ft_atoi_invisible);
 	add_fun_subtest(test_ft_atoi_string);
 	add_fun_subtest(test_ft_atoi_max_int);
 	add_fun_subtest(test_ft_atoi_min_int);
