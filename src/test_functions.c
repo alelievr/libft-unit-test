@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created  2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2016/12/22 12:16:48 by bwaegene         ###   ########.fr       */
+/*   created  2015/11/17 17:42:18 by alelievr          #+#    #+#             */
+/*   updated  2016/12/22 15:29:17 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1171,7 +1171,7 @@ void			test_ft_memcmp_basic3(void *ptr) {
 
 void			test_ft_memcmp_hidden(void *ptr) {
 	typeof(memcmp)		*ft_memcmp = ptr;
-	SET_EXPLANATION("your memcmp stop at \0");
+	SET_EXPLANATION("your memcmp stop at \\0");
 
 	SANDBOX_RAISE(
 		uint8_t	*s1 = (uint8_t *)"atoms\0\0\0\0";
