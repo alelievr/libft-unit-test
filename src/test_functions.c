@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created  2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2016/12/24 17:07:49 by bwaegene         ###   ########.fr       */
+/*   Updated: 2017/01/16 17:56:39 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -6265,7 +6265,7 @@ void			test_ft_itoa_random(void *ptr) {
 				n = rand();
 				d = ft_itoa(n);
 				if (atoi(d) != n) {
-					SET_DIFF_INT(atoi(d), n)
+					SET_DIFF_INT(n, atoi(d))
 					exit(TEST_FAILED);
 				}
 			}
