@@ -71,7 +71,7 @@ WRAPNAME	=	run_test
 FRAMEWORK	=	
 
 #	Compiler
-CFLAGS		=	-Werror -Wall -Wextra -ggdb# -fsanitize=address
+CFLAGS		=	-Werror -Wall -Wextra# -ggdb -fsanitize=address
 CSOFLAGS	=	-shared -fPIC
 CSOFLAGS2	=	
 CC			=	clang
@@ -135,7 +135,7 @@ ifeq ($(OS),Linux)
 endif
 
 ifeq ($(OS),Linux)
-	DYLIBFLAG = -fPIC -shared
+	DYLIBFLAG = -fPIC -shared -ldl
 else
 	DYLIBFLAG = -dynamiclib
 endif

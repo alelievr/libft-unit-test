@@ -43,6 +43,7 @@ const char		*forbidden_functions[] = {
 #define MAX(x, y) ((x) > (y)) ? (x) : (y)
 #define SKIP_SPACE(x) while (isspace(**x)) (*x)++;
 #define SKIP_SEMICOLON(x) while (**x == ';') (*x)++;
+#define	CODELINE_BUFFSIZE 0xF0000
 
 bool		single_bracket_on_line(char *line, int n)
 {
@@ -54,14 +55,14 @@ bool		single_bracket_on_line(char *line, int n)
 
 char		*get_next_code_line(char **code, bool reset)
 {
-	static char	ret[0xF00];
-	static int	indent = 1;
-	static bool	next_line_indent = false;
-	bool		new_block_statement = false;
-	bool		set_now = false;
-	int			parent = 0;
-	int			i = 0;
-	int			shift = 0;
+	static char		ret[CODELINE_BUFFSIZE + 1];
+	static size_t	indent = 1;
+	static bool		next_line_indent = false;
+	bool			new_block_statement = false;
+	bool			set_now = false;
+	size_t			parent = 0;
+	size_t			i = 0;
+	size_t			shift = 0;
 
 	if (reset)
 	{
@@ -71,7 +72,7 @@ char		*get_next_code_line(char **code, bool reset)
 
 	if (next_line_indent)
 		indent++;
-	while (i < indent)
+	while (i < indent && i < CODELINE_BUFFSIZE)
 		ret[i++] = '\t';
 	while (**code)
 	{
@@ -83,6 +84,8 @@ char		*get_next_code_line(char **code, bool reset)
 			if (parent == 0 && new_block_statement)
 			{
 				set_now = true;
+				if (i >= CODELINE_BUFFSIZE)
+					goto end;
 				ret[i++] = *(*code)++;
 				SKIP_SPACE(code);
 				next_line_indent = true;
@@ -96,6 +99,8 @@ char		*get_next_code_line(char **code, bool reset)
 			{
 				if (next_line_indent)
 					shift = 1;
+				if (i >= CODELINE_BUFFSIZE)
+					goto end;
 				ret[i++] = *(*code)++;
 				SKIP_SPACE(code);
 				break ;
@@ -107,6 +112,8 @@ char		*get_next_code_line(char **code, bool reset)
 			if (single_bracket_on_line(ret, i))
 			{
 				shift = 1;
+				if (i >= CODELINE_BUFFSIZE)
+					goto end;
 				ret[i++] = *(*code)++;
 				SKIP_SPACE(code);
 				break ;
@@ -114,6 +121,8 @@ char		*get_next_code_line(char **code, bool reset)
 		}
 		if (!strncmp(*code, "if ", 3) || !strncmp(*code, "while ", 6) || !strncmp(*code, "for ", 4))
 			new_block_statement = true;
+		if (i >= CODELINE_BUFFSIZE)
+			goto end;
 		ret[i++] = **code;
 		if (**code == ';' && parent == 0)
 		{
@@ -123,6 +132,7 @@ char		*get_next_code_line(char **code, bool reset)
 		}
 		(*code)++;
 	}
+	end:
 	ret[i] = 0;
 	if (next_line_indent && set_now == false)
 	{

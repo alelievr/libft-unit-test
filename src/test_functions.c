@@ -7365,6 +7365,7 @@ void			test_ft_lstdel_free(void *ptr) {
 			l->next = lstnew(strdup("#TEST#"), 7);
 			tmp = l->next;
 			ft_lstdel(&l, lstdelone_f);
+			
 			if (!l) {
 				free(tmp);
 				exit(TEST_SUCCESS);
