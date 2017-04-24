@@ -6265,7 +6265,7 @@ void			test_ft_itoa_random(void *ptr) {
 				n = rand();
 				d = ft_itoa(n);
 				if (atoi(d) != n) {
-					SET_DIFF_INT(atoi(d), n)
+					SET_DIFF_INT(n, atoi(d))
 					exit(TEST_FAILED);
 				}
 			}

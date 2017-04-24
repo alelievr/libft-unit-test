@@ -383,7 +383,7 @@ static void updateRankingFile(int total_player_points)
 		return ;
 	if ((fd = open(BENCH_LOG_FILE, O_RDONLY)) != -1 && !fstat(fd, &st))
 	{
-		if ((fstart = file = mmap(NULL, st.st_size + 1, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0)) != MAP_FAILED)
+		if ((fstart = file = mmap(NULL, st.st_size + 1, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, fd, 0)) != MAP_FAILED)
 		{
 			file[st.st_size] = 0;
 			while (*file != '\0' && i < 0xF000 - 2)
@@ -419,7 +419,9 @@ static void updateRankingFile(int total_player_points)
 				dprintf(fd, "%-8s: %i pts\n", users[j].name, users[j].points);
 			}
 		}
-		close(fd);
+		if (!close(fd))
+			printf(COLOR_INFO "\nyour score [%i] have been added to the ranking file, you can view it here:\n"
+					"/sgoinfre/goinfre/Perso/libft-unit-test/bench.txt\n" COLOR_CLEAR, total_player_points);
 		munmap(fstart, st.st_size);
 	}
 }
