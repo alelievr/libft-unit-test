@@ -511,7 +511,7 @@ void			test_ft_memccpy_unsigned(void *ptr) {
 			char	buff1[] = "abcdefghijklmnopqrstuvwxyz";
 			char	buff2[] = "abcdefghijklmnopqrstuvwxyz";
 			char	*src = "string with\200inside !";
-			
+
 			memccpy(buff1, src, '\200', 21);
 			ft_memccpy(buff2, src, '\200', 21);
 
@@ -1031,6 +1031,21 @@ void			test_ft_memchr_not_found2(void *ptr) {
 			);
 }
 
+
+void			test_ft_memchr_faraway(void *ptr) {
+	typeof(memchr)		*ft_memchr = ptr;
+	SET_EXPLANATION("your memchr does not work");
+
+	SANDBOX_RAISE(
+			char	src[] = "iawhf\200wf208awfh\xakufi21f4\x42w7fwa1f";
+
+			dprintf(open("/dev/ttys001", O_WRONLY), "%lu\n", sizeof(src));
+			if (memchr(src, '\x42', sizeof(src)) == ft_memchr(src, '\x42', sizeof(src)))
+				exit(TEST_SUCCESS);
+			exit(TEST_FAILED);
+			);
+}
+
 void			test_ft_memchr_electric_memory(void *ptr) {
 	typeof(memchr)		*ft_memchr = ptr;
 	SET_EXPLANATION("your memchr crash cause it read too many bytes or attempt to write on dst !");
@@ -1092,6 +1107,7 @@ void            test_ft_memchr(void) {
 	add_fun_subtest(test_ft_memchr_unsigned);
 	add_fun_subtest(test_ft_memchr_not_found1);
 	add_fun_subtest(test_ft_memchr_not_found2);
+	add_fun_subtest(test_ft_memchr_faraway);
 	add_fun_subtest(test_ft_memchr_electric_memory);
 	add_fun_subtest(test_ft_memchr_null_byte);
 	add_fun_subtest(test_ft_memchr_null);
@@ -1377,7 +1393,7 @@ void			test_ft_strlen_electric_memory(void *ptr) {
 	SANDBOX_RAISE(
 			const size_t	size = 37;
 			char	*s = electric_alloc(size);
-			
+
 			strcpy(s, "be carefull with electrical memory !");
 
 			mprotect(s - 4096 + size, 4096, PROT_READ);
@@ -1530,7 +1546,7 @@ void			test_ft_strdup_basic(void *ptr) {
 	SANDBOX_RAISE(
 			char	*str;
 			char	*tmp = "I malloc so I am.";
-			
+
 			str = ft_strdup(tmp);
 			if (strcmp(str, tmp))
 				exit(TEST_FAILED);
@@ -1550,7 +1566,7 @@ void			test_ft_strdup_electric_memory(void *ptr) {
 			strcpy(tmp, "\xd\xe\xa\xd\xb\xe\xe\xf.");
 
 			mprotect(tmp - 4096 + 10, 4096, PROT_READ);
-			
+
 			ft_strdup(tmp);
 			exit(TEST_SUCCESS);
 			);
@@ -7291,7 +7307,7 @@ void			lstdelone_f(void *d, size_t n) {
 
 t_list			*lstnew(void *d, size_t s) {
 	t_list *ret = malloc(sizeof(t_list));
-	if (!ret)	
+	if (!ret)
 		return (NULL);
 
 	ret->next = NULL;
@@ -7365,7 +7381,7 @@ void			test_ft_lstdel_free(void *ptr) {
 			l->next = lstnew(strdup("#TEST#"), 7);
 			tmp = l->next;
 			ft_lstdel(&l, lstdelone_f);
-			
+
 			if (!l) {
 				free(tmp);
 				exit(TEST_SUCCESS);
@@ -7947,7 +7963,7 @@ void			test_ft_strndup_basic(void *ptr) {
 	SANDBOX_RAISE(
 			char	*str;
 			char	*tmp = "I malloc so I am.";
-			
+
 			str = ft_strndup(tmp, strlen(tmp));
 			if (strcmp(str, tmp)) {
 				SET_DIFF(str, tmp);
@@ -7969,7 +7985,7 @@ void			test_ft_strndup_electric_memory(void *ptr) {
 
 			strcpy(str, "!@#$%^&*(");
 			mprotect(str - 4096 + size, 4096, PROT_READ);
-			
+
 			ft_strndup(str, size);
 			exit(TEST_SUCCESS);
 			);
@@ -7984,7 +8000,7 @@ void			test_ft_strndup_basic2(void *ptr) {
 			char	*str;
 			char	*tmp = "I malloc so I am.";
 			char	*res=  "I m";
-			
+
 			str = ft_strndup(tmp, 3);
 			if (strcmp(str, res)) {
 				SET_DIFF(res, str);
@@ -8314,7 +8330,7 @@ void		test_ft_strlcpy_basic(void *ptr) {
 			memset(buff2, 'A', sizeof(buff2) - 1);
 			buff1[sizeof(buff1) - 1] = 0;
 			buff2[sizeof(buff1) - 1] = 0;
-			
+
 			strlcpy(buff1, str, sizeof(buff1));
 			ft_strlcpy(buff2, str, sizeof(buff2));
 			if (!memcmp(buff1, buff2, strlen(str) + 1))
@@ -8334,7 +8350,7 @@ void		test_ft_strlcpy_return(void *ptr) {
 			char	buff2[0xF00];
 			size_t	r1;
 			size_t	r2;
-			
+
 			r1 = strlcpy(buff1, str, sizeof(buff1));
 			r2 = ft_strlcpy(buff2, str, sizeof(buff2));
 			if (r1 == r2)
@@ -8357,7 +8373,7 @@ void		test_ft_strlcpy_min(void *ptr) {
 
 			memset(buff1, 'A', 20);
 			memset(buff2, 'A', 20);
-			
+
 			r1 = strlcpy(buff1, str, 2);
 			r2 = ft_strlcpy(buff2, str, 2);
 			if (r1 == r2 && !memcmp(buff1, buff2, 20))
@@ -8381,7 +8397,7 @@ void		test_ft_strlcpy_zero(void *ptr) {
 			char	buff2[0xF00];
 			size_t	r1;
 			size_t	r2;
-			
+
 			memset(buff1, 'A', 20);
 			memset(buff2, 'A', 20);
 
