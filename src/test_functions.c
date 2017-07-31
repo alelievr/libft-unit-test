@@ -1034,12 +1034,11 @@ void			test_ft_memchr_not_found2(void *ptr) {
 
 void			test_ft_memchr_faraway(void *ptr) {
 	typeof(memchr)		*ft_memchr = ptr;
-	SET_EXPLANATION("your memchr does not work");
+	SET_EXPLANATION("your memchr does not work on basic input");
 
 	SANDBOX_RAISE(
 			char	src[] = "iawhf\200wf208awfh\xakufi21f4\x42w7fwa1f";
 
-			dprintf(open("/dev/ttys001", O_WRONLY), "%lu\n", sizeof(src));
 			if (memchr(src, '\x42', sizeof(src)) == ft_memchr(src, '\x42', sizeof(src)))
 				exit(TEST_SUCCESS);
 			exit(TEST_FAILED);
