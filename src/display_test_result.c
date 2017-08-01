@@ -431,7 +431,7 @@ static void updateRankingFile(int total_player_points)
 		}
 		if (!close(fd))
 			printf(COLOR_INFO "\nyour score [%i] have been added to the ranking file, you can view it here:\n"
-					"/sgoinfre/goinfre/Perso/libft-unit-test/bench.txt\n" COLOR_CLEAR, total_player_points);
+					BENCH_LOG_FILE "\n" COLOR_CLEAR, total_player_points);
 		munmap(fstart, st.st_size);
 	}
 }
@@ -477,12 +477,15 @@ void    display_test_result(int value, char *explications)
 		{
 			if (g_bench != 0 || g_versus != NULL)
 			{
-				char	*winner = (total_player_points > total_versus_points) ? "WINNER: local libft" : "WINNER: john cena !";
-				if (g_versus == NULL)
-					winner = "WINNER: system's libc";
-				int		winner_len = strlen(winner);
+				char	*winner;
+				int		winner_len;
 				char	*sep1 = (count % 2) ? "( " : " )";
 				char	*sep2 = !(count % 2) ? "( " : " )";
+
+				winner = (total_player_points > total_versus_points) ? "WINNER: local libft" : "WINNER: system's libc";
+				if (g_versus != NULL && total_versus_points > total_player_points)
+					winner = "WINNER: john cena !";
+ 	 	 	 	 winner_len = strlen(winner);
 				printf(COLOR_PART1"%s"COLOR_CLEAR"  | | %2i pts %*s "COLOR_BENCH_WINNER"%s"COLOR_CLEAR" %*s %2i pts | |  "COLOR_PART1"%s\n"COLOR_CLEAR,
 						sep1,
 						total_player_points,

@@ -155,7 +155,7 @@ enum		e_prot {
 # define	DIFF_FILE		".fun_diff"
 # define	SHARED_MEM_FILE	".shmem"
 # define	BACKTRACE_FILE	"backtrace.crash"
-# define	BENCH_LOG_FILE	"/sgoinfre/goinfre/Perso/libft-unit-test/bench.txt"
+# define	BENCH_LOG_FILE	"/sgoinfre/goinfre/Perso/lftutest/bench.txt"
 
 # define	COLOR_SUCCESS	"\033[38;5;46m"
 # define	COLOR_FAILED	"\033[38;5;160m"

@@ -1327,6 +1327,53 @@ void			test_ft_strlen_basic(void *ptr) {
 			);
 }
 
+void			test_ft_strlen_random(void *ptr) {
+	typeof(strlen)	*ft_strlen = ptr;
+	SET_EXPLANATION("your strlen doesn't work with basic test");
+	
+	SANDBOX_RAISE(
+			int		r1;
+			int		r2;
+			char	buff[0x100];
+			int		offset;
+			int		rnd_fd = open("/dev/urandom", O_RDONLY);
+			const int test_count = 9001;
+
+			if (rnd_fd < 0)
+				exit(TEST_SUCCESS);
+
+			for (int i = 0; i < test_count; i++)
+				if (read(rnd_fd, buff, sizeof(buff)) > 0)
+				{
+					offset = rand() % sizeof(buff);
+					buff[sizeof(buff) - 1] = 0;
+					if ((r1 = ft_strlen(buff + offset)) != (r2 = strlen(buff + offset))) {
+						SET_DIFF_INT(r1, r2);
+						exit(TEST_FAILED);
+					}
+				}
+				else
+					exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_strlen_bad_opti(void *ptr) {
+	typeof(strlen)	*ft_strlen = ptr;
+	SET_EXPLANATION("your strlen doesn't work with basic test / bad optimization broke it");
+
+	SANDBOX_RAISE(
+			int		r1;
+			int		r2;
+			const char *str = "01234567, AAAAAA, abc\xba e, ......, end of string !";
+
+			if ((r1 = ft_strlen(str)) != (r2 = strlen(str))) {
+				SET_DIFF_INT(r1, r2);
+				exit(TEST_FAILED);
+			}
+			exit(TEST_SUCCESS);
+			);
+}
+
 void			test_ft_strlen_unicode(void *ptr) {
 	typeof(strlen)	*ft_strlen = ptr;
 	SET_EXPLANATION("your strlen doesn't work with unicode string");
@@ -1443,6 +1490,8 @@ void			test_ft_strlen_speed(void *ptr) {
 void            test_ft_strlen(void){
 
 	add_fun_subtest(test_ft_strlen_basic);
+	add_fun_subtest(test_ft_strlen_random);
+	add_fun_subtest(test_ft_strlen_bad_opti);
 	add_fun_subtest(test_ft_strlen_unicode);
 	add_fun_subtest(test_ft_strlen_null);
 	add_fun_subtest(test_ft_strlen_empty);
