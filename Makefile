@@ -75,6 +75,7 @@ CFLAGS		=	-Werror -Wall -Wextra# -ggdb -fsanitize=address
 CSOFLAGS	=	-shared -fPIC
 CSOFLAGS2	=	
 CC			=	clang
+CC_SO		=	$(CC)
 
 #	Optimization
 OPTFLAGS	=	-O2 -funroll-loops
@@ -154,7 +155,7 @@ $(SONAME):
 	@mkdir -p $(TMPLIB)
 	@cd $(TMPLIB) && ar -xv ../libft.a 1>/dev/null
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m➤ \033[38;5;$(LINK_COLOR)m",\
-		$(CC), $(CSOFLAGS), $(TMPLIB)/*.o, -o, $(SONAME))
+		$(CC_SO), $(CSOFLAGS), $(TMPLIB)/*.o, -o, $(SONAME))
 else
 $(SONAME):
 	@make -C $(LIBFTDIR) so

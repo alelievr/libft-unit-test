@@ -16,6 +16,7 @@
 #include <math.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
+#include <errno.h>
 
 const char		*forbidden_functions[] = {
 	"memset",
@@ -393,7 +394,7 @@ static void updateRankingFile(int total_player_points)
 		return ;
 	if ((fd = open(BENCH_LOG_FILE, O_RDONLY)) != -1 && !fstat(fd, &st))
 	{
-		if ((fstart = file = mmap(NULL, st.st_size + 1, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, fd, 0)) != MAP_FAILED)
+		if ((fstart = file = mmap(NULL, st.st_size + 1, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0)) != MAP_FAILED)
 		{
 			file[st.st_size] = 0;
 			while (*file != '\0' && i < 0xF000 - 2)
@@ -407,9 +408,16 @@ static void updateRankingFile(int total_player_points)
 				i += 2;
 			}
 		}
+		else
+		{
+			printf("can't read bench file: %s", strerror(errno));
+			return ;
+		}
 		for (int j = 1; j < i; j += 2)
+		{
 			if (login_cmp(login, users[j].name))
 				users[j].name[0] = 0;
+		}
 		for (int j = 1; j < i + 2 || i == 1; j += 2)
 		{
 			if (users[j].points < total_player_points || users[j].points == 0 || i == 1)
@@ -436,7 +444,7 @@ static void updateRankingFile(int total_player_points)
 	}
 }
 
-void    display_test_result(int value, char *explications)
+void    display_test_result(int value, char *explanations)
 {
 	static char		*old_fun_name = NULL;
 	static int		index = 0;
@@ -448,6 +456,7 @@ void    display_test_result(int value, char *explications)
 	static t_err	errs[0xF00] = {{0, NULL, NULL, NULL}};
 
 	MALLOC_RESET;
+
 	count++;
 	if (!old_fun_name || strcmp(old_fun_name, current_fun_name)) {
 		first = 1;
@@ -568,7 +577,7 @@ void    display_test_result(int value, char *explications)
 			printf(COLOR_FAILED"[FAILED] "COLOR_CLEAR);
 			dprintf(g_log_fd, "[FAILED] ");
 			errs[index].type = value;
-			errs[index].data = explications;
+			errs[index].data = explanations;
 			errs[index].diff = get_diff();
 			errs[index++].code = current_test_code;
 			break ;
@@ -576,7 +585,7 @@ void    display_test_result(int value, char *explications)
 			printf(COLOR_FAILED"[CRASH] "COLOR_CLEAR);
 			dprintf(g_log_fd, "[CRASH] ");
 			errs[index].type = value;
-			errs[index].data = explications;
+			errs[index].data = explanations;
 			errs[index].diff = NULL;
 			errs[index++].code = current_test_code;
 			break ;
@@ -584,7 +593,7 @@ void    display_test_result(int value, char *explications)
 			printf(COLOR_FAILED"[NO CRASH] "COLOR_CLEAR);
 			dprintf(g_log_fd, "[NO CRASH] ");
 			errs[index].type = value;
-			errs[index].data = explications;
+			errs[index].data = explanations;
 			errs[index].diff = NULL;
 			errs[index++].code = current_test_code;
 			break ;
@@ -592,7 +601,7 @@ void    display_test_result(int value, char *explications)
 			printf(COLOR_KO"[KO] "COLOR_CLEAR);
 			dprintf(g_log_fd, "[KO] ");
 			errs[index].type = value;
-			errs[index].data = explications;
+			errs[index].data = explanations;
 			errs[index].diff = get_diff();
 			errs[index++].code = current_test_code;
 			break ;
