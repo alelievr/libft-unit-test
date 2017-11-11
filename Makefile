@@ -217,7 +217,7 @@ libclean:
 	@rm -rf $(ASSETDIR)/$(ANAME) $(ASSETDIR)/$(NAME) $(TMPLIB)
 
 relib:
-	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", make -j 3 re -C "$(LIBFTDIR)")
+	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", make re -C "$(LIBFTDIR)")
 
 #	All removing then compiling
 re: relib fclean libclean all
