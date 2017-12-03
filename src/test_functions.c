@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   created  2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   updated  2016/12/22 15:29:17 by alelievr         ###   ########.fr       */
+/*   Updated: 2017/11/11 15:33:16 by sboilard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -503,7 +503,7 @@ void			test_ft_memccpy_basic_test(void *ptr) {
 
 }
 
-void			test_ft_memccpy_unsigned(void *ptr) {
+void			test_ft_memccpy_memory_unsigned(void *ptr) {
 	typeof(memccpy)	*ft_memccpy = ptr;
 	SET_EXPLANATION("your memccpy doesn't cast the memory into unsigned char");
 
@@ -514,6 +514,26 @@ void			test_ft_memccpy_unsigned(void *ptr) {
 
 			memccpy(buff1, src, '\200', 21);
 			ft_memccpy(buff2, src, '\200', 21);
+
+			if (!memcmp(buff1, buff2, 21))
+				exit(TEST_SUCCESS);
+			SET_DIFF(buff1, buff2);
+			exit(TEST_FAILED);
+			);
+
+}
+
+void			test_ft_memccpy_stop_char_unsigned(void *ptr) {
+	typeof(memccpy)	*ft_memccpy = ptr;
+	SET_EXPLANATION("your memccpy doesn't cast the stop-character into unsigned char");
+
+	SANDBOX_RAISE(
+			char	buff1[] = "abcdefghijklmnopqrstuvwxyz";
+			char	buff2[] = "abcdefghijklmnopqrstuvwxyz";
+			char	*src = "string with\200inside !";
+
+			memccpy(buff1, src, 0600, 21);
+			ft_memccpy(buff2, src, 0600, 21);
 
 			if (!memcmp(buff1, buff2, 21))
 				exit(TEST_SUCCESS);
@@ -687,7 +707,8 @@ void			test_ft_memccpy_speed(void *ptr) {
 
 void            test_ft_memccpy(void){
 	add_fun_subtest(test_ft_memccpy_basic_test);
-	add_fun_subtest(test_ft_memccpy_unsigned);
+	add_fun_subtest(test_ft_memccpy_memory_unsigned);
+	add_fun_subtest(test_ft_memccpy_stop_char_unsigned);
 	add_fun_subtest(test_ft_memccpy_return);
 	add_fun_subtest(test_ft_memccpy_not_found);
 	add_fun_subtest(test_ft_memccpy_zero_value);
