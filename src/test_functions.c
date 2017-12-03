@@ -1142,8 +1142,8 @@ void			test_ft_memcmp_basic1(void *ptr) {
 			uint8_t	*s2 = (uint8_t *)"\xff\xaa\xde\x12MACOSX";
 			size_t	size = 7;
 
-			int		i1 = REG(memcmp(s1, s2, size));
-			int		i2 = REG(ft_memcmp(s1, s2, size));
+			int		i1 = memcmp(s1, s2, size);
+			int		i2 = ft_memcmp(s1, s2, size);
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
 			SET_DIFF_INT(i1, i2);
@@ -4417,7 +4417,7 @@ void			test_ft_isalpha_(void *ptr) {
 			i = -1;
 			while (i < 530)
 			{
-				if (ft_isalpha(i) != isalpha(i))
+				if (!!ft_isalpha(i) != !!isalpha(i))
 					exit(TEST_FAILED);
 				i++;
 			}
@@ -4443,7 +4443,7 @@ void			test_ft_isdigit_(void *ptr) {
 			i = -1;
 			while (i < 530)
 			{
-				if (ft_isdigit(i) != isdigit(i))
+				if (!!ft_isdigit(i) != !!isdigit(i))
 					exit(TEST_FAILED);
 				i++;
 			}
@@ -4468,7 +4468,7 @@ void			test_ft_isalnum_(void *ptr) {
 			i = -1;
 			while (i < 530)
 			{
-				if (ft_isalnum(i) != isalnum(i))
+				if (!!ft_isalnum(i) != !!isalnum(i))
 					exit(TEST_FAILED);
 				i++;
 			}
@@ -4493,7 +4493,7 @@ void			test_ft_isascii_(void *ptr) {
 			i = -1;
 			while (i < 530)
 			{
-				if (ft_isascii(i) != isascii(i)) {
+				if (!!ft_isascii(i) != !!isascii(i)) {
 					SET_DIFF_CUSTOM("%12s: |%i|\n%12s: |%i|\nparam: (%i)", current_fun_name + 3, isascii(i), current_fun_name, ft_isascii(i), i)
 					exit(TEST_FAILED);
 				}
@@ -4520,7 +4520,7 @@ void			test_ft_isprint_(void *ptr) {
 			i = -1;
 			while (i < 530)
 			{
-				if (ft_isprint(i) != isprint(i)) {
+				if (!!ft_isprint(i) != !!isprint(i)) {
 					SET_DIFF_CUSTOM("%12s: |%i|\n%12s: |%i|\nparam: (%i)", current_fun_name + 3, isprint(i), current_fun_name, ft_isprint(i), i)
 					exit(TEST_FAILED);
 				}
@@ -7661,7 +7661,7 @@ void			test_ft_islower_(void *ptr) {
 
 	SANDBOX_RAISE(
 			for (int i = -50; i < 530; i++) {
-				if (ft_islower(i) != islower(i)) {
+				if (!!ft_islower(i) != !!islower(i)) {
 					SET_DIFF_INT(islower(i), ft_islower(i));
 					exit(TEST_FAILED);
 				}
@@ -7684,7 +7684,7 @@ void			test_ft_isupper_(void *ptr) {
 
 	SANDBOX_RAISE(
 			for (int i = -50; i < 530; i++) {
-				if (ft_isupper(i) != isupper(i)) {
+				if (!!ft_isupper(i) != !!isupper(i)) {
 					SET_DIFF_INT(isupper(i), ft_isupper(i));
 					exit(TEST_FAILED);
 				}
@@ -7711,7 +7711,7 @@ void			test_ft_isnumber_(void *ptr) {
 
 	SANDBOX_RAISE(
 			for (int i = -50; i < 530; i++) {
-				if (ft_isnumber(i) != isnumber(i)) {
+				if (!!ft_isnumber(i) != !!isnumber(i)) {
 					SET_DIFF_INT(isnumber(i), ft_isnumber(i));
 					exit(TEST_FAILED);
 				}
@@ -7734,7 +7734,7 @@ void			test_ft_isblank_(void *ptr) {
 
 	SANDBOX_RAISE(
 			for (int i = -50; i < 530; i++) {
-				if (ft_isblank(i) != isblank(i)) {
+				if (!!ft_isblank(i) != !!isblank(i)) {
 					SET_DIFF_INT(isblank(i), ft_isblank(i));
 					exit(TEST_FAILED);
 				}
