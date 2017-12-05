@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   created  2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2017/12/05 23:52:54 by alelievr         ###   ########.fr       */
+/*   Updated  2017/12/03 19:30:21 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1147,9 +1147,12 @@ void			test_ft_memcmp_basic(void *ptr) {
 			uint8_t	*s2 = (uint8_t *)"\xff\xaa\xde\x12MACOSX";
 			size_t	size = 10;
 
-			if (memcmp(s1, s2, size) == ft_memcmp(s1, s2, size))
+			int		i1 = memcmp(s1, s2, size);
+			int		i2 = ft_memcmp(s1, s2, size);
+
+			if (i1 == i2)
 				exit(TEST_SUCCESS);
-			SET_DIFF_INT(memcmp(s1, s2, size), ft_memcmp(s1, s2, size));
+			SET_DIFF_INT(i1, i2);
 			exit(TEST_FAILED);
 			);
 }
@@ -1159,18 +1162,19 @@ void			test_ft_memcmp_basic1(void *ptr) {
 	SET_EXPLANATION("your memcmp does not work with basic input");
 
 	SANDBOX_RAISE(
-			uint8_t	*s1 = (uint8_t *)"\xff\xaa\xde\x12OLOL";
+			uint8_t	*s1 = (uint8_t *)"\xff\xaa\xde\x12WXYZ";
 			uint8_t	*s2 = (uint8_t *)"\xff\xaa\xde\x12MACOSX";
 			size_t	size = 7;
 
-			int		i1 = memcmp(s1, s2, size);
-			int		i2 = ft_memcmp(s1, s2, size);
+			//macos memcmp function return 1 or -1 in this case, Apple why ?
+			int		i1 = REG(memcmp(s1, s2, size));
+			int		i2 = REG(ft_memcmp(s1, s2, size));
+
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
 			SET_DIFF_INT(i1, i2);
 			exit(TEST_FAILED);
 			);
-	(void)ft_memcmp;
 }
 
 void			test_ft_memcmp_basic2(void *ptr) {
