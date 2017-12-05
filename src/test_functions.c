@@ -21,6 +21,12 @@
 #define		REG(x)		((x > 0) ? 1 : ((x < 0) ? -1 : 0))
 #define		ASSERT_RETURN_VALUE(x, y) if (x != y) exit(TEST_FAILED)
 
+#ifdef linux
+# define LREG(x) REG(x)
+#else
+# define LREG(x) x
+#endif
+
 #define			add_fun_subtest(x) add_fun_subtest_(x, (char *)# x)
 void			add_fun_subtest_(void (*fun)(void *ptr), char *funname) {
 	static int		index = 0;
@@ -1147,8 +1153,8 @@ void			test_ft_memcmp_basic(void *ptr) {
 			uint8_t	*s2 = (uint8_t *)"\xff\xaa\xde\x12MACOSX";
 			size_t	size = 10;
 
-			int		i1 = memcmp(s1, s2, size);
-			int		i2 = ft_memcmp(s1, s2, size);
+			int		i1 = LREG(memcmp(s1, s2, size));
+			int		i2 = LREG(ft_memcmp(s1, s2, size));
 
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
@@ -1186,9 +1192,12 @@ void			test_ft_memcmp_basic2(void *ptr) {
 			uint8_t	*s2 = (uint8_t *)"\xff\xaa\xde\x12MACOSAAAAA";
 			size_t	size = 4;
 
-			if (memcmp(s1, s2, size) == ft_memcmp(s1, s2, size))
+			int i1 = LREG(memcmp(s1, s2, size));
+			int	i2 = LREG(ft_memcmp(s1, s2, size));
+
+			if (i1 == i2)
 				exit(TEST_SUCCESS);
-			SET_DIFF_INT(memcmp(s1, s2, size), ft_memcmp(s1, s2, size));
+			SET_DIFF_INT(i1, i2);
 			exit(TEST_FAILED);
 			);
 }
@@ -1202,9 +1211,12 @@ void			test_ft_memcmp_basic3(void *ptr) {
 			uint8_t	*s2 = (uint8_t *)"\xff\xaa\xde\x02";
 			size_t	size = 8;
 
-			if (memcmp(s1, s2, size) == ft_memcmp(s1, s2, size))
+			int i1 = LREG(memcmp(s1, s2, size));
+			int	i2 = LREG(ft_memcmp(s1, s2, size));
+
+			if (i1 == i2)
 				exit(TEST_SUCCESS);
-			SET_DIFF_INT(memcmp(s1, s2, size), ft_memcmp(s1, s2, size));
+			SET_DIFF_INT(i1, i2);
 			exit(TEST_FAILED);
 			);
 }
@@ -1214,14 +1226,17 @@ void			test_ft_memcmp_hidden(void *ptr) {
 	SET_EXPLANATION("your memcmp stop at \\0");
 
 	SANDBOX_RAISE(
-		uint8_t	*s1 = (uint8_t *)"atoms\0\0\0\0";
-		uint8_t	*s2 = (uint8_t *)"atoms\0abc";
-		size_t	size = 8;
+			uint8_t	*s1 = (uint8_t *)"atoms\0\0\0\0";
+			uint8_t	*s2 = (uint8_t *)"atoms\0abc";
+			size_t	size = 8;
 
-		if (memcmp(s1, s2, size) == ft_memcmp(s1, s2, size))
-			exit(TEST_SUCCESS);
-		SET_DIFF_INT(memcmp(s1, s2, size), ft_memcmp(s1, s2, size));
-		exit(TEST_FAILED);
+			int i1 = LREG(memcmp(s1, s2, size));
+			int	i2 = LREG(ft_memcmp(s1, s2, size));
+
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
 		);
 }
 
@@ -1234,9 +1249,12 @@ void			test_ft_memcmp_unsigned(void *ptr) {
 			uint8_t	*s2 = (uint8_t *)"\xff\xaa\xde\0";
 			size_t	size = 8;
 
-			if (memcmp(s1, s2, size) == ft_memcmp(s1, s2, size))
+			int i1 = LREG(memcmp(s1, s2, size));
+			int	i2 = LREG(ft_memcmp(s1, s2, size));
+
+			if (i1 == i2)
 				exit(TEST_SUCCESS);
-			SET_DIFF_INT(memcmp(s1, s2, size), ft_memcmp(s1, s2, size));
+			SET_DIFF_INT(i1, i2);
 			exit(TEST_FAILED);
 			);
 }
@@ -1250,9 +1268,12 @@ void			test_ft_memcmp_null_byte(void *ptr) {
 			uint8_t	*s2 = (uint8_t *)"\xff\0\0\xaa\0\xde\x00MBS";
 			size_t	size = 9;
 
-			if (memcmp(s1, s2, size) == ft_memcmp(s1, s2, size))
+			int i1 = LREG(memcmp(s1, s2, size));
+			int	i2 = LREG(ft_memcmp(s1, s2, size));
+
+			if (i1 == i2)
 				exit(TEST_SUCCESS);
-			SET_DIFF_INT(memcmp(s1, s2, size), ft_memcmp(s1, s2, size));
+			SET_DIFF_INT(i1, i2);
 			exit(TEST_FAILED);
 			);
 }
