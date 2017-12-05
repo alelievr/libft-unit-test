@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   created  2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2017/11/11 15:33:16 by sboilard         ###   ########.fr       */
+/*   Updated: 2017/12/05 23:52:54 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -3015,7 +3015,7 @@ void			test_ft_strchr_electric_memory(void *ptr) {
 
 void			test_ft_strchr_null(void *ptr) {
 	typeof(strchr)	*ft_strchr = ptr;
-	SET_EXPLANATION("your strchr does not segv with NULL parameter");
+	SET_EXPLANATION("your strchr does not segfault with NULL parameter");
 
 	SANDBOX_IRAISE(
 			ft_strchr(NULL, '\0');
@@ -3161,6 +3161,7 @@ void			test_ft_strrchr_electric_memory(void *ptr) {
 }
 
 void			test_ft_strrchr_null(void *ptr) {
+	SET_EXPLANATION("your strrchr does not segfault when a null parameter is sent");
 	typeof(strrchr)	*ft_strrchr = ptr;
 
 	SANDBOX_IRAISE(
