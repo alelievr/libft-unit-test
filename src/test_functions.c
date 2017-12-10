@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   created  2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2017/12/03 19:30:21 by alelievr         ###   ########.fr       */
+/*   Updated: 2017/12/10 20:38:27 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -3519,6 +3519,25 @@ void			test_ft_strnstr_basic3(void *ptr) {
 			);
 }
 
+void			test_ft_strnstr_basic4(void *ptr) {
+	typeof(strnstr)	*ft_strnstr = ptr;
+	SET_EXPLANATION("your strnstr does not work with basic input");
+
+	SANDBOX_RAISE(
+			char *big = "abcdef";
+			char *little = "abcdefghijklmnop";
+			size_t	max = strlen(big);
+
+			char 	*s1 = strnstr(big, little, max);
+			char 	*s2 = ft_strnstr(big, little, max);
+
+			if (s1 == s2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(s1, s2);
+			exit(TEST_FAILED);
+			);
+}
+
 void			test_ft_strnstr_found(void *ptr) {
 	typeof(strnstr)	*ft_strnstr = ptr;
 	SET_EXPLANATION("your strnstr does not work with not found patern");
@@ -3662,6 +3681,7 @@ void            test_ft_strnstr(void){
 	add_fun_subtest(test_ft_strnstr_basic);
 	add_fun_subtest(test_ft_strnstr_basic2);
 	add_fun_subtest(test_ft_strnstr_basic3);
+	add_fun_subtest(test_ft_strnstr_basic4);
 	add_fun_subtest(test_ft_strnstr_found);
 	add_fun_subtest(test_ft_strnstr_zero_len1);
 	add_fun_subtest(test_ft_strnstr_zero_len2);
