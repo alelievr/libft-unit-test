@@ -65,7 +65,7 @@ int		hardcore_main(void *libft_so_handler)
 			return (-1);
 		}
 
-	if (rand() % 10 > 7)
+	if (rand() % 10 > 3)
 	{
 		printf("%s\n", mtable[rand() % 3]);
 		return (-1);

@@ -8238,7 +8238,7 @@ void			test_ft_atof_zero(void *ptr) {
 
 void			test_ft_atof_nan(void *ptr) {
 	typeof(atof)	*ft_atof = ptr;
-	SET_EXPLANATION("your atof does not work with basic nan value");
+	SET_EXPLANATION("your atof does not work with nan value");
 
 	SANDBOX_RAISE(
 			char	buff[0xF00];
@@ -8248,7 +8248,7 @@ void			test_ft_atof_nan(void *ptr) {
 			sprintf(buff, "%lf", NAN);
 			d1 = atof(buff);
 			d2 = ft_atof(buff);
-			if ((float)d1 == (float)d2)
+			if (isnan(d1) == isnan(d2))
 				exit(TEST_SUCCESS);
 			SET_DIFF_DOUBLE(d1, d2);
 			exit(TEST_FAILED);
@@ -8257,7 +8257,7 @@ void			test_ft_atof_nan(void *ptr) {
 
 void			test_ft_atof_blanks1(void *ptr) {
 	typeof(atof)	*ft_atof = ptr;
-	SET_EXPLANATION("your atof does not work with basic blanks");
+	SET_EXPLANATION("your atof does not work with blank chars");
 
 	SANDBOX_RAISE(
 			char *	nbr = "  \v\r  \t\n\n\f-9.457787";
@@ -8275,7 +8275,7 @@ void			test_ft_atof_blanks1(void *ptr) {
 
 void			test_ft_atof_blanks2(void *ptr) {
 	typeof(atof)	*ft_atof = ptr;
-	SET_EXPLANATION("your atof does not work with basic blanks");
+	SET_EXPLANATION("your atof does not work with blank chars");
 
 	SANDBOX_RAISE(
 			char *	nbr = "  \v\r  \t\n\n\f+42.442422f    ";
