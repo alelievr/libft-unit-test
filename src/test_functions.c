@@ -6138,152 +6138,123 @@ void            test_ft_strtrim(void){
 //        ft_strsplit         //
 ////////////////////////////////
 
+void			split_cmp_array(char ** expected, char ** got)
+{
+	for (; *expected; expected++, got++)
+	{
+		if (*got == NULL || strcmp(*expected, *got))
+		{
+			SET_DIFF(*got, *expected);
+			exit(TEST_FAILED);
+		}
+	}
+
+	exit(TEST_SUCCESS);
+}
+
 void			test_ft_strsplit_basic(void *ptr) {
 	char	**(*ft_strsplit)(char *, char) = ptr;
 	SET_EXPLANATION("your strsplit does not work with basic input");
-	char	**ret = (char*[6]){"split", "this", "for", "me", "!", NULL};
 
 	SANDBOX_RAISE(
-			char	*s = "      split       this for   me  !       ";
+			char	*string = "      split       this for   me  !       ";
+			char	**expected = ((char*[6]){"split", "this", "for", "me", "!", NULL});
 
-			char	**r = ft_strsplit(s, ' ');
-			while (*r) {
-				if (strcmp(*r, *ret)) {
-					SET_DIFF(*ret, *r);
-					exit(TEST_FAILED);
-				}
-				r++;
-				ret++;
-			}
-			exit(TEST_SUCCESS);
+			char	**result = ft_strsplit(string, ' ');
+
+			split_cmp_array(expected, result);
 			);
 }
 
 void			test_ft_strsplit_space(void *ptr) {
 	char	**(*ft_strsplit)(char *, char) = ptr;
 	SET_EXPLANATION("your strsplit does not work with full space string");
-	char	**ret = (char*[1]){NULL};
 
 	SANDBOX_RAISE(
-			char	*s = "                  ";
+			char	**expected = ((char*[1]){NULL});
+			char	*string = "                  ";
 
-			char	**r = ft_strsplit(s, ' ');
-			while (*r) {
-				if (strcmp(*r, *ret)) {
-					SET_DIFF(*ret, *r);
-					exit(TEST_FAILED);
-				}
-				r++;
-				ret++;
-			}
-			exit(TEST_SUCCESS);
+			char	**result = ft_strsplit(string, ' ');
+
+			split_cmp_array(expected, result);
 			);
 }
 
 void			test_ft_strsplit_begin(void *ptr) {
 	char	**(*ft_strsplit)(char *, char) = ptr;
 	SET_EXPLANATION("your strsplit does not work with one word");
-	char	**ret = (char*[2]){"olol", NULL};
+	char	**expected = (char*[2]){"olol", NULL};
 
 	SANDBOX_RAISE(
 			char	*s = "                  olol";
 
-			char	**r = ft_strsplit(s, ' ');
-			while (*r) {
-				if (strcmp(*r, *ret)) {
-					SET_DIFF(*ret, *r);
-					exit(TEST_FAILED);
-				}
-				r++;
-				ret++;
-			}
-			exit(TEST_SUCCESS);
+			char	**result = ft_strsplit(s, ' ');
+
+			split_cmp_array(expected, result);
 			);
 }
 
 void			test_ft_strsplit_end(void *ptr) {
 	char	**(*ft_strsplit)(char *, char) = ptr;
 	SET_EXPLANATION("your strsplit does not work with one word");
-	char	**ret = (char*[2]){"olol", NULL};
+	char	**expected = (char*[2]){"olol", NULL};
 
 	SANDBOX_RAISE(
 			char	*s = "olol                     ";
 
-			char	**r = ft_strsplit(s, ' ');
-			while (*r) {
-				if (strcmp(*r, *ret)) {
-					SET_DIFF(*ret, *r);
-					exit(TEST_FAILED);
-				}
-				r++;
-				ret++;
-			}
-			exit(TEST_SUCCESS);
+			char	**result = ft_strsplit(s, ' ');
+
+			split_cmp_array(expected, result);
 			);
 }
 
 void			test_ft_strsplit_empty(void *ptr) {
 	char	**(*ft_strsplit)(char *, char) = ptr;
 	SET_EXPLANATION("your strsplit does not work with empty string");
-	char	**ret = (char*[2]){NULL};
+	char	**expected = (char*[2]){NULL};
 
 	SANDBOX_RAISE(
 			char	*s = "";
+			char	**result = ft_strsplit(s, '\65');
 
-			char	**r = ft_strsplit(s, '\65');
-			while (*r) {
-				if (strcmp(*r, *ret)) {
-					SET_DIFF(*ret, *r);
-					exit(TEST_FAILED);
-				}
-				r++;
-				ret++;
-			}
-			exit(TEST_SUCCESS);
+			split_cmp_array(expected, result);
 			);
 }
 
 void			test_ft_strsplit_full(void *ptr) {
 	char	**(*ft_strsplit)(char *, char) = ptr;
 	SET_EXPLANATION("your strsplit does not work with full string");
-	char	**ret = (char*[2]){NULL};
+	char	**expected = (char*[2]){NULL};
 
 	SANDBOX_RAISE(
 			char	*s = "0 0 0 0 0 0 0 0 0";
+			char	**result = ft_strsplit(s, ' ');
 
-			char	**r = ft_strsplit(s, ' ');
-			while (*r) {
-				if (strcmp(*r, "0")) {
-					SET_DIFF(*ret, *r);
-					exit(TEST_FAILED);
-				}
-				r++;
-				ret++;
-			}
-			exit(TEST_SUCCESS);
+			split_cmp_array(expected, result);
 			);
 }
 
 void			test_ft_strsplit_free(void *ptr) {
 	char	**(*ft_strsplit)(char *, char) = ptr;
 	SET_EXPLANATION("your strsplit does not work with basic input");
-	char	**ret = (char*[6]){"split  ", "this", "for", "me", "!", NULL};
+	char	**expected = (char*[6]){"split  ", "this", "for", "me", "!", NULL};
 
 	SANDBOX_RAISE(
 			char	*s = "split  ||this|for|me|||||!|";
 			int		i = 0;
+			char	**result = ft_strsplit(s, '|');
 
-			char	**r = ft_strsplit(s, '|');
-			while (r[i]) {
-				if (strcmp(r[i], *ret)) {
-					SET_DIFF(*ret, r[i]);
+			while (result[i]) {
+				if (strcmp(result[i], *expected)) {
+					SET_DIFF(*expected, result[i]);
 					exit(TEST_FAILED);
 				}
-				free(r[i]);
+				free(result[i]);
 				i++;
-				ret++;
+				expected++;
 			}
-			free(r);
+			free(result);
+
 			exit(TEST_SUCCESS);
 			);
 }
@@ -6296,11 +6267,11 @@ void			test_ft_strsplit_malloc_null(void *ptr) {
 			char	*s = "      split       this for   me  !       ";
 
 			MALLOC_NULL;
-			char	**r = ft_strsplit(s, ' ');
+			char	**result = ft_strsplit(s, ' ');
 			MALLOC_RESET;
-			if (!r)
+			if (!result)
 				exit(TEST_SUCCESS);
-			SET_DIFF_PTR(NULL, r);
+			SET_DIFF_PTR(NULL, result);
 			exit(TEST_FAILED);
 			);
 }
@@ -6308,21 +6279,21 @@ void			test_ft_strsplit_malloc_null(void *ptr) {
 void			test_ft_strsplit_zero(void *ptr) {
 	char	**(*ft_strsplit)(char *, char) = ptr;
 	SET_EXPLANATION("your strsplit does not work with basic input");
-	char	**ret = (char*[6]){"split", "this", "for", "me", "!", NULL};
+	char	**expected = (char*[6]){"split", "this", "for", "me", "!", NULL};
 
 	SANDBOX_RAISE(
 			char	*s = "      split       this for   me  !       ";
 
 			MALLOC_MEMSET;
-			char	**r = ft_strsplit(s, ' ');
+			char	**result = ft_strsplit(s, ' ');
 			MALLOC_RESET;
-			while (*r) {
-				if (strcmp(*r, *ret)) {
-					SET_DIFF(*ret, *r);
+			while (*result) {
+				if (strcmp(*result, *expected)) {
+					SET_DIFF(*expected, *result);
 					exit(TEST_FAILED);
 				}
-				r++;
-				ret++;
+				result++;
+				expected++;
 			}
 			exit(TEST_SUCCESS);
 			);
@@ -6333,10 +6304,10 @@ void			test_ft_strsplit_null(void *ptr) {
 	SET_EXPLANATION("your strsplit does not segfault/return null when null parameter is sent");
 
 	SANDBOX_PROT(
-			char	**ret = ft_strsplit(NULL, ' ');
-			if (!ret)
+			char	**expected = ft_strsplit(NULL, ' ');
+			if (!expected)
 				exit(TEST_SUCCESS);
-			SET_DIFF_PTR(NULL, ret);
+			SET_DIFF_PTR(NULL, expected);
 			exit(TEST_FAILED);
 			)
 }
