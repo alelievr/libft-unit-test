@@ -402,4 +402,9 @@ int				hardcore_main(void *libft_so_handler);
 void			sandbox(void);
 void			unsandbox(void);
 
+/*	System's replacement functions:  */
+int				simple_memcmp (const char *s1, const char *s2, size_t n);
+void			putwchart(int wchar, int *len, char *buff);
+int				ft_putwstr(wchar_t *wstr, char *buff);
+
 #endif

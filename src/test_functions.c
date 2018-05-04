@@ -1149,11 +1149,11 @@ void			test_ft_memcmp_basic(void *ptr) {
 	SET_EXPLANATION("your memcmp does not work with basic input");
 
 	SANDBOX_RAISE(
-			uint8_t	*s1 = (uint8_t *)"\xff\xaa\xde\x12MACOSX";
-			uint8_t	*s2 = (uint8_t *)"\xff\xaa\xde\x12MACOSX";
+			char	*s1 = "\xff\xaa\xde\x12MACOSX";
+			char	*s2 = "\xff\xaa\xde\x12MACOSX";
 			size_t	size = 10;
 
-			int		i1 = LREG(memcmp(s1, s2, size));
+			int		i1 = LREG(simple_memcmp(s1, s2, size));
 			int		i2 = LREG(ft_memcmp(s1, s2, size));
 
 			if (i1 == i2)
@@ -1168,12 +1168,12 @@ void			test_ft_memcmp_basic1(void *ptr) {
 	SET_EXPLANATION("your memcmp does not work with basic input");
 
 	SANDBOX_RAISE(
-			uint8_t	*s1 = (uint8_t *)"\xff\xaa\xde\x12WXYZ";
-			uint8_t	*s2 = (uint8_t *)"\xff\xaa\xde\x12MACOSX";
+			char	*s1 = "\xff\xaa\xde\x12WXYZ";
+			char	*s2 = "\xff\xaa\xde\x12MACOSX";
 			size_t	size = 7;
 
 			//macos memcmp function return 1 or -1 in this case, Apple why ?
-			int		i1 = REG(memcmp(s1, s2, size));
+			int		i1 = REG(simple_memcmp(s1, s2, size));
 			int		i2 = REG(ft_memcmp(s1, s2, size));
 
 			if (i1 == i2)
@@ -1188,11 +1188,11 @@ void			test_ft_memcmp_basic2(void *ptr) {
 	SET_EXPLANATION("your memcmp does not work with basic input");
 
 	SANDBOX_RAISE(
-			uint8_t	*s1 = (uint8_t *)"\xff\xaa\xde\x12";
-			uint8_t	*s2 = (uint8_t *)"\xff\xaa\xde\x12MACOSAAAAA";
+			char	*s1 = "\xff\xaa\xde\x12";
+			char	*s2 = "\xff\xaa\xde\x12MACOSAAAAA";
 			size_t	size = 4;
 
-			int i1 = LREG(memcmp(s1, s2, size));
+			int i1 = LREG(simple_memcmp(s1, s2, size));
 			int	i2 = LREG(ft_memcmp(s1, s2, size));
 
 			if (i1 == i2)
@@ -1207,11 +1207,11 @@ void			test_ft_memcmp_basic3(void *ptr) {
 	SET_EXPLANATION("your memcmp does not work with basic input");
 
 	SANDBOX_RAISE(
-			uint8_t	*s1 = (uint8_t *)"\xff\xaa\xde\xffMACOSX\xff";
-			uint8_t	*s2 = (uint8_t *)"\xff\xaa\xde\x02";
+			char	*s1 = "\xff\xaa\xde\xffMACOSX\xff";
+			char	*s2 = "\xff\xaa\xde\x02";
 			size_t	size = 8;
 
-			int i1 = LREG(memcmp(s1, s2, size));
+			int i1 = LREG(simple_memcmp(s1, s2, size));
 			int	i2 = LREG(ft_memcmp(s1, s2, size));
 
 			if (i1 == i2)
@@ -1226,11 +1226,11 @@ void			test_ft_memcmp_hidden(void *ptr) {
 	SET_EXPLANATION("your memcmp stop at \\0");
 
 	SANDBOX_RAISE(
-			uint8_t	*s1 = (uint8_t *)"atoms\0\0\0\0";
-			uint8_t	*s2 = (uint8_t *)"atoms\0abc";
+			char	*s1 = "atoms\0\0\0\0";
+			char	*s2 = "atoms\0abc";
 			size_t	size = 8;
 
-			int i1 = LREG(memcmp(s1, s2, size));
+			int i1 = LREG(simple_memcmp(s1, s2, size));
 			int	i2 = LREG(ft_memcmp(s1, s2, size));
 
 			if (i1 == i2)
@@ -1245,11 +1245,11 @@ void			test_ft_memcmp_unsigned(void *ptr) {
 	SET_EXPLANATION("your memcmp does not cast the memory in unsigned char");
 
 	SANDBOX_RAISE(
-			uint8_t	*s1 = (uint8_t *)"\xff\xaa\xde\200";
-			uint8_t	*s2 = (uint8_t *)"\xff\xaa\xde\0";
+			char	*s1 = "\xff\xaa\xde\200";
+			char	*s2 = "\xff\xaa\xde\0";
 			size_t	size = 8;
 
-			int i1 = LREG(memcmp(s1, s2, size));
+			int i1 = LREG(simple_memcmp(s1, s2, size));
 			int	i2 = LREG(ft_memcmp(s1, s2, size));
 
 			if (i1 == i2)
@@ -1264,11 +1264,11 @@ void			test_ft_memcmp_null_byte(void *ptr) {
 	SET_EXPLANATION("your memcmp does not work with basic input");
 
 	SANDBOX_RAISE(
-			uint8_t	*s1 = (uint8_t *)"\xff\0\0\xaa\0\xde\xffMACOSX\xff";
-			uint8_t	*s2 = (uint8_t *)"\xff\0\0\xaa\0\xde\x00MBS";
+			char	*s1 = "\xff\0\0\xaa\0\xde\xffMACOSX\xff";
+			char	*s2 = "\xff\0\0\xaa\0\xde\x00MBS";
 			size_t	size = 9;
 
-			int i1 = LREG(memcmp(s1, s2, size));
+			int i1 = LREG(simple_memcmp(s1, s2, size));
 			int	i2 = LREG(ft_memcmp(s1, s2, size));
 
 			if (i1 == i2)
@@ -1326,8 +1326,8 @@ void			test_ft_memcmp_speed(void *ptr) {
 
 	SANDBOX_SPEED(
 			size_t	size = BFSIZE * 16;
-			uint8_t	*s1 = malloc(sizeof(uint8_t) * size);
-			uint8_t	*s2 = malloc(sizeof(uint8_t) * size);
+			char	*s1 = malloc(sizeof(char) * size);
+			char	*s2 = malloc(sizeof(char) * size);
 
 			memset(s1, 'A', size);
 			memset(s2, 'A', size);
@@ -6547,45 +6547,6 @@ void			test_ft_putchar_ascii(void *ptr) {
 			);
 }
 
-int     nbr_bits(unsigned int nbr)
-{
-	int     i;
-
-	i = 1;
-	while ((nbr = nbr >> 1))
-		i++;
-	return (i);
-}
-
-void    putwchart(int wchar, int *len, char *buff)
-{
-	unsigned int    ch;
-	int             n;
-	int				i = 0;
-
-	ch = (unsigned int)wchar;
-	n = nbr_bits(ch);
-	if (n > 7 && ((*len += 1)))
-	{
-		if (n > 11 && ((*len += 1)))
-		{
-			if (n > 16 && ((*len += 2)))
-			{
-				buff[i++] = ((ch >> 18) & 7) | 240;
-				buff[i++] = ((ch >> 12) & 63) | 128;
-			}
-			else if ((*len += 1))
-				buff[i++] = ((ch >> 12) & 15) | 224;
-			buff[i++] = ((ch >> 6) & 63) | 128;
-		}
-		else if ((*len += 1))
-			buff[i++] = ((ch >> 6) & 31) | 192;
-		buff[i++] = (ch & 63) | 128;
-	}
-	else if ((*len += 1))
-		buff[i++] = ch;
-}
-
 void			test_ft_putchar_unicode(void *ptr) {
 	typeof(putchar)	*ft_putchar = ptr;
 	SET_EXPLANATION("your putchar does not work with unicode");
@@ -6654,30 +6615,6 @@ void			test_ft_putstr_ascii(void *ptr) {
 			SET_DIFF(buff1, buff2);
 			exit(TEST_FAILED);
 			);
-}
-
-int     ft_putwstr(wchar_t *wstr, char *buff)
-{
-	int     len;
-	int     ret;
-	int     i;
-
-	len = 0;
-	ret = 0;
-	i = 0;
-	if (wstr != NULL)
-		while (wstr[i])
-		{
-			putwchart(wstr[i], &len, buff);
-			ret += len;
-			i++;
-		}
-	else
-	{
-		strcat(buff, "(null)");
-		ret = 6;
-	}
-	return (ret);
 }
 
 void			test_ft_putstr_unicode(void *ptr) {
