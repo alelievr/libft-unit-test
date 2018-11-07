@@ -174,7 +174,7 @@ void			test_ft_memset_zero_value(void *ptr) {
 
 void			test_ft_memset_electric_memory(void *ptr) {
 	typeof(memset)	*ft_memset = ptr;
-	SET_EXPLANATION("your memset crash cause it read too many bytes !");
+	SET_EXPLANATION("your memset crash because it read too many bytes !");
 
 	SANDBOX_RAISE(
 			const size_t	size = 10;
@@ -270,7 +270,7 @@ void			test_ft_bzero_null(void *ptr) {
 
 void			test_ft_bzero_electric_memory(void *ptr) {
 	typeof(bzero)	*ft_bzero = ptr;
-	SET_EXPLANATION("your bzero crash cause it read too many bytes !");
+	SET_EXPLANATION("your bzero crash because it read too many bytes !");
 
 	SANDBOX_RAISE(
 			const size_t	size = 10;
@@ -422,7 +422,7 @@ void			test_ft_memcpy_struct(void *ptr) {
 
 void			test_ft_memcpy_electric_memory(void *ptr) {
 	typeof(memcpy)	*ft_memcpy = ptr;
-	SET_EXPLANATION("your memcpy crash cause it read/write too many bytes !");
+	SET_EXPLANATION("your memcpy crash because it read/write too many bytes !");
 
 	SANDBOX_RAISE(
 			const size_t	size = 10;
@@ -659,7 +659,7 @@ void			test_ft_memccpy_struct(void *ptr) {
 
 void			test_ft_memccpy_electric_memory(void *ptr) {
 	typeof(memccpy)	*ft_memccpy = ptr;
-	SET_EXPLANATION("your memccpy crash cause it read/write too many bytes !");
+	SET_EXPLANATION("your memccpy crash because it read/write too many bytes !");
 
 	SANDBOX_RAISE(
 			const size_t	size = 10;
@@ -875,7 +875,7 @@ void			test_ft_memmove_hard(void *ptr) {
 
 void			test_ft_memmove_electric_memory(void *ptr) {
 	typeof(memmove)		*ft_memmove = ptr;
-	SET_EXPLANATION("your memmove crash cause it read too many bytes or attempt to read on dst !");
+	SET_EXPLANATION("your memmove crash because it read too many bytes or attempt to read on dst !");
 
 	SANDBOX_RAISE(
 			int		size = 10;
@@ -1074,7 +1074,7 @@ void			test_ft_memchr_faraway(void *ptr) {
 
 void			test_ft_memchr_electric_memory(void *ptr) {
 	typeof(memchr)		*ft_memchr = ptr;
-	SET_EXPLANATION("your memchr crash cause it read too many bytes or attempt to write on dst !");
+	SET_EXPLANATION("your memchr crash because it read too many bytes from s or attempt to write on s !");
 
 	SANDBOX_RAISE(
 			int				size = 15;
@@ -1280,7 +1280,7 @@ void			test_ft_memcmp_null_byte(void *ptr) {
 
 void			test_ft_memcmp_electric_memory(void *ptr) {
 	typeof(memcmp)		*ft_memcmp = ptr;
-	SET_EXPLANATION("your memcmp crash cause it read too many bytes !");
+	SET_EXPLANATION("your memcmp crash because it read too many bytes !");
 
 	SANDBOX_RAISE(
 			size_t	size = 10;
@@ -1480,7 +1480,7 @@ void			test_ft_strlen_zero(void *ptr) {
 
 void			test_ft_strlen_electric_memory(void *ptr) {
 	typeof(strlen)	*ft_strlen = ptr;
-	SET_EXPLANATION("your strlen crash cause it read too many bytes !");
+	SET_EXPLANATION("your strlen crash because it read too many bytes !");
 
 	SANDBOX_RAISE(
 			const size_t	size = 37;
@@ -1652,7 +1652,7 @@ void			test_ft_strdup_basic(void *ptr) {
 
 void			test_ft_strdup_electric_memory(void *ptr) {
 	typeof(strdup)	*ft_strdup = ptr;
-	SET_EXPLANATION("your strdup crash cause it read too many bytes !");
+	SET_EXPLANATION("your strdup crash because it read too many bytes !");
 
 	SANDBOX_RAISE(
 			char	*tmp = electric_alloc(10);
@@ -1835,7 +1835,7 @@ void			test_ft_strcpy_empty(void *ptr) {
 
 void			test_ft_strcpy_electric_memory(void *ptr) {
 	typeof(strcpy)	*ft_strcpy = ptr;
-	SET_EXPLANATION("your strcpy crash cause it read too many bytes or attempt to read on dst !");
+	SET_EXPLANATION("your strcpy crash because it read too many bytes or attempt to read on dst !");
 
 	SANDBOX_RAISE(
 			const size_t	size = 10;
@@ -2083,7 +2083,7 @@ void			test_ft_strncpy_final_0(void *ptr) {
 
 void			test_ft_strncpy_electric_memory(void *ptr) {
 	typeof(strncpy)	*ft_strncpy = ptr;
-	SET_EXPLANATION("your strncpy crash cause it read too many bytes or attempt to read on dst !");
+	SET_EXPLANATION("your strncpy crash because it read too many bytes or attempt to read on dst !");
 
 	SANDBOX_RAISE(
 			const size_t size = 10;
@@ -2305,7 +2305,7 @@ void			test_ft_strcat_null_byte(void *ptr) {
 
 void			test_ft_strcat_electric_memory(void *ptr) {
 	typeof(strcat)	*ft_strcat = ptr;
-	SET_EXPLANATION("your strcat crash cause it read too many bytes or attempt to write on buff !");
+	SET_EXPLANATION("your strcat crash because it read too many bytes or attempt to write on buff !");
 
 	SANDBOX_RAISE(
 			const size_t	size = 10;
@@ -2543,7 +2543,7 @@ void			test_ft_strncat_null_byte(void *ptr) {
 
 void			test_ft_strncat_electric_memory(void *ptr) {
 	typeof(strncat)	*ft_strncat = ptr;
-	SET_EXPLANATION("your strncat crash cause it read too many bytes or attempt to write on buff !");
+	SET_EXPLANATION("your strncat crash because it read too many bytes or attempt to write on buff !");
 
 	SANDBOX_RAISE(
 			const size_t	size = 10;
@@ -2784,7 +2784,7 @@ void			test_ft_strlcat_null_byte(void *ptr) {
 
 void			test_ft_strlcat_electric_memory(void *ptr) {
 	typeof(strlcat)	*ft_strlcat = ptr;
-	SET_EXPLANATION("your strlcat crash cause it read too many bytes or attempt to write on buff !");
+	SET_EXPLANATION("your strlcat crash because it read too many bytes or attempt to write on buff !");
 
 	SANDBOX_RAISE(
 			const size_t	size = 10;
@@ -3024,7 +3024,7 @@ void			test_ft_strchr_empty(void *ptr) {
 
 void			test_ft_strchr_electric_memory(void *ptr) {
 	typeof(strchr)	*ft_strchr = ptr;
-	SET_EXPLANATION("your strchr crash cause it read too many bytes or attempt to write on s !");
+	SET_EXPLANATION("your strchr crash because it read too many bytes or attempt to write on s !");
 
 	SANDBOX_RAISE(
 			char	*src = electric_alloc(10);
@@ -3163,7 +3163,7 @@ void			test_ft_strrchr_empty(void *ptr) {
 
 void			test_ft_strrchr_electric_memory(void *ptr) {
 	typeof(strrchr)	*ft_strrchr = ptr;
-	SET_EXPLANATION("your strrchr crash cause it read too many bytes or attempt to write on s !");
+	SET_EXPLANATION("your strrchr crash because it read too many bytes or attempt to write on s !");
 
 	SANDBOX_RAISE(
 			char	*src = electric_alloc(10);
@@ -3397,6 +3397,7 @@ void			test_ft_strstr_zero_len2(void *ptr) {
 
 void			test_ft_strstr_same_ptr(void *ptr) {
 	typeof(strstr)	*ft_strstr = ptr;
+	SET_EXPLANATION("your strstr does not work with same pointers");
 
 	SANDBOX_RAISE(
 			char	*s1 = "AAAAAAAAAAAAA";
@@ -3410,9 +3411,26 @@ void			test_ft_strstr_same_ptr(void *ptr) {
 			);
 }
 
+void			test_ft_strstr_bad_boyer_moore(void *ptr) {
+	typeof(strstr)	*ft_strstr = ptr;
+	SET_EXPLANATION("your strstr does not work with basic input");
+
+	SANDBOX_RAISE(
+			char	*s1 = "Z";
+			char	*s2 = "A";
+
+			char	*i1 = strstr(s1, s2);
+			char	*i2 = ft_strstr(s1, s2);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
 void			test_ft_strstr_electric_memory(void *ptr) {
 	typeof(strstr)	*ft_strstr = ptr;
-	SET_EXPLANATION("your strstr crash cause it read too many bytes !");
+	SET_EXPLANATION("your strstr crash because it read too many bytes !");
 
 	SANDBOX_RAISE(
 			const size_t size = 20;
@@ -3477,6 +3495,7 @@ void            test_ft_strstr(void){
 	add_fun_subtest(test_ft_strstr_zero_len1);
 	add_fun_subtest(test_ft_strstr_zero_len2);
 	add_fun_subtest(test_ft_strstr_same_ptr);
+	add_fun_subtest(test_ft_strstr_bad_boyer_moore);
 	add_fun_subtest(test_ft_strstr_electric_memory);
 	add_fun_subtest(test_ft_strstr_null2);
 	add_fun_subtest(test_ft_strstr_null1);
@@ -3646,7 +3665,7 @@ void			test_ft_strnstr_zero(void *ptr) {
 
 void			test_ft_strnstr_electric_memory(void *ptr) {
 	typeof(strnstr)	*ft_strnstr = ptr;
-	SET_EXPLANATION("your strnstr crash cause it read too many bytes !");
+	SET_EXPLANATION("your strnstr crash because it read too many bytes !");
 
 	SANDBOX_RAISE(
 			const size_t size = 20;
@@ -3875,7 +3894,7 @@ void			test_ft_strcmp_ascii(void *ptr) {
 
 void			test_ft_strcmp_electric_memory(void *ptr) {
 	typeof(strcmp)	*ft_strcmp = ptr;
-	SET_EXPLANATION("your strcmp crash cause it read too many bytes !");
+	SET_EXPLANATION("your strcmp crash because it read too many bytes !");
 
 	SANDBOX_RAISE(
 			const size_t	size = 10;
@@ -4129,7 +4148,7 @@ void			test_ft_strncmp_ascii(void *ptr) {
 
 void			test_ft_strncmp_electric_memory(void *ptr) {
 	typeof(strncmp)	*ft_strncmp = ptr;
-	SET_EXPLANATION("your strncmp crash cause it read too many bytes !");
+	SET_EXPLANATION("your strncmp crash because it read too many bytes !");
 
 	SANDBOX_RAISE(
 			const size_t	size = 10;
@@ -5023,7 +5042,7 @@ void			test_ft_striter_basic(void *ptr) {
 
 void			test_ft_striter_electric_memory(void *ptr) {
 	void	(*ft_striter)(char *, void (*)(char *)) = ptr;
-	SET_EXPLANATION("your striter crash cause it read too many bytes !");
+	SET_EXPLANATION("your striter crash because it read too many bytes !");
 
 	SANDBOX_RAISE(
 			const size_t	size = 10;
@@ -5089,7 +5108,7 @@ void			test_ft_striteri_basic(void *ptr) {
 
 void			test_ft_striteri_electric_memory(void *ptr) {
 	void	(*ft_striteri)(char *, void (*)(unsigned, char *)) = ptr;
-	SET_EXPLANATION("your striteri crash cause it read too many bytes !");
+	SET_EXPLANATION("your striteri crash because it read too many bytes !");
 
 	SANDBOX_RAISE(
 			const size_t	size = 10;
@@ -5476,7 +5495,7 @@ void			test_ft_strequ_same_pointer(void *ptr) {
 
 void			test_ft_strequ_electric_memory(void *ptr) {
 	int		(*ft_strequ)(const char *s1, const char *s2) = ptr;
-	SET_EXPLANATION("your strequ crash cause it read too many bytes !");
+	SET_EXPLANATION("your strequ crash because it read too many bytes !");
 
 	SANDBOX_RAISE(
 			const size_t	size = 10;
@@ -5579,7 +5598,7 @@ void			test_ft_strnequ_same_pointer(void *ptr) {
 
 void			test_ft_strnequ_electric_memory(void *ptr) {
 	int		(*ft_strnequ)(const char *s1, const char *s2, size_t n) = ptr;
-	SET_EXPLANATION("your strnequ crash cause it read too many bytes !");
+	SET_EXPLANATION("your strnequ crash because it read too many bytes !");
 
 	SANDBOX_RAISE(
 			const size_t	size = 10;
@@ -5775,7 +5794,7 @@ void			test_ft_strsub_all(void *ptr) {
 
 void			test_ft_strsub_electric_memory(void *ptr) {
 	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
-	SET_EXPLANATION("your strsub crash cause it read too many bytes !");
+	SET_EXPLANATION("your strsub crash because it read too many bytes !");
 
 	SANDBOX_RAISE(
 			const size_t	size = 10;
