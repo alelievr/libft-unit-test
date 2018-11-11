@@ -394,24 +394,27 @@ static void updateRankingFile(int total_player_points)
 		return ;
 	if ((fd = open(BENCH_LOG_FILE, O_RDONLY)) != -1 && !fstat(fd, &st))
 	{
-		if ((fstart = file = mmap(NULL, st.st_size + 1, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0)) != MAP_FAILED)
+		if (st.st_size != 0)
 		{
-			file[st.st_size] = 0;
-			while (*file != '\0' && i < 0xF000 - 2)
+			if ((fstart = file = mmap(NULL, st.st_size + 1, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0)) != MAP_FAILED)
 			{
-				if (fstart - file + st.st_size < 10)
-					break ;
-				strlcpy(users[i].name, file, 9);
-				users[i].points = atoi(file + 10);
-				if (!(strsep(&file, "\n")))
-					break ;
-				i += 2;
+				file[st.st_size] = 0;
+				while (*file != '\0' && i < 0xF000 - 2)
+				{
+					if (fstart - file + st.st_size < 10)
+						break ;
+					strlcpy(users[i].name, file, 9);
+					users[i].points = atoi(file + 10);
+					if (!(strsep(&file, "\n")))
+						break ;
+					i += 2;
+				}
 			}
-		}
-		else
-		{
-			printf("can't read bench file: %s", strerror(errno));
-			return ;
+			else
+			{
+				printf("can't read bench file: %s", strerror(errno));
+				return ;
+			}
 		}
 		for (int j = 1; j < i; j += 2)
 		{
