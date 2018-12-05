@@ -1553,7 +1553,7 @@ void            test_ft_strlen(void){
 
 void			test_ft_strdup_last_char(void *ptr) {
 	typeof(strdup)	*ft_strdup = ptr;
-	SET_EXPLANATION("your strdup does not add \\0 at the end of the sring");
+	SET_EXPLANATION("your strdup does not add \\0 at the end of the string");
 
 	SANDBOX_RAISE(
 			char 	*str;
@@ -7934,7 +7934,7 @@ void            test_ft_strtrimc(void){
 
 void			test_ft_strndup_last_char(void *ptr) {
 	typeof(strndup)	*ft_strndup = ptr;
-	SET_EXPLANATION("your strndup does not add \\0 at the end of the sring");
+	SET_EXPLANATION("your strndup does not add \\0 at the end of the string");
 
 	SANDBOX_RAISE(
 			char 	*str;
