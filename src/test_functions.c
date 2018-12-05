@@ -6200,7 +6200,7 @@ void			split_cmp_array(char ** expected, char ** got)
 	{
 		if (*got == NULL || strcmp(*expected, *got))
 		{
-			SET_DIFF(*got, *expected);
+			SET_DIFF(*expected, *got);
 			exit(TEST_FAILED);
 		}
 	}
