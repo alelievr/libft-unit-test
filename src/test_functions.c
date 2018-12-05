@@ -3081,7 +3081,7 @@ void            test_ft_strchr(void){
 //         ft_strrchr         //
 ////////////////////////////////
 
-void			test_ft_strrchr_basic(void *ptr) {
+void			test_ft_strrchr_basic1(void *ptr) {
 	typeof(strrchr)	*ft_strrchr = ptr;
 	SET_EXPLANATION("your strrchr does not work with basic input");
 
@@ -3090,6 +3090,22 @@ void			test_ft_strrchr_basic(void *ptr) {
 
 			char	*d1 = strrchr(src, ' ');
 			char	*d2 = ft_strrchr(src, ' ');
+			if (d1 == d2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(d1, d2);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_strrchr_basic2(void *ptr) {
+	typeof(strrchr)	*ft_strrchr = ptr;
+	SET_EXPLANATION("your strrchr does not work with basic input");
+
+	SANDBOX_RAISE(
+			char	*src = "abbbbbbbb";
+
+			char	*d1 = strrchr(src, 'a');
+			char	*d2 = ft_strrchr(src, 'a');
 			if (d1 == d2)
 				exit(TEST_SUCCESS);
 			SET_DIFF(d1, d2);
@@ -3211,7 +3227,8 @@ void			test_ft_strrchr_speed(void *ptr) {
 }
 
 void            test_ft_strrchr(void) {
-	add_fun_subtest(test_ft_strrchr_basic);
+	add_fun_subtest(test_ft_strrchr_basic1);
+	add_fun_subtest(test_ft_strrchr_basic2);
 	add_fun_subtest(test_ft_strrchr_not_found);
 	add_fun_subtest(test_ft_strrchr_unicode);
 	add_fun_subtest(test_ft_strrchr_zero);
