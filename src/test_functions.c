@@ -3668,6 +3668,24 @@ void			test_ft_strnstr_zero_len2(void *ptr) {
 			);
 }
 
+void			test_ft_strnstr_zero_len3(void *ptr) {
+	typeof(strnstr)	*ft_strnstr = ptr;
+	SET_EXPLANATION("your strnstr does not work with empty strings and 0 length");
+
+	SANDBOX_RAISE(
+			char	*s1 = "oh no not the empty string !";
+			char	*s2 = "";
+			size_t	max = 0;
+
+			char	*i1 = strnstr(s1, s2, max);
+			char	*i2 = ft_strnstr(s1, s2, max);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
 void			test_ft_strnstr_same_ptr(void *ptr) {
 	typeof(strnstr)	*ft_strnstr = ptr;
 
@@ -3763,6 +3781,7 @@ void            test_ft_strnstr(void){
 	add_fun_subtest(test_ft_strnstr_found);
 	add_fun_subtest(test_ft_strnstr_zero_len1);
 	add_fun_subtest(test_ft_strnstr_zero_len2);
+	add_fun_subtest(test_ft_strnstr_zero_len3);
 	add_fun_subtest(test_ft_strnstr_same_ptr);
 	add_fun_subtest(test_ft_strnstr_zero);
 	add_fun_subtest(test_ft_strnstr_electric_memory);
