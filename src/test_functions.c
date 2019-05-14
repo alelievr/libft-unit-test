@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   created  2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated  2017/12/03 19:30:21 by alelievr         ###   ########.fr       */
+/*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
+/*   Updated: 2019/05/14 21:31:32 by caellis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -458,6 +458,24 @@ void			test_ft_memcpy_null2(void *ptr) {
 			);
 }
 
+void			test_ft_memcpy_double_null1(void *ptr) {
+	typeof(memcpy)	*ft_memcpy = ptr;
+	SET_EXPLANATION("your memcpy does not behave well with NULL as both params");
+
+	SANDBOX_IRAISE(
+			ft_memcpy(NULL, NULL, 0);
+			);
+}
+
+void			test_ft_memcpy_double_null2(void *ptr) {
+	typeof(memcpy)	*ft_memcpy = ptr;
+	SET_EXPLANATION("your memcpy does not behave well with NULL as both params with size");
+
+	SANDBOX_IRAISE(
+			ft_memcpy(NULL, NULL, 3);
+			);
+}
+
 void			test_ft_memcpy_speed(void *ptr) {
 	typeof(memcpy)	*ft_memcpy = ptr;
 
@@ -483,6 +501,8 @@ void            test_ft_memcpy(void){
 	add_fun_subtest(test_ft_memcpy_electric_memory);
 	add_fun_subtest(test_ft_memcpy_null1);
 	add_fun_subtest(test_ft_memcpy_null2);
+	add_fun_subtest(test_ft_memcpy_double_null1);
+	add_fun_subtest(test_ft_memcpy_double_null2);
 	add_fun_subtest(test_ft_memcpy_speed);
 }
 
@@ -924,6 +944,24 @@ void			test_ft_memmove_null2(void *ptr) {
 			);
 }
 
+void			test_ft_memmove_double_null1(void *ptr) {
+	typeof(memmove)		*ft_memmove = ptr;
+	SET_EXPLANATION("your memmove does not well with NULL as both parameters");
+
+	SANDBOX_IRAISE(
+			ft_memmove(NULL, NULL, 0);
+			);
+}
+
+void			test_ft_memmove_double_null2(void *ptr) {
+	typeof(memmove)		*ft_memmove = ptr;
+	SET_EXPLANATION("your memmove does not well with NULL as both parameters and size");
+
+	SANDBOX_IRAISE(
+			ft_memmove(NULL, NULL, 5);
+			);
+}
+
 void			test_ft_memmove_same_pointer(void *ptr) {
 	typeof(memmove)		*ft_memmove = ptr;
 	SET_EXPLANATION("your memmove does not support the overlap");
@@ -990,6 +1028,8 @@ void            test_ft_memmove(void){
 	add_fun_subtest(test_ft_memmove_electric_memory);
 	add_fun_subtest(test_ft_memmove_null1);
 	add_fun_subtest(test_ft_memmove_null2);
+	add_fun_subtest(test_ft_memmove_double_null1);
+	add_fun_subtest(test_ft_memmove_double_null2);
 	add_fun_subtest(test_ft_memmove_malloc);
 	add_fun_subtest(test_ft_memmove_speed);
 }
