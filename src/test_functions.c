@@ -6,7 +6,7 @@
 /*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2019/05/14 21:31:32 by caellis          ###   ########.fr       */
+/*   Updated: 2019/05/17 00:36:22 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -948,7 +948,7 @@ void			test_ft_memmove_double_null1(void *ptr) {
 	typeof(memmove)		*ft_memmove = ptr;
 	SET_EXPLANATION("your memmove does not well with NULL as both parameters");
 
-	SANDBOX_IRAISE(
+	SANDBOX_RAISE(
 			ft_memmove(NULL, NULL, 0);
 			);
 }
@@ -957,7 +957,7 @@ void			test_ft_memmove_double_null2(void *ptr) {
 	typeof(memmove)		*ft_memmove = ptr;
 	SET_EXPLANATION("your memmove does not well with NULL as both parameters and size");
 
-	SANDBOX_IRAISE(
+	SANDBOX_RAISE(
 			ft_memmove(NULL, NULL, 5);
 			);
 }
