@@ -6,7 +6,7 @@
 /*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2019/05/17 00:36:22 by alelievr         ###   ########.fr       */
+/*   Updated: 2019/05/19 22:29:41 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -462,7 +462,7 @@ void			test_ft_memcpy_double_null1(void *ptr) {
 	typeof(memcpy)	*ft_memcpy = ptr;
 	SET_EXPLANATION("your memcpy does not behave well with NULL as both params");
 
-	SANDBOX_IRAISE(
+	SANDBOX_RAISE(
 			ft_memcpy(NULL, NULL, 0);
 			);
 }
@@ -471,7 +471,7 @@ void			test_ft_memcpy_double_null2(void *ptr) {
 	typeof(memcpy)	*ft_memcpy = ptr;
 	SET_EXPLANATION("your memcpy does not behave well with NULL as both params with size");
 
-	SANDBOX_IRAISE(
+	SANDBOX_RAISE(
 			ft_memcpy(NULL, NULL, 3);
 			);
 }
