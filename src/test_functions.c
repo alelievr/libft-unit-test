@@ -5745,18 +5745,18 @@ void            test_ft_strnequ(void){
 }
 
 ////////////////////////////////
-//         ft_strsub          //
+//         ft_substr          //
 ////////////////////////////////
 
-void			test_ft_strsub_basic(void *ptr) {
-	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
-	SET_EXPLANATION("your strsub does not work with valid input");
+void			test_ft_substr_basic(void *ptr) {
+	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
+	SET_EXPLANATION("your substr does not work with valid input");
 
 	SANDBOX_RAISE(
 			char	*str = "i just want this part #############";
 			size_t	size = 22;
 
-			char	*ret = ft_strsub(str, 0, size);
+			char	*ret = ft_substr(str, 0, size);
 			if (!strncmp(ret, str, size)) {
 				free(ret);
 				exit(TEST_SUCCESS);
@@ -5767,15 +5767,15 @@ void			test_ft_strsub_basic(void *ptr) {
 			);
 }
 
-void			test_ft_strsub_basic2(void *ptr) {
-	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
-	SET_EXPLANATION("your strsub does not work with valid input");
+void			test_ft_substr_basic2(void *ptr) {
+	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
+	SET_EXPLANATION("your substr does not work with valid input");
 
 	SANDBOX_RAISE(
 			char	*str = "i just want this part #############";
 			size_t	size = 20;
 
-			char	*ret = ft_strsub(str, 5, size);
+			char	*ret = ft_substr(str, 5, size);
 			if (!strncmp(ret, str + 5, size)) {
 				free(ret);
 				exit(TEST_SUCCESS);
@@ -5786,15 +5786,15 @@ void			test_ft_strsub_basic2(void *ptr) {
 			);
 }
 
-void			test_ft_strsub_zero_len(void *ptr) {
-	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
-	SET_EXPLANATION("your strsub does not work with empty strings");
+void			test_ft_substr_zero_len(void *ptr) {
+	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
+	SET_EXPLANATION("your substr does not work with empty strings");
 
 	SANDBOX_RAISE(
 			char	*str = "";
 			size_t	size = 0;
 
-			char	*ret = ft_strsub(str, 5, size);
+			char	*ret = ft_substr(str, 5, size);
 			if (!strncmp(ret, str + 5, size)) {
 				free(ret);
 				exit(TEST_SUCCESS);
@@ -5805,9 +5805,9 @@ void			test_ft_strsub_zero_len(void *ptr) {
 			);
 }
 
-void			test_ft_strsub_size(void *ptr) {
-	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
-	SET_EXPLANATION("your strsub did not allocate the good size so the \\0 test may be false");
+void			test_ft_substr_size(void *ptr) {
+	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
+	SET_EXPLANATION("your substr did not allocate the good size so the \\0 test may be false");
 
 	SANDBOX_RAISE(
 			char	*str = "i just want this part #############";
@@ -5815,7 +5815,7 @@ void			test_ft_strsub_size(void *ptr) {
 			int		ret_size;
 
 			MALLOC_SIZE;
-			ft_strsub(str, 5, size);
+			ft_substr(str, 5, size);
 			MALLOC_RESET;
 			ret_size = get_last_malloc_size();
 
@@ -5827,16 +5827,16 @@ void			test_ft_strsub_size(void *ptr) {
 			);
 }
 
-void			test_ft_strsub_zero(void *ptr) {
-	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
-	SET_EXPLANATION("your strsub does not set \\0 to the end of the string");
+void			test_ft_substr_zero(void *ptr) {
+	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
+	SET_EXPLANATION("your substr does not set \\0 to the end of the string");
 
 	SANDBOX_RAISE(
 			char	str[] = "i just want this part #############";
 			size_t	size = 20;
 
 			MALLOC_MEMSET;
-			char	*ret = ft_strsub(str, 5, size);
+			char	*ret = ft_substr(str, 5, size);
 			MALLOC_RESET;
 			str[size + 5] = 0;
 			if (!memcmp(ret, str + 5, size + 1)) {
@@ -5849,34 +5849,34 @@ void			test_ft_strsub_zero(void *ptr) {
 			);
 }
 
-void			test_ft_strsub_malloc_null(void *ptr) {
-	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
+void			test_ft_substr_malloc_null(void *ptr) {
+	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
 	SET_EXPLANATION("you did not protect your malloc");
 
 	SANDBOX_RAISE(
 			char	*s = "malloc protection !";
 
 			MALLOC_NULL;
-			char	*ret = ft_strsub(s, 0, 5);
+			char	*ret = ft_substr(s, 0, 5);
 			MALLOC_RESET;
 			if (ret == NULL)
 				exit(TEST_SUCCESS);
 			SET_DIFF_PTR(NULL, ret);
 			exit(TEST_FAILED);
 			(void)s;
-			(void)ft_strsub;
+			(void)ft_substr;
 			);
 }
 
-void			test_ft_strsub_all(void *ptr) {
-	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
-	SET_EXPLANATION("your strsub does not work for a whole string");
+void			test_ft_substr_all(void *ptr) {
+	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
+	SET_EXPLANATION("your substr does not work for a whole string");
 
 	SANDBOX_RAISE(
 			char	*s = "all of this !";
 			size_t	size = strlen(s);
 
-			char	*ret = ft_strsub(s, 0, size);
+			char	*ret = ft_substr(s, 0, size);
 
 			if (!strcmp(s, ret)) {
 				free(ret);
@@ -5888,9 +5888,9 @@ void			test_ft_strsub_all(void *ptr) {
 			);
 }
 
-void			test_ft_strsub_electric_memory(void *ptr) {
-	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
-	SET_EXPLANATION("your strsub crash because it read too many bytes !");
+void			test_ft_substr_electric_memory(void *ptr) {
+	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
+	SET_EXPLANATION("your substr crash because it read too many bytes !");
 
 	SANDBOX_RAISE(
 			const size_t	size = 10;
@@ -5898,31 +5898,31 @@ void			test_ft_strsub_electric_memory(void *ptr) {
 
 			strcpy(str, "YOLO !!!!");
 
-			ft_strsub(str, 0, size);
+			ft_substr(str, 0, size);
 
 			exit(TEST_SUCCESS);
 			);
 }
 
-void			test_ft_strsub_null(void *ptr) {
-	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
-	SET_EXPLANATION("your strsub does not segfault when null parameter is sent");
+void			test_ft_substr_null(void *ptr) {
+	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
+	SET_EXPLANATION("your substr does not segfault when null parameter is sent");
 
 	SANDBOX_PROT(
-			ft_strsub(NULL, 0, 12);
+			ft_substr(NULL, 0, 12);
 			);
 }
 
-void            test_ft_strsub(void){
-	add_fun_subtest(test_ft_strsub_basic);
-	add_fun_subtest(test_ft_strsub_basic2);
-	add_fun_subtest(test_ft_strsub_zero_len);
-	add_fun_subtest(test_ft_strsub_size);
-	add_fun_subtest(test_ft_strsub_zero);
-	add_fun_subtest(test_ft_strsub_malloc_null);
-	add_fun_subtest(test_ft_strsub_all);
-	add_fun_subtest(test_ft_strsub_electric_memory);
-	add_fun_subtest(test_ft_strsub_null);
+void            test_ft_substr(void){
+	add_fun_subtest(test_ft_substr_basic);
+	add_fun_subtest(test_ft_substr_basic2);
+	add_fun_subtest(test_ft_substr_zero_len);
+	add_fun_subtest(test_ft_substr_size);
+	add_fun_subtest(test_ft_substr_zero);
+	add_fun_subtest(test_ft_substr_malloc_null);
+	add_fun_subtest(test_ft_substr_all);
+	add_fun_subtest(test_ft_substr_electric_memory);
+	add_fun_subtest(test_ft_substr_null);
 }
 
 ////////////////////////////////

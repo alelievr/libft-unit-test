@@ -76,7 +76,7 @@ t_libft_test	fun_test_table[] = {
 	{"ft_strmapi", test_ft_strmapi, 2, 1},
 	{"ft_strequ", test_ft_strequ, 2, 1},
 	{"ft_strnequ", test_ft_strnequ, 2, 1},
-	{"ft_strsub", test_ft_strsub, 2, 1},
+	{"ft_substr", test_ft_substr, 2, 1},
 	{"ft_strjoin", test_ft_strjoin, 2, 1},
 	{"ft_strtrim", test_ft_strtrim, 2, 1},
 	{"ft_split", test_ft_split, 2, 1},

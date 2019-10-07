@@ -333,7 +333,7 @@ void			test_ft_strmap(void);
 void			test_ft_strmapi(void);
 void			test_ft_strequ(void);
 void			test_ft_strnequ(void);
-void			test_ft_strsub(void);
+void			test_ft_substr(void);
 void			test_ft_strjoin(void);
 void			test_ft_strtrim(void);
 void			test_ft_split(void);
