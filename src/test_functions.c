@@ -1416,7 +1416,7 @@ void			test_ft_strlen_basic(void *ptr) {
 void			test_ft_strlen_random(void *ptr) {
 	typeof(strlen)	*ft_strlen = ptr;
 	SET_EXPLANATION("your strlen doesn't work with basic test");
-	
+
 	SANDBOX_RAISE(
 			int		r1;
 			int		r2;
@@ -6065,15 +6065,17 @@ void            test_ft_strjoin(void){
 //         ft_strtrim         //
 ////////////////////////////////
 
+#define TRIM_SET_PLACEHOLDER " \n\t"
+
 void			test_ft_strtrim_basic(void *ptr) {
-	char *		(*ft_strtrim)(const char *) = ptr;
+	char *		(*ft_strtrim)(const char *, const char *) = ptr;
 	SET_EXPLANATION("your strtrim does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "   \t  \n\n \t\t  \n\n\nHello \t  Please\n Trim me !\n   \n \n \t\t\n  ";
 			char	*s2 = "Hello \t  Please\n Trim me !";
 
-			char	*ret = ft_strtrim(s1);
+			char	*ret = ft_strtrim(s1, TRIM_SET_PLACEHOLDER);
 			if (!strcmp(ret, s2))
 				exit(TEST_SUCCESS);
 			SET_DIFF(s2, ret);
@@ -6082,14 +6084,14 @@ void			test_ft_strtrim_basic(void *ptr) {
 }
 
 void			test_ft_strtrim_basic2(void *ptr) {
-	char *		(*ft_strtrim)(const char *) = ptr;
+	char *		(*ft_strtrim)(const char *, const char *) = ptr;
 	SET_EXPLANATION("your strtrim does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "   \t  \n\n \t\t  \n\n\nHello \t  Please\n Trim me !";
 			char	*s2 = "Hello \t  Please\n Trim me !";
 
-			char	*ret = ft_strtrim(s1);
+			char	*ret = ft_strtrim(s1, TRIM_SET_PLACEHOLDER);
 			if (!strcmp(ret, s2))
 				exit(TEST_SUCCESS);
 			SET_DIFF(s2, ret);
@@ -6098,14 +6100,14 @@ void			test_ft_strtrim_basic2(void *ptr) {
 }
 
 void			test_ft_strtrim_basic3(void *ptr) {
-	char *		(*ft_strtrim)(const char *) = ptr;
+	char *		(*ft_strtrim)(const char *, const char *) = ptr;
 	SET_EXPLANATION("your strtrim does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "Hello \t  Please\n Trim me !";
 			char	*s2 = "Hello \t  Please\n Trim me !";
 
-			char	*ret = ft_strtrim(s1);
+			char	*ret = ft_strtrim(s1, TRIM_SET_PLACEHOLDER);
 			if (!strcmp(ret, s2))
 				exit(TEST_SUCCESS);
 			SET_DIFF(s2, ret);
@@ -6114,14 +6116,14 @@ void			test_ft_strtrim_basic3(void *ptr) {
 }
 
 void			test_ft_strtrim_empty(void *ptr) {
-	char *		(*ft_strtrim)(const char *) = ptr;
+	char *		(*ft_strtrim)(const char *, const char *) = ptr;
 	SET_EXPLANATION("your strtrim does not work with empty input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "";
 			char	*s2 = "";
 
-			char	*ret = ft_strtrim(s1);
+			char	*ret = ft_strtrim(s1, TRIM_SET_PLACEHOLDER);
 			if (!strcmp(ret, s2))
 				exit(TEST_SUCCESS);
 			SET_DIFF(s2, ret);
@@ -6130,14 +6132,14 @@ void			test_ft_strtrim_empty(void *ptr) {
 }
 
 void			test_ft_strtrim_blank(void *ptr) {
-	char *		(*ft_strtrim)(const char *) = ptr;
+	char *		(*ft_strtrim)(const char *, const char *) = ptr;
 	SET_EXPLANATION("your strtrim does not work with full blank input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "  \t \t \n   \n\n\n\t";
 			char	*s2 = "";
 
-			char	*ret = ft_strtrim(s1);
+			char	*ret = ft_strtrim(s1, TRIM_SET_PLACEHOLDER);
 			if (!strcmp(ret, s2))
 				exit(TEST_SUCCESS);
 			SET_DIFF(s2, ret);
@@ -6146,7 +6148,7 @@ void			test_ft_strtrim_blank(void *ptr) {
 }
 
 void			test_ft_strtrim_size(void *ptr) {
-	char *		(*ft_strtrim)(const char *) = ptr;
+	char *		(*ft_strtrim)(const char *, const char *) = ptr;
 	SET_EXPLANATION("your strtrim did not allocate the good size so the \\0 test may be false");
 
 	SANDBOX_RAISE(
@@ -6156,7 +6158,7 @@ void			test_ft_strtrim_size(void *ptr) {
 			int		size;
 
 			MALLOC_SIZE;
-			ft_strtrim(s1);
+			ft_strtrim(s1, TRIM_SET_PLACEHOLDER);
 			MALLOC_RESET;
 			size = get_last_malloc_size();
 			if (size == r_size + 1)
@@ -6167,14 +6169,14 @@ void			test_ft_strtrim_size(void *ptr) {
 }
 
 void			test_ft_strtrim_free(void *ptr) {
-	char *		(*ft_strtrim)(const char *) = ptr;
+	char *		(*ft_strtrim)(const char *, const char *) = ptr;
 	SET_EXPLANATION("your strtrim does not allocate memory");
 
 	SANDBOX_RAISE(
 			char	*s1 = "   \t  \n\n \t\t  \n\n\nHello \t  Please\n Trim me !\n   \n \n \t\t\n  ";
 			char	*s2 = "Hello \t  Please\n Trim me !";
 
-			char	*ret = ft_strtrim(s1);
+			char	*ret = ft_strtrim(s1, TRIM_SET_PLACEHOLDER);
 			if (!strcmp(ret, s2)) {
 				free(ret);
 				exit(TEST_SUCCESS);
@@ -6186,14 +6188,14 @@ void			test_ft_strtrim_free(void *ptr) {
 }
 
 void			test_ft_strtrim_malloc_null(void *ptr) {
-	char *		(*ft_strtrim)(const char *) = ptr;
+	char *		(*ft_strtrim)(const char *, const char *) = ptr;
 	SET_EXPLANATION("you dont protect your malloc return");
 
 	SANDBOX_RAISE(
 			char	*s1 = "   \t  \n\n \t\t  \n\n\nHello \t  Please\n Trim me !\n   \n \n \t\t\n  ";
 
 			MALLOC_NULL;
-			char	*ret = ft_strtrim(s1);
+			char	*ret = ft_strtrim(s1, TRIM_SET_PLACEHOLDER);
 			MALLOC_RESET;
 			if (ret == NULL)
 				exit(TEST_SUCCESS);
@@ -6203,7 +6205,7 @@ void			test_ft_strtrim_malloc_null(void *ptr) {
 }
 
 void			test_ft_strtrim_zero(void *ptr) {
-	char *		(*ft_strtrim)(const char *) = ptr;
+	char *		(*ft_strtrim)(const char *, const char *) = ptr;
 	SET_EXPLANATION("your strtrim does not set \\0 to the end of the string");
 
 	SANDBOX_RAISE(
@@ -6211,7 +6213,7 @@ void			test_ft_strtrim_zero(void *ptr) {
 			char	*s2 = "Hello \t  Please\n Trim me !";
 
 			MALLOC_MEMSET;
-			char	*ret = ft_strtrim(s1);
+			char	*ret = ft_strtrim(s1, TRIM_SET_PLACEHOLDER);
 			MALLOC_RESET;
 			if (!strcmp(s2, ret)) {
 				free(ret);
@@ -6224,11 +6226,11 @@ void			test_ft_strtrim_zero(void *ptr) {
 }
 
 void			test_ft_strtrim_null(void *ptr) {
-	char *		(*ft_strtrim)(const char *) = ptr;
+	char *		(*ft_strtrim)(const char *, const char *) = ptr;
 	SET_EXPLANATION("your strtrim does not segfault/return null when null parameter is sent");
 
 	SANDBOX_PROT(
-			char	*ret = ft_strtrim(NULL);
+			char	*ret = ft_strtrim(NULL, TRIM_SET_PLACEHOLDER);
 			if (!ret)
 				exit(TEST_SUCCESS);
 			SET_DIFF_PTR(NULL, ret);
