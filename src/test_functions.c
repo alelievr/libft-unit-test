@@ -6250,7 +6250,7 @@ void            test_ft_strtrim(void){
 }
 
 ////////////////////////////////
-//        ft_strsplit         //
+//        ft_split         //
 ////////////////////////////////
 
 void			split_cmp_array(char ** expected, char ** got)
@@ -6267,97 +6267,97 @@ void			split_cmp_array(char ** expected, char ** got)
 	exit(TEST_SUCCESS);
 }
 
-void			test_ft_strsplit_basic(void *ptr) {
-	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLANATION("your strsplit does not work with basic input");
+void			test_ft_split_basic(void *ptr) {
+	char	**(*ft_split)(char *, char) = ptr;
+	SET_EXPLANATION("your split does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*string = "      split       this for   me  !       ";
 			char	**expected = ((char*[6]){"split", "this", "for", "me", "!", NULL});
 
-			char	**result = ft_strsplit(string, ' ');
+			char	**result = ft_split(string, ' ');
 
 			split_cmp_array(expected, result);
 			);
 }
 
-void			test_ft_strsplit_space(void *ptr) {
-	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLANATION("your strsplit does not work with full space string");
+void			test_ft_split_space(void *ptr) {
+	char	**(*ft_split)(char *, char) = ptr;
+	SET_EXPLANATION("your split does not work with full space string");
 
 	SANDBOX_RAISE(
 			char	**expected = ((char*[1]){NULL});
 			char	*string = "                  ";
 
-			char	**result = ft_strsplit(string, ' ');
+			char	**result = ft_split(string, ' ');
 
 			split_cmp_array(expected, result);
 			);
 }
 
-void			test_ft_strsplit_begin(void *ptr) {
-	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLANATION("your strsplit does not work with one word");
+void			test_ft_split_begin(void *ptr) {
+	char	**(*ft_split)(char *, char) = ptr;
+	SET_EXPLANATION("your split does not work with one word");
 	char	**expected = (char*[2]){"olol", NULL};
 
 	SANDBOX_RAISE(
 			char	*s = "                  olol";
 
-			char	**result = ft_strsplit(s, ' ');
+			char	**result = ft_split(s, ' ');
 
 			split_cmp_array(expected, result);
 			);
 }
 
-void			test_ft_strsplit_end(void *ptr) {
-	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLANATION("your strsplit does not work with one word");
+void			test_ft_split_end(void *ptr) {
+	char	**(*ft_split)(char *, char) = ptr;
+	SET_EXPLANATION("your split does not work with one word");
 	char	**expected = (char*[2]){"olol", NULL};
 
 	SANDBOX_RAISE(
 			char	*s = "olol                     ";
 
-			char	**result = ft_strsplit(s, ' ');
+			char	**result = ft_split(s, ' ');
 
 			split_cmp_array(expected, result);
 			);
 }
 
-void			test_ft_strsplit_empty(void *ptr) {
-	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLANATION("your strsplit does not work with empty string");
+void			test_ft_split_empty(void *ptr) {
+	char	**(*ft_split)(char *, char) = ptr;
+	SET_EXPLANATION("your split does not work with empty string");
 	char	**expected = (char*[2]){NULL};
 
 	SANDBOX_RAISE(
 			char	*s = "";
-			char	**result = ft_strsplit(s, '\65');
+			char	**result = ft_split(s, '\65');
 
 			split_cmp_array(expected, result);
 			);
 }
 
-void			test_ft_strsplit_full(void *ptr) {
-	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLANATION("your strsplit does not work with full string");
+void			test_ft_split_full(void *ptr) {
+	char	**(*ft_split)(char *, char) = ptr;
+	SET_EXPLANATION("your split does not work with full string");
 	char	**expected = (char*[2]){NULL};
 
 	SANDBOX_RAISE(
 			char	*s = "0 0 0 0 0 0 0 0 0";
-			char	**result = ft_strsplit(s, ' ');
+			char	**result = ft_split(s, ' ');
 
 			split_cmp_array(expected, result);
 			);
 }
 
-void			test_ft_strsplit_free(void *ptr) {
-	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLANATION("your strsplit does not work with basic input");
+void			test_ft_split_free(void *ptr) {
+	char	**(*ft_split)(char *, char) = ptr;
+	SET_EXPLANATION("your split does not work with basic input");
 	char	**expected = (char*[6]){"split  ", "this", "for", "me", "!", NULL};
 
 	SANDBOX_RAISE(
 			char	*s = "split  ||this|for|me|||||!|";
 			int		i = 0;
-			char	**result = ft_strsplit(s, '|');
+			char	**result = ft_split(s, '|');
 
 			while (result[i]) {
 				if (strcmp(result[i], *expected)) {
@@ -6374,15 +6374,15 @@ void			test_ft_strsplit_free(void *ptr) {
 			);
 }
 
-void			test_ft_strsplit_malloc_null(void *ptr) {
-	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLANATION("you did not protect your strsplit");
+void			test_ft_split_malloc_null(void *ptr) {
+	char	**(*ft_split)(char *, char) = ptr;
+	SET_EXPLANATION("you did not protect your split");
 
 	SANDBOX_RAISE(
 			char	*s = "      split       this for   me  !       ";
 
 			MALLOC_NULL;
-			char	**result = ft_strsplit(s, ' ');
+			char	**result = ft_split(s, ' ');
 			MALLOC_RESET;
 			if (!result)
 				exit(TEST_SUCCESS);
@@ -6391,16 +6391,16 @@ void			test_ft_strsplit_malloc_null(void *ptr) {
 			);
 }
 
-void			test_ft_strsplit_zero(void *ptr) {
-	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLANATION("your strsplit does not work with basic input");
+void			test_ft_split_zero(void *ptr) {
+	char	**(*ft_split)(char *, char) = ptr;
+	SET_EXPLANATION("your split does not work with basic input");
 	char	**expected = (char*[6]){"split", "this", "for", "me", "!", NULL};
 
 	SANDBOX_RAISE(
 			char	*s = "      split       this for   me  !       ";
 
 			MALLOC_MEMSET;
-			char	**result = ft_strsplit(s, ' ');
+			char	**result = ft_split(s, ' ');
 			MALLOC_RESET;
 			while (*result) {
 				if (strcmp(*result, *expected)) {
@@ -6414,12 +6414,12 @@ void			test_ft_strsplit_zero(void *ptr) {
 			);
 }
 
-void			test_ft_strsplit_null(void *ptr) {
-	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLANATION("your strsplit does not segfault/return null when null parameter is sent");
+void			test_ft_split_null(void *ptr) {
+	char	**(*ft_split)(char *, char) = ptr;
+	SET_EXPLANATION("your split does not segfault/return null when null parameter is sent");
 
 	SANDBOX_PROT(
-			char	**expected = ft_strsplit(NULL, ' ');
+			char	**expected = ft_split(NULL, ' ');
 			if (!expected)
 				exit(TEST_SUCCESS);
 			SET_DIFF_PTR(NULL, expected);
@@ -6427,17 +6427,17 @@ void			test_ft_strsplit_null(void *ptr) {
 			)
 }
 
-void            test_ft_strsplit(void) {
-	add_fun_subtest(test_ft_strsplit_basic);
-	add_fun_subtest(test_ft_strsplit_space);
-	add_fun_subtest(test_ft_strsplit_begin);
-	add_fun_subtest(test_ft_strsplit_end);
-	add_fun_subtest(test_ft_strsplit_empty);
-	add_fun_subtest(test_ft_strsplit_full);
-	add_fun_subtest(test_ft_strsplit_free);
-	add_fun_subtest(test_ft_strsplit_malloc_null);
-	add_fun_subtest(test_ft_strsplit_zero);
-	add_fun_subtest(test_ft_strsplit_null);
+void            test_ft_split(void) {
+	add_fun_subtest(test_ft_split_basic);
+	add_fun_subtest(test_ft_split_space);
+	add_fun_subtest(test_ft_split_begin);
+	add_fun_subtest(test_ft_split_end);
+	add_fun_subtest(test_ft_split_empty);
+	add_fun_subtest(test_ft_split_full);
+	add_fun_subtest(test_ft_split_free);
+	add_fun_subtest(test_ft_split_malloc_null);
+	add_fun_subtest(test_ft_split_zero);
+	add_fun_subtest(test_ft_split_null);
 }
 
 ////////////////////////////////

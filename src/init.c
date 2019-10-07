@@ -79,7 +79,7 @@ t_libft_test	fun_test_table[] = {
 	{"ft_strsub", test_ft_strsub, 2, 1},
 	{"ft_strjoin", test_ft_strjoin, 2, 1},
 	{"ft_strtrim", test_ft_strtrim, 2, 1},
-	{"ft_strsplit", test_ft_strsplit, 2, 1},
+	{"ft_split", test_ft_split, 2, 1},
 	{"ft_itoa", test_ft_itoa, 2, 1},
 	{"ft_putchar", test_ft_putchar, 2, 1},
 	{"ft_putstr", test_ft_putstr, 2, 1},

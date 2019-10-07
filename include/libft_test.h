@@ -336,7 +336,7 @@ void			test_ft_strnequ(void);
 void			test_ft_strsub(void);
 void			test_ft_strjoin(void);
 void			test_ft_strtrim(void);
-void			test_ft_strsplit(void);
+void			test_ft_split(void);
 void			test_ft_itoa(void);
 void			test_ft_putchar(void);
 void			test_ft_putstr(void);
