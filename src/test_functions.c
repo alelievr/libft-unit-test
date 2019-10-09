@@ -6,7 +6,7 @@
 /*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2019/05/19 22:29:41 by alelievr         ###   ########.fr       */
+/*   Updated: 2019/10/09 13:00:15 by cacharle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -7366,12 +7366,12 @@ void            test_ft_putnbr_fd(void){
 ////////////////////////////////
 
 void			test_ft_lstnew_basic(void *ptr) {
-	t_list	*(*ft_lstnew)(const void *, size_t) = ptr;
+	t_list	*(*ft_lstnew)(const void *) = ptr;
 	SET_EXPLANATION("your lstnew does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*data = "hello, i'm a data";
-			t_list	*l = ft_lstnew(data, strlen(data) + 1);
+			t_list	*l = ft_lstnew(data);
 
 			if (!strcmp(data, l->content))
 				exit(TEST_SUCCESS);
@@ -7381,15 +7381,14 @@ void			test_ft_lstnew_basic(void *ptr) {
 }
 
 void			test_ft_lstnew_free(void *ptr) {
-	t_list	*(*ft_lstnew)(const void *, size_t) = ptr;
+	t_list	*(*ft_lstnew)(const void *) = ptr;
 	SET_EXPLANATION("your lstnew does not allocate memory");
 
 	SANDBOX_RAISE(
 			char	*data = "hello, i'm a data";
-			t_list	*l = ft_lstnew(data, strlen(data) + 1);
+			t_list	*l = ft_lstnew(data);
 
 			if (!strcmp(data, l->content)) {
-				free(l->content);
 				free(l);
 				exit(TEST_SUCCESS);
 			}
@@ -7399,11 +7398,11 @@ void			test_ft_lstnew_free(void *ptr) {
 }
 
 void			test_ft_lstnew_null(void *ptr) {
-	t_list	*(*ft_lstnew)(const void *, size_t) = ptr;
+	t_list	*(*ft_lstnew)(const void *) = ptr;
 	SET_EXPLANATION("your lstnew does not work with null parameter");
 
 	SANDBOX_RAISE(
-			t_list	*l = ft_lstnew(NULL, 0);
+			t_list	*l = ft_lstnew(NULL);
 
 			if (!l->content)
 				exit(TEST_SUCCESS);
@@ -7413,14 +7412,14 @@ void			test_ft_lstnew_null(void *ptr) {
 }
 
 void			test_ft_lstnew_malloc_null(void *ptr) {
-	t_list	*(*ft_lstnew)(const void *, size_t) = ptr;
+	t_list	*(*ft_lstnew)(const void *) = ptr;
 	SET_EXPLANATION("your malloc return is not protected");
 
 	SANDBOX_RAISE(
 			char	*data = "hello, i'm a data";
 
 			MALLOC_NULL;
-			t_list	*l = ft_lstnew(data, strlen(data) + 1);
+			t_list	*l = ft_lstnew(data);
 			MALLOC_RESET;
 			if (!l)
 				exit(TEST_SUCCESS);
