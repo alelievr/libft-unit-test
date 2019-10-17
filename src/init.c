@@ -45,6 +45,7 @@ t_libft_test	fun_test_table[] = {
 	{"ft_memcmp", test_ft_memcmp, 1, 1},
 	{"ft_strlen", test_ft_strlen, 1, 1},
 	{"ft_strdup", test_ft_strdup, 1, 1},
+	{"ft_calloc", test_ft_calloc, 1, 1},
 	{"ft_strcpy", test_ft_strcpy, 1, 1},
 	{"ft_strncpy", test_ft_strncpy, 1, 1},
 	{"ft_strcat", test_ft_strcat, 1, 1},

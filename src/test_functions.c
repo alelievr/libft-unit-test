@@ -1737,6 +1737,112 @@ void            test_ft_strdup(void) {
 }
 
 ////////////////////////////////
+//         ft_calloc          //
+////////////////////////////////
+
+void			test_ft_calloc_free(void *ptr) {
+	void *	(*ft_calloc)(size_t) = ptr;
+	SET_EXPLANATION("your calloc don't allocate memory");
+
+	SANDBOX_RAISE(
+			free(ft_calloc(42));
+			);
+}
+
+void			test_ft_calloc_malloc_null(void *ptr) {
+	typeof(calloc)	*ft_calloc = ptr;
+	SET_EXPLANATION("you didn't protect your malloc return");
+
+	SANDBOX_RAISE(
+			char	*ptr;
+
+			MALLOC_NULL;
+			ptr = ft_calloc(4, 20);
+			MALLOC_RESET;
+			if (!ptr)
+				exit(TEST_SUCCESS);
+			SET_DIFF_PTR(NULL, ptr);
+			exit(TEST_FAILED);
+			);
+	(void)ft_calloc;
+}
+
+void			test_ft_calloc_zero(void *ptr) {
+	typeof(calloc)	*ft_calloc = ptr;
+	SET_EXPLANATION("your calloc don't work with 0 size");
+
+	SANDBOX_RAISE(
+			void *str = ft_calloc(0, 0);
+			if (str == NULL)
+				exit(TEST_FAILED);
+			free(str);
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_calloc_basic(void *ptr) {
+	typeof(calloc)	*ft_calloc = ptr;
+	SET_EXPLANATION("your calloc don't work with empty string");
+
+	SANDBOX_RAISE(
+            int     size = 8539;
+
+            MALLOC_MEMSET;
+			void * d1 = ft_calloc(size, sizeof(int));
+            MALLOC_RESET;
+			void * d2 = calloc(size, sizeof(int));
+			if (memcmp(d1, d2, size * sizeof(int)))
+				exit(TEST_FAILED);
+			free(d1);
+			free(d2);
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_calloc_size(void *ptr) {
+	typeof(calloc)	*ft_calloc = ptr;
+	SET_EXPLANATION("your calloc did not allocate the good size");
+
+	SANDBOX_RAISE(
+			int		size;
+            int     count = 42 * 3;
+
+			MALLOC_SIZE;
+			ft_calloc(count, sizeof(char));
+			MALLOC_RESET;
+			size = get_last_malloc_size();
+			if (size == count * sizeof(char))
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT((int)(count * sizeof(char)), size);
+			exit(TEST_KO);
+			);
+}
+
+void			test_ft_calloc_too_big(void *ptr) {
+	typeof(calloc)	*ft_calloc = ptr;
+	SET_EXPLANATION("your calloc does not work with too large numbers");
+
+	SANDBOX_RAISE(
+		    void *d1 = ft_calloc(ULONG_MAX, sizeof(char));
+		    void *d2 = ft_calloc(2, 1073741829); // overflow the int max
+		    void *d3 = ft_calloc(1, ULONG_MAX);
+			if (d1 || d3 || !d2)
+				exit(TEST_FAILED);
+			exit(TEST_SUCCESS);
+			);
+}
+
+void            test_ft_calloc(void) {
+
+	add_fun_subtest(test_ft_calloc_free);
+	add_fun_subtest(test_ft_calloc_malloc_null);
+	add_fun_subtest(test_ft_calloc_basic);
+	add_fun_subtest(test_ft_calloc_zero);
+	add_fun_subtest(test_ft_calloc_size);
+	add_fun_subtest(test_ft_calloc_too_big);
+}
+
+////////////////////////////////
 //         ft_strcpy          //
 ////////////////////////////////
 

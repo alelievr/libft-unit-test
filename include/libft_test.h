@@ -302,6 +302,7 @@ void			test_ft_memchr(void);
 void			test_ft_memcmp(void);
 void			test_ft_strlen(void);
 void			test_ft_strdup(void);
+void			test_ft_calloc(void);
 void			test_ft_strcpy(void);
 void			test_ft_strncpy(void);
 void			test_ft_strcat(void);
