@@ -6,7 +6,7 @@
 /*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2019/10/09 13:00:15 by cacharle         ###   ########.fr       */
+/*   Updated: 2019/10/19 16:51:14 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1839,7 +1839,7 @@ void            test_ft_calloc(void) {
 	add_fun_subtest(test_ft_calloc_basic);
 	add_fun_subtest(test_ft_calloc_zero);
 	add_fun_subtest(test_ft_calloc_size);
-	add_fun_subtest(test_ft_calloc_too_big);
+	//add_fun_subtest(test_ft_calloc_too_big);
 }
 
 ////////////////////////////////
