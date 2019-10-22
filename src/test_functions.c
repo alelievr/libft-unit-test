@@ -6,7 +6,7 @@
 /*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2019/10/09 13:00:15 by cacharle         ###   ########.fr       */
+/*   Updated: 2019/10/20 07:31:55 by juligonz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1839,7 +1839,7 @@ void            test_ft_calloc(void) {
 	add_fun_subtest(test_ft_calloc_basic);
 	add_fun_subtest(test_ft_calloc_zero);
 	add_fun_subtest(test_ft_calloc_size);
-	add_fun_subtest(test_ft_calloc_too_big);
+	//add_fun_subtest(test_ft_calloc_too_big);
 }
 
 ////////////////////////////////
@@ -7960,7 +7960,7 @@ void *		lstmap_f(void *content) {
 }
 
 void			test_ft_lstmap_basic(void *ptr) {
-	t_list *	(*ft_lstmap)(t_list *, void * (*)(void *)) = ptr;
+	t_list *	(*ft_lstmap)(t_list *, void * (*)(void *), void (*)(void *)) = ptr;
 	SET_EXPLANATION("your lstmap does not work with basic input");
 
 	SANDBOX_RAISE(
@@ -7969,7 +7969,7 @@ void			test_ft_lstmap_basic(void *ptr) {
 
 			l->next = lstnew(strdup("ss"));
 			l->next->next = lstnew(strdup("-_-"));
-			ret = ft_lstmap(l, lstmap_f);
+			ret = ft_lstmap(l, lstmap_f, NULL);
 			if (!strcmp(ret->content, "OK !") && !strcmp(ret->next->content, "OK !") && !strcmp(ret->next->next->content, "OK !") && !strcmp(l->content, " 1 2 3 ") && !strcmp(l->next->content, "ss") && !strcmp(l->next->next->content, "-_-"))
 				exit(TEST_SUCCESS);
 			SET_DIFF(" 1 2 3 ", l->content);
@@ -7978,11 +7978,11 @@ void			test_ft_lstmap_basic(void *ptr) {
 }
 
 void			test_ft_lstmap_null(void *ptr) {
-	t_list *	(*ft_lstmap)(t_list *, void * (*)(void *)) = ptr;
+	t_list *	(*ft_lstmap)(t_list *, void * (*)(void *), void (*)(void *)) = ptr;
 	SET_EXPLANATION("your lstmap does not segfault when null parameter is sent");
 
 	SANDBOX_PROT(
-			ft_lstmap(NULL, lstmap_f);
+			ft_lstmap(NULL, lstmap_f, NULL);
 			);
 }
 
