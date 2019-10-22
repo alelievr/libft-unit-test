@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created  2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated  2016/12/07 17:10:08 by alelievr         ###   ########.fr       */
+/*   Updated: 2019/10/20 11:01:59 by juligonz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct	s_subtest {
 typedef struct	s_subbench {
 	char	*fun_name;
 	void	(*fun_bench_ptr)(void* ptr1, void *ptr2);
-//	_Bool	visible;
+	_Bool	visible;
 }				t_libft_subbench;
 
 typedef struct	s_test {

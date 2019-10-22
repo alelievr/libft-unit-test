@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created  2015/11/17 17:30:13 by alelievr          #+#    #+#             */
-/*   Updated: 2019/10/15 18:20:30 by juligonz         ###   ########.fr       */
+/*   Updated: 2019/10/20 11:06:28 by juligonz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,19 +123,20 @@ t_libft_bench	fun_bench_table[] = {
 	{"ft_memchr", bench_ft_memchr, 1},
 	{"ft_memcmp", bench_ft_memcmp, 1},
 	{"ft_strlen", bench_ft_strlen, 1},
-	{"ft_strdup", bench_ft_strdup, 1},
-	{"ft_strcpy", bench_ft_strcpy, 1},
-	{"ft_strncpy", bench_ft_strncpy, 1},
-	{"ft_strcat", bench_ft_strcat, 1},
-	{"ft_strncat", bench_ft_strncat, 1},
-	{"ft_strlcat", bench_ft_strlcat, 1},
 	{"ft_strchr", bench_ft_strchr, 1},
 	{"ft_strrchr", bench_ft_strrchr, 1},
-	{"ft_strstr", bench_ft_strstr, 1},
-	{"ft_strnstr", bench_ft_strnstr, 1},
-	{"ft_strcmp", bench_ft_strcmp, 1},
 	{"ft_strncmp", bench_ft_strncmp, 1},
+	{"ft_strlcat", bench_ft_strlcat, 1},
+	{"ft_strnstr", bench_ft_strnstr, 1},
 	{"ft_atoi", bench_ft_atoi, 1},
+	{"ft_strdup", bench_ft_strdup, 1},
+
+	{"ft_strncpy", bench_ft_strncpy, 0},
+	{"ft_strcmp", bench_ft_strcmp, 0},
+	{"ft_strcpy", bench_ft_strcpy, 0},
+	{"ft_strcat", bench_ft_strcat, 0},
+	{"ft_strncat", bench_ft_strncat, 0},
+	{"ft_strstr", bench_ft_strstr, 0},
 
 	{NULL, NULL, 0}
 };
