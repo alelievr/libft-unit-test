@@ -177,7 +177,7 @@ $(ASSETDIR)/$(LIBMALLOC): $(ASSETDIR)/malloc.c
 $(ASSETDIR)/$(ANAME):
 	@rm -f $(SONAME)
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", make -j 3 -C "$(LIBFTDIR)")
-	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", make bonus -j 3 -C "$(LIBFTDIR)")
+	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", make bonus -j 3 -C "$(LIBFTDIR)" || true)
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", cp "$(LIBFTDIR)/libft.a" $(ASSETDIR)/)
 
 #	Linking
