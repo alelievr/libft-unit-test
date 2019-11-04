@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   test_functions.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2019/10/20 07:31:55 by juligonz         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   test_functions.c                                   :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: caellis <marvin@42.fr>                       +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2015/11/17 17:42:18 by alelievr       #+#    #+#                */
+/*   Updated: 2019/11/04 12:28:21 by aaugusti      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -7546,7 +7546,7 @@ void			test_ft_lstnew(void){
 ////////////////////////////////
 
 void			lstdelone_f(void *d) {
-	free(d);
+	*((char *)d) = '\0';
 }
 
 t_list			*lstnew(void *d) {
@@ -7569,7 +7569,7 @@ void			test_ft_lstdelone_basic(void *ptr) {
 
 			ft_lstdelone(l, lstdelone_f);
 			write(STDERR_FILENO, "", 1);
-			if (!l)
+			if (*((char *)l->content) == '\0')
 				exit(TEST_SUCCESS);
 			SET_DIFF_PTR(NULL, l);
 			exit(TEST_FAILED);
