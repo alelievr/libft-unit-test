@@ -6,7 +6,7 @@
 /*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2019/11/05 00:21:17 by alelievr         ###   ########.fr       */
+/*   Updated: 2019/11/05 00:35:22 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -7601,7 +7601,7 @@ void			test_ft_lstclear_basic(void *ptr) {
 	void		(*ft_lstclear)(t_list **, void (*)(void *)) = ptr;
 	SET_EXPLANATION("your lstclear does not work with basic input");
 
-	//STDERR_TO_BUFF;
+	STDERR_TO_BUFF;
 	SANDBOX_RAISE(
 			t_list	*l = lstnew(strdup("nyancat"));
 
@@ -7613,7 +7613,7 @@ void			test_ft_lstclear_basic(void *ptr) {
 			SET_DIFF_PTR(NULL, l);
 			exit(TEST_FAILED);
 			);
-	//VOID_STDERR;
+	VOID_STDERR;
 }
 
 void			test_ft_lstclear_free(void *ptr) {
@@ -7941,8 +7941,7 @@ void			test_ft_lstiter_basic(void *ptr) {
 
 			l->next = lstnew(strdup("KO !"));
 			l->next->next = lstnew(strdup("KO !"));
-
-      ft_lstiter(l, lstiter_f);
+      		ft_lstiter(l, lstiter_f);
 			if (!strcmp(l->content, "OK !") && !strcmp(l->next->content, "OK !") && !strcmp(l->next->next->content, "OK !"))
 				exit(TEST_SUCCESS);
 			SET_DIFF("OK !", l->content);
