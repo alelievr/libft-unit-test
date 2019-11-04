@@ -92,7 +92,7 @@ t_libft_test	fun_test_table[] = {
 
 	{"ft_lstnew", test_ft_lstnew, 3, 0},
 	{"ft_lstdelone", test_ft_lstdelone, 3, 0},
-	{"ft_lstdel", test_ft_lstdel, 3, 0},
+	{"ft_lstclear", test_ft_lstclear, 3, 0},
 	{"ft_lstadd", test_ft_lstadd, 3, 0},
 	{"ft_lstiter", test_ft_lstiter, 3, 0},
 	{"ft_lstmap", test_ft_lstmap, 3, 0},

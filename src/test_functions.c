@@ -6,7 +6,7 @@
 /*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2019/05/19 22:29:41 by alelievr         ###   ########.fr       */
+/*   Updated: 2019/11/04 19:48:06 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -7364,12 +7364,12 @@ void            test_ft_putnbr_fd(void){
 ////////////////////////////////
 
 void			test_ft_lstnew_basic(void *ptr) {
-	t_list	*(*ft_lstnew)(const void *, size_t) = ptr;
+	t_list	*(*ft_lstnew)(const void *) = ptr;
 	SET_EXPLANATION("your lstnew does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*data = "hello, i'm a data";
-			t_list	*l = ft_lstnew(data, strlen(data) + 1);
+			t_list	*l = ft_lstnew(data);
 
 			if (!strcmp(data, l->content))
 				exit(TEST_SUCCESS);
@@ -7379,12 +7379,12 @@ void			test_ft_lstnew_basic(void *ptr) {
 }
 
 void			test_ft_lstnew_free(void *ptr) {
-	t_list	*(*ft_lstnew)(const void *, size_t) = ptr;
+	t_list	*(*ft_lstnew)(const void *) = ptr;
 	SET_EXPLANATION("your lstnew does not allocate memory");
 
 	SANDBOX_RAISE(
 			char	*data = "hello, i'm a data";
-			t_list	*l = ft_lstnew(data, strlen(data) + 1);
+			t_list	*l = ft_lstnew(data);
 
 			if (!strcmp(data, l->content)) {
 				free(l->content);
@@ -7397,11 +7397,11 @@ void			test_ft_lstnew_free(void *ptr) {
 }
 
 void			test_ft_lstnew_null(void *ptr) {
-	t_list	*(*ft_lstnew)(const void *, size_t) = ptr;
+	t_list	*(*ft_lstnew)(const void *) = ptr;
 	SET_EXPLANATION("your lstnew does not work with null parameter");
 
 	SANDBOX_RAISE(
-			t_list	*l = ft_lstnew(NULL, 0);
+			t_list	*l = ft_lstnew(NULL);
 
 			if (!l->content)
 				exit(TEST_SUCCESS);
@@ -7411,14 +7411,14 @@ void			test_ft_lstnew_null(void *ptr) {
 }
 
 void			test_ft_lstnew_malloc_null(void *ptr) {
-	t_list	*(*ft_lstnew)(const void *, size_t) = ptr;
+	t_list	*(*ft_lstnew)(const void *) = ptr;
 	SET_EXPLANATION("your malloc return is not protected");
 
 	SANDBOX_RAISE(
 			char	*data = "hello, i'm a data";
 
 			MALLOC_NULL;
-			t_list	*l = ft_lstnew(data, strlen(data) + 1);
+			t_list	*l = ft_lstnew(data);
 			MALLOC_RESET;
 			if (!l)
 				exit(TEST_SUCCESS);
@@ -7438,35 +7438,35 @@ void			test_ft_lstnew(void){
 //        ft_lstdelone        //
 ////////////////////////////////
 
-void			lstdelone_f(void *d, size_t n) {
+static bool		g_delone_called;
+void			lstdelone_f(void *d) {
 	free(d);
-	(void)n;
+	g_delone_called = true;
 }
 
-t_list			*lstnew(void *d, size_t s) {
+t_list			*lstnew(void *d) {
 	t_list *ret = malloc(sizeof(t_list));
 	if (!ret)
 		return (NULL);
 
 	ret->next = NULL;
 	ret->content = d;
-	ret->content_size = s;
 	return (ret);
 }
 
 void			test_ft_lstdelone_basic(void *ptr) {
-	void		(*ft_lstdelone)(t_list **, void (*)(void *, size_t)) = ptr;
+	void		(*ft_lstdelone)(t_list *, void (*)(void *)) = ptr;
 	SET_EXPLANATION("your lstdelone does not work");
 
 	STDERR_TO_BUFF;
 	SANDBOX_RAISE(
-			t_list	*l = lstnew(malloc(10), 10);
+			t_list	*l = lstnew(malloc(10));
 
-			ft_lstdelone(&l, lstdelone_f);
+			g_delone_called = false;
+			ft_lstdelone(l, lstdelone_f);
 			write(STDERR_FILENO, "", 1);
-			if (!l)
+			if (g_delone_called)
 				exit(TEST_SUCCESS);
-			SET_DIFF_PTR(NULL, l);
 			exit(TEST_FAILED);
 			);
 	VOID_STDERR;
@@ -7478,25 +7478,24 @@ void			test_ft_lstdelone(void) {
 
 
 ////////////////////////////////
-//         ft_lstdel          //
+//         ft_lstclear        //
 ////////////////////////////////
 
 int				__delNum = 0;
-void			lstdel_f(void *lst, size_t s) {
+void			lstdel_f(void *lst) {
 	(void)lst;
-	(void)s;
 	__delNum++;
 }
 
-void			test_ft_lstdel_basic(void *ptr) {
-	void		(*ft_lstdel)(t_list **, void (*)(void *, size_t)) = ptr;
-	SET_EXPLANATION("your lstdel does not work with basic input");
+void			test_ft_lstclear_basic(void *ptr) {
+	void		(*ft_lstdel)(t_list **, void (*)(void *)) = ptr;
+	SET_EXPLANATION("your lstclear does not work with basic input");
 
 	STDERR_TO_BUFF;
 	SANDBOX_RAISE(
-			t_list	*l = lstnew(strdup("nyancat"), 8);
+			t_list	*l = lstnew(strdup("nyancat"));
 
-			l->next = lstnew(strdup("#TEST#"), 7);
+			l->next = lstnew(strdup("#TEST#"));
 			ft_lstdel(&l, lstdelone_f);
 			write(STDERR_FILENO, "", 1);
 			if (!l)
@@ -7507,16 +7506,16 @@ void			test_ft_lstdel_basic(void *ptr) {
 	VOID_STDERR;
 }
 
-void			test_ft_lstdel_free(void *ptr) {
-	void		(*ft_lstdel)(t_list **, void (*)(void *, size_t)) = ptr;
-	SET_EXPLANATION("your lstdel does not free the list");
+void			test_ft_lstclear_free(void *ptr) {
+	void		(*ft_lstdel)(t_list **, void (*)(void *)) = ptr;
+	SET_EXPLANATION("your lstclear does not free the list");
 
 	STDERR_TO_BUFF;
 	SANDBOX_IRAISE(
-			t_list	*l = lstnew(strdup("nyancat"), 8);
+			t_list	*l = lstnew(strdup("nyancat"));
 			t_list	*tmp;
 
-			l->next = lstnew(strdup("#TEST#"), 7);
+			l->next = lstnew(strdup("#TEST#"));
 			tmp = l->next;
 			ft_lstdel(&l, lstdelone_f);
 
@@ -7530,8 +7529,8 @@ void			test_ft_lstdel_free(void *ptr) {
 	VOID_STDERR;
 }
 
-void			test_ft_lstdel_number(void *ptr) {
-	void		(*ft_lstdel)(t_list **, void (*)(void *, size_t)) = ptr;
+void			test_ft_lstclear_number(void *ptr) {
+	void		(*ft_lstdel)(t_list **, void (*)(void *)) = ptr;
 	SET_EXPLANATION("bad call number of the function pointer");
 	t_list	*list;
 
@@ -7553,14 +7552,14 @@ void			test_ft_lstdel_number(void *ptr) {
 	)
 }
 
-void			test_ft_lstdel(void) {
-	add_fun_subtest(test_ft_lstdel_basic);
-	add_fun_subtest(test_ft_lstdel_free);
-	add_fun_subtest(test_ft_lstdel_number);
+void			test_ft_lstclear(void) {
+	add_fun_subtest(test_ft_lstclear_basic);
+	add_fun_subtest(test_ft_lstclear_free);
+	add_fun_subtest(test_ft_lstclear_number);
 }
 
 ////////////////////////////////
-//        ft_lstadd           //
+//      ft_lstadd_front       //
 ////////////////////////////////
 
 void			test_ft_lstadd_basic(void *ptr) {
@@ -7569,11 +7568,11 @@ void			test_ft_lstadd_basic(void *ptr) {
 
 	STDERR_TO_BUFF;
 	SANDBOX_RAISE(
-			t_list	*l = lstnew(strdup("nyacat"), 8);
-			t_list	*n = lstnew(strdup("OK"), 3);
+			t_list	*l = lstnew(strdup("nyacat"));
+			t_list	*n = lstnew(strdup("OK"));
 
 			ft_lstadd(&l, n);
-			if (l == n && !strcmp(l->content, "OK") && l->content_size == 3) {
+			if (l == n && !strcmp(l->content, "OK")) {
 				exit(TEST_SUCCESS);
 			}
 			SET_DIFF_PTR(n, l);
@@ -7588,11 +7587,11 @@ void			test_ft_lstadd_free(void *ptr) {
 
 	STDERR_TO_BUFF;
 	SANDBOX_RAISE(
-			t_list	*l = lstnew(strdup("nyacat"), 8);
-			t_list	*n = lstnew(strdup("OK"), 3);
+			t_list	*l = lstnew(strdup("nyacat"));
+			t_list	*n = lstnew(strdup("OK"));
 
 			ft_lstadd(&l, n);
-			if (l == n && !strcmp(l->content, "OK") && l->content_size == 3) {
+			if (l == n && !strcmp(l->content, "OK")) {
 				free(l->next);
 				free(l);
 				exit(TEST_SUCCESS);
@@ -7612,10 +7611,10 @@ void			test_ft_lstadd_null(void *ptr) {
 	STDERR_TO_BUFF;
 	SANDBOX_RAISE(
 			t_list	*l =  NULL;
-			t_list	*n = lstnew(strdup("OK"), 3);
+			t_list	*n = lstnew(strdup("OK"));
 
 			ft_lstadd(&l, n);
-			if (l == n && !strcmp(l->content, "OK") && l->content_size == 3) {
+			if (l == n && !strcmp(l->content, "OK")) {
 				free(l->next);
 				free(l);
 				exit(TEST_SUCCESS);
@@ -7634,6 +7633,8 @@ void			test_ft_lstadd(void){
 	add_fun_subtest(test_ft_lstadd_null);
 }
 
+// TODO: Add back, lst size and lst last
+
 ////////////////////////////////
 //        ft_lstiter          //
 ////////////////////////////////
@@ -7642,7 +7643,6 @@ void			lstiter_f(t_list *m) {
 	free(m->content);
 
 	m->content = strdup("OK !");
-	m->content_size = 5;
 }
 
 void			test_ft_lstiter_basic(void *ptr) {
@@ -7650,10 +7650,10 @@ void			test_ft_lstiter_basic(void *ptr) {
 	SET_EXPLANATION("your lstiter does not work with basic input");
 
 	SANDBOX_RAISE(
-			t_list	*l = lstnew(strdup(" 1 2 3 "), 8);
+			t_list	*l = lstnew(strdup(" 1 2 3 "));
 
-			l->next = lstnew(strdup("ss"), 3);
-			l->next->next = lstnew(strdup("-_-"), 4);
+			l->next = lstnew(strdup("ss"));
+			l->next->next = lstnew(strdup("-_-"));
 			ft_lstiter(l, lstiter_f);
 			if (!strcmp(l->content, "OK !") && !strcmp(l->next->content, "OK !") && !strcmp(l->next->next->content, "OK !"))
 				exit(TEST_SUCCESS);
@@ -7681,7 +7681,7 @@ void			test_ft_lstiter(void){
 ////////////////////////////////
 
 t_list *		lstmap_f(t_list *m) {
-	t_list *	r = lstnew("OK !", 5);
+	t_list *	r = lstnew("OK !");
 	(void)m;
 	return (r);
 }
@@ -7691,11 +7691,11 @@ void			test_ft_lstmap_basic(void *ptr) {
 	SET_EXPLANATION("your lstmap does not work with basic input");
 
 	SANDBOX_RAISE(
-			t_list	*l = lstnew(strdup(" 1 2 3 "), 8);
+			t_list	*l = lstnew(strdup(" 1 2 3 "));
 			t_list	*ret;
 
-			l->next = lstnew(strdup("ss"), 3);
-			l->next->next = lstnew(strdup("-_-"), 4);
+			l->next = lstnew(strdup("ss"));
+			l->next->next = lstnew(strdup("-_-"));
 			ret = ft_lstmap(l, lstmap_f);
 			if (!strcmp(ret->content, "OK !") && !strcmp(ret->next->content, "OK !") && !strcmp(ret->next->next->content, "OK !") && !strcmp(l->content, " 1 2 3 ") && !strcmp(l->next->content, "ss") && !strcmp(l->next->next->content, "-_-"))
 				exit(TEST_SUCCESS);
@@ -7718,11 +7718,11 @@ void			test_ft_lstmap_malloc_null(void *ptr) {
 	SET_EXPLANATION("you did not protect your malloc");
 
 	SANDBOX_RAISE(
-			t_list	*l = lstnew(strdup(" 1 2 3 "), 8);
+			t_list	*l = lstnew(strdup(" 1 2 3 "));
 			t_list	*ret;
 
-			l->next = lstnew(strdup("ss"), 3);
-			l->next->next = lstnew(strdup("-_-"), 4);
+			l->next = lstnew(strdup("ss"));
+			l->next->next = lstnew(strdup("-_-"));
 			MALLOC_DEBUG;
 			ret = ft_lstmap(l, lstmap_f);
 			MALLOC_RESET;
