@@ -6,7 +6,7 @@
 /*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2019/11/04 19:48:06 by alelievr         ###   ########.fr       */
+/*   Updated: 2019/11/05 00:21:17 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -7382,18 +7382,20 @@ void			test_ft_lstnew_free(void *ptr) {
 	t_list	*(*ft_lstnew)(const void *) = ptr;
 	SET_EXPLANATION("your lstnew does not allocate memory");
 
+	STDERR_TO_BUFF;
 	SANDBOX_RAISE(
 			char	*data = "hello, i'm a data";
 			t_list	*l = ft_lstnew(data);
+			write(STDERR_FILENO, "", 1);
 
 			if (!strcmp(data, l->content)) {
-				free(l->content);
 				free(l);
 				exit(TEST_SUCCESS);
 			}
 			SET_DIFF(data, l->content);
 			exit(TEST_FAILED);
 			);
+	VOID_STDERR;
 }
 
 void			test_ft_lstnew_null(void *ptr) {
@@ -7491,7 +7493,7 @@ void			test_ft_lstclear_basic(void *ptr) {
 	void		(*ft_lstdel)(t_list **, void (*)(void *)) = ptr;
 	SET_EXPLANATION("your lstclear does not work with basic input");
 
-	STDERR_TO_BUFF;
+	//STDERR_TO_BUFF;
 	SANDBOX_RAISE(
 			t_list	*l = lstnew(strdup("nyancat"));
 
@@ -7503,7 +7505,7 @@ void			test_ft_lstclear_basic(void *ptr) {
 			SET_DIFF_PTR(NULL, l);
 			exit(TEST_FAILED);
 			);
-	VOID_STDERR;
+	//VOID_STDERR;
 }
 
 void			test_ft_lstclear_free(void *ptr) {
@@ -7518,6 +7520,7 @@ void			test_ft_lstclear_free(void *ptr) {
 			l->next = lstnew(strdup("#TEST#"));
 			tmp = l->next;
 			ft_lstdel(&l, lstdelone_f);
+			write(STDERR_FILENO, "", 1);
 
 			if (!l) {
 				free(tmp);
@@ -7534,6 +7537,7 @@ void			test_ft_lstclear_number(void *ptr) {
 	SET_EXPLANATION("bad call number of the function pointer");
 	t_list	*list;
 
+	STDERR_TO_BUFF;
 	SANDBOX_RAISE(
 			char	*content = "hello !";
 
@@ -7545,11 +7549,13 @@ void			test_ft_lstclear_number(void *ptr) {
 			list->content = content;
 			list->next->content = content + 2;
 			ft_lstdel(&list, lstdel_f);
+			write(STDERR_FILENO, "", 1);
 			if (__delNum == 2)
 				exit(TEST_SUCCESS);
 			SET_DIFF_INT(2, __delNum);
 			exit(TEST_FAILED);
 	)
+	VOID_STDERR;
 }
 
 void			test_ft_lstclear(void) {
