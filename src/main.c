@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2016/12/12 14:18:54 by alelievr         ###   ########.fr       */
+/*   Updated: 2019/10/20 11:01:10 by juligonz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,7 @@ void	run_subbench(void *h, void *h2)
 
 		if (tmpfun)
 			fun_subbench_table[i].fun_bench_ptr(tmpfun, vsfun);
-		else
+		else if (fun_subbench_table[i].visible)
 			ft_raise(TEST_MISSING);
 	}
 	current_fun_name = "";

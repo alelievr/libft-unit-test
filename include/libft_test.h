@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created  2015/11/13 20:23:36 by alelievr          #+#    #+#             */
-/*   Updated  2016/12/07 17:10:08 by alelievr         ###   ########.fr       */
+/*   Updated: 2019/10/20 11:01:59 by juligonz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct	s_subtest {
 typedef struct	s_subbench {
 	char	*fun_name;
 	void	(*fun_bench_ptr)(void* ptr1, void *ptr2);
-//	_Bool	visible;
+	_Bool	visible;
 }				t_libft_subbench;
 
 typedef struct	s_test {
@@ -301,6 +301,7 @@ void			test_ft_memchr(void);
 void			test_ft_memcmp(void);
 void			test_ft_strlen(void);
 void			test_ft_strdup(void);
+void			test_ft_calloc(void);
 void			test_ft_strcpy(void);
 void			test_ft_strncpy(void);
 void			test_ft_strcat(void);
@@ -332,10 +333,10 @@ void			test_ft_strmap(void);
 void			test_ft_strmapi(void);
 void			test_ft_strequ(void);
 void			test_ft_strnequ(void);
-void			test_ft_strsub(void);
+void			test_ft_substr(void);
 void			test_ft_strjoin(void);
 void			test_ft_strtrim(void);
-void			test_ft_strsplit(void);
+void			test_ft_split(void);
 void			test_ft_itoa(void);
 void			test_ft_putchar(void);
 void			test_ft_putstr(void);
@@ -349,8 +350,11 @@ void			test_ft_putnbr_fd(void);
 void            test_ft_lstnew(void);
 void            test_ft_lstdelone(void);
 void            test_ft_lstclear(void);
-void            test_ft_lstadd(void);
+void            test_ft_lstadd_front(void);
+void            test_ft_lstadd_back(void);
 void            test_ft_lstiter(void);
+void            test_ft_lstsize(void);
+void            test_ft_lstlast(void);
 void            test_ft_lstmap(void);
 
 void			test_ft_islower(void);

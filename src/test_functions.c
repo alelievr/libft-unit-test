@@ -1416,7 +1416,7 @@ void			test_ft_strlen_basic(void *ptr) {
 void			test_ft_strlen_random(void *ptr) {
 	typeof(strlen)	*ft_strlen = ptr;
 	SET_EXPLANATION("your strlen doesn't work with basic test");
-	
+
 	SANDBOX_RAISE(
 			int		r1;
 			int		r2;
@@ -1734,6 +1734,112 @@ void            test_ft_strdup(void) {
 	add_fun_subtest(test_ft_strdup_electric_memory);
 	add_fun_subtest(test_ft_strdup_null);
 	add_fun_subtest(test_ft_strdup_speed);
+}
+
+////////////////////////////////
+//         ft_calloc          //
+////////////////////////////////
+
+void			test_ft_calloc_free(void *ptr) {
+	void *	(*ft_calloc)(size_t) = ptr;
+	SET_EXPLANATION("your calloc don't allocate memory");
+
+	SANDBOX_RAISE(
+			free(ft_calloc(42));
+			);
+}
+
+void			test_ft_calloc_malloc_null(void *ptr) {
+	typeof(calloc)	*ft_calloc = ptr;
+	SET_EXPLANATION("you didn't protect your malloc return");
+
+	SANDBOX_RAISE(
+			char	*ptr;
+
+			MALLOC_NULL;
+			ptr = ft_calloc(4, 20);
+			MALLOC_RESET;
+			if (!ptr)
+				exit(TEST_SUCCESS);
+			SET_DIFF_PTR(NULL, ptr);
+			exit(TEST_FAILED);
+			);
+	(void)ft_calloc;
+}
+
+void			test_ft_calloc_zero(void *ptr) {
+	typeof(calloc)	*ft_calloc = ptr;
+	SET_EXPLANATION("your calloc don't work with 0 size");
+
+	SANDBOX_RAISE(
+			void *str = ft_calloc(0, 0);
+			if (str == NULL)
+				exit(TEST_FAILED);
+			free(str);
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_calloc_basic(void *ptr) {
+	typeof(calloc)	*ft_calloc = ptr;
+	SET_EXPLANATION("your calloc don't work with empty string");
+
+	SANDBOX_RAISE(
+            int     size = 8539;
+
+            MALLOC_MEMSET;
+			void * d1 = ft_calloc(size, sizeof(int));
+            MALLOC_RESET;
+			void * d2 = calloc(size, sizeof(int));
+			if (memcmp(d1, d2, size * sizeof(int)))
+				exit(TEST_FAILED);
+			free(d1);
+			free(d2);
+			exit(TEST_SUCCESS);
+			);
+}
+
+void			test_ft_calloc_size(void *ptr) {
+	typeof(calloc)	*ft_calloc = ptr;
+	SET_EXPLANATION("your calloc did not allocate the good size");
+
+	SANDBOX_RAISE(
+			int		size;
+            int     count = 42 * 3;
+
+			MALLOC_SIZE;
+			ft_calloc(count, sizeof(char));
+			MALLOC_RESET;
+			size = get_last_malloc_size();
+			if (size == count * sizeof(char))
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT((int)(count * sizeof(char)), size);
+			exit(TEST_KO);
+			);
+}
+
+void			test_ft_calloc_too_big(void *ptr) {
+	typeof(calloc)	*ft_calloc = ptr;
+	SET_EXPLANATION("your calloc does not work with too large numbers");
+
+	SANDBOX_RAISE(
+		    void *d1 = ft_calloc(ULONG_MAX, sizeof(char));
+		    void *d2 = ft_calloc(2, 1073741829); // overflow the int max
+		    void *d3 = ft_calloc(1, ULONG_MAX);
+			if (d1 || d3 || !d2)
+				exit(TEST_FAILED);
+			exit(TEST_SUCCESS);
+			);
+}
+
+void            test_ft_calloc(void) {
+
+	add_fun_subtest(test_ft_calloc_free);
+	add_fun_subtest(test_ft_calloc_malloc_null);
+	add_fun_subtest(test_ft_calloc_basic);
+	add_fun_subtest(test_ft_calloc_zero);
+	add_fun_subtest(test_ft_calloc_size);
+	//add_fun_subtest(test_ft_calloc_too_big);
 }
 
 ////////////////////////////////
@@ -5745,18 +5851,18 @@ void            test_ft_strnequ(void){
 }
 
 ////////////////////////////////
-//         ft_strsub          //
+//         ft_substr          //
 ////////////////////////////////
 
-void			test_ft_strsub_basic(void *ptr) {
-	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
-	SET_EXPLANATION("your strsub does not work with valid input");
+void			test_ft_substr_basic(void *ptr) {
+	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
+	SET_EXPLANATION("your substr does not work with valid input");
 
 	SANDBOX_RAISE(
 			char	*str = "i just want this part #############";
 			size_t	size = 22;
 
-			char	*ret = ft_strsub(str, 0, size);
+			char	*ret = ft_substr(str, 0, size);
 			if (!strncmp(ret, str, size)) {
 				free(ret);
 				exit(TEST_SUCCESS);
@@ -5767,15 +5873,15 @@ void			test_ft_strsub_basic(void *ptr) {
 			);
 }
 
-void			test_ft_strsub_basic2(void *ptr) {
-	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
-	SET_EXPLANATION("your strsub does not work with valid input");
+void			test_ft_substr_basic2(void *ptr) {
+	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
+	SET_EXPLANATION("your substr does not work with valid input");
 
 	SANDBOX_RAISE(
 			char	*str = "i just want this part #############";
 			size_t	size = 20;
 
-			char	*ret = ft_strsub(str, 5, size);
+			char	*ret = ft_substr(str, 5, size);
 			if (!strncmp(ret, str + 5, size)) {
 				free(ret);
 				exit(TEST_SUCCESS);
@@ -5786,15 +5892,15 @@ void			test_ft_strsub_basic2(void *ptr) {
 			);
 }
 
-void			test_ft_strsub_zero_len(void *ptr) {
-	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
-	SET_EXPLANATION("your strsub does not work with empty strings");
+void			test_ft_substr_zero_len(void *ptr) {
+	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
+	SET_EXPLANATION("your substr does not work with empty strings");
 
 	SANDBOX_RAISE(
 			char	*str = "";
 			size_t	size = 0;
 
-			char	*ret = ft_strsub(str, 5, size);
+			char	*ret = ft_substr(str, 5, size);
 			if (!strncmp(ret, str + 5, size)) {
 				free(ret);
 				exit(TEST_SUCCESS);
@@ -5805,9 +5911,9 @@ void			test_ft_strsub_zero_len(void *ptr) {
 			);
 }
 
-void			test_ft_strsub_size(void *ptr) {
-	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
-	SET_EXPLANATION("your strsub did not allocate the good size so the \\0 test may be false");
+void			test_ft_substr_size(void *ptr) {
+	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
+	SET_EXPLANATION("your substr did not allocate the good size so the \\0 test may be false");
 
 	SANDBOX_RAISE(
 			char	*str = "i just want this part #############";
@@ -5815,7 +5921,7 @@ void			test_ft_strsub_size(void *ptr) {
 			int		ret_size;
 
 			MALLOC_SIZE;
-			ft_strsub(str, 5, size);
+			ft_substr(str, 5, size);
 			MALLOC_RESET;
 			ret_size = get_last_malloc_size();
 
@@ -5827,16 +5933,16 @@ void			test_ft_strsub_size(void *ptr) {
 			);
 }
 
-void			test_ft_strsub_zero(void *ptr) {
-	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
-	SET_EXPLANATION("your strsub does not set \\0 to the end of the string");
+void			test_ft_substr_zero(void *ptr) {
+	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
+	SET_EXPLANATION("your substr does not set \\0 to the end of the string");
 
 	SANDBOX_RAISE(
 			char	str[] = "i just want this part #############";
 			size_t	size = 20;
 
 			MALLOC_MEMSET;
-			char	*ret = ft_strsub(str, 5, size);
+			char	*ret = ft_substr(str, 5, size);
 			MALLOC_RESET;
 			str[size + 5] = 0;
 			if (!memcmp(ret, str + 5, size + 1)) {
@@ -5849,34 +5955,34 @@ void			test_ft_strsub_zero(void *ptr) {
 			);
 }
 
-void			test_ft_strsub_malloc_null(void *ptr) {
-	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
+void			test_ft_substr_malloc_null(void *ptr) {
+	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
 	SET_EXPLANATION("you did not protect your malloc");
 
 	SANDBOX_RAISE(
 			char	*s = "malloc protection !";
 
 			MALLOC_NULL;
-			char	*ret = ft_strsub(s, 0, 5);
+			char	*ret = ft_substr(s, 0, 5);
 			MALLOC_RESET;
 			if (ret == NULL)
 				exit(TEST_SUCCESS);
 			SET_DIFF_PTR(NULL, ret);
 			exit(TEST_FAILED);
 			(void)s;
-			(void)ft_strsub;
+			(void)ft_substr;
 			);
 }
 
-void			test_ft_strsub_all(void *ptr) {
-	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
-	SET_EXPLANATION("your strsub does not work for a whole string");
+void			test_ft_substr_all(void *ptr) {
+	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
+	SET_EXPLANATION("your substr does not work for a whole string");
 
 	SANDBOX_RAISE(
 			char	*s = "all of this !";
 			size_t	size = strlen(s);
 
-			char	*ret = ft_strsub(s, 0, size);
+			char	*ret = ft_substr(s, 0, size);
 
 			if (!strcmp(s, ret)) {
 				free(ret);
@@ -5888,9 +5994,9 @@ void			test_ft_strsub_all(void *ptr) {
 			);
 }
 
-void			test_ft_strsub_electric_memory(void *ptr) {
-	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
-	SET_EXPLANATION("your strsub crash because it read too many bytes !");
+void			test_ft_substr_electric_memory(void *ptr) {
+	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
+	SET_EXPLANATION("your substr crash because it read too many bytes !");
 
 	SANDBOX_RAISE(
 			const size_t	size = 10;
@@ -5898,31 +6004,31 @@ void			test_ft_strsub_electric_memory(void *ptr) {
 
 			strcpy(str, "YOLO !!!!");
 
-			ft_strsub(str, 0, size);
+			ft_substr(str, 0, size);
 
 			exit(TEST_SUCCESS);
 			);
 }
 
-void			test_ft_strsub_null(void *ptr) {
-	char	*(*ft_strsub)(const char *, size_t, size_t) = ptr;
-	SET_EXPLANATION("your strsub does not segfault when null parameter is sent");
+void			test_ft_substr_null(void *ptr) {
+	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
+	SET_EXPLANATION("your substr does not segfault when null parameter is sent");
 
 	SANDBOX_PROT(
-			ft_strsub(NULL, 0, 12);
+			ft_substr(NULL, 0, 12);
 			);
 }
 
-void            test_ft_strsub(void){
-	add_fun_subtest(test_ft_strsub_basic);
-	add_fun_subtest(test_ft_strsub_basic2);
-	add_fun_subtest(test_ft_strsub_zero_len);
-	add_fun_subtest(test_ft_strsub_size);
-	add_fun_subtest(test_ft_strsub_zero);
-	add_fun_subtest(test_ft_strsub_malloc_null);
-	add_fun_subtest(test_ft_strsub_all);
-	add_fun_subtest(test_ft_strsub_electric_memory);
-	add_fun_subtest(test_ft_strsub_null);
+void            test_ft_substr(void){
+	add_fun_subtest(test_ft_substr_basic);
+	add_fun_subtest(test_ft_substr_basic2);
+	add_fun_subtest(test_ft_substr_zero_len);
+	add_fun_subtest(test_ft_substr_size);
+	add_fun_subtest(test_ft_substr_zero);
+	add_fun_subtest(test_ft_substr_malloc_null);
+	add_fun_subtest(test_ft_substr_all);
+	add_fun_subtest(test_ft_substr_electric_memory);
+	add_fun_subtest(test_ft_substr_null);
 }
 
 ////////////////////////////////
@@ -6065,15 +6171,17 @@ void            test_ft_strjoin(void){
 //         ft_strtrim         //
 ////////////////////////////////
 
+#define TRIM_SET_PLACEHOLDER " \n\t"
+
 void			test_ft_strtrim_basic(void *ptr) {
-	char *		(*ft_strtrim)(const char *) = ptr;
+	char *		(*ft_strtrim)(const char *, const char *) = ptr;
 	SET_EXPLANATION("your strtrim does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "   \t  \n\n \t\t  \n\n\nHello \t  Please\n Trim me !\n   \n \n \t\t\n  ";
 			char	*s2 = "Hello \t  Please\n Trim me !";
 
-			char	*ret = ft_strtrim(s1);
+			char	*ret = ft_strtrim(s1, TRIM_SET_PLACEHOLDER);
 			if (!strcmp(ret, s2))
 				exit(TEST_SUCCESS);
 			SET_DIFF(s2, ret);
@@ -6082,14 +6190,14 @@ void			test_ft_strtrim_basic(void *ptr) {
 }
 
 void			test_ft_strtrim_basic2(void *ptr) {
-	char *		(*ft_strtrim)(const char *) = ptr;
+	char *		(*ft_strtrim)(const char *, const char *) = ptr;
 	SET_EXPLANATION("your strtrim does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "   \t  \n\n \t\t  \n\n\nHello \t  Please\n Trim me !";
 			char	*s2 = "Hello \t  Please\n Trim me !";
 
-			char	*ret = ft_strtrim(s1);
+			char	*ret = ft_strtrim(s1, TRIM_SET_PLACEHOLDER);
 			if (!strcmp(ret, s2))
 				exit(TEST_SUCCESS);
 			SET_DIFF(s2, ret);
@@ -6098,14 +6206,14 @@ void			test_ft_strtrim_basic2(void *ptr) {
 }
 
 void			test_ft_strtrim_basic3(void *ptr) {
-	char *		(*ft_strtrim)(const char *) = ptr;
+	char *		(*ft_strtrim)(const char *, const char *) = ptr;
 	SET_EXPLANATION("your strtrim does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "Hello \t  Please\n Trim me !";
 			char	*s2 = "Hello \t  Please\n Trim me !";
 
-			char	*ret = ft_strtrim(s1);
+			char	*ret = ft_strtrim(s1, TRIM_SET_PLACEHOLDER);
 			if (!strcmp(ret, s2))
 				exit(TEST_SUCCESS);
 			SET_DIFF(s2, ret);
@@ -6114,14 +6222,14 @@ void			test_ft_strtrim_basic3(void *ptr) {
 }
 
 void			test_ft_strtrim_empty(void *ptr) {
-	char *		(*ft_strtrim)(const char *) = ptr;
+	char *		(*ft_strtrim)(const char *, const char *) = ptr;
 	SET_EXPLANATION("your strtrim does not work with empty input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "";
 			char	*s2 = "";
 
-			char	*ret = ft_strtrim(s1);
+			char	*ret = ft_strtrim(s1, TRIM_SET_PLACEHOLDER);
 			if (!strcmp(ret, s2))
 				exit(TEST_SUCCESS);
 			SET_DIFF(s2, ret);
@@ -6130,14 +6238,14 @@ void			test_ft_strtrim_empty(void *ptr) {
 }
 
 void			test_ft_strtrim_blank(void *ptr) {
-	char *		(*ft_strtrim)(const char *) = ptr;
+	char *		(*ft_strtrim)(const char *, const char *) = ptr;
 	SET_EXPLANATION("your strtrim does not work with full blank input");
 
 	SANDBOX_RAISE(
 			char	*s1 = "  \t \t \n   \n\n\n\t";
 			char	*s2 = "";
 
-			char	*ret = ft_strtrim(s1);
+			char	*ret = ft_strtrim(s1, TRIM_SET_PLACEHOLDER);
 			if (!strcmp(ret, s2))
 				exit(TEST_SUCCESS);
 			SET_DIFF(s2, ret);
@@ -6146,7 +6254,7 @@ void			test_ft_strtrim_blank(void *ptr) {
 }
 
 void			test_ft_strtrim_size(void *ptr) {
-	char *		(*ft_strtrim)(const char *) = ptr;
+	char *		(*ft_strtrim)(const char *, const char *) = ptr;
 	SET_EXPLANATION("your strtrim did not allocate the good size so the \\0 test may be false");
 
 	SANDBOX_RAISE(
@@ -6156,7 +6264,7 @@ void			test_ft_strtrim_size(void *ptr) {
 			int		size;
 
 			MALLOC_SIZE;
-			ft_strtrim(s1);
+			ft_strtrim(s1, TRIM_SET_PLACEHOLDER);
 			MALLOC_RESET;
 			size = get_last_malloc_size();
 			if (size == r_size + 1)
@@ -6167,14 +6275,14 @@ void			test_ft_strtrim_size(void *ptr) {
 }
 
 void			test_ft_strtrim_free(void *ptr) {
-	char *		(*ft_strtrim)(const char *) = ptr;
+	char *		(*ft_strtrim)(const char *, const char *) = ptr;
 	SET_EXPLANATION("your strtrim does not allocate memory");
 
 	SANDBOX_RAISE(
 			char	*s1 = "   \t  \n\n \t\t  \n\n\nHello \t  Please\n Trim me !\n   \n \n \t\t\n  ";
 			char	*s2 = "Hello \t  Please\n Trim me !";
 
-			char	*ret = ft_strtrim(s1);
+			char	*ret = ft_strtrim(s1, TRIM_SET_PLACEHOLDER);
 			if (!strcmp(ret, s2)) {
 				free(ret);
 				exit(TEST_SUCCESS);
@@ -6186,14 +6294,14 @@ void			test_ft_strtrim_free(void *ptr) {
 }
 
 void			test_ft_strtrim_malloc_null(void *ptr) {
-	char *		(*ft_strtrim)(const char *) = ptr;
+	char *		(*ft_strtrim)(const char *, const char *) = ptr;
 	SET_EXPLANATION("you dont protect your malloc return");
 
 	SANDBOX_RAISE(
 			char	*s1 = "   \t  \n\n \t\t  \n\n\nHello \t  Please\n Trim me !\n   \n \n \t\t\n  ";
 
 			MALLOC_NULL;
-			char	*ret = ft_strtrim(s1);
+			char	*ret = ft_strtrim(s1, TRIM_SET_PLACEHOLDER);
 			MALLOC_RESET;
 			if (ret == NULL)
 				exit(TEST_SUCCESS);
@@ -6203,7 +6311,7 @@ void			test_ft_strtrim_malloc_null(void *ptr) {
 }
 
 void			test_ft_strtrim_zero(void *ptr) {
-	char *		(*ft_strtrim)(const char *) = ptr;
+	char *		(*ft_strtrim)(const char *, const char *) = ptr;
 	SET_EXPLANATION("your strtrim does not set \\0 to the end of the string");
 
 	SANDBOX_RAISE(
@@ -6211,7 +6319,7 @@ void			test_ft_strtrim_zero(void *ptr) {
 			char	*s2 = "Hello \t  Please\n Trim me !";
 
 			MALLOC_MEMSET;
-			char	*ret = ft_strtrim(s1);
+			char	*ret = ft_strtrim(s1, TRIM_SET_PLACEHOLDER);
 			MALLOC_RESET;
 			if (!strcmp(s2, ret)) {
 				free(ret);
@@ -6224,11 +6332,11 @@ void			test_ft_strtrim_zero(void *ptr) {
 }
 
 void			test_ft_strtrim_null(void *ptr) {
-	char *		(*ft_strtrim)(const char *) = ptr;
+	char *		(*ft_strtrim)(const char *, const char *) = ptr;
 	SET_EXPLANATION("your strtrim does not segfault/return null when null parameter is sent");
 
 	SANDBOX_PROT(
-			char	*ret = ft_strtrim(NULL);
+			char	*ret = ft_strtrim(NULL, TRIM_SET_PLACEHOLDER);
 			if (!ret)
 				exit(TEST_SUCCESS);
 			SET_DIFF_PTR(NULL, ret);
@@ -6250,7 +6358,7 @@ void            test_ft_strtrim(void){
 }
 
 ////////////////////////////////
-//        ft_strsplit         //
+//        ft_split         //
 ////////////////////////////////
 
 void			split_cmp_array(char ** expected, char ** got)
@@ -6267,97 +6375,97 @@ void			split_cmp_array(char ** expected, char ** got)
 	exit(TEST_SUCCESS);
 }
 
-void			test_ft_strsplit_basic(void *ptr) {
-	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLANATION("your strsplit does not work with basic input");
+void			test_ft_split_basic(void *ptr) {
+	char	**(*ft_split)(char *, char) = ptr;
+	SET_EXPLANATION("your split does not work with basic input");
 
 	SANDBOX_RAISE(
 			char	*string = "      split       this for   me  !       ";
 			char	**expected = ((char*[6]){"split", "this", "for", "me", "!", NULL});
 
-			char	**result = ft_strsplit(string, ' ');
+			char	**result = ft_split(string, ' ');
 
 			split_cmp_array(expected, result);
 			);
 }
 
-void			test_ft_strsplit_space(void *ptr) {
-	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLANATION("your strsplit does not work with full space string");
+void			test_ft_split_space(void *ptr) {
+	char	**(*ft_split)(char *, char) = ptr;
+	SET_EXPLANATION("your split does not work with full space string");
 
 	SANDBOX_RAISE(
 			char	**expected = ((char*[1]){NULL});
 			char	*string = "                  ";
 
-			char	**result = ft_strsplit(string, ' ');
+			char	**result = ft_split(string, ' ');
 
 			split_cmp_array(expected, result);
 			);
 }
 
-void			test_ft_strsplit_begin(void *ptr) {
-	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLANATION("your strsplit does not work with one word");
+void			test_ft_split_begin(void *ptr) {
+	char	**(*ft_split)(char *, char) = ptr;
+	SET_EXPLANATION("your split does not work with one word");
 	char	**expected = (char*[2]){"olol", NULL};
 
 	SANDBOX_RAISE(
 			char	*s = "                  olol";
 
-			char	**result = ft_strsplit(s, ' ');
+			char	**result = ft_split(s, ' ');
 
 			split_cmp_array(expected, result);
 			);
 }
 
-void			test_ft_strsplit_end(void *ptr) {
-	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLANATION("your strsplit does not work with one word");
+void			test_ft_split_end(void *ptr) {
+	char	**(*ft_split)(char *, char) = ptr;
+	SET_EXPLANATION("your split does not work with one word");
 	char	**expected = (char*[2]){"olol", NULL};
 
 	SANDBOX_RAISE(
 			char	*s = "olol                     ";
 
-			char	**result = ft_strsplit(s, ' ');
+			char	**result = ft_split(s, ' ');
 
 			split_cmp_array(expected, result);
 			);
 }
 
-void			test_ft_strsplit_empty(void *ptr) {
-	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLANATION("your strsplit does not work with empty string");
+void			test_ft_split_empty(void *ptr) {
+	char	**(*ft_split)(char *, char) = ptr;
+	SET_EXPLANATION("your split does not work with empty string");
 	char	**expected = (char*[2]){NULL};
 
 	SANDBOX_RAISE(
 			char	*s = "";
-			char	**result = ft_strsplit(s, '\65');
+			char	**result = ft_split(s, '\65');
 
 			split_cmp_array(expected, result);
 			);
 }
 
-void			test_ft_strsplit_full(void *ptr) {
-	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLANATION("your strsplit does not work with full string");
+void			test_ft_split_full(void *ptr) {
+	char	**(*ft_split)(char *, char) = ptr;
+	SET_EXPLANATION("your split does not work with full string");
 	char	**expected = (char*[2]){NULL};
 
 	SANDBOX_RAISE(
 			char	*s = "0 0 0 0 0 0 0 0 0";
-			char	**result = ft_strsplit(s, ' ');
+			char	**result = ft_split(s, ' ');
 
 			split_cmp_array(expected, result);
 			);
 }
 
-void			test_ft_strsplit_free(void *ptr) {
-	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLANATION("your strsplit does not work with basic input");
+void			test_ft_split_free(void *ptr) {
+	char	**(*ft_split)(char *, char) = ptr;
+	SET_EXPLANATION("your split does not work with basic input");
 	char	**expected = (char*[6]){"split  ", "this", "for", "me", "!", NULL};
 
 	SANDBOX_RAISE(
 			char	*s = "split  ||this|for|me|||||!|";
 			int		i = 0;
-			char	**result = ft_strsplit(s, '|');
+			char	**result = ft_split(s, '|');
 
 			while (result[i]) {
 				if (strcmp(result[i], *expected)) {
@@ -6374,15 +6482,15 @@ void			test_ft_strsplit_free(void *ptr) {
 			);
 }
 
-void			test_ft_strsplit_malloc_null(void *ptr) {
-	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLANATION("you did not protect your strsplit");
+void			test_ft_split_malloc_null(void *ptr) {
+	char	**(*ft_split)(char *, char) = ptr;
+	SET_EXPLANATION("you did not protect your split");
 
 	SANDBOX_RAISE(
 			char	*s = "      split       this for   me  !       ";
 
 			MALLOC_NULL;
-			char	**result = ft_strsplit(s, ' ');
+			char	**result = ft_split(s, ' ');
 			MALLOC_RESET;
 			if (!result)
 				exit(TEST_SUCCESS);
@@ -6391,16 +6499,16 @@ void			test_ft_strsplit_malloc_null(void *ptr) {
 			);
 }
 
-void			test_ft_strsplit_zero(void *ptr) {
-	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLANATION("your strsplit does not work with basic input");
+void			test_ft_split_zero(void *ptr) {
+	char	**(*ft_split)(char *, char) = ptr;
+	SET_EXPLANATION("your split does not work with basic input");
 	char	**expected = (char*[6]){"split", "this", "for", "me", "!", NULL};
 
 	SANDBOX_RAISE(
 			char	*s = "      split       this for   me  !       ";
 
 			MALLOC_MEMSET;
-			char	**result = ft_strsplit(s, ' ');
+			char	**result = ft_split(s, ' ');
 			MALLOC_RESET;
 			while (*result) {
 				if (strcmp(*result, *expected)) {
@@ -6414,12 +6522,12 @@ void			test_ft_strsplit_zero(void *ptr) {
 			);
 }
 
-void			test_ft_strsplit_null(void *ptr) {
-	char	**(*ft_strsplit)(char *, char) = ptr;
-	SET_EXPLANATION("your strsplit does not segfault/return null when null parameter is sent");
+void			test_ft_split_null(void *ptr) {
+	char	**(*ft_split)(char *, char) = ptr;
+	SET_EXPLANATION("your split does not segfault/return null when null parameter is sent");
 
 	SANDBOX_PROT(
-			char	**expected = ft_strsplit(NULL, ' ');
+			char	**expected = ft_split(NULL, ' ');
 			if (!expected)
 				exit(TEST_SUCCESS);
 			SET_DIFF_PTR(NULL, expected);
@@ -6427,17 +6535,17 @@ void			test_ft_strsplit_null(void *ptr) {
 			)
 }
 
-void            test_ft_strsplit(void) {
-	add_fun_subtest(test_ft_strsplit_basic);
-	add_fun_subtest(test_ft_strsplit_space);
-	add_fun_subtest(test_ft_strsplit_begin);
-	add_fun_subtest(test_ft_strsplit_end);
-	add_fun_subtest(test_ft_strsplit_empty);
-	add_fun_subtest(test_ft_strsplit_full);
-	add_fun_subtest(test_ft_strsplit_free);
-	add_fun_subtest(test_ft_strsplit_malloc_null);
-	add_fun_subtest(test_ft_strsplit_zero);
-	add_fun_subtest(test_ft_strsplit_null);
+void            test_ft_split(void) {
+	add_fun_subtest(test_ft_split_basic);
+	add_fun_subtest(test_ft_split_space);
+	add_fun_subtest(test_ft_split_begin);
+	add_fun_subtest(test_ft_split_end);
+	add_fun_subtest(test_ft_split_empty);
+	add_fun_subtest(test_ft_split_full);
+	add_fun_subtest(test_ft_split_free);
+	add_fun_subtest(test_ft_split_malloc_null);
+	add_fun_subtest(test_ft_split_zero);
+	add_fun_subtest(test_ft_split_null);
 }
 
 ////////////////////////////////
@@ -7448,9 +7556,9 @@ void			lstdelone_f(void *d) {
 
 t_list			*lstnew(void *d) {
 	t_list *ret = malloc(sizeof(t_list));
+
 	if (!ret)
 		return (NULL);
-
 	ret->next = NULL;
 	ret->content = d;
 	return (ret);
@@ -7466,7 +7574,8 @@ void			test_ft_lstdelone_basic(void *ptr) {
 
 			g_delone_called = false;
 			ft_lstdelone(l, lstdelone_f);
-			write(STDERR_FILENO, "", 1);
+
+      write(STDERR_FILENO, "", 1);
 			if (g_delone_called)
 				exit(TEST_SUCCESS);
 			exit(TEST_FAILED);
@@ -7477,7 +7586,6 @@ void			test_ft_lstdelone_basic(void *ptr) {
 void			test_ft_lstdelone(void) {
 	add_fun_subtest(test_ft_lstdelone_basic);
 }
-
 
 ////////////////////////////////
 //         ft_lstclear        //
@@ -7490,7 +7598,7 @@ void			lstdel_f(void *lst) {
 }
 
 void			test_ft_lstclear_basic(void *ptr) {
-	void		(*ft_lstdel)(t_list **, void (*)(void *)) = ptr;
+	void		(*ft_lstclear)(t_list **, void (*)(void *)) = ptr;
 	SET_EXPLANATION("your lstclear does not work with basic input");
 
 	//STDERR_TO_BUFF;
@@ -7498,7 +7606,7 @@ void			test_ft_lstclear_basic(void *ptr) {
 			t_list	*l = lstnew(strdup("nyancat"));
 
 			l->next = lstnew(strdup("#TEST#"));
-			ft_lstdel(&l, lstdelone_f);
+			ft_lstclear(&l, lstdelone_f);
 			write(STDERR_FILENO, "", 1);
 			if (!l)
 				exit(TEST_SUCCESS);
@@ -7509,7 +7617,7 @@ void			test_ft_lstclear_basic(void *ptr) {
 }
 
 void			test_ft_lstclear_free(void *ptr) {
-	void		(*ft_lstdel)(t_list **, void (*)(void *)) = ptr;
+	void		(*ft_lstclear)(t_list **, void (*)(void *)) = ptr;
 	SET_EXPLANATION("your lstclear does not free the list");
 
 	STDERR_TO_BUFF;
@@ -7519,7 +7627,7 @@ void			test_ft_lstclear_free(void *ptr) {
 
 			l->next = lstnew(strdup("#TEST#"));
 			tmp = l->next;
-			ft_lstdel(&l, lstdelone_f);
+			ft_lstclear(&l, lstdelone_f);
 			write(STDERR_FILENO, "", 1);
 
 			if (!l) {
@@ -7533,7 +7641,7 @@ void			test_ft_lstclear_free(void *ptr) {
 }
 
 void			test_ft_lstclear_number(void *ptr) {
-	void		(*ft_lstdel)(t_list **, void (*)(void *)) = ptr;
+	void		(*ft_lstclear)(t_list **, void (*)(void *)) = ptr;
 	SET_EXPLANATION("bad call number of the function pointer");
 	t_list	*list;
 
@@ -7548,7 +7656,7 @@ void			test_ft_lstclear_number(void *ptr) {
 			bzero(list->next, sizeof(t_list));
 			list->content = content;
 			list->next->content = content + 2;
-			ft_lstdel(&list, lstdel_f);
+			ft_lstclear(&list, lstdel_f);
 			write(STDERR_FILENO, "", 1);
 			if (__delNum == 2)
 				exit(TEST_SUCCESS);
@@ -7568,17 +7676,18 @@ void			test_ft_lstclear(void) {
 //      ft_lstadd_front       //
 ////////////////////////////////
 
-void			test_ft_lstadd_basic(void *ptr) {
-	void	(*ft_lstadd)(t_list **, t_list *new) = ptr;
-	SET_EXPLANATION("your lstadd does not work with basic input");
+void			test_ft_lstadd_front_basic(void *ptr) {
+	void	(*ft_lstadd_front)(t_list **, t_list *new) = ptr;
+	SET_EXPLANATION("your lstadd_front does not work with basic input");
 
 	STDERR_TO_BUFF;
 	SANDBOX_RAISE(
 			t_list	*l = lstnew(strdup("nyacat"));
 			t_list	*n = lstnew(strdup("OK"));
 
-			ft_lstadd(&l, n);
-			if (l == n && !strcmp(l->content, "OK")) {
+			ft_lstadd_front(&l, n);
+
+      if (l == n && !strcmp(l->content, "OK")) {
 				exit(TEST_SUCCESS);
 			}
 			SET_DIFF_PTR(n, l);
@@ -7587,17 +7696,18 @@ void			test_ft_lstadd_basic(void *ptr) {
 	VOID_STDERR;
 }
 
-void			test_ft_lstadd_free(void *ptr) {
-	void	(*ft_lstadd)(t_list **, t_list *new) = ptr;
-	SET_EXPLANATION("your lstadd does not work with basic input");
+void			test_ft_lstadd_front_free(void *ptr) {
+	void	(*ft_lstadd_front)(t_list **, t_list *new) = ptr;
+	SET_EXPLANATION("your lstadd_front does not work with basic input");
 
 	STDERR_TO_BUFF;
 	SANDBOX_RAISE(
 			t_list	*l = lstnew(strdup("nyacat"));
 			t_list	*n = lstnew(strdup("OK"));
 
-			ft_lstadd(&l, n);
-			if (l == n && !strcmp(l->content, "OK")) {
+			ft_lstadd_front(&l, n);
+
+      if (l == n && !strcmp(l->content, "OK")) {
 				free(l->next);
 				free(l);
 				exit(TEST_SUCCESS);
@@ -7610,16 +7720,16 @@ void			test_ft_lstadd_free(void *ptr) {
 	VOID_STDERR;
 }
 
-void			test_ft_lstadd_null(void *ptr) {
-	void	(*ft_lstadd)(t_list **, t_list *new) = ptr;
-	SET_EXPLANATION("your lstadd does not work with null node input");
+void			test_ft_lstadd_front_null(void *ptr) {
+	void	(*ft_lstadd_front)(t_list **, t_list *new) = ptr;
+	SET_EXPLANATION("your lstadd_front does not work with null node input");
 
 	STDERR_TO_BUFF;
 	SANDBOX_RAISE(
 			t_list	*l =  NULL;
 			t_list	*n = lstnew(strdup("OK"));
 
-			ft_lstadd(&l, n);
+			ft_lstadd_front(&l, n);
 			if (l == n && !strcmp(l->content, "OK")) {
 				free(l->next);
 				free(l);
@@ -7633,10 +7743,180 @@ void			test_ft_lstadd_null(void *ptr) {
 	VOID_STDERR;
 }
 
-void			test_ft_lstadd(void){
-	add_fun_subtest(test_ft_lstadd_basic);
-	add_fun_subtest(test_ft_lstadd_free);
-	add_fun_subtest(test_ft_lstadd_null);
+void			test_ft_lstadd_front(void){
+	add_fun_subtest(test_ft_lstadd_front_basic);
+	add_fun_subtest(test_ft_lstadd_front_free);
+	add_fun_subtest(test_ft_lstadd_front_null);
+}
+
+////////////////////////////////
+//     ft_lstadd_back        //
+////////////////////////////////
+
+void			test_ft_lstadd_back_basic(void *ptr) {
+	void	(*ft_lstadd_back)(t_list **, t_list *new) = ptr;
+	SET_EXPLANATION("your lstadd_back does not work with basic input");
+
+	STDERR_TO_BUFF;
+	SANDBOX_RAISE(
+			t_list	*l = lstnew(strdup("nyacat"));
+			t_list	*n = lstnew(strdup("OK"));
+
+			ft_lstadd_back(&l, n);
+			if (l->next == n && !strcmp(l->next->content, "OK")) {
+				exit(TEST_SUCCESS);
+			}
+			SET_DIFF_PTR(n, l);
+			exit(TEST_FAILED);
+			);
+	VOID_STDERR;
+}
+
+void			test_ft_lstadd_back_free(void *ptr) {
+	void	(*ft_lstadd_back)(t_list **, t_list *new) = ptr;
+	SET_EXPLANATION("your lstadd_back does not work with basic input");
+
+	STDERR_TO_BUFF;
+	SANDBOX_RAISE(
+			t_list	*l = lstnew(strdup("nyacat"));
+			t_list	*n = lstnew(strdup("OK"));
+
+			ft_lstadd_back(&l, n);
+			if (l->next == n && !strcmp(l->next->content, "OK")) {
+				free(l->next);
+				free(l);
+				exit(TEST_SUCCESS);
+			}
+			free(l->next);
+			free(l);
+			SET_DIFF_PTR(n, l);
+			exit(TEST_FAILED);
+			);
+	VOID_STDERR;
+}
+
+void			test_ft_lstadd_back_null(void *ptr) {
+	void	(*ft_lstadd_back)(t_list **, t_list *new) = ptr;
+	SET_EXPLANATION("your lstadd_back does not work with null node input");
+
+	STDERR_TO_BUFF;
+	SANDBOX_RAISE(
+			t_list	*l =  NULL;
+			t_list	*n = lstnew(strdup("OK"));
+
+			ft_lstadd_back(&l, n);
+			if (l == n && !strcmp(l->content, "OK")) {
+				free(l->next);
+				free(l);
+				exit(TEST_SUCCESS);
+			}
+			free(l->next);
+			free(l);
+			SET_DIFF_PTR(l, l);
+			exit(TEST_FAILED);
+			);
+	VOID_STDERR;
+}
+
+void			test_ft_lstadd_back(void){
+	add_fun_subtest(test_ft_lstadd_back_basic);
+	add_fun_subtest(test_ft_lstadd_back_free);
+	add_fun_subtest(test_ft_lstadd_back_null);
+}
+
+////////////////////////////////
+//        ft_lstsize          //
+////////////////////////////////
+
+void			test_ft_lstsize_basic(void *ptr) {
+	int		(*ft_lstsize)(t_list *) = ptr;
+	SET_EXPLANATION("your lstsize does not work with basic input");
+
+	SANDBOX_RAISE(
+			t_list	*l;
+			int actual;
+			int expected;
+	
+			l = lstnew(strdup("1"));
+			l->next = lstnew(strdup("2"));
+			l->next->next = lstnew(strdup("3"));
+			expected = 3;
+			actual = ft_lstsize(l);
+			if (actual == expected)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(expected, actual);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_lstsize_null(void *ptr) {
+	int		(*ft_lstsize)(t_list *) = ptr;
+	SET_EXPLANATION("your lstsize does not work with basic input");
+
+	SANDBOX_RAISE(
+			t_list	*l = NULL;
+			int actual;
+			int expected = 0;
+	
+			actual = ft_lstsize(l);
+			if (actual == expected)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(expected, actual);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_lstsize(void){
+	add_fun_subtest(test_ft_lstsize_basic);
+	add_fun_subtest(test_ft_lstsize_null);
+}
+
+////////////////////////////////
+//        ft_lstlast          //
+////////////////////////////////
+
+void			test_ft_lstlast_basic(void *ptr) {
+	t_list *	(*ft_lstlast)(t_list *) = ptr;
+	SET_EXPLANATION("your lstlast does not work with basic input");
+
+	SANDBOX_RAISE(
+			t_list	*l;
+			t_list	*expected;
+			t_list	*actual;
+	
+			l = lstnew(strdup("1"));
+			l->next = lstnew(strdup("2"));
+			l->next->next = lstnew(strdup("3"));
+			expected = l->next->next;
+			actual = ft_lstlast(l);
+			if (actual == expected)
+				exit(TEST_SUCCESS);
+			SET_DIFF_PTR(expected, actual);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_lstlast_null(void *ptr) {
+	t_list *	(*ft_lstlast)(t_list *) = ptr;
+	SET_EXPLANATION("your lstlast does not work with basic input");
+
+	SANDBOX_RAISE(
+			t_list	*l = NULL;
+			t_list	*expected;
+			t_list	*actual;
+
+			expected = NULL;
+			actual = ft_lstlast(l);
+			if (actual == expected)
+				exit(TEST_SUCCESS);
+			SET_DIFF_PTR(expected, actual);
+			exit(TEST_FAILED);
+			);
+}
+
+void			test_ft_lstlast(void){
+	add_fun_subtest(test_ft_lstlast_basic);
+	add_fun_subtest(test_ft_lstlast_null);
 }
 
 // TODO: Add back, lst size and lst last
@@ -7645,22 +7925,24 @@ void			test_ft_lstadd(void){
 //        ft_lstiter          //
 ////////////////////////////////
 
-void			lstiter_f(t_list *m) {
-	free(m->content);
+void			lstiter_f(void *content) {
+	char *s = content;
 
-	m->content = strdup("OK !");
+	s[0] = 'O';
+	s[1] = 'K';
 }
 
 void			test_ft_lstiter_basic(void *ptr) {
-	void	(*ft_lstiter)(t_list *, void (*)(t_list *)) = ptr;
+	void	(*ft_lstiter)(t_list *, void (*)(void *)) = ptr;
 	SET_EXPLANATION("your lstiter does not work with basic input");
 
 	SANDBOX_RAISE(
-			t_list	*l = lstnew(strdup(" 1 2 3 "));
+			t_list	*l = lstnew(strdup("KO !"));
 
-			l->next = lstnew(strdup("ss"));
-			l->next->next = lstnew(strdup("-_-"));
-			ft_lstiter(l, lstiter_f);
+			l->next = lstnew(strdup("KO !"));
+			l->next->next = lstnew(strdup("KO !"));
+
+      ft_lstiter(l, lstiter_f);
 			if (!strcmp(l->content, "OK !") && !strcmp(l->next->content, "OK !") && !strcmp(l->next->next->content, "OK !"))
 				exit(TEST_SUCCESS);
 			SET_DIFF("OK !", l->content);
@@ -7669,7 +7951,7 @@ void			test_ft_lstiter_basic(void *ptr) {
 }
 
 void			test_ft_lstiter_null(void *ptr) {
-	void	(*ft_lstiter)(t_list *, void (*)(t_list *)) = ptr;
+	void	(*ft_lstiter)(t_list *, void (*)(void *)) = ptr;
 	SET_EXPLANATION("your lstiter does not segfault when null parameter is sent");
 
 	SANDBOX_PROT(
@@ -7686,14 +7968,13 @@ void			test_ft_lstiter(void){
 //         ft_lstmap          //
 ////////////////////////////////
 
-t_list *		lstmap_f(t_list *m) {
-	t_list *	r = lstnew("OK !");
-	(void)m;
-	return (r);
+void *		lstmap_f(void *content) {
+	(void)content;
+	return ("OK !");
 }
 
 void			test_ft_lstmap_basic(void *ptr) {
-	t_list *	(*ft_lstmap)(t_list *, t_list * (*)(t_list *)) = ptr;
+	t_list *	(*ft_lstmap)(t_list *, void * (*)(void *), void (*)(void *)) = ptr;
 	SET_EXPLANATION("your lstmap does not work with basic input");
 
 	SANDBOX_RAISE(
@@ -7702,7 +7983,7 @@ void			test_ft_lstmap_basic(void *ptr) {
 
 			l->next = lstnew(strdup("ss"));
 			l->next->next = lstnew(strdup("-_-"));
-			ret = ft_lstmap(l, lstmap_f);
+			ret = ft_lstmap(l, lstmap_f, NULL);
 			if (!strcmp(ret->content, "OK !") && !strcmp(ret->next->content, "OK !") && !strcmp(ret->next->next->content, "OK !") && !strcmp(l->content, " 1 2 3 ") && !strcmp(l->next->content, "ss") && !strcmp(l->next->next->content, "-_-"))
 				exit(TEST_SUCCESS);
 			SET_DIFF(" 1 2 3 ", l->content);
@@ -7711,16 +7992,16 @@ void			test_ft_lstmap_basic(void *ptr) {
 }
 
 void			test_ft_lstmap_null(void *ptr) {
-	t_list *	(*ft_lstmap)(t_list *, t_list * (*)(t_list *)) = ptr;
+	t_list *	(*ft_lstmap)(t_list *, void * (*)(void *), void (*)(void *)) = ptr;
 	SET_EXPLANATION("your lstmap does not segfault when null parameter is sent");
 
 	SANDBOX_PROT(
-			ft_lstmap(NULL, lstmap_f);
+			ft_lstmap(NULL, lstmap_f, NULL);
 			);
 }
 
 void			test_ft_lstmap_malloc_null(void *ptr) {
-	t_list *	(*ft_lstmap)(t_list *, t_list * (*)(t_list *)) = ptr;
+	t_list *	(*ft_lstmap)(t_list *, void *(*)(void *)) = ptr;
 	SET_EXPLANATION("you did not protect your malloc");
 
 	SANDBOX_RAISE(
@@ -7744,8 +8025,6 @@ void			test_ft_lstmap(void){
 	add_fun_subtest(test_ft_lstmap_null);
 //	add_fun_subtest(test_ft_lstmap_malloc_null);
 }
-
-
 
 ////////////////////////////////
 //         ft_islower         //

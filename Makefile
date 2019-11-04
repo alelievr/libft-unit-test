@@ -6,7 +6,7 @@
 #    By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created  2015/04/04 19:22:36 by alelievr          #+#    #+#              #
-#    Updated  2015/12/23 20:02:39 by alelievr         ###   ########.fr        #
+#    Updated: 2019/11/03 22:05:40 by tjans         ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -177,8 +177,9 @@ $(ASSETDIR)/$(LIBMALLOC): $(ASSETDIR)/malloc.c
 $(ASSETDIR)/$(ANAME):
 	@rm -f $(SONAME)
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", make -j 3 -C "$(LIBFTDIR)")
+	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", make bonus -j 3 -C "$(LIBFTDIR)" || true)
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", cp "$(LIBFTDIR)/libft.a" $(ASSETDIR)/)
-	
+
 #	Linking
 $(ASSETDIR)/$(NAME): $(OBJ)
 	@$(call disp_title,Linking,$(LINK_COLOR_T));
@@ -239,12 +240,12 @@ codesize:
 
 f: libclean all
 	@rm -rf $(ASSETDIR)/$(ANAME)
-	@echo "\033[38;5;93mRUNING TESTS:"
+	@echo "\033[38;5;93mRUNNING TESTS:"
 	@./$(WRAPNAME) ${SPEED}
 
 b: libclean all
 	@rm -rf $(ASSETDIR)/$(ANAME)
-	@echo "\033[38;5;93mRUNING BENCH:"
+	@echo "\033[38;5;93mRUNNING BENCH:"
 	@./$(WRAPNAME) -b ${ARGS}
 
 libft: libclean all
