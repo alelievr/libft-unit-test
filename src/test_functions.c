@@ -6,7 +6,7 @@
 /*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2019/10/20 07:31:55 by juligonz         ###   ########.fr       */
+/*   Updated: 2019/11/04 19:43:50 by tjans         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -8853,11 +8853,34 @@ void		test_ft_strlcpy_null(void *ptr) {
 			);
 }
 
+void		test_ft_strlcpy_zerosize(void *ptr) {
+	typeof(strlcpy) *ft_strlcpy = ptr;
+	SET_EXPLANATION("your strlcpy copies while destsize is zero, \
+			or does not return the size of the string it tried to create");
+
+	SANDBOX_RAISE(
+			char	*str = "BBBB";
+			char	buff1[0xF00];
+			char	buff2[0xF00];
+
+			memset(buff1, 'A', 20);
+			memset(buff2, 'A', 20);
+
+			if (strlcpy(buff1, str, 0) != ft_strlcpy(buff2, str, 0))
+				exit(TEST_FAILED);
+			if (!memcmp(buff1, buff2, 20))
+				exit(TEST_SUCCESS);
+			SET_DIFF_BYTES(buff1, buff2, 20);
+			exit(TEST_FAILED);
+			);
+}
+
 void		test_ft_strlcpy(void) {
 	add_fun_subtest(test_ft_strlcpy_basic);
 	add_fun_subtest(test_ft_strlcpy_return);
 	add_fun_subtest(test_ft_strlcpy_overflow);
 	add_fun_subtest(test_ft_strlcpy_min);
 	add_fun_subtest(test_ft_strlcpy_zero);
+	add_fun_subtest(test_ft_strlcpy_zerosize);
 	add_fun_subtest(test_ft_strlcpy_null);
 }
