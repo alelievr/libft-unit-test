@@ -6,7 +6,7 @@
 /*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2019/11/04 19:43:50 by tjans         ########   odam.nl         */
+/*   Updated: 2019/11/04 19:53:03 by tjans         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -8856,7 +8856,7 @@ void		test_ft_strlcpy_null(void *ptr) {
 void		test_ft_strlcpy_zerosize(void *ptr) {
 	typeof(strlcpy) *ft_strlcpy = ptr;
 	SET_EXPLANATION("your strlcpy copies while destsize is zero, \
-			or does not return the size of the string it tried to create");
+or does not return the size of the string it tried to create");
 
 	SANDBOX_RAISE(
 			char	*str = "BBBB";
