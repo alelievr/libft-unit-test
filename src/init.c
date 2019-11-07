@@ -82,7 +82,6 @@ t_libft_test	fun_test_table[] = {
 	{"ft_lstiter", test_ft_lstiter, 3, 1},
 	{"ft_lstmap", test_ft_lstmap, 3, 1},
 
-
 	{"ft_memalloc", test_ft_memalloc, 3, 0},
 	{"ft_strcpy", test_ft_strcpy, 3, 0},
 	{"ft_strncpy", test_ft_strncpy, 3, 0},

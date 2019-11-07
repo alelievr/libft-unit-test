@@ -6,7 +6,7 @@
 /*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2019/11/04 19:53:03 by tjans         ########   odam.nl         */
+/*   Updated: 2019/11/05 00:35:22 by alelievr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -7490,9 +7490,11 @@ void			test_ft_lstnew_free(void *ptr) {
 	t_list	*(*ft_lstnew)(const void *) = ptr;
 	SET_EXPLANATION("your lstnew does not allocate memory");
 
+	STDERR_TO_BUFF;
 	SANDBOX_RAISE(
 			char	*data = "hello, i'm a data";
 			t_list	*l = ft_lstnew(data);
+			write(STDERR_FILENO, "", 1);
 
 			if (!strcmp(data, l->content)) {
 				free(l);
@@ -7501,6 +7503,7 @@ void			test_ft_lstnew_free(void *ptr) {
 			SET_DIFF(data, l->content);
 			exit(TEST_FAILED);
 			);
+	VOID_STDERR;
 }
 
 void			test_ft_lstnew_null(void *ptr) {
@@ -7545,8 +7548,10 @@ void			test_ft_lstnew(void){
 //        ft_lstdelone        //
 ////////////////////////////////
 
+static bool		g_delone_called;
 void			lstdelone_f(void *d) {
 	free(d);
+	g_delone_called = true;
 }
 
 t_list			*lstnew(void *d) {
@@ -7565,13 +7570,14 @@ void			test_ft_lstdelone_basic(void *ptr) {
 
 	STDERR_TO_BUFF;
 	SANDBOX_RAISE(
-			t_list	*l = lstnew(strdup("test"));
+			t_list	*l = lstnew(malloc(10));
 
+			g_delone_called = false;
 			ft_lstdelone(l, lstdelone_f);
-			write(STDERR_FILENO, "", 1);
-			if (!l)
+
+      write(STDERR_FILENO, "", 1);
+			if (g_delone_called)
 				exit(TEST_SUCCESS);
-			SET_DIFF_PTR(NULL, l);
 			exit(TEST_FAILED);
 			);
 	VOID_STDERR;
@@ -7582,13 +7588,12 @@ void			test_ft_lstdelone(void) {
 }
 
 ////////////////////////////////
-//        ft_lstclear         //
+//         ft_lstclear        //
 ////////////////////////////////
 
 int				__delNum = 0;
-void			lstclear_f(void *lst, size_t s) {
+void			lstdel_f(void *lst) {
 	(void)lst;
-	(void)s;
 	__delNum++;
 }
 
@@ -7623,6 +7628,7 @@ void			test_ft_lstclear_free(void *ptr) {
 			l->next = lstnew(strdup("#TEST#"));
 			tmp = l->next;
 			ft_lstclear(&l, lstdelone_f);
+			write(STDERR_FILENO, "", 1);
 
 			if (!l) {
 				free(tmp);
@@ -7635,10 +7641,11 @@ void			test_ft_lstclear_free(void *ptr) {
 }
 
 void			test_ft_lstclear_number(void *ptr) {
-	void		(*ft_lstclear)(t_list **, void (*)(void *, size_t)) = ptr;
+	void		(*ft_lstclear)(t_list **, void (*)(void *)) = ptr;
 	SET_EXPLANATION("bad call number of the function pointer");
 	t_list	*list;
 
+	STDERR_TO_BUFF;
 	SANDBOX_RAISE(
 			char	*content = "hello !";
 
@@ -7649,12 +7656,14 @@ void			test_ft_lstclear_number(void *ptr) {
 			bzero(list->next, sizeof(t_list));
 			list->content = content;
 			list->next->content = content + 2;
-			ft_lstclear(&list, lstclear_f);
+			ft_lstclear(&list, lstdel_f);
+			write(STDERR_FILENO, "", 1);
 			if (__delNum == 2)
 				exit(TEST_SUCCESS);
 			SET_DIFF_INT(2, __delNum);
 			exit(TEST_FAILED);
 	)
+	VOID_STDERR;
 }
 
 void			test_ft_lstclear(void) {
@@ -7664,7 +7673,7 @@ void			test_ft_lstclear(void) {
 }
 
 ////////////////////////////////
-//     ft_lstadd_front        //
+//      ft_lstadd_front       //
 ////////////////////////////////
 
 void			test_ft_lstadd_front_basic(void *ptr) {
@@ -7677,7 +7686,8 @@ void			test_ft_lstadd_front_basic(void *ptr) {
 			t_list	*n = lstnew(strdup("OK"));
 
 			ft_lstadd_front(&l, n);
-			if (l == n && !strcmp(l->content, "OK")) {
+
+      if (l == n && !strcmp(l->content, "OK")) {
 				exit(TEST_SUCCESS);
 			}
 			SET_DIFF_PTR(n, l);
@@ -7696,7 +7706,8 @@ void			test_ft_lstadd_front_free(void *ptr) {
 			t_list	*n = lstnew(strdup("OK"));
 
 			ft_lstadd_front(&l, n);
-			if (l == n && !strcmp(l->content, "OK")) {
+
+      if (l == n && !strcmp(l->content, "OK")) {
 				free(l->next);
 				free(l);
 				exit(TEST_SUCCESS);
@@ -7908,6 +7919,8 @@ void			test_ft_lstlast(void){
 	add_fun_subtest(test_ft_lstlast_null);
 }
 
+// TODO: Add back, lst size and lst last
+
 ////////////////////////////////
 //        ft_lstiter          //
 ////////////////////////////////
@@ -7928,7 +7941,7 @@ void			test_ft_lstiter_basic(void *ptr) {
 
 			l->next = lstnew(strdup("KO !"));
 			l->next->next = lstnew(strdup("KO !"));
-			ft_lstiter(l, lstiter_f);
+      		ft_lstiter(l, lstiter_f);
 			if (!strcmp(l->content, "OK !") && !strcmp(l->next->content, "OK !") && !strcmp(l->next->next->content, "OK !"))
 				exit(TEST_SUCCESS);
 			SET_DIFF("OK !", l->content);

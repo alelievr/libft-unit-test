@@ -222,7 +222,8 @@ relib:
 	@$(call exec_color, "\033[38;5;$(LINK_COLOR_T)m", make re -C "$(LIBFTDIR)")
 
 #	All removing then compiling
-re: relib fclean libclean all
+re: relib fclean libclean
+	@$(MAKE) all
 
 #	Checking norme
 norme:
