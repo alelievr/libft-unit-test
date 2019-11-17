@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bench_functions.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: waddam <waddam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created  2016/08/06 16:42:40 by alelievr          #+#    #+#             */
-/*   Updated  2016/10/05 15:29:34 by alelievr         ###   ########.fr       */
+/*   Created: 2016/08/06 16:42:40 by alelievr          #+#    #+#             */
+/*   Updated: 2019/11/14 22:21:45 by waddam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ void			bench_ft_bzero_smallbench(void *ptr, void *vsptr) {
 	SET_BENCHITER(16);
 
 	SANDBOX_BENCH(
-			size_t	size = MEGABYTE * 128;
+			size_t	size = 128;
 			char	*str = (char *)malloc(sizeof(char) * size);
 			char	*str2 = (char *)malloc(sizeof(char) * size);
 
