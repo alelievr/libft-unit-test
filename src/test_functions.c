@@ -1196,7 +1196,7 @@ void			test_ft_memcmp_basic(void *ptr) {
 			int		i1 = LREG(simple_memcmp(s1, s2, size));
 			int		i2 = LREG(ft_memcmp(s1, s2, size));
 
-			if (i1 == i2)
+			if (!!i1 == !!i2)
 				exit(TEST_SUCCESS);
 			SET_DIFF_INT(i1, i2);
 			exit(TEST_FAILED);
@@ -1216,7 +1216,7 @@ void			test_ft_memcmp_basic1(void *ptr) {
 			int		i1 = REG(simple_memcmp(s1, s2, size));
 			int		i2 = REG(ft_memcmp(s1, s2, size));
 
-			if (i1 == i2)
+			if (!!i1 == !!i2)
 				exit(TEST_SUCCESS);
 			SET_DIFF_INT(i1, i2);
 			exit(TEST_FAILED);
@@ -1235,7 +1235,7 @@ void			test_ft_memcmp_basic2(void *ptr) {
 			int i1 = LREG(simple_memcmp(s1, s2, size));
 			int	i2 = LREG(ft_memcmp(s1, s2, size));
 
-			if (i1 == i2)
+			if (!!i1 == !!i2)
 				exit(TEST_SUCCESS);
 			SET_DIFF_INT(i1, i2);
 			exit(TEST_FAILED);
@@ -1254,7 +1254,7 @@ void			test_ft_memcmp_basic3(void *ptr) {
 			int i1 = LREG(simple_memcmp(s1, s2, size));
 			int	i2 = LREG(ft_memcmp(s1, s2, size));
 
-			if (i1 == i2)
+			if (!!i1 == !!i2)
 				exit(TEST_SUCCESS);
 			SET_DIFF_INT(i1, i2);
 			exit(TEST_FAILED);
@@ -1273,7 +1273,7 @@ void			test_ft_memcmp_hidden(void *ptr) {
 			int i1 = LREG(simple_memcmp(s1, s2, size));
 			int	i2 = LREG(ft_memcmp(s1, s2, size));
 
-			if (i1 == i2)
+			if (!!i1 == !!i2)
 				exit(TEST_SUCCESS);
 			SET_DIFF_INT(i1, i2);
 			exit(TEST_FAILED);
@@ -1292,7 +1292,7 @@ void			test_ft_memcmp_unsigned(void *ptr) {
 			int i1 = LREG(simple_memcmp(s1, s2, size));
 			int	i2 = LREG(ft_memcmp(s1, s2, size));
 
-			if (i1 == i2)
+			if (!!i1 == !!i2)
 				exit(TEST_SUCCESS);
 			SET_DIFF_INT(i1, i2);
 			exit(TEST_FAILED);
@@ -1311,7 +1311,7 @@ void			test_ft_memcmp_null_byte(void *ptr) {
 			int i1 = LREG(simple_memcmp(s1, s2, size));
 			int	i2 = LREG(ft_memcmp(s1, s2, size));
 
-			if (i1 == i2)
+			if (!!i1 == !!i2)
 				exit(TEST_SUCCESS);
 			SET_DIFF_INT(i1, i2);
 			exit(TEST_FAILED);
