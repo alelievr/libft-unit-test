@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: ytsumita <ytsumita@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2019/11/05 00:35:22 by alelievr         ###   ########.fr       */
+/*   Updated: 2020/07/03 01:36:16 by ytsumita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -6010,6 +6010,17 @@ void			test_ft_substr_electric_memory(void *ptr) {
 			);
 }
 
+void			test_ft_substr_len_lessthan_start(void *ptr) {
+	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
+	SET_EXPLANATION("your substr should be return "" when len is less than start (Not return NULL)");
+
+	SANDBOX_RAISE(
+			if (strcmp(ft_substr("YOLO !", 5, 2), ""))
+				exit(TEST_FAILED);
+			exit(TEST_SUCCESS);
+			);
+}
+
 void			test_ft_substr_null(void *ptr) {
 	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
 	SET_EXPLANATION("your substr does not segfault when null parameter is sent");
@@ -6028,6 +6039,7 @@ void            test_ft_substr(void){
 	add_fun_subtest(test_ft_substr_malloc_null);
 	add_fun_subtest(test_ft_substr_all);
 	add_fun_subtest(test_ft_substr_electric_memory);
+	add_fun_subtest(test_ft_substr_len_lessthan_start);
 	add_fun_subtest(test_ft_substr_null);
 }
 
@@ -6522,6 +6534,21 @@ void			test_ft_split_zero(void *ptr) {
 			);
 }
 
+void			test_ft_split_terminator(void *ptr) {
+	char	**(*ft_split)(char *, char) = ptr;
+	SET_EXPLANATION("your split will segfault in case --> *str=\"\\0aa\\0bbb\" c=\'\\0\' ");
+
+	SANDBOX_RAISE(
+			char	**expected = ft_split("\0aa\0bbb", '\0');
+			for (int i = 0; i < 3; i++)
+			{
+				if (expected[i] != NULL)
+					exit(TEST_FAILED);
+			}
+			exit(TEST_SUCCESS);
+			)
+}
+
 void			test_ft_split_null(void *ptr) {
 	char	**(*ft_split)(char *, char) = ptr;
 	SET_EXPLANATION("your split does not segfault/return null when null parameter is sent");
@@ -6545,6 +6572,7 @@ void            test_ft_split(void) {
 	add_fun_subtest(test_ft_split_free);
 	add_fun_subtest(test_ft_split_malloc_null);
 	add_fun_subtest(test_ft_split_zero);
+	add_fun_subtest(test_ft_split_terminator);
 	add_fun_subtest(test_ft_split_null);
 }
 
@@ -7836,7 +7864,7 @@ void			test_ft_lstsize_basic(void *ptr) {
 			t_list	*l;
 			int actual;
 			int expected;
-	
+
 			l = lstnew(strdup("1"));
 			l->next = lstnew(strdup("2"));
 			l->next->next = lstnew(strdup("3"));
@@ -7857,7 +7885,7 @@ void			test_ft_lstsize_null(void *ptr) {
 			t_list	*l = NULL;
 			int actual;
 			int expected = 0;
-	
+
 			actual = ft_lstsize(l);
 			if (actual == expected)
 				exit(TEST_SUCCESS);
@@ -7883,7 +7911,7 @@ void			test_ft_lstlast_basic(void *ptr) {
 			t_list	*l;
 			t_list	*expected;
 			t_list	*actual;
-	
+
 			l = lstnew(strdup("1"));
 			l->next = lstnew(strdup("2"));
 			l->next->next = lstnew(strdup("3"));
