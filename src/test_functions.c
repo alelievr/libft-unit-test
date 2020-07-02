@@ -6,7 +6,7 @@
 /*   By: ytsumita <ytsumita@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2020/07/03 01:36:16 by ytsumita         ###   ########.fr       */
+/*   Updated: 2020/07/03 01:54:14 by ytsumita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -6012,7 +6012,7 @@ void			test_ft_substr_electric_memory(void *ptr) {
 
 void			test_ft_substr_len_lessthan_start(void *ptr) {
 	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
-	SET_EXPLANATION("your substr should be return "" when len is less than start (Not return NULL)");
+	SET_EXPLANATION("your substr should be return \"\" when len is less than start (Not return NULL)");
 
 	SANDBOX_RAISE(
 			if (strcmp(ft_substr("YOLO !", 5, 2), ""))
