@@ -6,7 +6,7 @@
 /*   By: ytsumita <ytsumita@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2020/07/03 22:45:43 by ytsumita         ###   ########.fr       */
+/*   Updated: 2020/07/04 08:33:06 by ytsumita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -6021,17 +6021,6 @@ void			test_ft_substr_s_len_lessthan_start(void *ptr) {
 			);
 }
 
-void			test_ft_substr_len_lessthan_start(void *ptr) {
-	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
-	SET_EXPLANATION("your substr should be return \"\" when *s length is less than start (Not return NULL)");
-
-	SANDBOX_RAISE(
-			if (strcmp(ft_substr("YOLO !", 5, 2), ""))
-				exit(TEST_FAILED);
-			exit(TEST_SUCCESS);
-			);
-}
-
 void			test_ft_substr_null(void *ptr) {
 	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
 	SET_EXPLANATION("your substr does not segfault when null parameter is sent");
@@ -6051,7 +6040,6 @@ void            test_ft_substr(void){
 	add_fun_subtest(test_ft_substr_all);
 	add_fun_subtest(test_ft_substr_electric_memory);
 	add_fun_subtest(test_ft_substr_s_len_lessthan_start);
-	add_fun_subtest(test_ft_substr_len_lessthan_start);
 	add_fun_subtest(test_ft_substr_null);
 }
 
