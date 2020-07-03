@@ -6,7 +6,7 @@
 /*   By: ytsumita <ytsumita@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2020/07/04 08:33:06 by ytsumita         ###   ########.fr       */
+/*   Updated: 2020/07/04 08:48:38 by ytsumita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -6540,7 +6540,7 @@ void			test_ft_split_terminator(void *ptr) {
 
 	SANDBOX_RAISE(
 			char	**expected = ft_split("\0aa\0bbb", '\0');
-			for (int i = 0; i < 3; i++)
+			for (int i = 0; expected[i]; i++)
 			{
 				if (expected[i] != NULL)
 					exit(TEST_FAILED);
