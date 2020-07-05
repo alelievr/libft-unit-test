@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caellis <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2019/11/05 00:35:22 by alelievr         ###   ########.fr       */
+/*   Updated: 2020/07/03 15:35:48 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -6019,6 +6019,25 @@ void			test_ft_substr_null(void *ptr) {
 			);
 }
 
+void			test_ft_substr_big_start(void *ptr) {
+	char	*(*ft_substr)(const char *, size_t, size_t) = ptr;
+	SET_EXPLANATION("your substr does not work when start >= ft_strlen(s)");
+
+	SANDBOX_RAISE(
+			char	*str = "01234";
+			size_t	size = 10;
+
+			char	*ret = ft_substr(str, 10, size);
+			if (!strncmp(ret, "", 1)) {
+				free(ret);
+				exit(TEST_SUCCESS);
+			}
+			SET_DIFF("", ret);
+			free(ret);
+			exit(TEST_FAILED);
+			);
+}
+
 void            test_ft_substr(void){
 	add_fun_subtest(test_ft_substr_basic);
 	add_fun_subtest(test_ft_substr_basic2);
@@ -6029,6 +6048,7 @@ void            test_ft_substr(void){
 	add_fun_subtest(test_ft_substr_all);
 	add_fun_subtest(test_ft_substr_electric_memory);
 	add_fun_subtest(test_ft_substr_null);
+	add_fun_subtest(test_ft_substr_big_start);
 }
 
 ////////////////////////////////
