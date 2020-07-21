@@ -109,7 +109,7 @@ void			test_ft_memset_return(void *ptr) {
 			SET_DIFF_BYTES(r1, r2, size);
 			ASSERT_RETURN_VALUE(r1, r2);
 
-			r1 = memset("", 'A', 0);
+			r1 = memset("", 'A', (0));
 			r2 = ft_memset("", 'A', 0);
 			ASSERT_RETURN_VALUE(r1, r2);
 			exit(TEST_SUCCESS);
@@ -164,7 +164,7 @@ void			test_ft_memset_zero_value(void *ptr) {
 			memset(buff2, 0, sizeof(buff2));
 
 			ft_memset(buff, '\xff', 0);
-			memset(buff2, '\xff', 0);
+			memset(buff2, '\xff', (0));
 			if (!memcmp(buff, buff2, BSIZE))
 				exit(TEST_SUCCESS);
 			SET_DIFF(buff, buff2);
@@ -251,7 +251,7 @@ void			test_ft_bzero_zero_value(void *ptr) {
 			memset(buff2, '\x1', sizeof(buff2));
 
 			ft_bzero(buff, 0);
-			bzero(buff2, 0);
+			bzero(buff2, (0));
 			if (!memcmp(buff, buff2, BSIZE))
 				exit(TEST_SUCCESS);
 			SET_DIFF_BYTES(buff, buff2, 10);
