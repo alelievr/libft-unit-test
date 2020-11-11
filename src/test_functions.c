@@ -6809,6 +6809,10 @@ void			test_ft_putchar_ascii(void *ptr) {
 			);
 }
 
+// Here's a famous japanese Haiku! It's good for your culture :)
+wchar_t* haiku_0 = L"古池や蛙飛び込む水の音\
+ふるいけやかわずとびこむみずのおと";
+
 void			test_ft_putchar_unicode(void *ptr) {
 	typeof(putchar)	*ft_putchar = ptr;
 	SET_EXPLANATION("your putchar does not work with unicode");
@@ -6816,17 +6820,27 @@ void			test_ft_putchar_unicode(void *ptr) {
 	SANDBOX_RAISE(
 			char	buff[10];
 			char	buff2[10];
-			int		c = L'ø';
 			int		len = 0;
-			putwchart(c, &len, buff2);
-			buff2[len] = 0;
-			STDOUT_TO_BUFF;
-			ft_putchar(c);
-			GET_STDOUT(buff, 10);
-			if (!strcmp(buff, buff2))
-				exit(TEST_SUCCESS);
-			SET_DIFF(buff, buff2);
-			exit(TEST_KO);
+
+			int i = 0;
+			while (haiku_0[i++])
+			{
+				wchar_t c = haiku_0[i];
+				putwchart(c, &len, buff2);
+				buff2[len] = 0;
+
+				STDOUT_TO_BUFF;
+				ft_putchar(c);
+				GET_STDOUT(buff, 10);
+
+				if (strcmp(buff, buff2))
+				{
+					SET_DIFF(buff2, buff);
+					exit(TEST_KO);
+				}
+			}
+			exit(TEST_SUCCESS);
+
 			);
 	(void)ft_putchar;
 }
