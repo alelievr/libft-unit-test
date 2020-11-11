@@ -77,10 +77,10 @@ char	*get_fd_buffer(int fd, char *buff, size_t size) {
 	int		ret;
 
 	if (buff == NULL) {
-		char	b[0xF000];
-		ret = read(fd_pipe[0], b, sizeof(b));
+		char	b[0xF000 + 1];
+		ret = read(fd_pipe[0], b, sizeof(b) - 1);
 		if (ret != -1)
-			fd_pipe[ret] = 0;
+			b[ret] = 0;
 		dup2(_stdout, fd);
 		return (NULL);
 	}
