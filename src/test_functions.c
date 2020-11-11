@@ -7186,32 +7186,9 @@ void			test_ft_putchar_fd_ascii(void *ptr) {
 			);
 }
 
-void			test_ft_putchar_fd_unicode(void *ptr) {
-	void		(*ft_putchar_fd)(int fd, int c) = ptr;
-	SET_EXPLANATION("your putchar_fd does not work with unicode");
-
-	SANDBOX_RAISE(
-			char	buff[10];
-			char	buff2[10];
-			int		c = L'ø';
-			int		len = 0;
-			putwchart(c, &len, buff2);
-			buff2[len] = 0;
-			STDERR_TO_BUFF;
-			ft_putchar_fd(c, STDERR_FILENO);
-			GET_STDERR(buff, 10);
-			if (!strcmp(buff, buff2))
-				exit(TEST_SUCCESS);
-			SET_DIFF(buff, buff2);
-			exit(TEST_KO);
-			);
-	(void)ft_putchar_fd;
-}
-
 void            test_ft_putchar_fd(void){
 	add_fun_subtest(test_ft_putchar_fd_basic);
 	add_fun_subtest(test_ft_putchar_fd_ascii);
-	add_fun_subtest(test_ft_putchar_fd_unicode);
 }
 
 ////////////////////////////////
