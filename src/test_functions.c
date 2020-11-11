@@ -6645,7 +6645,7 @@ void			test_ft_itoa_max_int(void *ptr) {
 			char	*i1 = ft_itoa(INT_MAX);
 
 			if (atoi(i1) != INT_MAX) {
-				SET_DIFF(i1, "0");
+				SET_DIFF("2147483647", i1);
 				exit(TEST_FAILED);
 			}
 			exit(TEST_SUCCESS);
@@ -6700,7 +6700,7 @@ void			test_ft_itoa_min_int(void *ptr) {
 			char	*i1 = ft_itoa(INT_MIN);
 
 			if (atoi(i1) != INT_MIN) {
-				SET_DIFF(i1, "0");
+				SET_DIFF("-2147483648", i1);
 				exit(TEST_FAILED);
 			}
 			exit(TEST_SUCCESS);
@@ -6717,7 +6717,7 @@ void			test_ft_itoa_zero_byte(void *ptr) {
 			MALLOC_RESET;
 
 			if (strcmp(i1, "-1234")) {
-				SET_DIFF(i1, "-1234");
+				SET_DIFF("-1234", i1);
 				exit(TEST_FAILED);
 			}
 			exit(TEST_SUCCESS);
@@ -7145,7 +7145,7 @@ void			test_ft_putchar_fd_basic(void *ptr) {
 			GET_STDERR(buff, 10);
 			if (buff[0] == c)
 				exit(TEST_SUCCESS);
-			SET_DIFF(buff, &c);
+			SET_DIFF(&c, buff);
 			exit(TEST_FAILED);
 			);
 }
