@@ -92,12 +92,12 @@ extern size_t			page_size;
 extern char				*it;
 extern int				errors;
 
-extern pid_t			g_pid;
-extern char				g_ret[2];
+extern pid_t			g_pid_h;
+extern char				g_ret_h[2];
 
-char one[50];
-char two[50];
-char *cp;
+extern char one[50];
+extern char two[50];
+extern char *cp;
 
 # define OPT_ITERATIONS 10000
 # define OPT_RANDOM 10001
@@ -137,8 +137,8 @@ void	ncurses_deinit();
 void	write_result(char *fun_name, bool succeed);
 void	ncurses_loop(void);
 
-# define	SANDBOX_CRASH		(g_ret[0] == SIGSEGV || g_ret[0] == SIGBUS || g_ret[0] == SIGABRT)
-# define	SANDBOX_RESULT		(g_ret[1])
+# define	SANDBOX_CRASH		(g_ret_h[0] == SIGSEGV || g_ret_h[0] == SIGBUS || g_ret_h[0] == SIGABRT)
+# define	SANDBOX_RESULT		(g_ret_h[1])
 
 enum e_color_set
 {

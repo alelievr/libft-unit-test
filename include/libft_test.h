@@ -226,7 +226,7 @@ enum		e_prot {
 # define	MALLOC_SIZE			MALLOC_SET_BYTE(_MALLOC_SIZE)
 
 //# define	PRINT_BITS(x, y)	print_double_bits(x, y);
-# define	SET_DIFF(x, y)		lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%.300s|\n%12s: |%.300s|", current_fun_name + 3, x, current_fun_name, y); write(g_diff_fd, "\0", 1);
+# define	SET_DIFF(x, y)		lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%.300s|\n%12s: |%.300s|", current_fun_name + 3, (char*)x, current_fun_name, (char*)y); write(g_diff_fd, "\0", 1);
 # define	SET_DIFF_INT(x, y)	lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%i|\n%12s: |%i|", current_fun_name + 3, x, current_fun_name, y) ; write(g_diff_fd, "\0", 1);
 # define	SET_DIFF_DOUBLE(x, y)	lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%lf|\n%12s: |%lf|", current_fun_name + 3, x, current_fun_name, y) ; write(g_diff_fd, "\0", 1);
 # define	SET_DIFF_PTR(x, y)	lseek(g_diff_fd, 0, SEEK_SET); dprintf(g_diff_fd, "%12s: |%p|\n%12s: |%p|", current_fun_name + 3, x, current_fun_name, y) ; write(g_diff_fd, "\0", 1);

@@ -18,13 +18,13 @@ unsigned int	seed = 0x42;
 size_t			page_size;
 int				errors = 0;
 char			*it = "<UNSET>";
-pid_t			g_pid;
-char			g_ret[2];
+pid_t			g_pid_h;
+char			g_ret_h[2];
 # define HIMAGIC        0x8080808080808080lu
 # define LOMAGIC        0x0101010101010101lu
 # define LONGCHR_NULL(x)    (((x - LOMAGIC) & HIMAGIC) != 0)
 
-# define	SANDBOX(x)	if (!(g_pid = fork())) {x;exit(TEST_SUCCESS);} if (g_pid > 0) { wait((int*)g_ret); }
+# define	SANDBOX(x)	if (!(g_pid_h = fork())) {x;exit(TEST_SUCCESS);} if (g_pid_h > 0) { wait((int*)g_ret_h); }
 #define SANDBOX_HARDCORE(x) SANDBOX(x); if (SANDBOX_CRASH || SANDBOX_RESULT == TEST_FAILED) write_result(it, false); else write_result(it, true);
 
 const char *mtable[] = {
