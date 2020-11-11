@@ -4348,6 +4348,24 @@ void			test_ft_strncmp_ascii(void *ptr) {
 			);
 }
 
+void			test_ft_strncmp_biglittle(void *ptr) {
+	typeof(strncmp)	*ft_strncmp = ptr;
+	SET_EXPLANATION("your strncmp does not work when s1 is contained in s2");
+
+	SANDBOX_RAISE(
+			char	*big = "abcdef";
+			char	*little = "abcdefghijklmnop";
+			size_t	size = 6;
+
+			int		i1 = REG(strncmp(big, little, size));
+			int		i2 = REG(ft_strncmp(big, little, size));
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
 void			test_ft_strncmp_electric_memory(void *ptr) {
 	typeof(strncmp)	*ft_strncmp = ptr;
 	SET_EXPLANATION("your strncmp crash because it read too many bytes !");
@@ -4418,6 +4436,7 @@ void            test_ft_strncmp(void){
 	add_fun_subtest(test_ft_strncmp_hidden);
 	add_fun_subtest(test_ft_strncmp_over_len);
 	add_fun_subtest(test_ft_strncmp_ascii);
+	add_fun_subtest(test_ft_strncmp_biglittle);
 	add_fun_subtest(test_ft_strncmp_electric_memory);
 	add_fun_subtest(test_ft_strncmp_null1);
 	add_fun_subtest(test_ft_strncmp_null2);
