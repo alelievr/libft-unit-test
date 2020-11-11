@@ -4664,6 +4664,55 @@ void			test_ft_atoi_over_min_long(void *ptr) {
 			);
 }
 
+void			test_ft_atoi_plus0(void *ptr) {
+	typeof(atoi)	*ft_atoi = ptr;
+	SET_EXPLANATION("your atoi does not work with the plus sign");
+
+	SANDBOX_RAISE(
+			char	n[40] = "+1234";
+
+			int		i1 = atoi(n);
+			int		i2 = ft_atoi(n);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_KO);
+			);
+}
+
+void			test_ft_atoi_plus1(void *ptr) {
+	typeof(atoi)	*ft_atoi = ptr;
+	SET_EXPLANATION("your atoi does not work with the plus sign and spaces");
+
+	SANDBOX_RAISE(
+			char	n[40] = "\t\v\f\r\n \f+\t\v\f\r\n \f1234";
+
+			int		i1 = atoi(n);
+			int		i2 = ft_atoi(n);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_KO);
+			);
+}
+
+void			test_ft_atoi_plus2(void *ptr) {
+	typeof(atoi)	*ft_atoi = ptr;
+	SET_EXPLANATION("your atoi does not work with the plus sign and spaces");
+
+	SANDBOX_RAISE(
+			char	n[40] = "+\t\v\f\r\n \f1234";
+
+			int		i1 = atoi(n);
+			int		i2 = ft_atoi(n);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_KO);
+			);
+}
+
+
 void			test_ft_atoi_null(void *ptr) {
 	typeof(atoi)	*ft_atoi = ptr;
 
@@ -4705,6 +4754,9 @@ void            test_ft_atoi(void){
 	add_fun_subtest(test_ft_atoi_min_long);
 	add_fun_subtest(test_ft_atoi_over_max_long);
 	add_fun_subtest(test_ft_atoi_over_min_long);
+	add_fun_subtest(test_ft_atoi_plus0);
+	add_fun_subtest(test_ft_atoi_plus1);
+	add_fun_subtest(test_ft_atoi_plus2);
 	add_fun_subtest(test_ft_atoi_null);
 	add_fun_subtest(test_ft_atoi_speed);
 }
