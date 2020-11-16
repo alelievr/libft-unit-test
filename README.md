@@ -46,6 +46,15 @@ To get it work on linux:
 + Install this two packages libbsd-dev and libncurses-dev
 + Add a rule called 'so' in your Makefile to compile your libft in dynamic library instead of static (must be called "libft.so").
 
+
+Example:
+```
+so:
+	$(CC) -fPIC $(CFLAGS) $(SRC)
+	gcc -shared -o libft.so $(OBJ)
+```
+
+
 # Screenshots
 
 ### Default mode
