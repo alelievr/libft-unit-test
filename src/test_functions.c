@@ -8943,7 +8943,7 @@ void		test_ft_strlcpy_null(void *ptr) {
 	typeof(strlcpy)	*ft_strlcpy = ptr;
 	SET_EXPLANATION("your strlcpy doe not segfault when null parameter is sent");
 
-	SANDBOX_PROT(
+	SANDBOX_IRAISE(
 			ft_strlcpy(NULL, NULL, 10);
 			);
 }
