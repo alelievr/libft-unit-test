@@ -1493,7 +1493,7 @@ void			test_ft_strlen_empty(void *ptr) {
 
 void			test_ft_strlen_null(void *ptr) {
 	typeof(strlen)	*ft_strlen = ptr;
-	SET_EXPLANATION("your strlen does not segv when null is sended");
+	SET_EXPLANATION("your strlen does not segfault when null is sent");
 
 	SANDBOX_IRAISE(
 			ft_strlen(NULL);
@@ -2948,18 +2948,6 @@ void			test_ft_strlcat_electric_memory(void *ptr) {
 			);
 }
 
-void			test_ft_strlcat_null1(void *ptr) {
-	typeof(strlcat)	*ft_strlcat = ptr;
-	SET_EXPLANATION("your strlcat does not segfault when null parameter is sent");
-
-	SANDBOX_IRAISE(
-			char	b[0xF] = "nyan !";
-
-			ft_strlcat(NULL, b, 2);
-			);
-}
-
-
 void			test_ft_strlcat_return_value(void *ptr) {
 	typeof(strlcat)	*ft_strlcat = ptr;
 	SET_EXPLANATION("your strlcat return value is false");
@@ -2988,14 +2976,34 @@ void			test_ft_strlcat_return_value(void *ptr) {
 			);
 }
 
-void			test_ft_strlcat_null2(void *ptr) {
+void			test_ft_strlcat_null1(void *ptr) {
 	typeof(strlcat)	*ft_strlcat = ptr;
-	SET_EXPLANATION("your strlcat does not segfault when null parameter is sent");
+	SET_EXPLANATION("your strlcat does not segfault when the first null parametre is sent");
 
 	SANDBOX_IRAISE(
 			char	b[0xF] = "nyan !";
 
-			ft_strlcat(b, NULL, 2);
+			ft_strlcat(NULL, b, 0);
+			);
+}
+
+void			test_ft_strlcat_null2(void *ptr) {
+	typeof(strlcat)	*ft_strlcat = ptr;
+	SET_EXPLANATION("your strlcat does not segfault when the second null parametre is sent");
+
+	SANDBOX_IRAISE(
+			char	b[0xF] = "nyan !";
+
+			ft_strlcat(b, NULL, 0);
+			);
+}
+
+void			test_ft_strlcat_double_null(void *ptr) {
+	typeof(strlcat)	*ft_strlcat = ptr;
+	SET_EXPLANATION("your strlcat does not segfault when two null parametres are sent");
+
+	SANDBOX_IRAISE(
+			ft_strlcat(NULL, NULL, 0);
 			);
 }
 
@@ -3033,6 +3041,7 @@ void            test_ft_strlcat(void){
 	add_fun_subtest(test_ft_strlcat_return_value);
 	add_fun_subtest(test_ft_strlcat_null1);
 	add_fun_subtest(test_ft_strlcat_null2);
+	add_fun_subtest(test_ft_strlcat_double_null);
 	add_fun_subtest(test_ft_strlcat_speed);
 }
 
@@ -8957,7 +8966,11 @@ void		test_ft_strlcpy_overflow(void *ptr) {
 
 void		test_ft_strlcpy_null(void *ptr) {
 	typeof(strlcpy)	*ft_strlcpy = ptr;
-	SET_EXPLANATION("your strlcpy doe not segfault when null parameter is sent");
+	SET_EXPLANATION("your strlcpy does not segfault when two null parametres are sent");
+	
+	SANDBOX_IRAISE(
+			ft_strlcpy(NULL, NULL, 0);
+			);
 
 	SANDBOX_IRAISE(
 			ft_strlcpy(NULL, NULL, 10);
