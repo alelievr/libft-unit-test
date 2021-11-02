@@ -8080,7 +8080,8 @@ void			test_ft_lstmap_basic(void *ptr) {
 
 			l->next = lstnew(strdup("ss"));
 			l->next->next = lstnew(strdup("-_-"));
-			ret = ft_lstmap(l, lstmap_f, NULL);
+			// ret = ft_lstmap(l, lstmap_f, NULL);  // del may be necessary to use
+			ret = ft_lstmap(l, lstmap_f, lstdel_f); // or lstdelone_f
 			if (!strcmp(ret->content, "OK !") && !strcmp(ret->next->content, "OK !") && !strcmp(ret->next->next->content, "OK !") && !strcmp(l->content, " 1 2 3 ") && !strcmp(l->next->content, "ss") && !strcmp(l->next->next->content, "-_-"))
 				exit(TEST_SUCCESS);
 			SET_DIFF(" 1 2 3 ", l->content);
