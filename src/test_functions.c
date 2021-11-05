@@ -4822,12 +4822,13 @@ void			test_ft_isalnum_(void *ptr) {
 	typeof(isalnum)	*ft_isalnum = ptr;
 	SET_EXPLANATION("your isalnum just doesn't work, REALLY ?!");
 
+	// working fine in/on Ubuntu + a reasonable range
 	SANDBOX_RAISE(
-			int		i;
-			i = -1;
-			while (i < 530)
+			int		i = 0;
+
+			while (i < 256)
 			{
-				if (!!ft_isalnum(i) != !!isalnum(i))
+				if ((bool)ft_isalnum(i) != (bool)isalnum(i))
 					exit(TEST_FAILED);
 				i++;
 			}
@@ -4895,17 +4896,18 @@ void            test_ft_isprint(void){
 }
 
 ////////////////////////////////
-//        ft_touupper         //
+//        ft_toupper         //
 ////////////////////////////////
 
 void			test_ft_toupper_(void *ptr) {
 	typeof(toupper)	*ft_toupper = ptr;
 	SET_EXPLANATION("your toupper just doesn't work, REALLY ?!");
 
+	// working fine in/on Ubuntu + a reasonable range
 	SANDBOX_RAISE(
-			int		i;
-			i = -100;
-			while (i < 530)
+			int		i = 0;
+
+			while (i < 256)
 			{
 				if (ft_toupper(i) != toupper(i)) {
 					SET_DIFF_CUSTOM("%12s: |%i|\n%12s: |%i|\nparam: (%i)", current_fun_name + 3, toupper(i), current_fun_name, ft_toupper(i), i)
@@ -4929,10 +4931,11 @@ void			test_ft_tolower_(void *ptr) {
 	typeof(tolower)	*ft_tolower = ptr;
 	SET_EXPLANATION("your tolower just doesn't work, REALLY ?!");
 
+	// working fine in/on Ubuntu + a reasonable range
 	SANDBOX_RAISE(
-			int		i;
-			i = -100;
-			while (i < 530)
+			int		i = 0;
+
+			while (i < 256)
 			{
 				if (ft_tolower(i) != tolower(i)) {
 					SET_DIFF_CUSTOM("%12s: |%i|\n%12s: |%i|\nparam: (%i)", current_fun_name + 3, tolower(i), current_fun_name, ft_tolower(i), i)
