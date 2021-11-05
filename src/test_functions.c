@@ -7681,8 +7681,22 @@ void			test_ft_lstdelone_basic(void *ptr) {
 	VOID_STDERR;
 }
 
+void			test_ft_lstdelone_nulls(void *ptr) {
+	void	(*ft_lstdelone)(t_list *, void (*)(void *)) = ptr;
+	SET_EXPLANATION("your lstdelone does not segfault when null parameters are sent");
+
+	SANDBOX_PROT(
+			t_list	*node = lstnew(malloc(10));
+
+			ft_lstdelone(NULL, lstdelone_f);
+			ft_lstdelone(node, NULL);
+			free(node);
+			);
+}
+
 void			test_ft_lstdelone(void) {
 	add_fun_subtest(test_ft_lstdelone_basic);
+	add_fun_subtest(test_ft_lstdelone_nulls);
 }
 
 ////////////////////////////////
