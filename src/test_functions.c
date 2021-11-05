@@ -7764,10 +7764,24 @@ void			test_ft_lstclear_number(void *ptr) {
 	VOID_STDERR;
 }
 
+void			test_ft_lstclear_nulls(void *ptr) {
+	void		(*ft_lstclear)(t_list **, void (*)(void *)) = ptr;
+	SET_EXPLANATION("your lstclear does not segfault when null parameters are sent");
+
+	SANDBOX_PROT(
+			t_list	*lst = lstnew(malloc(10));
+
+			ft_lstclear(NULL, lstdelone_f);
+			ft_lstclear(&lst, NULL);
+			free(lst);
+			);
+}
+
 void			test_ft_lstclear(void) {
 	add_fun_subtest(test_ft_lstclear_basic);
 	add_fun_subtest(test_ft_lstclear_free);
 	add_fun_subtest(test_ft_lstclear_number);
+	add_fun_subtest(test_ft_lstclear_nulls);
 }
 
 ////////////////////////////////
