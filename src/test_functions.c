@@ -3834,6 +3834,7 @@ void			test_ft_strnstr_zero_len3(void *ptr) {
 
 void			test_ft_strnstr_same_ptr(void *ptr) {
 	typeof(strnstr)	*ft_strnstr = ptr;
+	SET_EXPLANATION("your strnstr does not work with the same pointer \"little\" string");
 
 	SANDBOX_RAISE(
 			char	*s1 = "AAAAAAAAAAAAA";
@@ -3848,14 +3849,16 @@ void			test_ft_strnstr_same_ptr(void *ptr) {
 			);
 }
 
-void			test_ft_strnstr_zero(void *ptr) {
+void			test_ft_strnstr_overlen(void *ptr) {
 	typeof(strnstr)	*ft_strnstr = ptr;
+	SET_EXPLANATION("your strnstr does not work with the same pointer and an exceeding length value");
 
 	SANDBOX_RAISE(
 			char	*s1 = "A";
+			size_t	max = strlen(s1) + 1;
 
-			char	*i1 = strnstr(s1, s1, 2);
-			char	*i2 = ft_strnstr(s1, s1, 2);
+			char	*i1 = strnstr(s1, s1, max);
+			char	*i2 = ft_strnstr(s1, s1, max);
 			if (i1 == i2)
 				exit(TEST_SUCCESS);
 			SET_DIFF(i1, i2);
@@ -3865,7 +3868,7 @@ void			test_ft_strnstr_zero(void *ptr) {
 
 void			test_ft_strnstr_electric_memory(void *ptr) {
 	typeof(strnstr)	*ft_strnstr = ptr;
-	SET_EXPLANATION("your strnstr crash because it read too many bytes !");
+	SET_EXPLANATION("your strnstr crashes because it read too many bytes !");
 
 	SANDBOX_RAISE(
 			const size_t size = 20;
@@ -3903,6 +3906,7 @@ void			test_ft_strnstr_null2(void *ptr) {
 
 void			test_ft_strnstr_speed(void *ptr) {
 	typeof(strnstr)	*ft_strnstr = ptr;
+	SET_EXPLANATION("your strnstr seems to be relatively slow");
 
 	SANDBOX_SPEED(
 			size_t	size = BFSIZE * 4;
@@ -3929,7 +3933,7 @@ void            test_ft_strnstr(void){
 	add_fun_subtest(test_ft_strnstr_zero_len2);
 	add_fun_subtest(test_ft_strnstr_zero_len3);
 	add_fun_subtest(test_ft_strnstr_same_ptr);
-	add_fun_subtest(test_ft_strnstr_zero);
+	add_fun_subtest(test_ft_strnstr_overlen);
 	add_fun_subtest(test_ft_strnstr_electric_memory);
 	add_fun_subtest(test_ft_strnstr_null2);
 	add_fun_subtest(test_ft_strnstr_null1);
