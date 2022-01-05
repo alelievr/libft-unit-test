@@ -159,7 +159,7 @@ $(SONAME):
 		$(CC_SO), $(CSOFLAGS), $(TMPLIB)/*.o, -o, $(SONAME))
 else
 $(SONAME):
-	@make -C $(LIBFTDIR) so
+	@gcc -shared -o $(LIBFTDIR)/$(SONAME) -fPIC $(LIBFTDIR)/*.c
 	@if [ -e $(LIBFTDIR)/libft.so ];\
 		then\
 		cp $(LIBFTDIR)/libft.so . ;\
