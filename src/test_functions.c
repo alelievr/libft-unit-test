@@ -6,7 +6,7 @@
 /*   By: mfunyu <mfunyu@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2022/08/23 21:29:47 by mfunyu           ###   ########.fr       */
+/*   Updated: 2022/08/23 21:40:16 by mfunyu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -3932,6 +3932,16 @@ void			test_ft_strnstr_speed(void *ptr) {
 			);
 }
 
+void			test_ft_strnstr_null3(void *ptr) {
+	typeof(strnstr)	*ft_strnstr = ptr;
+	SET_EXPLANATION("your strnstr crush when null parameter is sent with a size of 0");
+
+	SANDBOX_RAISE(
+			ft_strnstr(NULL, "fake", 0);
+			exit(TEST_SUCCESS);
+			);
+}
+
 void            test_ft_strnstr(void){
 	add_fun_subtest(test_ft_strnstr_basic);
 	add_fun_subtest(test_ft_strnstr_basic2);
@@ -3947,6 +3957,7 @@ void            test_ft_strnstr(void){
 	add_fun_subtest(test_ft_strnstr_electric_memory);
 	add_fun_subtest(test_ft_strnstr_null2);
 	add_fun_subtest(test_ft_strnstr_null1);
+	add_fun_subtest(test_ft_strnstr_null3);
 	add_fun_subtest(test_ft_strnstr_speed);
 }
 
