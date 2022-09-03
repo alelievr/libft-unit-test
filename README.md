@@ -1,7 +1,5 @@
 ##	libft Unit tests
 
-> :warning: **Important note: this version targets the new 42 subject of `libft`, if you want to use the old one [you can access it on the old branch](https://github.com/alelievr/libft-unit-test/tree/old).**
-
 libft-unit-test is a complete testing suite for 42's libft project, allowing you to test your lib, track your progress and benchmarking your lib (with system's libc or with another lib)
 
 # 🤖 Important information 🤖
