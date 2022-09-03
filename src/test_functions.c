@@ -1630,13 +1630,12 @@ void			test_ft_strdup_size(void *ptr) {
 	SET_EXPLANATION("your strdup did not allocate the good size so the \\0 test may be false");
 
 	SANDBOX_RAISE(
-			char 	*str;
 			char	*tmp = "this is a normal test";
 			int		r_size = strlen(tmp);
 			int		size;
 
 			MALLOC_SIZE;
-			str = ft_strdup(tmp);
+			ft_strdup(tmp);
 			MALLOC_RESET;
 			size = get_last_malloc_size();
 			if (size == r_size + 1)
@@ -5100,12 +5099,11 @@ void			test_ft_memalloc_malloc_size(void *ptr) {
 	SET_EXPLANATION("your memalloc did not allocate the good size");
 
 	SANDBOX_RAISE(
-			void	*ret;
 			int		alloc_size = 42;
 			int		size;
 
 			MALLOC_SIZE;
-			ret = ft_memalloc(alloc_size);
+			ft_memalloc(alloc_size);
 			MALLOC_RESET;
 
 			size = get_last_malloc_size();
@@ -6775,10 +6773,9 @@ void			test_ft_itoa_size(void *ptr) {
 
 	SANDBOX_RAISE(
 			int		size;
-			char	*i1;
 
 			MALLOC_SIZE;
-			i1 = ft_itoa(-5859);
+			ft_itoa(-5859);
 			MALLOC_RESET;
 			size = get_last_malloc_size();
 
@@ -6795,10 +6792,9 @@ void			test_ft_itoa_size2(void *ptr) {
 
 	SANDBOX_RAISE(
 			int		size;
-			char	*i1;
 
 			MALLOC_SIZE;
-			i1 = ft_itoa(0);
+			ft_itoa(0);
 			MALLOC_RESET;
 			size = get_last_malloc_size();
 
@@ -8510,13 +8506,12 @@ void			test_ft_strndup_size(void *ptr) {
 	SET_EXPLANATION("your strndup did not allocate the good size so the \\0 test may be false");
 
 	SANDBOX_RAISE(
-			char 	*str;
 			char	*tmp = "this is a normal test";
 			int		r_size = 5;
 			int		size;
 
 			MALLOC_SIZE;
-			str = ft_strndup(tmp, r_size);
+			ft_strndup(tmp, r_size);
 			MALLOC_RESET;
 			size = get_last_malloc_size();
 			if (size != r_size + 1) {
