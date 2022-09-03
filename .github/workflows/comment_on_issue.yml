@@ -1,0 +1,31 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Comment on issue
+
+# Controls when the workflow will run
+on:
+  issues:
+    types:
+      - opened
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create or Update Comment
+        uses: peter-evans/create-or-update-comment@v2.0.0
+        with:
+          issue-number: ${{github.event.issue.number}}
+          body: |
+            Hello! Thanks for contributing to the libft unit test.
+
+            Note that this repository is not maintained by the owner anymore, instead there is a bot that will automatically merge any reviewed pull requests.
+            If you feel like it, here are some links that can help you submiting a change in the code base::
+            - [Create a pull request from a fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork)
+            - [List of people that can review your pull request](https://github.com/alelievr/libft-unit-test/graphs/contributors)
+            - [Automatically closing an issue with a pull request](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword)
