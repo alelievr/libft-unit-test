@@ -10,6 +10,12 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      issueId:
+        description: 'Issue ID'
+        default: '0'
+        required: false
+        type: number
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -20,7 +26,7 @@ jobs:
       - name: Create or Update Comment
         uses: peter-evans/create-or-update-comment@v2.0.0
         with:
-          issue-number: ${{github.event.issue.number}}
+          issue-number: ${{ inputs.issueId }}
           body: |
             Hello! Thanks for contributing to the libft unit test.
 
