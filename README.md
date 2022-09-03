@@ -4,6 +4,12 @@
 
 libft-unit-test is a complete testing suite for 42's libft project, allowing you to test your lib, track your progress and benchmarking your lib (with system's libc or with another lib)
 
+# 🤖 Important information 🤖
+
+This repository this not maintained by the owner anymore, an automated merge bot is setup to merge all the pull requests that are reviewed by at least one contributor of this project.
+
+In other words if something is broken and you want to fix it, the only thing you have to do is [create a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork) and find someone that has already pushed code to this repository to review your work. You can see the list of people that can review your work here: [libft-uni-test contributors](https://github.com/alelievr/libft-unit-test/graphs/contributors).
+
 # Installation
 You must have the following file structure:
 ```
