@@ -4447,6 +4447,22 @@ void            test_ft_strncmp(void){
 //         ft_atoi            //
 ////////////////////////////////
 
+void			test_ft_atoi_basic_zero(void *ptr) {
+	typeof(atoi)	*ft_atoi = ptr;
+	SET_EXPLANATION("your atoi does not work with zero number");
+
+	SANDBOX_RAISE(
+			char	*n = "0";
+
+			int		i1 = atoi(n);
+			int		i2 = ft_atoi(n);
+			if (i1 == i2)
+				exit(TEST_SUCCESS);
+			SET_DIFF_INT(i1, i2);
+			exit(TEST_FAILED);
+			);
+}
+
 void			test_ft_atoi_basic(void *ptr) {
 	typeof(atoi)	*ft_atoi = ptr;
 	SET_EXPLANATION("your atoi does not work with positive numbers");
@@ -4741,6 +4757,7 @@ void			test_ft_atoi_speed(void *ptr) {
 }
 
 void            test_ft_atoi(void){
+	add_fun_subtest(test_ft_atoi_basic_zero);
 	add_fun_subtest(test_ft_atoi_basic);
 	add_fun_subtest(test_ft_atoi_negative);
 	add_fun_subtest(test_ft_atoi_rand);
@@ -7097,7 +7114,7 @@ void            test_ft_putendl(void){
 
 void			test_ft_putnbr_basic(void *ptr) {
 	void		(*ft_putnbr)(int) = ptr;
-	SET_EXPLANATION("your putnbr does not work");
+	SET_EXPLANATION("your putnbr does not work with zero number");
 
 	SANDBOX_RAISE(
 			int		i = 0;
@@ -7106,9 +7123,9 @@ void			test_ft_putnbr_basic(void *ptr) {
 			STDOUT_TO_BUFF;
 			ft_putnbr(i);
 			GET_STDOUT(buff, 0xF0);
-			if (atoi(buff) == i)
+			if (buff[0] == '0')
 				exit(TEST_SUCCESS);
-			SET_DIFF_INT(i, atoi(buff));
+			//SET_DIFF_INT(i, atoi(buff));
 			exit(TEST_FAILED);
 			);
 }
@@ -7439,7 +7456,7 @@ void            test_ft_putendl_fd(void){
 
 void			test_ft_putnbr_fd_basic(void *ptr) {
 	void		(*ft_putnbr_fd)(int, int fd) = ptr;
-	SET_EXPLANATION("your putnbr_fd does not work");
+	SET_EXPLANATION("your putnbr_fd does not work with zero number");
 
 	SANDBOX_RAISE(
 			int		i = 0;
@@ -7448,9 +7465,9 @@ void			test_ft_putnbr_fd_basic(void *ptr) {
 			STDERR_TO_BUFF;
 			ft_putnbr_fd(i, STDERR_FILENO);
 			GET_STDERR(buff, 0xF0);
-			if (atoi(buff) == i)
+			if (buff[0] == '0')
 				exit(TEST_SUCCESS);
-			SET_DIFF_INT(i, atoi(buff));
+			//SET_DIFF_INT(i, atoi(buff));
 			exit(TEST_FAILED);
 			);
 }
