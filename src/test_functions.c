@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mfunyu <mfunyu@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2020/07/03 15:35:48 by user42           ###   ########.fr       */
+/*   Updated: 2022/08/23 21:40:16 by mfunyu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -3020,6 +3020,19 @@ void			test_ft_strlcat_speed(void *ptr) {
 			);
 }
 
+void			test_ft_strlcat_null3(void *ptr) {
+	typeof(strlcat)	*ft_strlcat = ptr;
+	SET_EXPLANATION("your strlcat crush when null parameter is sent with a size of 0");
+
+	SANDBOX_RAISE(
+			char	b[0xF] = "nyan !";
+
+			ft_strlcat(NULL, b, 0);
+
+			exit(TEST_SUCCESS);
+			);
+}
+
 void            test_ft_strlcat(void){
 	add_fun_subtest(test_ft_strlcat_basic);
 	add_fun_subtest(test_ft_strlcat_return);
@@ -3033,6 +3046,7 @@ void            test_ft_strlcat(void){
 	add_fun_subtest(test_ft_strlcat_return_value);
 	add_fun_subtest(test_ft_strlcat_null1);
 	add_fun_subtest(test_ft_strlcat_null2);
+	add_fun_subtest(test_ft_strlcat_null3);
 	add_fun_subtest(test_ft_strlcat_speed);
 }
 
@@ -3922,6 +3936,16 @@ void			test_ft_strnstr_speed(void *ptr) {
 			);
 }
 
+void			test_ft_strnstr_null3(void *ptr) {
+	typeof(strnstr)	*ft_strnstr = ptr;
+	SET_EXPLANATION("your strnstr crush when null parameter is sent with a size of 0");
+
+	SANDBOX_RAISE(
+			ft_strnstr(NULL, "fake", 0);
+			exit(TEST_SUCCESS);
+			);
+}
+
 void            test_ft_strnstr(void){
 	add_fun_subtest(test_ft_strnstr_basic);
 	add_fun_subtest(test_ft_strnstr_basic2);
@@ -3937,6 +3961,7 @@ void            test_ft_strnstr(void){
 	add_fun_subtest(test_ft_strnstr_electric_memory);
 	add_fun_subtest(test_ft_strnstr_null2);
 	add_fun_subtest(test_ft_strnstr_null1);
+	add_fun_subtest(test_ft_strnstr_null3);
 	add_fun_subtest(test_ft_strnstr_speed);
 }
 
@@ -7986,7 +8011,7 @@ void			test_ft_lstsize_basic(void *ptr) {
 			t_list	*l;
 			int actual;
 			int expected;
-	
+
 			l = lstnew(strdup("1"));
 			l->next = lstnew(strdup("2"));
 			l->next->next = lstnew(strdup("3"));
@@ -8007,7 +8032,7 @@ void			test_ft_lstsize_null(void *ptr) {
 			t_list	*l = NULL;
 			int actual;
 			int expected = 0;
-	
+
 			actual = ft_lstsize(l);
 			if (actual == expected)
 				exit(TEST_SUCCESS);
@@ -8033,7 +8058,7 @@ void			test_ft_lstlast_basic(void *ptr) {
 			t_list	*l;
 			t_list	*expected;
 			t_list	*actual;
-	
+
 			l = lstnew(strdup("1"));
 			l->next = lstnew(strdup("2"));
 			l->next->next = lstnew(strdup("3"));
