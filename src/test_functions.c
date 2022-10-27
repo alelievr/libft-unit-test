@@ -1740,11 +1740,11 @@ void            test_ft_strdup(void) {
 ////////////////////////////////
 
 void			test_ft_calloc_free(void *ptr) {
-	void *	(*ft_calloc)(size_t) = ptr;
+	typeof(calloc)	*ft_calloc = ptr;
 	SET_EXPLANATION("your calloc don't allocate memory");
 
 	SANDBOX_RAISE(
-			free(ft_calloc(42));
+			free(ft_calloc(42, 1));
 			);
 }
 
