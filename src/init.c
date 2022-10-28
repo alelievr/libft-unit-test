@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created  2015/11/17 17:30:13 by alelievr          #+#    #+#             */
-/*   Updated: 2019/10/20 11:06:28 by juligonz         ###   ########.fr       */
+/*   Updated: 2022/10/28 13:04:02 by ladloff          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ t_libft_test	fun_test_table[] = {
 	{"ft_memset", test_ft_memset, 1, 1},
 	{"ft_bzero", test_ft_bzero, 1, 1},
 	{"ft_memcpy", test_ft_memcpy, 1, 1},
-	{"ft_memccpy", test_ft_memccpy, 1, 1},
 	{"ft_memmove", test_ft_memmove, 1, 1},
 	{"ft_memchr", test_ft_memchr, 1, 1},
 	{"ft_memcmp", test_ft_memcmp, 1, 1},
@@ -117,7 +116,6 @@ t_libft_bench	fun_bench_table[] = {
 	{"ft_memset", bench_ft_memset, 1},
 	{"ft_bzero", bench_ft_bzero, 1},
 	{"ft_memcpy", bench_ft_memcpy, 1},
-	{"ft_memccpy", bench_ft_memccpy, 1},
 	{"ft_memmove", bench_ft_memmove, 1},
 	{"ft_memchr", bench_ft_memchr, 1},
 	{"ft_memcmp", bench_ft_memcmp, 1},

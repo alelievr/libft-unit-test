@@ -6,7 +6,7 @@
 #    By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created  2015/04/04 19:22:36 by alelievr          #+#    #+#              #
-#    Updated: 2019/11/03 22:05:40 by tjans         ########   odam.nl          #
+#    Updated: 2022/10/28 14:06:58 by ladloff          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,6 @@ SRC			=	src/main.c						\
 				hardcore-mode/test-strncmp.c    \
 				hardcore-mode/test-memset.c     \
 				hardcore-mode/test-memcpy.c     \
-				hardcore-mode/test-memccpy.c    \
 				hardcore-mode/test-memmove.c    \
 				hardcore-mode/test-memchr.c     \
 				hardcore-mode/test-memcmp.c     \
