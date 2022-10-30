@@ -6,7 +6,7 @@
 /*   By: mfunyu <mfunyu@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2022/10/28 13:00:57 by ladloff          ###   ########.fr       */
+/*   Updated: 2022/10/30 09:25:38 by ladloff          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -4435,38 +4435,6 @@ void			test_ft_atoi_min_long(void *ptr) {
 			);
 }
 
-void			test_ft_atoi_over_max_long(void *ptr) {
-	typeof(atoi)	*ft_atoi = ptr;
-	SET_EXPLANATION("your atoi does not work with over long max value");
-
-	SANDBOX_RAISE(
-			char	n[40] = "99999999999999999999999999";
-
-			int		i1 = atoi(n);
-			int		i2 = ft_atoi(n);
-			if (i1 == i2)
-				exit(TEST_SUCCESS);
-			SET_DIFF_INT(i1, i2);
-			exit(TEST_KO);
-			);
-}
-
-void			test_ft_atoi_over_min_long(void *ptr) {
-	typeof(atoi)	*ft_atoi = ptr;
-	SET_EXPLANATION("your atoi does not work with over long min value");
-
-	SANDBOX_RAISE(
-			char	n[40] = "-99999999999999999999999999";
-
-			int		i1 = atoi(n);
-			int		i2 = ft_atoi(n);
-			if (i1 == i2)
-				exit(TEST_SUCCESS);
-			SET_DIFF_INT(i1, i2);
-			exit(TEST_KO);
-			);
-}
-
 void			test_ft_atoi_plus0(void *ptr) {
 	typeof(atoi)	*ft_atoi = ptr;
 	SET_EXPLANATION("your atoi does not work with the plus sign");
@@ -4556,8 +4524,6 @@ void            test_ft_atoi(void){
 	add_fun_subtest(test_ft_atoi_min_int);
 	add_fun_subtest(test_ft_atoi_max_long);
 	add_fun_subtest(test_ft_atoi_min_long);
-	add_fun_subtest(test_ft_atoi_over_max_long);
-	add_fun_subtest(test_ft_atoi_over_min_long);
 	add_fun_subtest(test_ft_atoi_plus0);
 	add_fun_subtest(test_ft_atoi_plus1);
 	add_fun_subtest(test_ft_atoi_plus2);
