@@ -36,7 +36,6 @@ const char *mtable[] = {
 struct { int (*fun)(void *); char *name; void *ft; } test_table[18] = {
 	{test_main_memset, "ft_memset", NULL},
 	{test_main_memcpy, "ft_memcpy", NULL},
-	{test_main_memccpy, "ft_memccpy", NULL},
 	{test_main_memmove, "ft_memmove", NULL},
 	{test_main_memchr, "ft_memchr", NULL},
 	{test_main_memcmp, "ft_memcmp", NULL},
@@ -84,7 +83,6 @@ int		hardcore_main(void *libft_so_handler)
 
 	/*SANDBOX_HARDCORE(test_main_memset((void *)memset));
 	SANDBOX_HARDCORE(test_main_memcpy((void *)memcpy));
-	SANDBOX_HARDCORE(test_main_memccpy((void *)memccpy));
 	SANDBOX_HARDCORE(test_main_memmove((void *)memmove));
 	SANDBOX_HARDCORE(test_main_memchr((void *)memchr));
 	SANDBOX_HARDCORE(test_main_memcmp((void *)memcmp));
