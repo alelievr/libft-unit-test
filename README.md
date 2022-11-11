@@ -1,4 +1,4 @@
-##	libft Unit tests
+##  libft Unit tests
 
 > :warning: **Important note: this version targets the new 42 subject of `libft`, if you want to use the old one [you can access it on the old branch](https://github.com/alelievr/libft-unit-test/tree/old).**
 
@@ -6,9 +6,9 @@ libft-unit-test is a complete testing suite for 42's libft project, allowing you
 
 # 🤖 Important information 🤖
 
-This repository this not maintained by the owner anymore, an automated merge bot is setup to merge all the pull requests that are reviewed by at least one contributor of this project.
+This repository this not maintained by the owner anymore, an automated merge bot is set up to merge all the pull requests that are reviewed by at least one contributor to this project.
 
-In other words if something is broken and you want to fix it, the only thing you have to do is [create a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork) and find someone that has already pushed code to this repository to review your work. You can see the list of people that can review your work here: [libft-uni-test contributors](https://github.com/alelievr/libft-unit-test/graphs/contributors).
+In other words, if something is broken and you want to fix it, the only thing you have to do is [create a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork) and find someone that has already pushed code to this repository to review your work. You can see the list of people that can review your work here: [libft-uni-test contributors](https://github.com/alelievr/libft-unit-test/graphs/contributors).
 
 # Installation
 You must have the following file structure:
@@ -18,8 +18,8 @@ You must have the following file structure:
 |- libft-unit-tests/
 ```
 Whereas:
-	`libft` is your project folder.
-	`libft-unit-tests` is the folder containing this repository.
+    `libft` is your project folder.
+    `libft-unit-tests` is the folder containing this repository.
 
 Afterwards, you can just `make`.
 
@@ -43,13 +43,13 @@ Color | Meaning
 
 More information about the test context and code is available in the result.log written at the root of the test repository.
 
-Note that in the results, there is a big difference between `[CRASH]` or `[FAIL]` and `[KO]`. While both crash and fail means that the function does not work and should be graded as invalid it's not the case for KO, KO means that the functions fails to handle a case not intended to be tested by 42's grading system and that in some case may exceed the scope of the function.
+Note that in the results, there is a big difference between `[CRASH]` or `[FAIL]` and `[KO]`. While both crash and fail means that the function does not work and should be graded as invalid it's not the case for KO, KO means that the function fails to handle a case not intended to be tested by 42's grading system and that in some case may exceed the scope of the function.
 
 # Linux
 
-To get it work on linux:
+To get it to work on linux:
 
-+ Install this two packages libbsd-dev and libncurses-dev
++ Install these two packages libbsd-dev and libncurses-dev
 + Add a rule called 'so' in your Makefile to compile your libft in dynamic library instead of static (must be called "libft.so").
 + To make it work in ubuntu you might need to add the flag -nostartfiles
 
@@ -57,14 +57,14 @@ To get it work on linux:
 Example:
 ```
 so:
-	$(CC) -fPIC $(CFLAGS) $(SRC)
-	gcc -shared -o libft.so $(OBJ)
+    $(CC) -fPIC $(CFLAGS) $(SRC)
+    gcc -shared -o libft.so $(OBJ)
 ```
 Example (ubuntu):
 ```
 so:
-	$(CC) -nostartfiles -fPIC $(CFLAGS) $(SRC)
-	gcc -nostartfiles -shared -o libft.so $(OBJ)
+    $(CC) -nostartfiles -fPIC $(CFLAGS) $(SRC)
+    gcc -nostartfiles -shared -o libft.so $(OBJ)
 ```
 
 # Screenshots
@@ -75,4 +75,3 @@ so:
 
 ### Benchmark mode
 ![Benchmarking](https://user-images.githubusercontent.com/6877923/73292576-91b2bf80-4202-11ea-8e33-2a1fc22bc2cc.png)
-
