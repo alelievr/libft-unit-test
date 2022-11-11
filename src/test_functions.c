@@ -6,7 +6,7 @@
 /*   By: mfunyu <mfunyu@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2022/10/30 09:25:38 by ladloff          ###   ########.fr       */
+/*   Updated: 2022/11/11 21:58:23 by twalker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -458,6 +458,24 @@ void			test_ft_memcpy_null2(void *ptr) {
 			);
 }
 
+void			test_ft_memcpy_null3(void *ptr) {
+	typeof(memcpy)	*ft_memcpy = ptr;
+	SET_EXPLANATION("your memcpy should not crash with NULL as one of the params when size is 0");
+
+	SANDBOX_RAISE(
+			ft_memcpy(NULL, "", 0);
+			);
+}
+
+void			test_ft_memcpy_null4(void *ptr) {
+	typeof(memcpy)	*ft_memcpy = ptr;
+	SET_EXPLANATION("your memcpy should not crash with NULL as one of the params when size is 0");
+
+	SANDBOX_RAISE(
+			ft_memcpy("", NULL, 0);
+			);
+}
+
 void			test_ft_memcpy_double_null1(void *ptr) {
 	typeof(memcpy)	*ft_memcpy = ptr;
 	SET_EXPLANATION("your memcpy does not behave well with NULL as both params");
@@ -501,6 +519,8 @@ void            test_ft_memcpy(void){
 	add_fun_subtest(test_ft_memcpy_electric_memory);
 	add_fun_subtest(test_ft_memcpy_null1);
 	add_fun_subtest(test_ft_memcpy_null2);
+	add_fun_subtest(test_ft_memcpy_null3);
+	add_fun_subtest(test_ft_memcpy_null4);
 	add_fun_subtest(test_ft_memcpy_double_null1);
 	add_fun_subtest(test_ft_memcpy_double_null2);
 	add_fun_subtest(test_ft_memcpy_speed);
