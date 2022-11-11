@@ -6,7 +6,7 @@
 /*   By: mfunyu <mfunyu@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2022/10/30 09:25:38 by ladloff          ###   ########.fr       */
+/*   Updated: 2022/11/12 00:01:28 by twalker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -7460,7 +7460,6 @@ void			test_ft_lstdelone_nulls(void *ptr) {
 
 			ft_lstdelone(NULL, lstdelone_f);
 			ft_lstdelone(node, NULL);
-			free(node);
 			);
 }
 
