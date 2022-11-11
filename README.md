@@ -36,7 +36,7 @@ the `-nospeed` option is available if you're mad enough at your optimization. :)
 The test result will be displayed directly in the console with a simple color code.
 Color | Meaning
 --- | ---
-![](https://via.placeholder.com/15/f00/000000?text=+) Red | The function did not behaved correctly or crashed during the test.
+![](https://via.placeholder.com/15/f00/000000?text=+) Red | The function did not behave correctly or crashed during the test.
 ![](https://via.placeholder.com/15/f90/000000?text=+) Orange | The function exceeded the maximal execution time, Probably due to an infinite loop.
 ![](https://via.placeholder.com/15/ff0/000000?text=+) Yellow | The function failed to handle an extreme case, Most of the time, it's okay to consider the function as correct.
 ![](https://via.placeholder.com/15/0f0/000000?text=+) Green | The function is correct.
