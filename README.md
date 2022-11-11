@@ -1,4 +1,4 @@
-##  libft Unit tests
+#		libft Unit tests
 
 > :warning: **Important note: this version targets the new 42 subject of `libft`, if you want to use the old one [you can access it on the old branch](https://github.com/alelievr/libft-unit-test/tree/old).**
 
@@ -18,8 +18,8 @@ You must have the following file structure:
 |- libft-unit-tests/
 ```
 Whereas:
-    `libft` is your project folder.
-    `libft-unit-tests` is the folder containing this repository.
+		`libft` is your project folder.
+		`libft-unit-tests` is the folder containing this repository.
 
 Afterwards, you can just `make`.
 
@@ -57,14 +57,14 @@ To get it to work on linux:
 Example:
 ```
 so:
-    $(CC) -fPIC $(CFLAGS) $(SRC)
-    gcc -shared -o libft.so $(OBJ)
+		$(CC) -fPIC $(CFLAGS) $(SRC)
+		gcc -shared -o libft.so $(OBJ)
 ```
 Example (ubuntu):
 ```
 so:
-    $(CC) -nostartfiles -fPIC $(CFLAGS) $(SRC)
-    gcc -nostartfiles -shared -o libft.so $(OBJ)
+		$(CC) -nostartfiles -fPIC $(CFLAGS) $(SRC)
+		gcc -nostartfiles -shared -o libft.so $(OBJ)
 ```
 
 # Screenshots
