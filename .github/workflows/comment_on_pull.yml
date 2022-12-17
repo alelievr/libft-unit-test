@@ -1,22 +1,13 @@
-name: Auto message for PR's and Issues
-on:
-  pull_request:
-    types: [opened]
-
-# Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-
+name: Auto Comment
+on: [pull_request]
 jobs:
-  comment:
+  run:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Comment On Pull
-        uses: peter-evans/create-or-update-comment@v2.0.0
+      - uses: wow-actions/auto-comment@v1
         with:
-          issue-number: ${{github.event.pull_request.number}}
-          body: |
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          pullRequestOpened: |
             Hello! Thanks for your pull request.
             
             A bot will automatically merge your PR if you can get [one contributor](https://github.com/alelievr/libft-unit-test/graphs/contributors) to approve it.
