@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfunyu <mfunyu@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: ladloff <ladloff@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2022/10/30 09:25:38 by ladloff          ###   ########.fr       */
+/*   Updated: 2023/02/20 15:27:58 by ladloff          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1531,9 +1531,13 @@ void			test_ft_calloc_zero(void *ptr) {
 
 	SANDBOX_RAISE(
 			void *str = ft_calloc(0, 0);
-			if (str == NULL)
+			if (str && strcmp(str, "") != 0)
+			{
+				free(str);
 				exit(TEST_FAILED);
-			free(str);
+			}
+			if (!str)
+				free(str);
 			exit(TEST_SUCCESS);
 			);
 }
