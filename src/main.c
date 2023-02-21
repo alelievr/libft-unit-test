@@ -6,7 +6,7 @@
 /*   By: alelievr <alelievr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/13 19:59:29 by alelievr          #+#    #+#             */
-/*   Updated: 2019/10/20 11:01:10 by juligonz         ###   ########.fr       */
+/*   Updated: 2023/01/19 03:24:35 by knagase          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,20 +41,22 @@ static t_option options[] = {
 
 void	*electric_alloc(size_t size)
 {
-	void	*ptr = mmap(NULL, 8192lu, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+	long	page_size = sysconf(_SC_PAGESIZE);
+	void	*ptr = mmap(NULL, page_size * 2, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
 
-	memset(ptr, 'Z', 8192lu);
-	mprotect(ptr + 4096, 4096, PROT_NONE);
-	return (ptr + 4096 - size);
+	memset(ptr, 'Z', page_size * 2);
+	mprotect(ptr + page_size, page_size, PROT_NONE);
+	return (ptr + page_size - size);
 }
 
 void	*electric_alloc_rev(size_t size)
 {
-	void	*ptr = mmap(NULL, 8192lu, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+	long	page_size = sysconf(_SC_PAGESIZE);
+	void	*ptr = mmap(NULL, page_size * 2, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
 
-	memset(ptr, 'Z', 8192lu);
-	mprotect(ptr, 4096, PROT_NONE);
-	return (ptr + 4096 + size);
+	memset(ptr, 'Z', page_size * 2);
+	mprotect(ptr, page_size, PROT_NONE);
+	return (ptr + page_size + size);
 }
 
 unsigned long long	ft_clock(void) {
