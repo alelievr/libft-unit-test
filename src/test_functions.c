@@ -6,7 +6,7 @@
 /*   By: ladloff <ladloff@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/17 17:42:18 by alelievr          #+#    #+#             */
-/*   Updated: 2023/02/20 15:27:58 by ladloff          ###   ########.fr       */
+/*   Updated: 2023/02/27 00:10:46 by ladloff          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1536,8 +1536,7 @@ void			test_ft_calloc_zero(void *ptr) {
 				free(str);
 				exit(TEST_FAILED);
 			}
-			if (!str)
-				free(str);
+			free(str);
 			exit(TEST_SUCCESS);
 			);
 }
