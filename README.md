@@ -1,14 +1,14 @@
 ##	libft Unit tests
 
-> :warning: **Important note: this version targets the new 42 subject of `libft`, if you want to use the old one [you can access it on the old branch](https://github.com/alelievr/libft-unit-test/tree/old).**
+> :warning: **Important note: this version targets the new 42-subject of `libft`, if you want to use the old one [you can access it on the old branch](https://github.com/alelievr/libft-unit-test/tree/old).**
 
-libft-unit-test is a complete testing suite for 42's libft project, allowing you to test your lib, track your progress and benchmarking your lib (with system's libc or with another lib)
+libft-unit-test is a complete testing suite for 42's libft project, allowing you to test your lib, track your progress and benchmark your lib (with system's libc or with another lib)
 
 # 🤖 Important information 🤖
 
-This repository this not maintained by the owner anymore, an automated merge bot is setup to merge all the pull requests that are reviewed by at least one contributor of this project.
+This repository this not maintained by the owner anymore, an automated merge bot is set up to merge all the pull requests that are reviewed by at least one contributor to this project.
 
-In other words if something is broken and you want to fix it, the only thing you have to do is [create a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork) and find someone that has already pushed code to this repository to review your work. You can see the list of people that can review your work here: [libft-uni-test contributors](https://github.com/alelievr/libft-unit-test/graphs/contributors).
+In other words, if something is broken and you want to fix it, the only thing you have to do is [create a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork) and find someone that has already pushed code to this repository to review your work. You can see the list of people that can review your work here: [libft-unit-test contributors](https://github.com/alelievr/libft-unit-test/graphs/contributors).
 
 # Installation
 You must have the following file structure:
@@ -36,21 +36,21 @@ the `-nospeed` option is available if you're mad enough at your optimization. :)
 The test result will be displayed directly in the console with a simple color code.
 Color | Meaning
 --- | ---
-![](https://via.placeholder.com/15/f00/000000?text=+) Red | The function did not behaved correctly or crashed during the test.
+![](https://via.placeholder.com/15/f00/000000?text=+) Red | The function did not behave correctly or crashed during the test.
 ![](https://via.placeholder.com/15/f90/000000?text=+) Orange | The function exceeded the maximal execution time, Probably due to an infinite loop.
 ![](https://via.placeholder.com/15/ff0/000000?text=+) Yellow | The function failed to handle an extreme case, Most of the time, it's okay to consider the function as correct.
 ![](https://via.placeholder.com/15/0f0/000000?text=+) Green | The function is correct.
 
 More information about the test context and code is available in the result.log written at the root of the test repository.
 
-Note that in the results, there is a big difference between `[CRASH]` or `[FAIL]` and `[KO]`. While both crash and fail means that the function does not work and should be graded as invalid it's not the case for KO, KO means that the functions fails to handle a case not intended to be tested by 42's grading system and that in some case may exceed the scope of the function.
+Note that in the results, there is a big difference between `[CRASH]` or `[FAIL]` and `[KO]`. While both crash and fail means that the function does not work and should be graded as invalid it's not the case for KO, KO means that the functions fail to handle a case not intended to be tested by 42's grading system and that in some case may exceed the scope of the function.
 
 # Linux
 
-To get it work on linux:
+To get it to work on Linux:
 
-+ Install this two packages libbsd-dev and libncurses-dev
-+ Add a rule called 'so' in your Makefile to compile your libft in dynamic library instead of static (must be called "libft.so").
++ Install these two packages libbsd-dev and libncurses-dev
++ Add a rule called 'so' in your Makefile to compile your libft in the dynamic library instead of the static (must be called "libft.so").
 + To make it work in ubuntu you might need to add the flag -nostartfiles
 
 
